@@ -25,3 +25,7 @@ Quando l'utente chiede di pubblicare l'editor online (o aggiornare il repo), dev
 1. Sovrascrivere `index.html` creando una copia aggiornata dell'ultimo `murdoku-studio.html`.
 2. Eseguire in locale `git add .` e `git commit -m "Aggiornamento versione [VERSIONE]"`.
 3. Chiedere esplicitamente all'utente di eseguire `git push origin main` dal suo terminale per completare il deploy (poiché il sandbox di rete blocca i push automatici).
+
+## Terminologia
+- **PLAYER**: si riferisce alla modalità "PLAY", ovvero la sezione dell'applicazione che si apre cliccando sul pulsante "PLAY".
+- **Editor**: si riferisce alla modalità "Editor", ovvero la parte dell'applicazione che si apre cliccando sul pulsante "Editor".

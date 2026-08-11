@@ -390,3 +390,14 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
   - Sostituzione dei tradizionali eventi mouse `click` e `dblclick` (inaffidabili su Safari/iOS per il doppio-tap-zoom) con eventi pointer/touch nativi (`touchend`) che misurano il Delta Time tra i tocchi per una fluidità ottimale.
   - **Singolo Tap:** Registra un'annotazione provvisoria (nota a margine o croce rossa X) senza alterare le preclusioni di riga e colonna.
   - **Doppio Tap:** Conferma il piazzamento definitivo del personaggio e fa scattare l'evidenziazione automatica (X rosse) su riga e colonna.
+
+### 36. Unificazione e Semplificazione Indizi nel Player (v2.1 e v2.2)
+- **Logica di Presentazione**: Nella modalità Player ("Gioca"), se un singolo personaggio possiede più indizi a lui associati, questi non vengono più elencati separatamente su più righe.
+- **Concatenazione e Pulizia**: 
+  - Vengono fusi in un unico paragrafo testuale collegato dalla congiunzione " e ".
+  - Il nome del personaggio (che risulta ridondante essendo già indicato nell'intestazione del box) viene rimosso automaticamente all'inizio di ciascuna frase.
+  - È stata rimossa la numerazione progressiva laterale (es. "1.", "2.") accanto agli indizi in quanto non necessaria per la leggibilità e l'estetica del Player.
+  - Esempio di trasformazione:
+    - *Indizio 1:* "Arturo si trova in un angolo della sua area."
+    - *Indizio 2:* "Arturo si trova nella riga più in alto."
+    - *Risultato Mostrato:* "Si trova in un angolo della sua area e si trova nella riga più in alto."

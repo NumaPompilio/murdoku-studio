@@ -259,7 +259,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.2</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.0</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -5647,31 +5647,11 @@ function renderPlayerClues() {
           <div class="clue-traits" style="font-size:10.5px; opacity:0.8; font-weight:normal; text-transform:none; margin-top:2px;">${traitsText}</div>
         </div>
       </div>`;
-    if(list.length > 0){ 
+    for(const c of list){ 
       n++; 
-      let parts = list.map(c => {
-         let text = c.text.trim();
-         if (text.startsWith(s.name + " ")) {
-            text = text.substring(s.name.length + 1).trim();
-         } else if (text.startsWith(s.name)) {
-            text = text.substring(s.name.length).trim();
-         }
-         if (text.endsWith(".")) text = text.substring(0, text.length - 1);
-         return text;
-      });
-      parts = parts.map((p, idx) => {
-         if (p.length > 0) {
-           if (idx === 0) {
-             return p.charAt(0).toUpperCase() + p.slice(1);
-           } else {
-             return p.charAt(0).toLowerCase() + p.slice(1);
-           }
-         }
-         return p;
-      });
-      let combinedText = parts.join(" e ") + ".";
       boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
-        <div class="txt">${escapeHtml(combinedText)}</div>
+        <span class="num" style="color:var(--violet-bright); font-size:13px;">${n}.</span>
+        <div class="txt">${escapeHtml(c.text)}</div>
       </div>`;
     }
     boxStr += `</div>`;
@@ -5683,6 +5663,7 @@ function renderPlayerClues() {
     for(const c of globals){ 
       n++; 
       boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
+        <span class="num" style="color:var(--violet-bright); font-size:13px;">${n}.</span>
         <div class="txt">${escapeHtml(c.text)}</div>
       </div>`;
     }

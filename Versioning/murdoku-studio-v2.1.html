@@ -259,7 +259,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.2</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.1</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -5671,6 +5671,7 @@ function renderPlayerClues() {
       });
       let combinedText = parts.join(" e ") + ".";
       boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
+        <span class="num" style="color:var(--violet-bright); font-size:13px;">${n}.</span>
         <div class="txt">${escapeHtml(combinedText)}</div>
       </div>`;
     }
@@ -5683,6 +5684,7 @@ function renderPlayerClues() {
     for(const c of globals){ 
       n++; 
       boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
+        <span class="num" style="color:var(--violet-bright); font-size:13px;">${n}.</span>
         <div class="txt">${escapeHtml(c.text)}</div>
       </div>`;
     }
