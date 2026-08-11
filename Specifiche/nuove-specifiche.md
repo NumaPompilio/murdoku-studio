@@ -444,3 +444,11 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### 46. Restyling Popup "Incolla Mappa" (v2.15)
 - **Modifica UI**: Il box inline adibito all'importazione manuale della mappa (attivato dal pulsante "Incolla Mappa" nel Player) è stato convertito in un vero e proprio modale fluttuante (`modal`), uniformandone l'aspetto e l'UX con il modale di "Seleziona Mappa da Cartella". Lo sfondo ora viene oscurato per far risaltare la finestra di importazione.
+
+### 47. Nuovo Oggetto: Sant'Oronzo (v2.16)
+- **Asset Aggiunti**: Introdotto l'oggetto `santoronzo` (statua di Sant'Oronzo, non calpestabile), assegnato alla categoria *Salento & Tradizione* e *Natura & Esterni*. L'asset viene renderizzato tramite un nodo SVG vettoriale altamente dettagliato con gradienti e ombre per esaltarne la tridimensionalità.
+
+### 48. Form di Aggiunta Oggetti (v2.17)
+- **Nuova Funzionalità**: Aggiunto il pulsante "➕ Aggiungi" nella sezione di selezione degli oggetti dell'Editor.
+- **Interfaccia Utente**: Cliccando il pulsante si apre un modale fluttuante (stile *Importa Mappa*) che permette di compilare i dettagli di un nuovo oggetto (ID, Label, Articolo, Simbolo, Calpestabile, Categorie, Render Type, Scala, Codice SVG/Testo).
+- **Integrazione File System**: Implementata la logica `requireAssetsDirectoryHandle` tramite File System Access API per autorizzare l'accesso alla cartella `assets`. Alla conferma, il sistema esegue il parsing di `objects.md`, inietta in coda il nuovo oggetto JSON (o aggiorna uno esistente se l'ID coincide) e sovrascrive il file mantenendo il formato markdown.

@@ -263,7 +263,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.15</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.17</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -349,7 +349,9 @@
       <div class="field" style="margin-top:11px" id="objPickWrap">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
           <label id="palLabel" style="margin:0">Oggetto da posizionare</label>
-          <select id="objCategory" style="font-size:11px; padding:3px 8px; border-radius:6px; background:var(--panel2); color:var(--text); border:1px solid var(--line2); cursor:pointer">
+          <div style="display:flex; gap:10px; align-items:center;">
+            <button class="btn ghost" id="btnOpenAddObject" style="padding:3px 8px; font-size:11px; border:1px solid var(--line2);">➕ Aggiungi</button>
+            <select id="objCategory" style="font-size:11px; padding:3px 8px; border-radius:6px; background:var(--panel2); color:var(--text); border:1px solid var(--line2); cursor:pointer">
             <option value="all">Tutti gli oggetti</option>
             <option value="salento">☀️ Salento & Tradizione</option>
             <option value="beach" selected>🏖️ Spiaggia & Mare</option>
@@ -357,7 +359,8 @@
             <option value="nature">🌳 Natura & Esterni</option>
             <option value="walkable">🟢 Solo calpestabili</option>
             <option value="obstacle">🔴 Solo ostacoli</option>
-          </select>
+            </select>
+          </div>
         </div>
         <div id="objPalette" class="palette"></div>
         <div class="hint" id="palHint">Icone <b>calpestabili</b> (una persona può starci sopra) e <b>ostacoli</b>, come appaiono sulla mappa.</div>
@@ -628,6 +631,77 @@
   </div>
 </div></div>
 
+<!-- Modale Aggiungi Oggetto JSON -->
+<div id="addObjectModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(600px,96vw); max-height:90vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+  <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);">
+    <h3>Aggiungi Nuovo Oggetto</h3>
+    <span class="sp" style="flex:1"></span>
+    <button class="btn ghost" id="addObjClose">Chiudi</button>
+  </div>
+  <div style="padding:20px 16px; flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:12px;">
+    
+    <div style="display:flex; gap:12px;">
+      <div style="flex:1">
+        <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">ID Oggetto</label>
+        <input type="text" id="addObjId" placeholder="es. letto" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+      </div>
+      <div style="flex:1">
+        <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">Label (Nome visibile)</label>
+        <input type="text" id="addObjLabel" placeholder="es. Letto Singolo" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+      </div>
+    </div>
+    
+    <div style="display:flex; gap:12px;">
+      <div style="flex:1">
+        <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">Articolo</label>
+        <input type="text" id="addObjArticle" placeholder="es. un, una, il" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+      </div>
+      <div style="flex:1">
+        <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">Simbolo (Max 2 char)</label>
+        <input type="text" id="addObjSymbol" placeholder="es. LE" maxlength="2" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+      </div>
+      <div style="flex:1; display:flex; align-items:flex-end; padding-bottom:8px;">
+        <label style="display:flex; align-items:center; gap:6px; font-size:13px; cursor:pointer;">
+          <input type="checkbox" id="addObjWalkable"> Calpestabile
+        </label>
+      </div>
+    </div>
+
+    <div>
+      <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">Categorie (Tieni premuto Ctrl/Cmd per selezione multipla)</label>
+      <select id="addObjCategories" multiple style="width:100%; padding:6px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px; height:80px;">
+        <option value="salento">☀️ Salento & Tradizione</option>
+        <option value="beach">🏖️ Spiaggia & Mare</option>
+        <option value="house">🏠 Casa & Interni</option>
+        <option value="nature">🌳 Natura & Esterni</option>
+      </select>
+    </div>
+
+    <div style="display:flex; gap:12px;">
+      <div style="flex:1">
+        <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">Render Type</label>
+        <select id="addObjType" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+          <option value="svg">SVG</option>
+          <option value="text">Text / Emoji</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">Scale</label>
+        <input type="number" step="0.05" id="addObjScale" value="1" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+      </div>
+    </div>
+
+    <div style="flex:1; display:flex; flex-direction:column;">
+      <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:4px">Codice SVG o Contenuto Testuale</label>
+      <textarea id="addObjCode" style="width:100%; flex:1; min-height:80px; font-family:var(--mono); font-size:11px; background:var(--desk); color:var(--text); border:1px solid var(--line2); border-radius:7px; padding:10px;" placeholder="<defs>...</defs><g>...</g>"></textarea>
+    </div>
+    <div style="margin-top:4px; font-size:11px; color:var(--warn); line-height:1.4">💡 <b>Nota:</b> Quando clicchi Salva, ti verrà chiesto di autorizzare l'accesso alla cartella <b>"assets"</b> in cui si trova il file <b>objects.md</b>.</div>
+  </div>
+  <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
+    <button class="btn primary" id="addObjConfirm">Salva Oggetto su File</button>
+  </div>
+</div></div>
+
 <div id="toast"></div>
 
 <script>
@@ -710,6 +784,7 @@
     pajaro:    { label: "pajaro",               walkable: false },
     luminarie: { label: "luminarie",            walkable: false },
     taccaro:   { label: "taccaro",              walkable: false },
+    santoronzo:{ label: "Sant'Oronzo",          walkable: false },
   };
   function objLabel(kind) { return (OBJECT_LIB[kind] && OBJECT_LIB[kind].label) || kind; }
   function objWalkable(kind) { return !!(OBJECT_LIB[kind] && OBJECT_LIB[kind].walkable); }
@@ -1592,7 +1667,7 @@
     scannetto:"uno", tamburello:"un", apecar:"un'", trattore:"un",
     pumo:"un", cassapanca:"una", madia:"una", cascetta:"una",
     murosecco:"un", malota:"una", scrace:"delle", ulivo:"un", muscia:"una",
-    faro:"un", pajaro:"un", luminarie:"delle", taccaro:"un",
+    faro:"un", pajaro:"un", luminarie:"delle", taccaro:"un", santoronzo:"un",
   };
   function withArticle(kind) {
     const art = OBJ_ART[kind] || "un";
@@ -2467,6 +2542,58 @@ function objectGlyph(kind, cx, cy, CS){
       `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:#434A54;" d="M362.65,511.992c-5.89,0-10.655-4.781-10.655-10.656v-21.344c0-5.891,4.766-10.656,10.655-10.656 c5.891,0,10.672,4.766,10.672,10.656v21.344C373.322,507.211,368.541,511.992,362.65,511.992z"></path> <path style="fill:#434A54;" d="M501.32,511.992c-5.891,0-10.672-4.781-10.672-10.656v-21.344c0-5.891,4.781-10.656,10.672-10.656 s10.671,4.766,10.671,10.656v21.344C511.991,507.211,507.211,511.992,501.32,511.992z"></path> </g> <g> <path style="fill:#7F4545;" d="M490.648,426.65H373.322c-5.891,0-10.672-4.766-10.672-10.656s4.781-10.656,10.672-10.656h117.326 c5.891,0,10.672,4.766,10.672,10.656S496.539,426.65,490.648,426.65z"></path> <path style="fill:#7F4545;" d="M490.648,341.34H373.322c-5.891,0-10.672-4.781-10.672-10.688c0-5.875,4.781-10.656,10.672-10.656 h117.326c5.891,0,10.672,4.781,10.672,10.656C501.32,336.558,496.539,341.34,490.648,341.34z"></path> <path style="fill:#7F4545;" d="M490.648,255.996H373.322c-5.891,0-10.672-4.773-10.672-10.664s4.781-10.672,10.672-10.672h117.326 c5.891,0,10.672,4.781,10.672,10.672S496.539,255.996,490.648,255.996z"></path> <path style="fill:#7F4545;" d="M490.648,170.662H373.322c-5.891,0-10.672-4.773-10.672-10.664s4.781-10.664,10.672-10.664h117.326 c5.891,0,10.672,4.773,10.672,10.664S496.539,170.662,490.648,170.662z"></path> <path style="fill:#7F4545;" d="M490.648,85.335H373.322c-5.891,0-10.672-4.781-10.672-10.672s4.781-10.664,10.672-10.664h117.326 c5.891,0,10.672,4.773,10.672,10.664S496.539,85.335,490.648,85.335z"></path> <path style="fill:#7F4545;" d="M32,511.992c-5.891,0-10.672-4.781-10.672-10.656v-21.344c0-5.891,4.781-10.656,10.672-10.656 s10.656,4.766,10.656,10.656v21.344C42.656,507.211,37.891,511.992,32,511.992z"></path> <path style="fill:#7F4545;" d="M309.324,511.992c-5.891,0-10.672-4.781-10.672-10.656v-21.344c0-5.891,4.781-10.656,10.672-10.656 s10.672,4.765,10.672,10.656v21.344C319.996,507.211,315.215,511.992,309.324,511.992z"></path> <rect x="12.657" y="10.664" style="fill:#7F4545;" width="319.99" height="469.33"></rect> </g> <rect x="127.996" y="266.656" style="fill:#48CFAD;" width="85.33" height="42.68"></rect> <rect x="127.996" y="31.996" style="fill:#FFCE54;" width="42.655" height="85.33"></rect> <path style="fill:#965353;" d="M330.651,0H10.657C4.766,0,0.001,4.773,0.001,10.664v469.328c0,5.891,4.766,10.656,10.656,10.656 h319.994c5.891,0,10.672-4.766,10.672-10.656V10.664C341.323,4.774,336.542,0,330.651,0z M21.328,138.662h298.668v95.999H21.328 V138.662z M21.328,255.996h298.668v95.998H21.328V255.996z M319.996,21.336v95.998H21.328V21.336H319.996z M21.328,469.336v-95.998 h298.668v95.998L21.328,469.336L21.328,469.336z"></path> <rect x="255.996" y="266.656" style="fill:#48CFAD;" width="42.656" height="85.33"></rect> <g> <rect x="213.326" y="266.656" style="fill:#ED5564;" width="42.671" height="85.33"></rect> <rect x="85.326" y="149.336" style="fill:#ED5564;" width="42.671" height="85.33"></rect> </g> <rect x="127.996" y="149.336" style="fill:#5D9CEC;" width="42.655" height="85.33"></rect> <rect x="170.656" y="149.336" style="fill:#A0D468;" width="42.671" height="85.33"></rect> <rect x="255.996" y="31.996" style="fill:#AC92EB;" width="42.656" height="85.33"></rect> <rect x="42.656" y="74.666" style="fill:#A0D468;" width="85.34" height="42.671"></rect> <rect x="42.656" y="32.735" style="fill:#ED5564;" width="85.34" height="42.663"></rect> <g> <rect x="94.656" y="149.336" style="fill:#E6E9ED;" width="24" height="85.33"></rect> <rect x="265.326" y="31.996" style="fill:#E6E9ED;" width="24" height="85.33"></rect> <rect x="137.326" y="31.996" style="fill:#E6E9ED;" width="24" height="85.33"></rect> </g> <rect x="42.656" y="426.646" style="fill:#ED5564;" width="85.34" height="42.686"></rect> <g> <rect x="42.656" y="435.996" style="fill:#E6E9ED;" width="85.34" height="23.998"></rect> <rect x="127.996" y="275.996" style="fill:#E6E9ED;" width="85.33" height="24"></rect> <rect x="42.656" y="83.996" style="fill:#E6E9ED;" width="85.34" height="24"></rect> </g> <rect x="213.326" y="31.996" style="fill:#5D9CEC;" width="42.671" height="85.33"></rect> <rect x="170.656" y="31.996" style="fill:#ED5564;" width="42.671" height="85.33"></rect> <rect x="42.656" y="149.336" style="fill:#48CFAD;" width="42.672" height="85.33"></rect> <rect x="213.326" y="191.996" style="fill:#FFCE54;" width="85.33" height="42.663"></rect> <rect x="213.326" y="149.336" style="fill:#ED5564;" width="85.33" height="42.664"></rect> <rect x="42.656" y="266.656" style="fill:#FFCE54;" width="42.672" height="85.33"></rect> <rect x="85.326" y="266.656" style="fill:#AC92EB;" width="42.671" height="85.33"></rect> <rect x="127.996" y="309.336" style="fill:#A0D468;" width="85.33" height="42.654"></rect> <rect x="255.996" y="383.996" style="fill:#FFCE54;" width="42.656" height="85.34"></rect> <rect x="127.996" y="383.996" style="fill:#5D9CEC;" width="42.655" height="85.34"></rect> <rect x="170.656" y="383.996" style="fill:#AC92EB;" width="42.671" height="85.34"></rect> <rect x="213.326" y="383.996" style="fill:#48CFAD;" width="42.671" height="85.34"></rect> <rect x="42.656" y="383.996" style="fill:#A0D468;" width="85.34" height="42.656"></rect> <g> <path style="fill:#965353;" d="M373.322,511.992c-5.891,0-10.672-4.781-10.672-10.656V10.664C362.65,4.773,367.431,0,373.322,0 c5.89,0,10.671,4.773,10.671,10.664v490.672C383.993,507.211,379.212,511.992,373.322,511.992z"></path> <path style="fill:#965353;" d="M490.648,511.992c-5.891,0-10.656-4.781-10.656-10.656V10.664C479.992,4.773,484.758,0,490.648,0 s10.672,4.773,10.672,10.664v490.672C501.32,507.211,496.539,511.992,490.648,511.992z"></path> </g> <g> <rect x="213.326" y="158.666" style="fill:#E6E9ED;" width="85.33" height="24"></rect> <rect x="127.996" y="318.656" style="fill:#E6E9ED;" width="85.33" height="23.998"></rect> <rect x="51.996" y="266.656" style="fill:#E6E9ED;" width="24" height="85.33"></rect> <rect x="179.996" y="383.996" style="fill:#E6E9ED;" width="23.999" height="85.34"></rect> <rect x="222.656" y="383.996" style="fill:#E6E9ED;" width="23.999" height="85.34"></rect> <rect x="265.326" y="383.996" style="fill:#E6E9ED;" width="24" height="85.34"></rect> </g> </g>`+
       `</svg></g>`;
   }
+  if(kind==="santoronzo"){
+    const size = s * 0.9;
+    const x = cx - size/2;
+    const y = cy - size/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<svg x="${x}" y="${y}" width="${size}" height="${size}" viewBox="0 0 512 512">`+
+      `<defs>`+
+      `<linearGradient id="bronze" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#2f756f"/><stop offset="45%" stop-color="#1f5552"/><stop offset="100%" stop-color="#123b3b"/></linearGradient>`+
+      `<linearGradient id="lightBronze" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#75aaa0"/><stop offset="100%" stop-color="#2f6d68"/></linearGradient>`+
+      `<linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d8d0bf"/><stop offset="100%" stop-color="#9f9685"/></linearGradient>`+
+      `<filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000" flood-opacity="0.25"/></filter>`+
+      `</defs>`+
+      `<g filter="url(#softShadow)">`+
+      `<g stroke="#173f3e" stroke-width="9" stroke-linecap="round" fill="none"><path d="M356 141 L356 378"/><path d="M356 140 C386 120 397 88 374 72 C354 59 333 77 344 98 C352 113 373 110 374 94"/></g>`+
+      `<g stroke="#7db1a8" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.7"><path d="M360 142 L360 372"/><path d="M358 137 C381 119 390 92 373 80"/></g>`+
+      `<path d="M185 172 C146 191 126 240 137 300 C147 357 177 389 207 409 C188 343 198 264 222 203 C212 185 200 176 185 172Z" fill="#123f40"/>`+
+      `<path d="M178 190 C155 215 151 258 158 294 C166 333 181 359 199 379" fill="none" stroke="#69a59d" stroke-width="5" opacity="0.45"/>`+
+      `<path d="M197 166 C176 130 164 96 158 64 C157 55 166 52 171 59 C177 73 181 88 187 102 C187 82 190 66 195 49 C198 40 209 42 210 52 C211 70 210 86 211 101 C220 87 229 76 240 66 C248 59 256 68 250 77 C239 93 230 108 223 125 C238 117 250 113 263 112 C273 111 277 123 268 129 C251 139 233 148 219 161 Z" fill="url(#bronze)" stroke="#0f3334" stroke-width="5" stroke-linejoin="round"/>`+
+      `<path d="M178 73 C184 101 194 131 210 158" stroke="#7db1a8" stroke-width="4" fill="none" opacity="0.55"/>`+
+      `<path d="M224 164 C205 197 194 251 195 315 C196 356 202 391 214 423 L306 423 C319 384 325 345 323 304 C321 247 307 199 288 164 C266 151 242 151 224 164Z" fill="url(#bronze)" stroke="#0f3334" stroke-width="6" stroke-linejoin="round"/>`+
+      `<path d="M291 174 C335 200 363 250 364 310 C365 363 337 395 308 415 C323 341 314 254 288 184Z" fill="#164646" stroke="#0f3334" stroke-width="5"/>`+
+      `<path d="M314 205 C343 244 351 304 338 350" stroke="#6fa79f" stroke-width="5" fill="none" opacity="0.45"/>`+
+      `<path d="M255 178 C241 217 236 279 240 344 C242 374 248 400 257 422 C266 395 271 366 272 337 C274 273 268 216 255 178Z" fill="#24635e" opacity="0.85"/>`+
+      `<path d="M226 226 L302 226" stroke="#79aaa2" stroke-width="4" opacity="0.55"/>`+
+      `<path d="M218 272 L310 272" stroke="#79aaa2" stroke-width="4" opacity="0.5"/>`+
+      `<path d="M218 319 L311 319" stroke="#79aaa2" stroke-width="4" opacity="0.45"/>`+
+      `<path d="M209 163 C223 145 242 137 262 138 C283 139 300 149 312 166 C289 183 236 184 209 163Z" fill="url(#lightBronze)" stroke="#0f3334" stroke-width="5"/>`+
+      `<ellipse cx="259" cy="128" rx="27" ry="32" fill="url(#bronze)" stroke="#0f3334" stroke-width="5"/>`+
+      `<path d="M248 128 C254 135 263 135 270 128" stroke="#8bbab1" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.65"/>`+
+      `<circle cx="249" cy="119" r="3" fill="#0d2f30"/>`+
+      `<circle cx="270" cy="119" r="3" fill="#0d2f30"/>`+
+      `<path d="M259 121 L255 132 L263 132" stroke="#0d2f30" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>`+
+      `<path d="M226 101 C232 64 245 35 259 18 C276 37 289 67 294 104 C276 91 247 90 226 101Z" fill="url(#lightBronze)" stroke="#0f3334" stroke-width="6" stroke-linejoin="round"/>`+
+      `<path d="M259 25 L259 96" stroke="#d4e2d8" stroke-width="4" opacity="0.65"/>`+
+      `<path d="M241 79 C252 72 268 72 280 80" stroke="#d4e2d8" stroke-width="4" fill="none" opacity="0.55"/>`+
+      `<path d="M259 45 L259 69 M248 57 L270 57" stroke="#103839" stroke-width="4" stroke-linecap="round"/>`+
+      `<path d="M306 200 C328 205 346 222 355 245 L345 264 C330 243 315 232 298 226Z" fill="url(#bronze)" stroke="#0f3334" stroke-width="5" stroke-linejoin="round"/>`+
+      `<circle cx="350" cy="259" r="11" fill="url(#lightBronze)" stroke="#0f3334" stroke-width="4"/>`+
+      `<path d="M232 191 C224 257 224 340 236 407" stroke="#0d3333" stroke-width="5" fill="none" opacity="0.45"/>`+
+      `<path d="M282 190 C294 259 295 342 282 409" stroke="#0d3333" stroke-width="5" fill="none" opacity="0.45"/>`+
+      `<path d="M257 185 C253 255 254 340 260 417" stroke="#8ebbb2" stroke-width="4" fill="none" opacity="0.5"/>`+
+      `<path d="M148 423 C177 405 333 405 364 423 L348 472 C314 491 199 491 164 472Z" fill="url(#stone)" stroke="#746d61" stroke-width="6" stroke-linejoin="round"/>`+
+      `<circle cx="256" cy="443" r="19" fill="#c7bfad" stroke="#756d60" stroke-width="4"/>`+
+      `<path d="M245 444 C252 452 262 452 269 444" stroke="#756d60" stroke-width="3" fill="none" stroke-linecap="round"/>`+
+      `<path d="M194 451 C174 442 172 418 194 416 C211 414 218 432 205 443 C197 450 190 449 185 444" fill="none" stroke="#81786a" stroke-width="7" stroke-linecap="round"/>`+
+      `<path d="M318 451 C338 442 340 418 318 416 C301 414 294 432 307 443 C315 450 322 449 327 444" fill="none" stroke="#81786a" stroke-width="7" stroke-linecap="round"/>`+
+      `<path d="M166 431 C204 441 306 441 346 431" stroke="#eee8d8" stroke-width="4" fill="none" opacity="0.6"/>`+
+      `<path d="M181 470 C221 482 291 482 331 470" stroke="#746d61" stroke-width="4" fill="none" opacity="0.5"/>`+
+      `<g stroke="#a8d2c6" stroke-width="3" opacity="0.28" stroke-linecap="round">`+
+      `<path d="M230 203 L246 199"/><path d="M278 217 L292 212"/><path d="M219 292 L236 287"/><path d="M276 306 L296 301"/><path d="M237 371 L251 367"/><path d="M288 386 L306 381"/><path d="M161 266 L177 259"/><path d="M335 286 L351 278"/>`+
+      `</g></g></svg></g>`;
+  }
   if(kind==="rug"||kind==="carpet"){                 // tappeto (vista dall'alto, con frange)
     const w=s*0.64, h=s*0.46, x=cx-w/2, y=cy-h/2, base="#c25b3a", line="#f4efe4";
     let fr="";
@@ -2996,7 +3123,7 @@ const MD_CODE = {
   boulder:'BL', scoglio:'SG', boa:'BO', cabin:'CB', lifeguard:'LG', shower:'DC', kiosk:'KS', volleyball:'VL', cooler:'BF',
   scannetto:'sc', tamburello:'tm', apecar:'ap', trattore:'tr',
   pumo:'PU', cassapanca:'CP', madia:'MD', cascetta:'CS', murosecco:'MS', malota:'ML', scrace:'SR', ulivo:'UL', muscia:'MC',
-  faro:'FR', pajaro:'PJ', luminarie:'LM', taccaro:'TC'
+  faro:'FR', pajaro:'PJ', luminarie:'LM', taccaro:'TC', santoronzo:'SO'
 };
 function areaLetter(id){ return id<0?'#':String.fromCharCode(65+(id%26)); }
 
@@ -3005,7 +3132,7 @@ const OBJ_CATEGORIES = {
   all: { label: "Tutti gli oggetti" },
   salento: {
     label: "☀️ Salento & Tradizione",
-    list: ["scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "murosecco", "malota", "scrace", "ulivo", "muscia", "apecar", "trattore", "faro", "pajaro", "luminarie", "taccaro"]
+    list: ["scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "murosecco", "malota", "scrace", "ulivo", "muscia", "apecar", "trattore", "faro", "pajaro", "luminarie", "taccaro", "santoronzo"]
   },
   beach: {
     label: "🏖️ Spiaggia & Mare",
@@ -3017,7 +3144,7 @@ const OBJ_CATEGORIES = {
   },
   nature: {
     label: "🌳 Natura & Esterni",
-    list: ["tree", "palm", "flowers", "statue", "boulder", "scoglio", "car", "ulivo", "murosecco", "malota", "scrace", "apecar", "trattore", "pajaro", "luminarie", "taccaro"]
+    list: ["tree", "palm", "flowers", "statue", "boulder", "scoglio", "car", "ulivo", "murosecco", "malota", "scrace", "apecar", "trattore", "pajaro", "luminarie", "taccaro", "santoronzo"]
   },
   walkable: {
     label: "🟢 Solo calpestabili"
@@ -4283,6 +4410,114 @@ $("#importConfirm").addEventListener("click",()=>{
     $("#importModal").style.display="none";
   } catch(e) {
     toast("Errore durante l'importazione dei dati.");
+  }
+});
+
+/* ---------- Aggiunta Dinamica Oggetto ---------- */
+window.assetsDirHandle = null;
+async function requireAssetsDirectoryHandle() {
+  if (window.assetsDirHandle) {
+    const permission = await window.assetsDirHandle.queryPermission({mode: 'readwrite'});
+    if (permission === 'granted') return window.assetsDirHandle;
+    const request = await window.assetsDirHandle.requestPermission({mode: 'readwrite'});
+    if (request === 'granted') return window.assetsDirHandle;
+  }
+  if (!window.showDirectoryPicker) {
+    toast("API File System non supportata su questo browser. Prova con Chrome o Edge.");
+    throw new Error("File System Access API not supported");
+  }
+  window.assetsDirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+  return window.assetsDirHandle;
+}
+
+$("#btnOpenAddObject").addEventListener("click", () => {
+  $("#addObjId").value = "";
+  $("#addObjLabel").value = "";
+  $("#addObjArticle").value = "un";
+  $("#addObjSymbol").value = "";
+  $("#addObjWalkable").checked = false;
+  Array.from($("#addObjCategories").options).forEach(opt => opt.selected = false);
+  $("#addObjType").value = "svg";
+  $("#addObjScale").value = "1";
+  $("#addObjCode").value = "";
+  $("#addObjectModal").style.display = "flex";
+  $("#addObjId").focus();
+});
+$("#addObjClose").addEventListener("click", () => $("#addObjectModal").style.display="none");
+$("#addObjectModal").addEventListener("click", e => { if(e.target.id==="addObjectModal") $("#addObjectModal").style.display="none"; });
+
+$("#addObjConfirm").addEventListener("click", async () => {
+  const id = $("#addObjId").value.trim();
+  const label = $("#addObjLabel").value.trim();
+  const article = $("#addObjArticle").value.trim();
+  const symbol = $("#addObjSymbol").value.trim();
+  const walkable = $("#addObjWalkable").checked;
+  const type = $("#addObjType").value;
+  const scale = parseFloat($("#addObjScale").value) || 1;
+  const code = $("#addObjCode").value.trim();
+
+  if(!id || !label || !symbol) { toast("ID, Label e Simbolo sono obbligatori!"); return; }
+
+  const categories = Array.from($("#addObjCategories").selectedOptions).map(opt => opt.value);
+
+  const newObj = {
+    id, label, article, symbol, walkable, categories,
+    render: { type, scale, svgCode: code }
+  };
+
+  try {
+    const dirHandle = await requireAssetsDirectoryHandle();
+    const fileHandle = await dirHandle.getFileHandle("objects.md", { create: true });
+    const file = await fileHandle.getFile();
+    const text = await file.text();
+
+    let jsonStr = text;
+    let pre = "```json\n";
+    let post = "\n```";
+    let startIdx = text.indexOf("```json");
+    if(startIdx !== -1) {
+      let contentStart = startIdx + 7;
+      let endIdx = text.indexOf("```", contentStart);
+      if(endIdx !== -1) {
+        jsonStr = text.substring(contentStart, endIdx).trim();
+        pre = text.substring(0, contentStart);
+        post = text.substring(endIdx);
+      }
+    }
+
+    let arr = [];
+    try {
+      arr = JSON.parse(jsonStr || "[]");
+    } catch(e) {
+      toast("Il file objects.md non contiene un JSON valido.");
+      return;
+    }
+    
+    // Controlla l'univocità delle chiavi (ID e Simbolo)
+    const duplicateId = arr.find(o => o.id === id);
+    if(duplicateId) {
+      toast(`Errore: L'ID "${id}" è già in uso! Scegline uno univoco.`);
+      return;
+    }
+
+    const duplicateSymbol = arr.find(o => o.symbol === symbol);
+    if(duplicateSymbol) {
+      toast(`Errore: Il Simbolo "${symbol}" è già in uso! Scegline uno univoco.`);
+      return;
+    }
+
+    arr.push(newObj);
+
+    const newContent = pre + "\n" + JSON.stringify(arr, null, 2) + "\n" + post;
+    const writable = await fileHandle.createWritable();
+    await writable.write(newContent);
+    await writable.close();
+
+    toast(`Oggetto ${id} aggiunto a objects.md! (Ricarica l'app)`);
+    $("#addObjectModal").style.display = "none";
+  } catch(err) {
+    console.error(err);
+    if(err.name !== 'AbortError') toast("Errore durante il salvataggio in assets.");
   }
 });
 
