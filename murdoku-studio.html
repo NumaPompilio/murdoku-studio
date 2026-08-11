@@ -6268,7 +6268,7 @@ async function loadRemoteObjects() {
         
         E.OBJECT_LIB[o.id] = { label: o.label, walkable: !!o.walkable };
         if (o.article) E.OBJ_ART[o.id] = o.article;
-        if (o.symbol) OBJ_SYMBOL[o.id] = o.symbol;
+        // if (o.symbol) ... non serve all'engine di render
 
         if (o.render) {
           if (o.render.type === 'text') {
