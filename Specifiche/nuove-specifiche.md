@@ -410,3 +410,6 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 ### 38. Riorganizzazione Layout Mobile Player (v2.4)
 - **Palette Personaggi in Verticale**: Per ottimizzare lo spazio di visualizzazione verticale sui dispositivi mobili, la palette con le icone selezionabili dei personaggi (compresa la X per i blocchi) non occupa più l'intera larghezza sopra la plancia di gioco.
 - **Affiancamento Laterale**: La palette è stata spostata sulla sinistra della plancia di gioco, organizzata in un'unica colonna verticale (dalla A in alto fino alla X in basso). In questo modo la mappa e gli indizi scorrono più in alto sullo schermo, migliorando l'ergonomia su mobile. In modalità desktop la palette mantiene il suo raggruppamento, ma è ora perfettamente centrata rispetto alla colonna principale del tabellone.
+
+### 39. Riduzione Spazi Indizi su Mobile (v2.5)
+- **Compattamento Verticale**: Solo nella visualizzazione MOBILE della modalità Player, l'altezza complessiva dei singoli riquadri contenenti gli indizi è stata lievemente ridotta. Questo è stato ottenuto diminuendo il `padding` (margine interno) sia del box principale che delle righe di testo degli indizi, in modo da mostrare più informazioni a parità di scorrimento dello schermo.
