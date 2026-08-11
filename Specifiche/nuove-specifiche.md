@@ -401,3 +401,8 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
     - *Indizio 1:* "Arturo si trova in un angolo della sua area."
     - *Indizio 2:* "Arturo si trova nella riga più in alto."
     - *Risultato Mostrato:* "Si trova in un angolo della sua area e si trova nella riga più in alto."
+
+### 37. Rendering Vettoriale Overlay Player (v2.3)
+- **Risoluzione Bug Allineamento su Dispositivi Mobili/Tablet**: In precedenza, le pedine piazzate (personaggi, note e bloccanti X) e le croci rosse di esclusione venivano disegnate come elementi HTML (`div`) sovrapposti. Questo causava una rottura del layout (disallineamento e scalatura errata) sui dispositivi in cui la mappa di base veniva ridimensionata tramite CSS (`width: 100%`).
+- **Conversione a SVG Nativo**: Il contenitore `#playerOverlay` è stato convertito in un nodo `<svg>` a cui viene iniettato dinamicamente lo stesso `viewBox` della griglia principale. 
+- Tutti gli elementi dell'overlay (croci e avatar dei personaggi) sono stati riscritti in SVG nativo (`<path>`, `<circle>`, `<text>`) permettendo così un ridimensionamento e un allineamento perfetti e fluidi a qualsiasi risoluzione.

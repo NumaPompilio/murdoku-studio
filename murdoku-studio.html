@@ -241,7 +241,7 @@
     .player-grid-wrap { display: flex !important; flex-direction: column !important; gap: 15px; flex-wrap: nowrap !important; margin-bottom: 0; width: 100%; align-items: center; }
     .player-left-col { flex: 0 0 auto; display: flex; justify-content: center; width: 100%; max-width: 100vw; position: sticky; top: 60px; z-index: 20; background: var(--ink); padding-bottom: 10px; }
     #playerBoardContainer { touch-action: manipulation; width: 100%; max-width: 500px; display: flex; justify-content: center; position: relative; }
-    #playerBoard, #playerHoverOverlay { width: 100% !important; height: auto !important; max-width: 100vw; }
+    #playerBoard, #playerHoverOverlay, #playerOverlay { width: 100% !important; height: auto !important; max-width: 100vw; }
     .player-right-col { flex: 0 0 auto; width: 100%; margin-left: 0; padding-left: 0; padding-bottom: 20px; overflow: visible !important; }
     #playerClues { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 15px; width: 100% !important; padding-right: 0; }
     .player-clue-col { display: contents !important; }
@@ -259,7 +259,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.2</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.3</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -541,7 +541,7 @@
     <div class="player-left-col" style="flex:0 0 auto;">
       <div id="playerBoardContainer" style="position:relative; display:inline-block;">
         <svg id="playerBoard" xmlns="http://www.w3.org/2000/svg" style="display:block;"></svg>
-        <div id="playerOverlay" class="player-overlay" style="pointer-events:none;"></div>
+        <svg id="playerOverlay" class="player-overlay" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; pointer-events:none;"></svg>
         <svg id="playerHoverOverlay" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; pointer-events:none;"></svg>
         <div id="playerClickLayer" style="position:absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;"></div>
       </div>
@@ -5448,6 +5448,11 @@ function updatePlayerOverlay() {
   const N = m.size;
   const P = playerState.padding;
   const CS = playerState.cellSize;
+  const W = P + N*CS + 8, H = P + N*CS + 8;
+  
+  ov.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  ov.setAttribute("width", W);
+  ov.setAttribute("height", H);
   
   const markedR = new Set();
   const markedC = new Set();
@@ -5466,13 +5471,11 @@ function updatePlayerOverlay() {
       if((markedR.has(r) || markedC.has(c)) && !playerState.placed[r+"_"+c] && (cell.walkable || cell.object)) {
         const x = P + c*CS;
         const y = P + r*CS;
-        const xdiv = document.createElement("div");
-        xdiv.className = "player-x-cross";
-        xdiv.style.left = x + "px";
-        xdiv.style.top = y + "px";
-        xdiv.style.width = CS + "px";
-        xdiv.style.height = CS + "px";
-        ov.appendChild(xdiv);
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", `M ${x} ${y} L ${x+CS} ${y+CS} M ${x+CS} ${y} L ${x} ${y+CS}`);
+        p.setAttribute("stroke", "rgba(228,72,61,0.5)");
+        p.setAttribute("stroke-width", CS * 0.08);
+        ov.appendChild(p);
       }
     }
   }
@@ -5485,28 +5488,10 @@ function updatePlayerOverlay() {
     const x = P + c*CS;
     const y = P + r*CS;
     
-    const cdiv = document.createElement("div");
-    
-    if (char.id === "_blocker") {
-      cdiv.className = "player-x-cross";
-      cdiv.style.left = x + "px";
-      cdiv.style.top = y + "px";
-      cdiv.style.width = CS + "px";
-      cdiv.style.height = CS + "px";
-      cdiv.style.pointerEvents = "auto";
-      cdiv.style.cursor = "pointer";
-      cdiv.style.zIndex = "10";
-    } else {
-      cdiv.className = "player-char-on-grid" + (char.kind==="victim" ? " victim" : "");
-      cdiv.style.left = (x + CS*0.1) + "px";
-      cdiv.style.top = (y + CS*0.1) + "px";
-      cdiv.style.width = (CS*0.8) + "px";
-      cdiv.style.height = (CS*0.8) + "px";
-      cdiv.style.fontSize = (CS*0.5) + "px";
-      cdiv.innerText = char.initial;
-      cdiv.style.pointerEvents = "auto";
-    }
-    cdiv.addEventListener("click", (e) => {
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.style.pointerEvents = "auto";
+    g.style.cursor = "pointer";
+    g.addEventListener("click", (e) => {
       e.stopPropagation();
       delete playerState.placed[k];
       updatePlayerPalette();
@@ -5514,12 +5499,23 @@ function updatePlayerOverlay() {
       renderPlayerClues();
     });
     
-    ov.appendChild(cdiv);
+    if (char.id === "_blocker") {
+      g.innerHTML = `<path d="M ${x} ${y} L ${x+CS} ${y+CS} M ${x+CS} ${y} L ${x} ${y+CS}" stroke="rgba(228,72,61,0.5)" stroke-width="${CS * 0.08}" />`;
+    } else {
+      const cx = x + CS/2;
+      const cy = y + CS/2;
+      const r_circ = CS * 0.4;
+      let strokeCol = char.kind === "victim" ? "var(--evidence)" : "var(--violet-bright)";
+      let strokeDash = char.kind === "victim" ? `stroke-dasharray="4"` : "";
+      g.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r_circ}" fill="var(--desk)" stroke="${strokeCol}" stroke-width="2" ${strokeDash} />
+                     <text x="${cx}" y="${cy}" font-family="var(--serif)" font-weight="bold" font-size="${CS*0.5}" fill="${strokeCol}" dominant-baseline="central" text-anchor="middle">${char.initial}</text>`;
+    }
+    ov.appendChild(g);
   }
   
   // Draw notes
   for(let k in playerState.notes) {
-    if(playerState.placed[k]) continue; // don't draw notes under a placed character
+    if(playerState.placed[k]) continue; 
     const notesArr = playerState.notes[k];
     if(!notesArr || notesArr.length === 0) continue;
     
@@ -5540,26 +5536,24 @@ function updatePlayerOverlay() {
     notesArr.forEach((char, idx) => {
       if(idx > 3) return;
       const pos = positions[idx];
-      const ndiv = document.createElement("div");
-      ndiv.className = "player-char-on-grid" + (char.kind==="victim" ? " victim" : "");
-      ndiv.style.left = (x + pos.left) + "px";
-      ndiv.style.top = (y + pos.top) + "px";
-      ndiv.style.width = noteSize + "px";
-      ndiv.style.height = noteSize + "px";
-      ndiv.style.fontSize = (noteSize * 0.65) + "px";
-      ndiv.style.borderWidth = "1.5px";
-      ndiv.style.opacity = "0.65";
-      ndiv.style.filter = "grayscale(40%)";
-      ndiv.style.pointerEvents = "auto";
-      ndiv.innerText = char.initial;
+      const cx = x + pos.left + noteSize/2;
+      const cy = y + pos.top + noteSize/2;
+      const r_circ = noteSize/2;
+      let strokeCol = char.kind === "victim" ? "var(--evidence)" : "var(--violet-bright)";
       
-      ndiv.addEventListener("click", e => {
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.style.pointerEvents = "auto";
+      g.style.cursor = "pointer";
+      g.style.opacity = "0.65";
+      g.style.filter = "grayscale(40%)";
+      g.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r_circ}" fill="var(--desk)" stroke="${strokeCol}" stroke-width="1.5" />
+                     <text x="${cx}" y="${cy}" font-family="var(--serif)" font-weight="bold" font-size="${noteSize*0.65}" fill="${strokeCol}" dominant-baseline="central" text-anchor="middle">${char.initial}</text>`;
+      g.addEventListener("click", (e) => {
         e.stopPropagation();
         playerState.notes[k] = playerState.notes[k].filter(ch => ch.id !== char.id);
         updatePlayerOverlay();
       });
-      
-      ov.appendChild(ndiv);
+      ov.appendChild(g);
     });
   }
 }
