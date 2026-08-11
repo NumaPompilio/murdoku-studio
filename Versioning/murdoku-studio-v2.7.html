@@ -263,15 +263,14 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.9</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.7</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
   <div class="mode-switch">
     <button class="btn active" id="modeEditorBtn">✏️ Editor</button>
     <button class="btn" id="modePlayerBtn">🎮 Gioca</button>
-    <button class="btn primary" id="playerOpenImportBtn" style="display:none; margin-left:10px;"><span class="k">📂</span> Incolla Mappa</button>
-    <button class="btn primary" id="playerOpenFolderLoadBtn" style="display:none; margin-left:10px;"><span class="k">📁</span> Seleziona Mappa</button>
+    <button class="btn primary" id="playerOpenImportBtn" style="display:none; margin-left:10px;"><span class="k">📂</span> Carica / Incolla Mappa</button>
   </div>
   <div class="spacer"></div>
   <div class="toprow">
@@ -479,7 +478,6 @@
         <button class="btn primary" id="saveCurrentMap" style="flex:1"><span class="k">💾</span> Salva mappa</button>
         <button class="btn" id="savedMapsCardBtn" style="flex:1"><span class="k">📂</span> Catalogo (<span id="savedCount">0</span>)</button>
       </div>
-      <button class="btn" id="saveMapToFolderBtn" style="width:100%; margin-bottom:6px"><span class="k">📁</span> Salva su Cartella "Mappe"</button>
       <button class="btn ghost" id="clearElems" style="width:100%; margin-bottom:6px">🧹 Cancella elementi (tieni muri)</button>
       <button class="btn ghost" id="clearAll" style="width:100%; margin-bottom:8px">🗑️ Cancella tutto (con muri)</button>
       <div class="hint">Salvataggio automatico nel browser + archivio mappe salvate.</div>
@@ -600,33 +598,6 @@
     <button class="btn primary" id="savedMapsSaveNew"><span class="k">💾</span> Salva come nuova mappa</button>
   </div>
 </div></div>
-
-<!-- Modale Salva su Cartella -->
-<div id="folderSaveModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(460px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
-  <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);"><h3>Salva Mappa in Cartella</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="folderSaveClose">Chiudi</button></div>
-  <div style="padding:20px 16px; flex:1">
-    <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Nome del file (sarà salvato come .md)</label>
-    <input type="text" id="folderSaveFilename" placeholder="Es. Mappa1" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
-    <div style="margin-top:12px; font-size:11px; color:var(--warn); line-height:1.4">💡 <b>Nota:</b> La prima volta che salvi, il browser ti chiederà di selezionare una cartella (es. "Mappe Salvate"). <b>Seleziona la cartella intera, non i singoli file.</b></div>
-  </div>
-  <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
-    <button class="btn primary" id="folderSaveConfirm">Salva Mappa</button>
-  </div>
-</div></div>
-
-<!-- Modale Seleziona da Cartella -->
-<div id="folderLoadModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(460px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
-  <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);"><h3>Seleziona Mappa da Cartella</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="folderLoadClose">Chiudi</button></div>
-  <div style="padding:20px 16px; flex:1">
-    <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Nome del file da caricare (senza estensione)</label>
-    <input type="text" id="folderLoadFilename" placeholder="Es. Mappa1" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
-    <div style="margin-top:12px; font-size:11px; color:var(--warn); line-height:1.4">💡 <b>Nota:</b> La mappa verrà scaricata automaticamente dal tuo repository GitHub (cartella "Mappe Salvate"). Assicurati di aver fatto <i>push</i> del file.</div>
-  </div>
-  <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
-    <button class="btn primary" id="folderLoadConfirm">Carica Mappa</button>
-  </div>
-</div></div>
-
 <div id="toast"></div>
 
 <script>
@@ -4276,104 +4247,6 @@ $("#importConfirm").addEventListener("click",()=>{
   }
 });
 
-/* ---------- Accesso Cartella Locale (File System Access API) ---------- */
-window.savedMapsDirHandle = null;
-async function requireDirectoryHandle() {
-  if (window.savedMapsDirHandle) {
-    const permission = await window.savedMapsDirHandle.queryPermission({mode: 'readwrite'});
-    if (permission === 'granted') return window.savedMapsDirHandle;
-    const request = await window.savedMapsDirHandle.requestPermission({mode: 'readwrite'});
-    if (request === 'granted') return window.savedMapsDirHandle;
-  }
-  if (!window.showDirectoryPicker) {
-    toast("API File System non supportata su questo browser. Prova con Chrome o Edge.");
-    throw new Error("File System Access API not supported");
-  }
-  window.savedMapsDirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-  return window.savedMapsDirHandle;
-}
-
-$("#saveMapToFolderBtn").addEventListener("click", () => {
-  const m = state.map;
-  if(!m){ toast("Nessuna mappa da salvare"); return; }
-  $("#folderSaveFilename").value = (state.mapTitle || "").trim() || `Mappa_${m.size}x${m.size}`;
-  $("#folderSaveModal").style.display = "flex";
-  $("#folderSaveFilename").focus();
-});
-$("#folderSaveClose").addEventListener("click", () => $("#folderSaveModal").style.display="none");
-$("#folderSaveModal").addEventListener("click", e => { if(e.target.id==="folderSaveModal") $("#folderSaveModal").style.display="none"; });
-
-$("#folderSaveConfirm").addEventListener("click", async () => {
-  let filename = $("#folderSaveFilename").value.trim();
-  if(!filename){ toast("Il nome del file è obbligatorio"); return; }
-  if(!filename.toLowerCase().endsWith(".md")) filename += ".md";
-  try {
-    const dirHandle = await requireDirectoryHandle();
-    const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
-    const writable = await fileHandle.createWritable();
-    const content = buildMapConfigMarkdown();
-    await writable.write(content);
-    await writable.close();
-    toast(`Mappa salvata come ${filename}`);
-    $("#folderSaveModal").style.display = "none";
-  } catch (err) {
-    console.error(err);
-    if(err.name !== 'AbortError') toast("Errore durante il salvataggio.");
-  }
-});
-
-$("#playerOpenFolderLoadBtn").addEventListener("click", () => {
-  $("#folderLoadFilename").value = "";
-  $("#folderLoadModal").style.display = "flex";
-  $("#folderLoadFilename").focus();
-});
-$("#folderLoadClose").addEventListener("click", () => $("#folderLoadModal").style.display="none");
-$("#folderLoadModal").addEventListener("click", e => { if(e.target.id==="folderLoadModal") $("#folderLoadModal").style.display="none"; });
-
-$("#folderLoadConfirm").addEventListener("click", async () => {
-  let filename = $("#folderLoadFilename").value.trim();
-  if(!filename){ toast("Il nome del file è obbligatorio"); return; }
-  if(!filename.toLowerCase().endsWith(".md")) filename += ".md";
-  try {
-    const rawUrl = `https://raw.githubusercontent.com/NumaPompilio/murdoku-studio/main/Mappe%20Salvate/${encodeURIComponent(filename)}`;
-    const res = await fetch(rawUrl);
-    if(!res.ok) {
-      if(res.status === 404) toast("Nessuna mappa trovata");
-      else toast(`Errore di rete: HTTP ${res.status}`);
-      return;
-    }
-    const text = await res.text();
-    const match = text.match(/<!-- MURDOKU_STATE_B64:\s*(.*?)\s*-->/);
-    if(!match) {
-      toast("Il file non contiene i dati di una mappa valida.");
-      return;
-    }
-    const jsonStr = decodeURIComponent(escape(atob(match[1].trim())));
-    const data = JSON.parse(jsonStr);
-    
-    if(!data.size || !data.cells) throw new Error("Dati mappa non validi");
-    const m = E.emptyMap(data.size);
-    for(const c of data.cells){ const cell=E.cellAt(m,c.row,c.col); cell.walkable=c.walkable!==false; if(c.object) cell.object=c.object; }
-    m.walls=new Set(data.walls||[]); m.windows=new Set(data.windows||[]); m.areaNames=data.areaNames||{};
-    m.areaFloors=data.areaFloors ? Object.assign({}, data.areaFloors) : {};
-    m.entities=(data.entities||[]).map(e=>({...e})); m.suspectCount=data.suspectCount||0;
-
-    playerState.map = m;
-    playerState.clues = data.clues || [];
-    playerState.entities = m.entities || [];
-    playerState.placed = {};
-    playerState.notes = {};
-    playerState.activeChar = null;
-
-    toast(`Mappa ${filename} caricata con successo`);
-    $("#folderLoadModal").style.display = "none";
-    renderPlayerUI();
-  } catch (err) {
-    console.error(err);
-    if(err.name !== 'AbortError') toast("Errore durante il caricamento del file.");
-  }
-});
-
 let currentMdFilename = null;
 function openMdModal(title, text, filename){
   currentMdFilename = filename || getExportFilename("documento", "md");
@@ -5223,7 +5096,6 @@ $("#modeEditorBtn").addEventListener("click", () => {
   $("#player-view").style.display = "none";
   $(".toprow").style.display = "flex"; // show toprow buttons
   $("#playerOpenImportBtn").style.display = "none";
-  $("#playerOpenFolderLoadBtn").style.display = "none";
 });
 
 $("#modePlayerBtn").addEventListener("click", () => {
@@ -5234,7 +5106,6 @@ $("#modePlayerBtn").addEventListener("click", () => {
     $("#player-view").style.display = "block";
     $(".toprow").style.display = "none"; // hide editor toprow buttons
     $("#playerOpenImportBtn").style.display = "inline-flex";
-    $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
     
     // Sincronizzazione automatica della mappa dall'Editor al Player
     if (state.map && state.clueObjs && state.clueObjs.length > 0) {
@@ -5266,13 +5137,11 @@ $("#modePlayerBtn").addEventListener("click", () => {
 $("#playerOpenImportBtn").addEventListener("click", () => {
   $("#playerImportSection").style.display = "block";
   $("#playerOpenImportBtn").style.display = "none";
-  $("#playerOpenFolderLoadBtn").style.display = "none";
 });
 
 $("#playerCancelImportBtn").addEventListener("click", () => {
   $("#playerImportSection").style.display = "none";
   $("#playerOpenImportBtn").style.display = "inline-flex";
-  $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
 });
 
 $("#playerDoPasteBtn").addEventListener("click", async () => {
@@ -5320,7 +5189,6 @@ $("#playerConfirmImportBtn").addEventListener("click", () => {
     
     $("#playerImportSection").style.display = "none";
     $("#playerOpenImportBtn").style.display = "inline-flex";
-    $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
     $("#playerImportText").value = "";
     
     renderPlayerUI();

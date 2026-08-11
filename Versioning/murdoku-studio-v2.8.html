@@ -263,7 +263,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.9</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.8</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -620,7 +620,7 @@
   <div style="padding:20px 16px; flex:1">
     <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Nome del file da caricare (senza estensione)</label>
     <input type="text" id="folderLoadFilename" placeholder="Es. Mappa1" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
-    <div style="margin-top:12px; font-size:11px; color:var(--warn); line-height:1.4">💡 <b>Nota:</b> La mappa verrà scaricata automaticamente dal tuo repository GitHub (cartella "Mappe Salvate"). Assicurati di aver fatto <i>push</i> del file.</div>
+    <div style="margin-top:12px; font-size:11px; color:var(--warn); line-height:1.4">💡 <b>Nota:</b> Se il browser apre una finestra di sistema, ti sta chiedendo l'accesso alla cartella. <b>Non cercare di selezionare il file .md</b> (sarà disabilitato), ma seleziona e conferma l'intera cartella "Mappe Salvate". Ci penserà poi il programma a pescare il file giusto.</div>
   </div>
   <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
     <button class="btn primary" id="folderLoadConfirm">Carica Mappa</button>
@@ -4335,14 +4335,16 @@ $("#folderLoadConfirm").addEventListener("click", async () => {
   if(!filename){ toast("Il nome del file è obbligatorio"); return; }
   if(!filename.toLowerCase().endsWith(".md")) filename += ".md";
   try {
-    const rawUrl = `https://raw.githubusercontent.com/NumaPompilio/murdoku-studio/main/Mappe%20Salvate/${encodeURIComponent(filename)}`;
-    const res = await fetch(rawUrl);
-    if(!res.ok) {
-      if(res.status === 404) toast("Nessuna mappa trovata");
-      else toast(`Errore di rete: HTTP ${res.status}`);
+    const dirHandle = await requireDirectoryHandle();
+    let fileHandle;
+    try {
+      fileHandle = await dirHandle.getFileHandle(filename, { create: false });
+    } catch(e) {
+      toast("Nessuna mappa trovata");
       return;
     }
-    const text = await res.text();
+    const file = await fileHandle.getFile();
+    const text = await file.text();
     const match = text.match(/<!-- MURDOKU_STATE_B64:\s*(.*?)\s*-->/);
     if(!match) {
       toast("Il file non contiene i dati di una mappa valida.");

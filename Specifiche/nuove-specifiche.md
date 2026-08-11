@@ -419,3 +419,13 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### 41. Avvio Diretto in Modalità Player da URL (v2.7)
 - **Logica di Accesso Diretto**: È stato aggiunto un listener `DOMContentLoaded` per interpretare i parametri della URL. Se la URL contiene l'ancora `#player` (es. `https://.../#player`) oppure il parametro in querystring `?mode=player` (es. `https://.../?mode=player`), l'applicazione simula in automatico il clic sul pulsante "Gioca" all'avvio, aprendosi direttamente nella visualizzazione Player ed omettendo l'Editor.
+
+### 42. Salvataggio su Cartella Locale e Caricamento da GitHub (v2.9)
+- **Logica Editor (Salvataggio Locale)**:
+  - Aggiunto il pulsante `📁 Salva su Cartella "Mappe"` nella card "Salvataggio & Progetto".
+  - Tramite la **File System Access API**, l'Editor chiede i permessi per accedere in scrittura a una cartella locale. La mappa viene esportata nel formato completo JSON+Testo e salvata o sovrascritta automaticamente con estensione `.md` nella cartella scelta.
+- **Logica Player (Caricamento Remoto)**:
+  - Rinominato il precedente pulsante "Carica / Incolla Mappa" in "Incolla Mappa" per chiarezza.
+  - Aggiunto il pulsante `📁 Seleziona Mappa` accanto ad esso.
+  - Al clic, un popup dedicato richiede di digitare il nome della mappa da caricare. A differenza dell'Editor (che salva in locale), il Player si comporta da Client e scarica il file **direttamente dalla cartella `Mappe Salvate` del repository GitHub ufficiale** (`NumaPompilio/murdoku-studio`), invocando la URL raw di GitHub (`raw.githubusercontent.com`).
+  - In caso di errore di rete o file inesistente, verrà mostrato il messaggio "Nessuna mappa trovata". In questo modo, l'utente può scaricare le mappe ufficiali online senza dover interagire con il file system locale.
