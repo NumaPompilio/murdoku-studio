@@ -413,3 +413,6 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### 39. Riduzione Spazi Indizi su Mobile (v2.5)
 - **Compattamento Verticale**: Solo nella visualizzazione MOBILE della modalità Player, l'altezza complessiva dei singoli riquadri contenenti gli indizi è stata lievemente ridotta. Questo è stato ottenuto diminuendo il `padding` (margine interno) sia del box principale che delle righe di testo degli indizi, in modo da mostrare più informazioni a parità di scorrimento dello schermo.
+
+### 40. Allineamento Verticale Palette Personaggi su Mobile (v2.6)
+- **Centratura rispetto alla Plancia**: Sempre in modalità MOBILE, la colonna laterale che contiene la palette dei personaggi (dalla A alla X) è stata allineata al centro esatto dell'asse verticale rispetto alla plancia di gioco, anziché essere allineata al margine superiore. Questo garantisce un risultato visivo più bilanciato e simmetrico.
