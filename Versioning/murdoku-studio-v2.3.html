@@ -219,13 +219,11 @@
   #player-view{display:flex; flex-direction:column; flex:1; min-height:0; overflow-y:auto; padding:20px; align-items:center;}
   .player-top-bar{display:flex; gap:10px; margin-bottom:20px;}
   .player-grid-wrap{position:relative; margin-bottom:20px; display:inline-block;}
-  .player-left-col{flex:0 0 auto; display:flex; flex-direction:column; align-items:center;}
   .player-palette{display:flex; gap:10px; flex-wrap:wrap; background:var(--panel); padding:10px; border-radius:8px; border:1px solid var(--line); margin-bottom:20px; max-width:800px; justify-content:center;}
   .player-char{width:40px; height:40px; border-radius:50%; border:2px solid var(--line2); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:20px; color:#fff; cursor:pointer; background:var(--panel2); user-select:none;}
   .player-char.victim{border-color:var(--evidence); color:var(--evidence);}
   .player-char.active{border-color:var(--violet-bright); background:var(--violet-dim); box-shadow:0 0 10px rgba(138,107,255,0.5);}
   .player-char.placed{opacity:0.3; cursor:not-allowed;}
-  .player-blocker-btn{margin-left:30px;}
   .player-x-cross{position:absolute; background:linear-gradient(45deg, transparent 45%, rgba(228,72,61,0.5) 48%, rgba(228,72,61,0.5) 52%, transparent 55%), linear-gradient(-45deg, transparent 45%, rgba(228,72,61,0.5) 48%, rgba(228,72,61,0.5) 52%, transparent 55%); pointer-events:none; z-index:5;}
   .player-char-on-grid{position:absolute; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-weight:bold; cursor:pointer; z-index:10; background:var(--desk); border:2px solid var(--violet-bright); color:var(--violet-bright);}
   .player-char-on-grid.victim{border-color:var(--evidence); color:var(--evidence); border-style:dashed;}
@@ -238,11 +236,10 @@
   @media (max-width: 1024px) {
     #playerLegend { display: none !important; }
     #player-view { padding: 10px; }
-    .player-palette { flex-direction: column; gap: 6px; padding: 6px; position: static; z-index: 30; margin-bottom: 0; }
-    .player-blocker-btn { margin-left: 0; margin-top: 30px; }
+    .player-palette { gap: 6px; padding: 6px; position: sticky; top: 0; z-index: 30; }
     .player-char { width: 34px; height: 34px; font-size: 16px; }
     .player-grid-wrap { display: flex !important; flex-direction: column !important; gap: 15px; flex-wrap: nowrap !important; margin-bottom: 0; width: 100%; align-items: center; }
-    .player-left-col { flex: 0 0 auto; display: flex; flex-direction: row; gap: 10px; align-items: flex-start; justify-content: center; width: 100%; max-width: 100vw; position: sticky; top: 0; z-index: 20; background: var(--ink); padding-bottom: 15px; border-bottom: 1px solid var(--line); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
+    .player-left-col { flex: 0 0 auto; display: flex; justify-content: center; width: 100%; max-width: 100vw; position: sticky; top: 60px; z-index: 20; background: var(--ink); padding-bottom: 10px; }
     #playerBoardContainer { touch-action: manipulation; width: 100%; max-width: 500px; display: flex; justify-content: center; position: relative; }
     #playerBoard, #playerHoverOverlay, #playerOverlay { width: 100% !important; height: auto !important; max-width: 100vw; }
     .player-right-col { flex: 0 0 auto; width: 100%; margin-left: 0; padding-left: 0; padding-bottom: 20px; overflow: visible !important; }
@@ -262,7 +259,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.4</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.3</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -538,9 +535,10 @@
     </div>
   </div>
 
+  <div class="player-palette" id="playerPalette" style="display:none;"></div>
+  
   <div class="player-grid-wrap" id="playerGridWrap" style="display:none; gap:30px; align-items:stretch; flex-wrap:wrap; width:100%; max-width:100%;">
     <div class="player-left-col" style="flex:0 0 auto;">
-      <div class="player-palette" id="playerPalette" style="display:none;"></div>
       <div id="playerBoardContainer" style="position:relative; display:inline-block;">
         <svg id="playerBoard" xmlns="http://www.w3.org/2000/svg" style="display:block;"></svg>
         <svg id="playerOverlay" class="player-overlay" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; pointer-events:none; z-index:10;"></svg>
@@ -5241,7 +5239,7 @@ function updatePlayerPalette() {
     const div = document.createElement("div");
     div.className = "player-char" + (char.kind==="victim" || char.kind==="blocker" ? " victim" : "");
     if(char.id === "_blocker") {
-      div.classList.add("player-blocker-btn");
+      div.style.marginLeft = "30px";
     }
     if(isPlaced) div.classList.add("placed");
     if(playerState.activeChar && playerState.activeChar.id === char.id) div.classList.add("active");
