@@ -1,0 +1,4918 @@
+/* ============================================================================
+   MURDOKU ENGINE  — logica pura, nessuna dipendenza dal DOM
+   Modello dati, aree, generazione mappa, piazzamento n-rooks,
+   catalogo indizi, solver deterministico, minimizzazione, soluzione ragionata.
+   ========================================================================== */
+(function (root) {
+  "use strict";
+
+  /* ---------- RNG deterministico (mulberry32) ---------- */
+  function makeRng(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function ri(rng, n) { return Math.floor(rng() * n); }
+  function pick(rng, arr) { return arr[ri(rng, arr.length)]; }
+  function shuffle(rng, arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = ri(rng, i + 1);[a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+
+  /* ---------- Palette oggetti (calpestabile = occupabile) ---------- */
+  // Ogni tema definisce quali oggetti usa. label italiana, walkable = ci si può stare sopra.
+  const OBJECT_LIB = {
+    chair:     { label: "sedia",                walkable: true  },
+    rug:       { label: "tappeto",              walkable: true  },
+    carpet:    { label: "tappeto",              walkable: true  }, // alias retro-compatibile
+    bed:       { label: "letto",                walkable: true  },
+    boat:      { label: "barca",                walkable: true  },
+    car:       { label: "auto",                 walkable: true  },
+    mattress:  { label: "materassino",          walkable: true  },
+    towel:     { label: "telo da mare",         walkable: true  },
+    umbrella:  { label: "ombrellone",           walkable: true  },
+    sunbed:    { label: "lettino da spiaggia",  walkable: true  },
+    surfboard: { label: "tavola da surf",       walkable: true  },
+    walkway:   { label: "passerella",           walkable: true  },
+    pedalo:    { label: "pedalò",               walkable: true  },
+    dock:      { label: "pontile",              walkable: true  },
+    table:     { label: "tavolo",               walkable: false },
+    bookcase:  { label: "libreria",             walkable: false },
+    shelf:     { label: "scaffale",             walkable: false },
+    tv:        { label: "TV",                   walkable: false },
+    plant:     { label: "pianta",               walkable: false },
+    tree:      { label: "albero",               walkable: false },
+    palm:      { label: "palma",                walkable: false },
+    flowers:   { label: "fiori",                walkable: false },
+    statue:    { label: "statua",               walkable: false },
+    boulder:   { label: "masso",                walkable: false },
+    scoglio:   { label: "scoglio",              walkable: false },
+    boa:       { label: "boa",                  walkable: false },
+    cabin:     { label: "cabina",               walkable: false },
+    lifeguard: { label: "torretta bagnino",     walkable: false },
+    shower:    { label: "doccia",               walkable: false },
+    kiosk:     { label: "chiringuito",          walkable: false },
+    volleyball:{ label: "rete da volley",       walkable: false },
+    cooler:    { label: "borsa frigo",          walkable: false },
+    // Oggetti Salento & Tradizione
+    scannetto: { label: "scannetto",            walkable: true  },
+    tamburello:{ label: "tamburello",           walkable: true  },
+    apecar:    { label: "Ape car",              walkable: true  },
+    trattore:  { label: "trattore",             walkable: true  },
+    pumo:      { label: "pumo",                 walkable: false },
+    cassapanca:{ label: "cassapanca",           walkable: false },
+    madia:     { label: "madia",                walkable: false },
+    cascetta:  { label: "cascetta",             walkable: false },
+    murosecco: { label: "muro a secco",         walkable: false },
+    malota:    { label: "malota",               walkable: false },
+    scrace:    { label: "scrace",               walkable: false },
+    ulivo:     { label: "albero di ulivo",      walkable: false },
+    muscia:    { label: "muscia",               walkable: false },
+    faro:      { label: "faro",                 walkable: false },
+    pajaro:    { label: "pajaro",               walkable: false },
+    luminarie: { label: "luminarie",            walkable: false },
+    taccaro:   { label: "taccaro",              walkable: false },
+  };
+  function objLabel(kind) { return (OBJECT_LIB[kind] && OBJECT_LIB[kind].label) || kind; }
+  function objWalkable(kind) { return !!(OBJECT_LIB[kind] && OBJECT_LIB[kind].walkable); }
+
+  /* ---------- Nomi italiani per lettera iniziale ---------- */
+  const ALPHABET = "ABCDEFGHILMNOPQRSTUVZ".split("");
+  const NAMES = {
+    A: ["Agnese", "Aldo", "Anna", "Arturo", "Alba", "Amelia"],
+    B: ["Bianca", "Bruno", "Beatrice", "Biagio", "Bianca", "Bruna"],
+    C: ["Carla", "Carlo", "Chiara", "Cesare", "Cinzia", "Corrado"],
+    D: ["Dario", "Delia", "Diego", "Diana", "Davide", "Dora"],
+    E: ["Elena", "Enzo", "Emma", "Ettore", "Elsa", "Elio"],
+    F: ["Fabio", "Flavia", "Franco", "Fiora", "Furio", "Fosca"],
+    G: ["Gaia", "Gino", "Giulia", "Guido", "Greta", "Gigi"],
+    H: ["Hilde", "Hugo", "Helga", "Hiro", "Hana", "Hektor"],
+    I: ["Ilaria", "Igor", "Ida", "Iacopo", "Iole", "Ivo"],
+    L: ["Luca", "Lidia", "Lorenzo", "Livia", "Lauro", "Lena"],
+    M: ["Marta", "Marco", "Mira", "Mauro", "Milena", "Michele"],
+    N: ["Nadia", "Nino", "Nora", "Neri", "Nella", "Nico"],
+    O: ["Olga", "Orazio", "Ornella", "Otello", "Oriana", "Osvaldo"],
+    P: ["Paola", "Piero", "Petra", "Pietro", "Pia", "Pino"],
+    Q: ["Quirino", "Quinta", "Quinto", "Quilla", "Quirina", "Quarto"],
+    R: ["Rita", "Renzo", "Rosa", "Remo", "Rina", "Rocco"],
+    S: ["Sara", "Sergio", "Silvia", "Saul", "Stella", "Siro"],
+    T: ["Teresa", "Tullio", "Tina", "Tazio", "Tosca", "Tino"],
+    U: ["Ugo", "Ursula", "Uberto", "Ulla", "Umberto", "Uma"],
+    V: ["Vanessa", "Vera", "Vito", "Viola", "Vasco", "Velia"],
+    Z: ["Zara", "Zeno", "Zita", "Zaccaria", "Zoe", "Zelda"],
+  };
+
+  function getGender(name) {
+    const males = new Set(["Aldo","Arturo","Bruno","Biagio","Carlo","Cesare","Corrado","Dario","Diego","Davide","Enzo","Ettore","Elio","Fabio","Franco","Furio","Gino","Guido","Gigi","Hugo","Hiro","Hektor","Igor","Iacopo","Ivo","Luca","Lorenzo","Lauro","Marco","Mauro","Michele","Nino","Neri","Nico","Orazio","Otello","Osvaldo","Piero","Pietro","Pino","Quirino","Quinto","Quarto","Renzo","Remo","Rocco","Sergio","Saul","Siro","Tullio","Tazio","Tino","Ugo","Uberto","Umberto","Vito","Vasco","Zeno","Zaccaria"]);
+    return males.has(name) ? "M" : "F";
+  }
+
+  function nameFor(i, rng, gender) {
+    let list = NAMES[ALPHABET[i % ALPHABET.length]];
+    if (!list) return "Sconosciuto";
+    if (gender) {
+      list = list.filter(n => getGender(n) === gender);
+      if (!list.length) list = NAMES[ALPHABET[i % ALPHABET.length]];
+    }
+    if (rng) return list[ri(rng, list.length)];
+    return list[0];
+  }
+
+  /* ---------- MAPPE PREDEFINITE ---------- */
+  const PREDEFINED_MAPS = [
+    {
+      id: "sorelle",
+      name: "Le due sorelle",
+      size: 9,
+      areaNames: { 0: "Mare", 1: "Scogliera", 2: "Lido", 3: "Spiaggia Libera" },
+      areaFloors: { 0: {type: "pattern", value: "mare"}, 1: {type: "pattern", value: "terra"}, 2: {type: "pattern", value: "spiaggia"}, 3: {type: "pattern", value: "spiaggia"} },
+      areas: {
+        0: [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[2,1],[2,2],[2,5],[2,6],[3,1],[3,2],[3,3],[3,4],[3,6],[4,1],[4,2],[4,3],[4,4],[4,5],[4,6],[5,1],[5,2],[5,3],[5,4],[5,5],[5,6]],
+        1: [[1,7],[1,8],[1,9],[2,7],[2,8],[2,9],[3,7],[3,8],[4,7],[4,8],[4,9],[5,7],[5,8],[5,9],[6,7],[6,8],[6,9],[7,8],[8,8],[8,9],[9,9]],
+        2: [[6,1],[6,3],[7,1],[7,2],[7,3],[8,1],[8,2],[8,3],[9,1]],
+        3: [[6,4],[6,5],[6,6],[7,4],[7,5],[7,6],[7,7],[8,4],[8,5],[8,7],[9,5],[9,6],[9,7]]
+      },
+      walls: [
+        [[1,6],[1,7]], [[2,6],[2,7]], [[3,6],[3,7]], [[4,6],[4,7]], [[5,6],[5,7]], 
+        [[6,3],[6,4]], [[6,6],[6,7]], [[7,3],[7,4]], [[7,7],[7,8]], [[8,3],[8,4]], 
+        [[8,7],[8,8]], [[9,3],[9,4]], [[9,7],[9,8]],
+        [[5,1],[6,1]], [[5,2],[6,2]], [[5,3],[6,3]], [[5,4],[6,4]], [[5,5],[6,5]], 
+        [[5,6],[6,6]], [[6,7],[7,7]]
+      ],
+      objects: {
+        "1,1": "pedalo", "1,5": "surfboard", "2,3": "scoglio", "2,4": "scoglio", 
+        "2,8": "umbrella", "3,1": "pedalo", "3,5": "boa", "3,6": "surfboard", 
+        "3,9": "palm", "4,2": "mattress", "4,4": "mattress", "4,7": "towel", 
+        "5,9": "umbrella", "6,1": "towel", "6,2": "lifeguard", "6,5": "sunbed", 
+        "6,7": "towel", "7,1": "umbrella", "7,2": "umbrella", "7,3": "umbrella", 
+        "7,5": "towel", "7,9": "palm", "8,2": "umbrella", "8,3": "umbrella", 
+        "8,4": "sunbed", "8,6": "cooler", "8,7": "towel", "9,2": "kiosk", 
+        "9,3": "cabin", "9,4": "palm", "9,6": "sunbed", "9,8": "palm"
+      }
+    },
+    {
+      id: "nonna",
+      name: "Casa della Nonna",
+      size: 9,
+      areaNames: { 0: "Veranda", 1: "Cucina", 2: "Corridoio", 3: "Bagno", 4: "Camera", 5: "Salotto" },
+      areaFloors: { 0: {type: "pattern", value: "pavimento"}, 1: {type: "color", value: "#d2b48c"}, 2: {type: "color", value: "#a8d5e2"}, 3: {type: "color", value: "#e08d79"} },
+      areas: {
+        0: [[1,1], [1,2], [1,6], [1,7], [1,8], [1,9], [2,2], [2,3], [2,4], [2,5], [2,6], [2,7], [2,8]],
+        1: [[4,1], [4,2], [4,3], [4,4], [5,1], [5,4], [6,1], [6,4]],
+        2: [[3,5], [4,5], [4,6], [5,5], [5,6], [6,5], [7,5], [8,5], [8,6]],
+        3: [[3,7], [3,8], [3,9], [4,7], [4,8]],
+        4: [[5,7], [5,8], [5,9], [6,7], [6,8], [6,9], [7,7], [7,8], [7,9], [8,7], [8,8], [8,9]],
+        5: [[7,2], [7,3], [7,4], [8,2], [8,3], [8,4], [9,2], [9,3], [9,4]]
+      },
+      walls: [
+        [[3,4],[3,5]], [[3,6],[3,7]], [[4,4],[4,5]], [[4,6],[4,7]], [[5,4],[5,5]], [[5,6],[5,7]], [[6,4],[6,5]], [[6,6],[6,7]], [[7,4],[7,5]], [[7,6],[7,7]], [[8,4],[8,5]], [[8,6],[8,7]], [[9,4],[9,5]], [[9,6],[9,7]],
+        [[2,1],[3,1]], [[2,2],[3,2]], [[2,3],[3,3]], [[2,4],[3,4]], [[2,5],[3,5]], [[2,6],[3,6]], [[2,7],[3,7]], [[2,8],[3,8]], [[2,9],[3,9]], [[4,7],[5,7]], [[4,8],[5,8]], [[4,9],[5,9]], [[6,1],[7,1]], [[6,2],[7,2]], [[6,3],[7,3]], [[6,4],[7,4]]
+      ],
+      objects: {
+        "1,3": "table", "1,4": "table", "1,5": "table", "1,8": "chair", "1,9": "chair",
+        "2,1": "plant", "2,3": "chair", "2,4": "chair", "2,9": "plant",
+        "3,1": "shelf", "3,2": "shelf", "3,3": "shelf", "3,4": "shelf", "3,6": "plant", "3,7": "chair", "3,9": "chair",
+        "4,9": "shelf",
+        "5,1": "chair", "5,2": "table", "5,3": "table",
+        "6,1": "chair", "6,2": "table", "6,3": "table", "6,4": "chair", "6,6": "bookcase", "6,8": "bed", "6,9": "bed",
+        "7,1": "plant", "7,3": "chair", "7,6": "bookcase", "7,8": "bed", "7,9": "bed",
+        "8,1": "tv", "8,3": "chair",
+        "9,1": "plant", "9,3": "chair", "9,5": "plant", "9,6": "plant", "9,7": "shelf", "9,8": "shelf", "9,9": "shelf"
+      }
+    }
+  ];
+
+  function loadPredefinedMap(id) {
+    const def = PREDEFINED_MAPS.find(m => m.id === id);
+    if (!def) return null;
+    const size = def.size;
+    const m = emptyMap(size);
+    m.mapTitle = def.name;
+    
+    // Oggetti
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        const cell = m.cells[r*size + c];
+        const objKey = `${r+1},${c+1}`;
+        if (def.objects[objKey]) {
+          cell.object = def.objects[objKey];
+          if(OBJECT_LIB[cell.object] && !OBJECT_LIB[cell.object].walkable) {
+            cell.walkable = false;
+          }
+        }
+      }
+    }
+
+    // Muri
+    for (const [[r1, c1], [r2, c2]] of def.walls) {
+      m.walls.add(wallKey({row: r1-1, col: c1-1}, {row: r2-1, col: c2-1}));
+    }
+
+    // Aree visive
+    const an = computeAreas(m);
+    
+    // Riassegna i nomi delle aree calcolati
+    const newAreaNames = {};
+    const newAreaFloors = {};
+    for (const [aId, cells] of Object.entries(def.areas)) {
+      if(cells.length > 0) {
+        const r = cells[0][0] - 1;
+        const c = cells[0][1] - 1;
+        const computedId = an.visualArea[r*size + c];
+        newAreaNames[computedId] = def.areaNames[aId];
+        if (def.areaFloors && def.areaFloors[aId]) {
+          newAreaFloors[computedId] = def.areaFloors[aId];
+        }
+      }
+    }
+    m.areaNames = newAreaNames;
+    m.areaFloors = newAreaFloors;
+    return m;
+  }
+
+  /* ---------- Modello mappa ---------- */
+  // cell: { row, col, walkable(base terrain), object?(kind) }
+  // occupabile(cell) = cell.walkable && (!object || objWalkable(object))
+  function key(r, c) { return r + "," + c; }
+  function wallKey(a, b) {
+    const A = key(a.row, a.col), B = key(b.row, b.col);
+    return A < B ? A + "|" + B : B + "|" + A;
+  }
+  function inBounds(m, r, c) { return r >= 0 && c >= 0 && r < m.size && c < m.size; }
+  function cellAt(m, r, c) { return m.cells[r * m.size + c]; }
+  function isOccupiable(m, r, c) {
+    const cell = cellAt(m, r, c);
+    if (!cell.walkable) return false;
+    if (cell.object && !objWalkable(cell.object)) return false;
+    return true;
+  }
+  function hasWall(m, r1, c1, r2, c2) {
+    if (r1 < 0 || r1 >= m.size || c1 < 0 || c1 >= m.size ||
+        r2 < 0 || r2 >= m.size || c2 < 0 || c2 >= m.size) return true;
+    const k = wallKey({ row: r1, col: c1 }, { row: r2, col: c2 });
+    return m.walls.has(k) || (m.windows && m.windows.has(k));
+  }
+  function isWindow(m, r1, c1, r2, c2) {
+    return m.windows && m.windows.has(wallKey({ row: r1, col: c1 }, { row: r2, col: c2 }));
+  }
+  function isFrontWindow(m, r, c) {
+    if (!m.windows || m.windows.size === 0) return false;
+    return isWindow(m, r, c, r-1, c) ||
+           isWindow(m, r, c, r+1, c) ||
+           isWindow(m, r, c, r, c-1) ||
+           isWindow(m, r, c, r, c+1);
+  }
+
+  const DIRS = [[-1, 0], [1, 0], [0, -1], [0, 1]]; // N,S,W,E
+
+  function emptyMap(size) {
+    const cells = [];
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++)
+      cells.push({ row: r, col: c, walkable: true });
+    return { size, cells, walls: new Set(), windows: new Set(), entities: [], suspectCount: 0, areaNames: {} };
+  }
+
+  /* ---------- Calcolo aree (componenti connesse tra celle occupabili) ---------- */
+  function computeAreas(m) {
+    const size = m.size;
+    // Una "stanza" è una regione di celle connesse attraversando qualsiasi cella
+    // (ostacoli e celle bloccate incluse) e bloccata SOLO dai muri.
+    const region = new Array(size * size).fill(-1);
+    let id = 0;
+    const areas = []; // { id, cells:[{row,col}] } (tutte le celle della regione)
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+      if (region[r * size + c] !== -1) continue;
+      const cellsList = [];
+      const stack = [[r, c]]; region[r * size + c] = id;
+      while (stack.length) {
+        const [cr, cc] = stack.pop();
+        cellsList.push({ row: cr, col: cc });
+        for (const [dr, dc] of DIRS) {
+          const nr = cr + dr, nc = cc + dc;
+          if (!inBounds(m, nr, nc)) continue;
+          if (hasWall(m, cr, cc, nr, nc)) continue;      // unica barriera: il muro
+          if (region[nr * size + nc] !== -1) continue;
+          region[nr * size + nc] = id; stack.push([nr, nc]);
+        }
+      }
+      areas.push({ id, cells: cellsList }); id++;
+    }
+    // areaOf: id di regione per le celle OCCUPABILI, -1 per ostacoli/bloccate
+    // (le entità stanno solo su celle occupabili; questa distinzione resta utile al resto del motore)
+    const areaOf = new Array(size * size).fill(-1);
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++)
+      if (isOccupiable(m, r, c)) areaOf[r * size + c] = region[r * size + c];
+    // area "visiva" = id di regione per OGNI cella (per colore e per "accanto")
+    const visualArea = region.slice();
+    return { areaOf, visualArea, areas, count: id, region };
+  }
+
+  // area id (visiva) di una cella qualsiasi
+  function areaIdAt(analysis, m, r, c) { return analysis.visualArea[r * m.size + c]; }
+
+  /* ---------- Generazione mappa casuale ---------- */
+  // Partiziona la griglia in aree connesse (crescita da semi), poi piazza oggetti.
+  const THEME_NAMES = [
+    "Salotto", "Cucina", "Camera", "Studio", "Ingresso", "Veranda", "Soffitta",
+    "Cantina", "Bagno", "Corridoio", "Sala", "Terrazzo", "Giardino", "Serra",
+    "Officina", "Deposito", "Atrio", "Loggia", "Portico", "Galleria",
+  ];
+  const WALKABLE_OBJS = ["chair", "rug", "bed", "mattress", "towel", "umbrella", "sunbed", "surfboard", "walkway", "pedalo", "dock"];
+  const BLOCK_OBJS = ["table", "bookcase", "shelf", "tv", "plant", "tree", "palm", "flowers", "statue", "boulder", "scoglio", "boa", "cabin", "lifeguard", "shower", "kiosk", "volleyball", "cooler"];
+
+  function generateMap(opts) {
+    const size = opts.size;
+    const rng = opts.rng || makeRng((Math.random() * 1e9) | 0);
+    let nAreas = opts.areas || Math.max(3, Math.min(size, 3 + ri(rng, Math.max(1, size - 2))));
+    const m = emptyMap(size);
+
+    // --- partizione in aree per crescita da semi (minimo 3 celle per area) ---
+    const cellsAll = [];
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) cellsAll.push([r, c]);
+    
+    let label;
+    let validAreas = false;
+    let currentNAreas = nAreas;
+    for (let attempts = 0; attempts < 50; attempts++) {
+      label = new Array(size * size).fill(-1);
+      const seeds = shuffle(rng, cellsAll).slice(0, currentNAreas);
+      const frontier = [];
+      seeds.forEach(([r, c], i) => { label[r * size + c] = i; frontier.push([r, c, i]); });
+      // BFS multi-sorgente randomizzata
+      const queue = shuffle(rng, frontier);
+      while (queue.length) {
+        const idx = ri(rng, queue.length);
+        const [r, c, id] = queue.splice(idx, 1)[0];
+        for (const [dr, dc] of shuffle(rng, DIRS)) {
+          const nr = r + dr, nc = c + dc;
+          if (nr < 0 || nc < 0 || nr >= size || nc >= size) continue;
+          if (label[nr * size + nc] !== -1) continue;
+          label[nr * size + nc] = id;
+          queue.push([nr, nc, id]);
+        }
+      }
+      // qualsiasi cella non assegnata -> area del primo vicino
+      for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+        if (label[r * size + c] !== -1) continue;
+        for (const [dr, dc] of DIRS) {
+          const nr = r + dr, nc = c + dc;
+          if (nr < 0 || nc < 0 || nr >= size || nc >= size) continue;
+          if (label[nr * size + nc] !== -1) { label[r * size + c] = label[nr * size + nc]; break; }
+        }
+        if (label[r * size + c] === -1) label[r * size + c] = 0;
+      }
+      
+      // Controllo dimensione minima
+      const counts = new Array(currentNAreas).fill(0);
+      for (let i = 0; i < size * size; i++) counts[label[i]]++;
+      if (counts.every(cnt => cnt >= 3)) {
+        validAreas = true;
+        break;
+      }
+      if (attempts > 20 && currentNAreas > 3) {
+        currentNAreas--; // Riduciamo il numero di stanze se non c'è spazio
+      }
+    }
+    nAreas = currentNAreas; // aggiorniamo per i nomi delle stanze
+    // --- muri sui confini tra aree diverse ---
+    for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) {
+      for (const [dr, dc] of [[1, 0], [0, 1]]) {
+        const nr = r + dr, nc = c + dc;
+        if (nr >= size || nc >= size) continue;
+        if (label[r * size + c] !== label[nr * size + nc])
+          m.walls.add(wallKey({ row: r, col: c }, { row: nr, col: nc }));
+      }
+    }
+    // --- nomi aree ---
+    const names = shuffle(rng, THEME_NAMES);
+    m.areaNames = {};
+    for (let i = 0; i < nAreas; i++) m.areaNames[i] = names[i % names.length];
+
+    // --- oggetti: alcune celle calpestabili, alcuni ostacoli, poche celle bloccate ---
+    const total = size * size;
+    const nWalkObj = Math.round(total * (0.10 + rng() * 0.10));
+    const nBlockObj = Math.round(total * (0.10 + rng() * 0.12));
+    const nBlocked = Math.round(total * (0.02 + rng() * 0.05));
+    const freeCells = shuffle(rng, cellsAll);
+    let ptr = 0;
+    const usedWalkKinds = shuffle(rng, WALKABLE_OBJS).slice(0, 2 + ri(rng, 2));
+    const usedBlockKinds = shuffle(rng, BLOCK_OBJS).slice(0, 3 + ri(rng, 3));
+    for (let i = 0; i < nWalkObj && ptr < freeCells.length; i++, ptr++) {
+      const [r, c] = freeCells[ptr];
+      cellAt(m, r, c).object = pick(rng, usedWalkKinds);
+    }
+    for (let i = 0; i < nBlockObj && ptr < freeCells.length; i++, ptr++) {
+      const [r, c] = freeCells[ptr];
+      cellAt(m, r, c).object = pick(rng, usedBlockKinds);
+    }
+    for (let i = 0; i < nBlocked && ptr < freeCells.length; i++, ptr++) {
+      const [r, c] = freeCells[ptr];
+      cellAt(m, r, c).walkable = false;
+    }
+    // AUTENTICO: entità = lato griglia -> sospetti = size-1 (vittima forzata all'ultima cella).
+    m.suspectCount = opts.suspectCount || (size - 1);
+    if (m.suspectCount > size - 1) m.suspectCount = size - 1;
+    return m;
+  }
+
+  /* ---------- Piazzamento n-rooks + vittima sola con assassino ---------- */
+  // entities: suspectCount sospetti + 1 vittima. Al più uno per riga/colonna.
+  // La vittima è in un'area con ESATTAMENTE un sospetto (l'assassino) e nessun altro.
+  function placeSolution(m, opts) {
+    const rng = opts.rng || makeRng((Math.random() * 1e9) | 0);
+    const analysis = computeAreas(m);
+    const nSusp = m.suspectCount;
+    const nEnt = nSusp + 1;
+
+    // celle occupabili raggruppate per area
+    const occ = [];
+    for (let r = 0; r < m.size; r++) for (let c = 0; c < m.size; c++)
+      if (isOccupiable(m, r, c)) occ.push({ row: r, col: c, area: analysis.areaOf[r * m.size + c] });
+
+    // aree con >=2 celle occupabili (servono per vittima+assassino) e globalmente fattibili
+    for (let attempt = 0; attempt < 4000; attempt++) {
+      const usedRows = new Set(), usedCols = new Set();
+      const placed = []; // {row,col,area}
+      // scegli area vittima con >=2 celle
+      const byArea = {};
+      for (const o of occ) (byArea[o.area] = byArea[o.area] || []).push(o);
+      const bigAreas = Object.keys(byArea).filter(a => byArea[a].length >= 2);
+      if (!bigAreas.length) return null;
+      const victimArea = +pick(rng, bigAreas);
+      const pool = shuffle(rng, byArea[victimArea]);
+      // vittima
+      const vic = pool[0];
+      // assassino (stessa area, riga/colonna diverse)
+      let murd = null;
+      for (const cand of pool.slice(1)) {
+        if (cand.row !== vic.row && cand.col !== vic.col) { murd = cand; break; }
+      }
+      if (!murd) continue;
+      usedRows.add(vic.row); usedCols.add(vic.col);
+      usedRows.add(murd.row); usedCols.add(murd.col);
+      placed.push(Object.assign({ role: "victim" }, vic));
+      placed.push(Object.assign({ role: "murderer" }, murd));
+
+      // altri sospetti: FUORI dall'area vittima, righe/colonne libere
+      const others = shuffle(rng, occ.filter(o =>
+        o.area !== victimArea && !usedRows.has(o.row) && !usedCols.has(o.col)));
+      let ok = true;
+      const need = nSusp - 1;
+      const chosen = [];
+      // backtracking semplice per rispettare righe/colonne
+      function bt(i, ur, uc) {
+        if (chosen.length === need) return true;
+        for (let j = i; j < others.length; j++) {
+          const o = others[j];
+          if (ur.has(o.row) || uc.has(o.col)) continue;
+          if (o.area === victimArea) continue;
+          ur.add(o.row); uc.add(o.col); chosen.push(o);
+          if (bt(j + 1, ur, uc)) return true;
+          ur.delete(o.row); uc.delete(o.col); chosen.pop();
+        }
+        return false;
+      }
+      const ur = new Set(usedRows), uc = new Set(usedCols);
+      if (!bt(0, ur, uc)) continue;
+      for (const o of chosen) placed.push(Object.assign({ role: "suspect" }, o));
+
+      // verifica: area vittima contiene esattamente vittima+assassino (nessun altro)
+      const inVictimArea = placed.filter(p => p.area === victimArea);
+      if (inVictimArea.length !== 2) continue;
+
+      // costruisci entità con nomi
+      const suspects = placed.filter(p => p.role !== "victim");
+      // ordina per (riga,colonna) per assegnare lettere A,B,C... in ordine di lettura
+      suspects.sort((a, b) => a.row - b.row || a.col - b.col);
+      const entities = [];
+      suspects.forEach((p, i) => {
+        const gender = rng() < 0.5 ? "M" : "F";
+        const hasHat = rng() < 0.35;
+        const hasGlasses = rng() < 0.35;
+        entities.push({
+          id: "s" + i, kind: "suspect", initial: ALPHABET[i],
+          name: nameFor(i, rng, gender), row: p.row, col: p.col,
+          isMurderer: p.role === "murderer",
+          gender, hasHat, hasGlasses
+        });
+      });
+      const v = placed.find(p => p.role === "victim");
+      const vicGender = rng() < 0.5 ? "M" : "F";
+      const vicHat = rng() < 0.35;
+      const vicGlasses = rng() < 0.35;
+      entities.push({
+        id: "victim", kind: "victim", initial: "V",
+        name: nameFor(20, rng, vicGender), row: v.row, col: v.col,
+        gender: vicGender, hasHat: vicHat, hasGlasses: vicGlasses
+      });
+      m.entities = entities;
+      m.victimAreaId = victimArea;
+      return { entities, victimArea, analysis };
+    }
+    return null;
+  }
+
+  /* ============================================================================
+     CATALOGO INDIZI
+     Ogni indizio ha: type, subject(id), fact, test(entity, ctx)->bool,
+     candidates(ctx)->Set di celle possibili per il soggetto (per unari),
+     text(ctx)->stringa italiana, category, diff (peso difficoltà).
+     ctx = { map, analysis, byId(id)->entity, size }
+     ========================================================================== */
+
+  function buildContext(m) {
+    const analysis = computeAreas(m);
+    const byId = {};
+    m.entities.forEach(e => byId[e.id] = e);
+    const occCells = [];
+    for (let r = 0; r < m.size; r++) for (let c = 0; c < m.size; c++)
+      if (isOccupiable(m, r, c)) occCells.push({ row: r, col: c });
+    // mappa oggetti presenti per tipo
+    const objCells = {}; // kind -> [{row,col}]
+    for (let r = 0; r < m.size; r++) for (let c = 0; c < m.size; c++) {
+      const o = cellAt(m, r, c).object;
+      if (o) (objCells[o] = objCells[o] || []).push({ row: r, col: c });
+    }
+    return { map: m, analysis, byId, size: m.size, occCells, objCells };
+  }
+
+  function areaName(ctx, id) { return ctx.map.areaNames[id] || ("Area " + (id + 1)); }
+  function beside(ctx, r, c, r2, c2) {
+    // orizzontale/verticale adiacente, stessa area, nessun muro
+    if (Math.abs(r - r2) + Math.abs(c - c2) !== 1) return false;
+    if (hasWall(ctx.map, r, c, r2, c2)) return false;
+    return areaIdAt(ctx.analysis, ctx.map, r, c) === areaIdAt(ctx.analysis, ctx.map, r2, c2);
+  }
+  function areaCells(ctx, id) { // celle occupabili di un'area
+    return ctx.occCells.filter(o => ctx.analysis.areaOf[o.row * ctx.size + o.col] === id);
+  }
+  function suspects(ctx) { return ctx.map.entities.filter(e => e.kind === "suspect"); }
+  function entArea(ctx, e) { return ctx.analysis.areaOf[e.row * ctx.size + e.col]; }
+
+  // Un angolo è una cella che tocca esattamente 2 muri (o bordi della griglia) ortogonali, a prescindere dall'arredamento o dagli oggetti.
+  function isAreaCorner(ctx, r, c) {
+    const m = ctx.map;
+    const size = ctx.size;
+    const wN = (r === 0) || hasWall(m, r, c, r - 1, c);
+    const wS = (r === size - 1) || hasWall(m, r, c, r + 1, c);
+    const wW = (c === 0) || hasWall(m, r, c, r, c - 1);
+    const wE = (c === size - 1) || hasWall(m, r, c, r, c + 1);
+
+    const wallCount = (wN ? 1 : 0) + (wS ? 1 : 0) + (wW ? 1 : 0) + (wE ? 1 : 0);
+    const isOrthogonal = (wN || wS) && (wW || wE);
+    return wallCount === 2 && isOrthogonal;
+  }
+
+  /* ---- generatori di indizi candidati per una data soluzione ---- */
+  function catalogFor(ctx, allowedTypes) {
+    const out = [];
+    const sz = ctx.size;
+    const allow = t => !allowedTypes || allowedTypes.has(t);
+    const sus = suspects(ctx);
+
+    // ----- INDIZIO VITTIMA (fisso) -----
+    // gestito a parte come vincolo; qui aggiungiamo il "narrativo".
+
+    for (const e of sus) {
+      const eArea = entArea(ctx, e);
+      const cell = cellAt(ctx.map, e.row, e.col);
+
+      // IN_AREA
+      if (allow("IN_AREA")) out.push(clue("IN_AREA", e, { areaId: eArea }, "area", 1,
+        ctx => `${e.name} si trova in ${areaName(ctx, eArea)}.`,
+        ctx => areaCells(ctx, eArea)));
+
+      // IN_ROW / IN_COL
+      if (allow("IN_ROW")) out.push(clue("IN_ROW", e, { row: e.row }, "posizione", 1,
+        () => `${e.name} si trova nella riga ${e.row + 1}.`,
+        ctx => ctx.occCells.filter(o => o.row === e.row)));
+      if (allow("IN_COL")) out.push(clue("IN_COL", e, { col: e.col }, "posizione", 1,
+        () => `${e.name} si trova nella colonna ${e.col + 1}.`,
+        ctx => ctx.occCells.filter(o => o.col === e.col)));
+
+      // bordi
+      if (allow("EDGE")) {
+        if (e.row === 0) out.push(clue("EDGE", e, { edge: "top" }, "posizione", 1,
+          () => `${e.name} si trova nella riga più in alto.`, ctx => ctx.occCells.filter(o => o.row === 0)));
+        if (e.row === sz - 1) out.push(clue("EDGE", e, { edge: "bottom" }, "posizione", 1,
+          () => `${e.name} si trova nella riga più in basso.`, ctx => ctx.occCells.filter(o => o.row === sz - 1)));
+        if (e.col === 0) out.push(clue("EDGE", e, { edge: "first" }, "posizione", 1,
+          () => `${e.name} si trova nella prima colonna.`, ctx => ctx.occCells.filter(o => o.col === 0)));
+        if (e.col === sz - 1) out.push(clue("EDGE", e, { edge: "last" }, "posizione", 1,
+          () => `${e.name} si trova nell'ultima colonna.`, ctx => ctx.occCells.filter(o => o.col === sz - 1)));
+      }
+      // NOT first/last column
+      if (allow("NOT_EDGE_COL") && e.col !== 0 && e.col !== sz - 1)
+        out.push(clue("NOT_EDGE_COL", e, {}, "posizione", 2,
+          () => `${e.name} non si trova né nella prima né nell'ultima colonna.`,
+          ctx => ctx.occCells.filter(o => o.col !== 0 && o.col !== sz - 1)));
+
+      // NOT_IN_ROW / NOT_IN_COL / NOT_IN_AREA (negazioni: medio)
+      if (allow("NOT_IN_AREA")) {
+        // scegli un'altra area come negazione (una in cui NON è)
+        const otherAreas = [...new Set(ctx.occCells.map(o => ctx.analysis.areaOf[o.row * sz + o.col]))].filter(a => a !== eArea);
+        if (otherAreas.length) {
+          const na = otherAreas[0];
+          out.push(clue("NOT_IN_AREA", e, { areaId: na }, "area", 2,
+            ctx => `${e.name} non si trova in ${areaName(ctx, na)}.`,
+            ctx => ctx.occCells.filter(o => ctx.analysis.areaOf[o.row * sz + o.col] !== na)));
+        }
+      }
+
+      // ON_OBJECT (su oggetto calpestabile)
+      if (allow("ON_OBJECT") && cell.object && objWalkable(cell.object)) {
+        const k = cell.object;
+        out.push(clue("ON_OBJECT", e, { objectKind: k }, "oggetto", 1,
+          () => `${e.name} si trova su ${withArticle(k)}.`,
+          ctx => ctx.occCells.filter(o => cellAt(ctx.map, o.row, o.col).object === k)));
+      }
+      // ONLY_ON_OBJECT: l'unica persona su un certo tipo di oggetto
+      if (allow("ONLY_ON_OBJECT") && cell.object && objWalkable(cell.object)) {
+        const k = cell.object;
+        const onObj = sus.filter(s => cellAt(ctx.map, s.row, s.col).object === k);
+        if (onObj.length === 1) {
+          let testo = "";
+          if (k === "chair") testo = `${e.name} è l'unica persona seduta su una sedia.`;
+          else if (k === "sunbed") testo = `${e.name} è l'unica persona sdraiata su un lettino.`;
+          else testo = `${e.name} è l'unica persona su ${withArticle(k)}.`;
+          out.push(clue("ONLY_ON_OBJECT", e, { objectKind: k }, "oggetto", 2,
+            () => testo,
+            ctx => ctx.occCells.filter(o => cellAt(ctx.map, o.row, o.col).object === k)));
+        }
+      }
+
+      // BESIDE_OBJECT (accanto a un tipo di oggetto)
+      if (allow("BESIDE_OBJECT")) {
+        const kinds = besideKinds(ctx, e.row, e.col);
+        for (const k of kinds) {
+          out.push(clue("BESIDE_OBJECT", e, { objectKind: k }, "oggetto", 1,
+            () => `${e.name} si trova accanto a ${withArticle(k)}.`,
+            ctx => ctx.occCells.filter(o => besideKinds(ctx, o.row, o.col).includes(k))));
+        }
+      }
+      // NOT_BESIDE_OBJECT
+      if (allow("NOT_BESIDE_OBJECT")) {
+        const kindsHere = besideKinds(ctx, e.row, e.col);
+        // trova un tipo presente sulla mappa ma NON adiacente a e
+        for (const k of Object.keys(ctx.objCells)) {
+          if (!kindsHere.includes(k)) {
+            out.push(clue("NOT_BESIDE_OBJECT", e, { objectKind: k }, "oggetto", 2,
+              () => `${e.name} non si trova accanto a ${withArticle(k)}.`,
+              ctx => ctx.occCells.filter(o => !besideKinds(ctx, o.row, o.col).includes(k))));
+            break;
+          }
+        }
+      }
+
+      // OBJECT_DIR (a Nord/Sud/Est/Ovest di un oggetto)
+      if (allow("OBJECT_DIR")) {
+        const dirs = [
+          { d: "N", dr: 1, dc: 0, lbl: "esattamente a nord" },
+          { d: "S", dr: -1, dc: 0, lbl: "esattamente a sud" },
+          { d: "E", dr: 0, dc: -1, lbl: "esattamente a destra" },
+          { d: "W", dr: 0, dc: 1, lbl: "esattamente a sinistra" }
+        ];
+        for (const dir of dirs) {
+          const r = e.row + dir.dr, c = e.col + dir.dc;
+          if (inBounds(ctx.map, r, c)) {
+            const k = cellAt(ctx.map, r, c).object;
+            if (k && beside(ctx, e.row, e.col, r, c)) {
+              out.push(clue("OBJECT_DIR", e, { objectKind: k, dir: dir.d }, "oggetto", 3,
+                () => `${e.name} si trova ${dir.lbl} di ${withArticle(k)}.`,
+                ctx => ctx.occCells.filter(o => {
+                  const tr = o.row + dir.dr, tc = o.col + dir.dc;
+                  return inBounds(ctx.map, tr, tc) && cellAt(ctx.map, tr, tc).object === k && beside(ctx, o.row, o.col, tr, tc);
+                })));
+            }
+          }
+        }
+      }
+
+      // CORNER / NOT_CORNER (dell'area)
+      if (allow("CORNER")) {
+        if (isAreaCorner(ctx, e.row, e.col))
+          out.push(clue("CORNER", e, {}, "posizione", 2,
+            () => `${e.name} si trova in un angolo della sua area.`,
+            ctx => ctx.occCells.filter(o => isAreaCorner(ctx, o.row, o.col))));
+        else
+          out.push(clue("NOT_CORNER", e, {}, "posizione", 2,
+            () => `${e.name} non si trova in un angolo della sua area.`,
+            ctx => ctx.occCells.filter(o => !isAreaCorner(ctx, o.row, o.col))));
+      }
+
+      // FRONT_WINDOW (di fronte alla finestra)
+      if (allow("FRONT_WINDOW")) {
+        if (isFrontWindow(ctx.map, e.row, e.col))
+          out.push(clue("FRONT_WINDOW", e, {}, "posizione", 2,
+            () => `${e.name} si trova di fronte a una finestra.`,
+            ctx => ctx.occCells.filter(o => isFrontWindow(ctx.map, o.row, o.col))));
+      }
+
+      // ALONE_IN_AREA (nessun altro sospetto nella sua area)
+      if (allow("ALONE")) {
+        const mates = sus.filter(s => s.id !== e.id && entArea(ctx, s) === eArea);
+        if (mates.length === 0)
+          out.push(clue("ALONE", e, {}, "relazione", 2,
+            () => `${e.name} è da ${e.gender==="M"?"solo":"sola"} nella sua area.`, null));
+      }
+
+      // ALONE_WITH_TRAIT (da solo con 1 persona avente un certo tratto)
+      if (allow("ALONE_WITH_TRAIT")) {
+        const mates = sus.filter(s => s.id !== e.id && entArea(ctx, s) === eArea);
+        if (mates.length === 1) {
+          const m0 = mates[0];
+          const traits = ["gender", "hasHat", "hasGlasses"];
+          for (const t of traits) {
+             const val = m0[t];
+             if (val === undefined || val === false) continue;
+             let tName = "";
+             if (t === "gender") tName = val === "M" ? "un uomo" : "una donna";
+             if (t === "hasHat") tName = "una persona con il cappello";
+             if (t === "hasGlasses") tName = "una persona con gli occhiali";
+             
+             out.push(clue("ALONE_WITH_TRAIT", e, { trait: t, val: val, textDesc: tName }, "relazione", 3,
+               () => `${e.name} si trova da ${e.gender==="M"?"solo":"sola"} nella sua area con ${tName}.`, null));
+          }
+        }
+      }
+
+
+      // IN_COL_OR
+      if (allow("IN_COL_OR")) {
+        const otherCols = [];
+        for(let c=0; c<sz; c++) if(c!==e.col) otherCols.push(c);
+        if(otherCols.length > 0) {
+          const c2 = e.col < sz - 1 ? e.col + 1 : e.col - 1;
+          const minC = Math.min(e.col, c2), maxC = Math.max(e.col, c2);
+          out.push(clue("IN_COL_OR", e, { col1: minC, col2: maxC }, "posizione", 2,
+            () => `${e.name} si trova nella ${minC+1}ª o nella ${maxC+1}ª colonna.`,
+            ctx => ctx.occCells.filter(o => o.col === minC || o.col === maxC)));
+        }
+      }
+      // ON_OBJECT_OR
+      if (allow("ON_OBJECT_OR") && cell.object && objWalkable(cell.object)) {
+        const k1 = cell.object;
+        const otherObjs = Object.keys(ctx.objCells).filter(k => k !== k1 && objWalkable(k));
+        if(otherObjs.length > 0) {
+          const k2 = otherObjs[0];
+          out.push(clue("ON_OBJECT_OR", e, { obj1: k1, obj2: k2 }, "oggetto", 3,
+            () => `${e.name} si trova su ${withArticle(k1)} o su ${withArticle(k2)}.`,
+            ctx => ctx.occCells.filter(o => { const ob = cellAt(ctx.map, o.row, o.col).object; return ob === k1 || ob === k2; })));
+        }
+      }
+      // BESIDE_OBJECT_OR
+      if (allow("BESIDE_OBJECT_OR")) {
+        const kinds = besideKinds(ctx, e.row, e.col);
+        if (kinds.length > 0) {
+          const k1 = kinds[0];
+          const otherObjs = Object.keys(ctx.objCells).filter(k => k !== k1);
+          if (otherObjs.length > 0) {
+            const k2 = otherObjs[0];
+            out.push(clue("BESIDE_OBJECT_OR", e, { obj1: k1, obj2: k2 }, "oggetto", 3,
+              () => `${e.name} si trova accanto a ${withArticle(k1)} o a ${withArticle(k2)}.`,
+              ctx => ctx.occCells.filter(o => {
+                const bk = besideKinds(ctx, o.row, o.col);
+                return bk.includes(k1) || bk.includes(k2);
+              })));
+          }
+        }
+      }
+      // TRAIT_ON_OBJECT_IN_AREA
+      if (allow("TRAIT_ON_OBJECT_IN_AREA")) {
+        const mates = sus.filter(s => s.id !== e.id && entArea(ctx, s) === eArea);
+        for(const m of mates) {
+          const mc = cellAt(ctx.map, m.row, m.col);
+          if(mc.object && objWalkable(mc.object) && m.gender) {
+            const tr = m.gender === "M" ? "un uomo" : "una donna";
+            out.push(clue("TRAIT_ON_OBJECT_IN_AREA", e, { trait: m.gender, obj: mc.object }, "relazione", 4,
+              () => `Nella sua area c'è ${tr} su ${withArticle(mc.object)}.`,
+              null));
+          }
+        }
+      }
+      // SOMEONE_OFFSET_ON
+      if (allow("SOMEONE_OFFSET_ON")) {
+        const dirs = [
+          { d: "N", dr: -1, dc: 0, lbl: "nord" }, { d: "S", dr: 1, dc: 0, lbl: "sud" },
+          { d: "E", dr: 0, dc: 1, lbl: "destra" }, { d: "W", dr: 0, dc: -1, lbl: "sinistra" }
+        ];
+        for(const dir of dirs) {
+          for(let dist=1; dist<=3; dist++) {
+            const r = e.row + dir.dr*dist, c = e.col + dir.dc*dist;
+            if(inBounds(ctx.map, r, c)) {
+              const tgt = sus.find(s => s.row === r && s.col === c);
+              if(tgt) {
+                const tc = cellAt(ctx.map, tgt.row, tgt.col);
+                const asse = dir.dr === 0 ? "colonne" : "righe";
+                const asseStr = dist===1 ? asse.slice(0,-1) : asse;
+                if(tc.object && objWalkable(tc.object)) {
+                  out.push(clue("SOMEONE_OFFSET_ON", e, { dist, dir: dir.d, obj: tc.object }, "posizione", 4,
+                    () => `Esattamente ${dist} ${asseStr} a ${dir.lbl} di ${e.name}, qualcuno si trova su ${withArticle(tc.object)}.`,
+                    null));
+                }
+                const bk = besideKinds(ctx, tgt.row, tgt.col);
+                if (allow("SOMEONE_OFFSET_BESIDE") && bk.length > 0) {
+                  const bObj = bk[0];
+                  out.push(clue("SOMEONE_OFFSET_BESIDE", e, { dist, dir: dir.d, obj: bObj }, "posizione", 4,
+                    () => `Esattamente ${dist} ${asseStr} a ${dir.lbl} di ${e.name}, qualcuno si trova accanto a ${withArticle(bObj)}.`,
+                    null));
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // ----- RELAZIONI BINARIE (soggetto e, riferimento other) -----
+
+      for (const o of sus) {
+        if (o.id === e.id) continue;
+        // SAME_AREA
+        if (allow("SAME_AREA") && entArea(ctx, e) === entArea(ctx, o))
+          out.push(clue("SAME_AREA", e, { targetId: o.id }, "relazione", 2,
+            () => `${e.name} si trova nella stessa area di ${o.name}.`, null, o.id));
+        // WITH_IN_AREA (più specifico)
+        if (allow("WITH_IN_AREA") && entArea(ctx, e) === entArea(ctx, o)) {
+          const aid = entArea(ctx, e);
+          out.push(clue("WITH_IN_AREA", e, { targetId: o.id, areaId: aid }, "relazione", 2,
+            ctx => `${e.name} è con ${o.name} in ${areaName(ctx, aid)}.`,
+            ctx => areaCells(ctx, aid), o.id));
+        }
+        // DIFF_AREA (hard, negazione)
+        if (allow("DIFF_AREA") && entArea(ctx, e) !== entArea(ctx, o))
+          out.push(clue("DIFF_AREA", e, { targetId: o.id }, "relazione", 3,
+            () => `${e.name} si trova in un'area diversa da ${o.name}.`, null, o.id));
+        // direzioni cardinali pure (nord, sud, est, ovest - mai diagonali composte)
+        if (allow("CARDINAL")) {
+          const dirNS = e.row < o.row ? "N" : "S";
+          const labelNS = e.row < o.row ? "nord" : "sud";
+          out.push(clue("CARDINAL", e, { targetId: o.id, dir: dirNS },
+            "relazione", 3,
+            () => `${e.name} si trova a ${labelNS} rispetto a ${o.name}.`, null, o.id));
+
+          const dirEW = e.col < o.col ? "W" : "E";
+          const labelEW = e.col < o.col ? "sinistra" : "destra";
+          out.push(clue("CARDINAL", e, { targetId: o.id, dir: dirEW },
+            "relazione", 3,
+            () => `${e.name} si trova a ${labelEW} rispetto a ${o.name}.`, null, o.id));
+        }
+        // offset esatto righe
+        if (allow("ROWS_OFFSET")) {
+          const d = o.row - e.row; // e è d righe a nord (se d>0)
+          if (Math.abs(d) >= 1) {
+            const dir = d > 0 ? "nord" : "sud";
+            out.push(clue("ROWS_OFFSET", e, { targetId: o.id, rowsNorth: d }, "relazione", 3,
+              () => `${e.name} si trova esattamente ${Math.abs(d)} ${Math.abs(d) === 1 ? "riga" : "righe"} a ${dir} di ${o.name}.`,
+              null, o.id));
+          }
+        }
+
+        // COLS_OFFSET
+        if (allow("COLS_OFFSET")) {
+          const d = o.col - e.col;
+          if (Math.abs(d) >= 1) {
+            const dir = d > 0 ? "sinistra" : "destra";
+            out.push(clue("COLS_OFFSET", e, { targetId: o.id, colsWest: d }, "relazione", 3,
+              () => `${e.name} si trova esattamente ${Math.abs(d)} ${Math.abs(d) === 1 ? "colonna" : "colonne"} a ${dir} di ${o.name}.`,
+              null, o.id));
+          }
+        }
+        
+        // ALONE_WITH_PERSON
+        if (allow("ALONE_WITH_PERSON") && entArea(ctx, e) === entArea(ctx, o)) {
+          const mates = sus.filter(s => s.id !== e.id && entArea(ctx, s) === entArea(ctx, e));
+          if (mates.length === 1 && mates[0].id === o.id) {
+            out.push(clue("ALONE_WITH_PERSON", e, { targetId: o.id }, "relazione", 3,
+              () => `${e.name} è da ${e.gender==="M"?"solo":"sola"} nella sua area con ${o.name}.`, null, o.id));
+          }
+        }
+      }
+    }
+
+    // ----- VINCOLI GLOBALI (expert) -----
+    if (allow("EMPTY_ROWS")) {
+      const rowsUsed = new Set(ctx.map.entities.map(e => e.row));
+      const empty = []; for (let r = 0; r < sz; r++) if (!rowsUsed.has(r)) empty.push(r);
+      if (empty.length >= 1)
+        out.push(globalClue("EMPTY_ROWS", { k: empty.length }, "globale", 3,
+          () => `Ci sono esattamente ${empty.length} ${empty.length === 1 ? "riga vuota" : "righe vuote"} (senza persone).`));
+    }
+    if (allow("EMPTY_COLS")) {
+      const colsUsed = new Set(ctx.map.entities.map(e => e.col));
+      const empty = []; for (let c = 0; c < sz; c++) if (!colsUsed.has(c)) empty.push(c);
+      if (empty.length >= 1)
+        out.push(globalClue("EMPTY_COLS", { k: empty.length }, "globale", 3,
+          () => `Ci sono esattamente ${empty.length} ${empty.length === 1 ? "colonna vuota" : "colonne vuote"} (senza persone).`));
+    }
+    if (allow("AREA_MIN_PEOPLE")) {
+      // per ogni area con >=2 persone, indizio "almeno n"
+      const cnt = {};
+      for (const e of ctx.map.entities) { const a = entArea(ctx, e); cnt[a] = (cnt[a] || 0) + 1; }
+      for (const a of Object.keys(cnt)) {
+        if (cnt[a] >= 3)
+          out.push(globalClue("AREA_MIN_PEOPLE", { areaId: +a, n: cnt[a] }, "globale", 3,
+            ctx => `In ${areaName(ctx, +a)} ci sono almeno ${cnt[a]} persone.`));
+      }
+    }
+    if (allow("AREA_PARITY")) {
+      const cnt = {};
+      for (const e of ctx.map.entities) { const a = entArea(ctx, e); cnt[a] = (cnt[a] || 0) + 1; }
+      for (const a of Object.keys(cnt)) {
+        if (cnt[a] >= 1) {
+          const par = cnt[a] % 2;
+          out.push(globalClue("AREA_PARITY", { areaId: +a, parity: par }, "globale", 3,
+            ctx => `In ${areaName(ctx, +a)} il numero di persone è ${par === 0 ? "pari" : "dispari"}.`));
+        }
+      }
+    }
+
+    return out;
+  }
+
+  function besideKinds(ctx, r, c) {
+    const out = [];
+    for (const [dr, dc] of DIRS) {
+      const nr = r + dr, nc = c + dc;
+      if (!inBounds(ctx.map, nr, nc)) continue;
+      if (hasWall(ctx.map, r, c, nr, nc)) continue;
+      if (areaIdAt(ctx.analysis, ctx.map, r, c) !== areaIdAt(ctx.analysis, ctx.map, nr, nc)) continue;
+      const o = cellAt(ctx.map, nr, nc).object;
+      if (o && !out.includes(o)) out.push(o);
+    }
+    return out;
+  }
+  const OBJ_ART = {
+    chair:"una", carpet:"un", rug:"un", bed:"un", boat:"una", car:"un'",
+    mattress:"un", towel:"un", umbrella:"un", sunbed:"un",
+    surfboard:"una", walkway:"una", pedalo:"un", dock:"un",
+    table:"un", bookcase:"una", shelf:"uno", tv:"una", plant:"una", tree:"un", palm:"una",
+    flowers:"dei", statue:"una", boulder:"un", scoglio:"uno", boa:"una",
+    cabin:"una", lifeguard:"una", shower:"una", kiosk:"un", volleyball:"una", cooler:"una",
+    scannetto:"uno", tamburello:"un", apecar:"un'", trattore:"un",
+    pumo:"un", cassapanca:"una", madia:"una", cascetta:"una",
+    murosecco:"un", malota:"una", scrace:"delle", ulivo:"un", muscia:"una",
+    faro:"un", pajaro:"un", luminarie:"delle", taccaro:"un",
+  };
+  function withArticle(kind) {
+    const art = OBJ_ART[kind] || "un";
+    return art + (art === "un'" ? "" : " ") + objLabel(kind);
+  }
+
+  let CLUE_UID = 0;
+  function clue(type, subject, fact, category, diff, text, candidates, targetId) {
+    return {
+      id: "c" + (CLUE_UID++), type, subjectId: subject.id, subjectName: subject.name,
+      fact, category, diff, _text: text, _cand: candidates, targetId: targetId || (fact && fact.targetId),
+      scope: "subject",
+    };
+  }
+  function globalClue(type, fact, category, diff, text) {
+    return { id: "c" + (CLUE_UID++), type, subjectId: null, fact, category, diff, _text: text, scope: "global" };
+  }
+  function clueText(ctx, cl) { return cl._text(ctx); }
+
+  /* ============================================================================
+     SOLVER: trova tutte le disposizioni (fino a 2) coerenti con un set di indizi.
+     Entità (sospetti + vittima) su celle occupabili distinte, righe/colonne distinte,
+     vittima sola con esattamente un sospetto (assassino).
+     ========================================================================== */
+  function solve(m, clues, ctxHint, budget) {
+    const ctx = ctxHint || buildContext(m);
+    const sz = ctx.size;
+    const ents = m.entities.map(e => ({ id: e.id, kind: e.kind }));
+    const vicId = ents.find(e => e.kind === "victim").id;
+    budget = budget || 250000;
+    let nodes = 0, aborted = false;
+
+    // domini candidati (dopo indizi unari con _cand). Cache per-clue.
+    if (!ctx._candCache) ctx._candCache = {};
+    const dom = {};
+    for (const e of ents) dom[e.id] = ctx.occCells.slice();
+
+    const binaryClues = [];
+    const globalClues = [];
+    const aloneIds = new Set();
+    for (const cl of clues) {
+      if (cl.scope === "global") { globalClues.push(cl); continue; }
+      if (cl.targetId) {
+        binaryClues.push(cl);
+        // "con X in [area]" vincola l'AREA di entrambi -> restringe i domini subito
+        if (cl.type === "WITH_IN_AREA" && cl.fact && cl.fact.areaId != null) {
+          const set = new Set(ctx.occCells.filter(o => ctx.analysis.areaOf[o.row * sz + o.col] === cl.fact.areaId).map(o => o.row * sz + o.col));
+          dom[cl.subjectId] = dom[cl.subjectId].filter(o => set.has(o.row * sz + o.col));
+          dom[cl.targetId] = dom[cl.targetId].filter(o => set.has(o.row * sz + o.col));
+        }
+        continue;
+      }
+      if (cl.type === "ALONE") { aloneIds.add(cl.subjectId); continue; }
+      if (cl._cand) {
+        let allowed = ctx._candCache[cl.id];
+        if (!allowed) { allowed = new Set(cl._cand(ctx).map(o => o.row * sz + o.col)); ctx._candCache[cl.id] = allowed; }
+        dom[cl.subjectId] = dom[cl.subjectId].filter(o => allowed.has(o.row * sz + o.col));
+      }
+    }
+
+    const areaOfCell = (r, c) => ctx.analysis.areaOf[r * sz + c];
+    const assign = {};
+    const usedRow = new Set(), usedCol = new Set();
+    const solutions = [];
+
+    // candidati correnti di e dati usedRow/usedCol e vincoli binari con assegnati
+    function currentCands(id) {
+      const base = dom[id];
+      const out = [];
+      for (const o of base) {
+        if (usedRow.has(o.row) || usedCol.has(o.col)) continue;
+        let ok = true;
+        for (const cl of binaryClues) {
+          if (id !== cl.subjectId && id !== cl.targetId) continue;
+          const sp = cl.subjectId === id ? o : assign[cl.subjectId];
+          const tp = cl.targetId === id ? o : assign[cl.targetId];
+          if (!sp || !tp) continue;
+          if (!checkBinary(cl, sp, tp, ctx)) { ok = false; break; }
+        }
+        if (ok) out.push(o);
+      }
+      return out;
+    }
+
+    function search(remaining) {
+      if (solutions.length >= 2 || aborted) return;
+      if (nodes++ > budget) { aborted = true; return; }
+      if (remaining.length === 0) {
+        if (checkFinal()) solutions.push(Object.assign({}, assign));
+        return;
+      }
+      // MRV: scegli entità con dominio corrente minimo
+      let bestI = -1, bestCands = null;
+      for (let i = 0; i < remaining.length; i++) {
+        const c = currentCands(remaining[i]);
+        if (c.length === 0) return; // dead end (forward check)
+        if (bestCands === null || c.length < bestCands.length) { bestI = i; bestCands = c; if (c.length === 1) break; }
+      }
+      const id = remaining[bestI];
+      const rest = remaining.slice(0, bestI).concat(remaining.slice(bestI + 1));
+      for (const o of bestCands) {
+        assign[id] = o; usedRow.add(o.row); usedCol.add(o.col);
+        search(rest);
+        usedRow.delete(o.row); usedCol.delete(o.col); delete assign[id];
+        if (solutions.length >= 2 || aborted) return;
+      }
+    }
+
+    function checkFinal() {
+      const va = areaOfCell(assign[vicId].row, assign[vicId].col);
+      let inArea = 0, suspInArea = 0;
+      for (const e of ents) {
+        if (areaOfCell(assign[e.id].row, assign[e.id].col) === va) { inArea++; if (e.kind === "suspect") suspInArea++; }
+      }
+      if (suspInArea !== 1 || inArea !== 2) return false;
+      for (const sid of aloneIds) {
+        const a = areaOfCell(assign[sid].row, assign[sid].col);
+        let cnt = 0;
+        for (const e of ents) if (e.kind === "suspect" && areaOfCell(assign[e.id].row, assign[e.id].col) === a) cnt++;
+        if (cnt !== 1) return false;
+      }
+      for (const cl of globalClues) if (!checkGlobalClue(cl, assign, ents, ctx)) return false;
+      return true;
+    }
+
+    search(ents.map(e => e.id));
+    return { solutions, unique: solutions.length === 1 && !aborted, aborted };
+  }
+
+  function candSetOf(ctx, cl) {
+    if (!ctx._candCache) ctx._candCache = {};
+    let s = ctx._candCache[cl.id];
+    if (!s) { s = new Set(cl._cand(ctx).map(o => o.row * ctx.size + o.col)); ctx._candCache[cl.id] = s; }
+    return s;
+  }
+  // valuta un indizio su una disposizione completa sol: id -> {row,col}
+  function evalClue(ctx, cl, sol) {
+    const sz = ctx.size;
+    if (cl.scope === "global") return checkGlobalClue(cl, sol, ctx.map.entities, ctx);
+    const sp = sol[cl.subjectId];
+    if (cl.type === "ALONE") {
+      const a = ctx.analysis.areaOf[sp.row * sz + sp.col];
+      let cnt = 0;
+      for (const e of ctx.map.entities) if (e.kind === "suspect" && ctx.analysis.areaOf[sol[e.id].row * sz + sol[e.id].col] === a) cnt++;
+      return cnt === 1;
+    }
+    if (cl.type === "ALONE_WITH_TRAIT") {
+      const a = ctx.analysis.areaOf[sp.row * sz + sp.col];
+      let cnt = 0;
+      let otherHasTrait = false;
+      for (const e of ctx.map.entities) {
+        if (e.kind === "suspect" && ctx.analysis.areaOf[sol[e.id].row * sz + sol[e.id].col] === a) {
+          cnt++;
+          if (e.id !== cl.subjectId && e[cl.fact.trait] === cl.fact.val) otherHasTrait = true;
+        }
+      }
+      return cnt === 2 && otherHasTrait;
+    }
+    if (cl.targetId) return checkBinary(cl, sp, sol[cl.targetId], ctx);
+    if (cl._cand) return candSetOf(ctx, cl).has(sp.row * sz + sp.col);
+    return true;
+  }
+
+  function checkBinary(cl, sp, tp, ctx) {
+    const sz = ctx.size;
+    const aOf = (p) => ctx.analysis.areaOf[p.row * sz + p.col];
+    switch (cl.type) {
+      case "SAME_AREA": return aOf(sp) === aOf(tp);
+      case "WITH_IN_AREA": return aOf(sp) === cl.fact.areaId && aOf(tp) === cl.fact.areaId;
+      case "DIFF_AREA": return aOf(sp) !== aOf(tp);
+      case "CARDINAL": {
+        if (cl.fact.dir === "N") return sp.row < tp.row;
+        if (cl.fact.dir === "S") return sp.row > tp.row;
+        if (cl.fact.dir === "W") return sp.col < tp.col;
+        if (cl.fact.dir === "E") return sp.col > tp.col;
+        const wantN = cl.fact.dir[0] === "N";
+        const wantW = cl.fact.dir[1] === "W";
+        const okNS = wantN ? sp.row < tp.row : sp.row > tp.row;
+        const okEW = wantW ? sp.col < tp.col : sp.col > tp.col;
+        return okNS && okEW;
+      }
+      case "ROWS_OFFSET": return (tp.row - sp.row) === cl.fact.rowsNorth;
+      default: return true;
+    }
+  }
+  function checkGlobalClue(cl, assign, ents, ctx) {
+    const sz = ctx.size;
+    if (cl.type === "INDIRECT") {
+      const trait = cl.fact.trait, val = cl.fact.val, base = cl.fact.baseClue;
+      for (const e of ents) {
+        if (e.kind !== "victim" && e[trait] === val) {
+          const mockSol = { ...assign, [base.subjectId]: assign[e.id] };
+          if (evalClue(ctx, base, mockSol)) return true;
+        }
+      }
+      return false;
+    }
+    if (cl.type === "EMPTY_ROWS") {
+      const used = new Set(ents.map(e => assign[e.id].row));
+      return (sz - used.size) === cl.fact.k;
+    }
+    if (cl.type === "EMPTY_COLS") {
+      const used = new Set(ents.map(e => assign[e.id].col));
+      return (sz - used.size) === cl.fact.k;
+    }
+    if (cl.type === "AREA_MIN_PEOPLE") {
+      let cnt = 0;
+      for (const e of ents) if (ctx.analysis.areaOf[assign[e.id].row * sz + assign[e.id].col] === cl.fact.areaId) cnt++;
+      return cnt >= cl.fact.n;
+    }
+    if (cl.type === "AREA_PARITY") {
+      let cnt = 0;
+      for (const e of ents) if (ctx.analysis.areaOf[assign[e.id].row * sz + assign[e.id].col] === cl.fact.areaId) cnt++;
+      return (cnt % 2) === cl.fact.parity;
+    }
+    return true;
+  }
+
+  /* ============================================================================
+     GENERAZIONE INDIZI: seleziona set minimo, univoco, bilanciato, ruotato.
+     ========================================================================== */
+  function generateClues(m, opts) {
+    opts = opts || {};
+    const rng = opts.rng || makeRng((Math.random() * 1e9) | 0);
+    const difficulty = opts.difficulty || "medio";
+    const maxPer = opts.maxCluesPerCharacter || 4;
+    const allowed = opts.allowedTypes ? new Set(opts.allowedTypes) : null;
+    const preserved = opts.preservedClues || [];
+    const ctx = buildContext(m);
+    const sus = suspects(ctx);
+
+    // catalogo completo di indizi VERI per la soluzione
+    let cat = catalogFor(ctx, allowed);
+
+    if (opts.maxIndClues && (difficulty === "hard" || difficulty === "expert")) {
+      const indCat = [];
+      const traits = ["gender", "hasHat", "hasGlasses"];
+      for (const c of cat) {
+        if (c.scope === "global") continue;
+        const sub = m.entities.find(e => e.id === c.subjectId);
+        if (!sub) continue;
+        for (const t of traits) {
+          const val = sub[t];
+          if (val === undefined || val === false) continue;
+          let tName = "";
+          if (t === "gender") tName = val === "M" ? "Un uomo" : "Una donna";
+          if (t === "hasHat") tName = "Una persona con il cappello";
+          if (t === "hasGlasses") tName = "Una persona con gli occhiali";
+          const baseText = c._text(ctx);
+          const newText = baseText.replace(sub.name, (match, offset) => offset === 0 ? tName : tName.toLowerCase());
+          indCat.push({
+            id: "i" + c.id + "_" + t, type: "INDIRECT", subjectId: c.subjectId,
+            fact: { baseClue: c, trait: t, val: val }, category: "globale", diff: c.diff + 1, scope: "global",
+            _text: () => newText
+          });
+        }
+      }
+      cat = cat.concat(indCat);
+    }
+
+    // pesi per difficoltà
+    const diffPref = { easy: [1], medium: [1, 2], hard: [2, 3], expert: [2, 3] };
+    // filtra per difficoltà preferita ma tieni backup
+    const pref = diffPref[difficulty] || [1, 2];
+
+    // indice per soggetto
+    function bySubject(list) {
+      const g = {}; for (const c of list) if (c.subjectId) (g[c.subjectId] = g[c.subjectId] || []).push(c); return g;
+    }
+
+    // set corrente = preservati
+    let chosen = preserved.slice();
+    const chosenIds = new Set(chosen.map(c => c.id));
+
+    // rotazione per tipologia
+    function typeCounts(list) { const t = {}; for (const c of list) t[c.type] = (t[c.type] || 0) + 1; return t; }
+    function perCharCount(list, sid) { return list.filter(c => c.subjectId === sid).length; }
+
+    // pool ordinato: preferisci difficoltà adatta, poi meno usati, poi varietà casuale
+    function poolSorted() {
+      const tc = typeCounts(chosen);
+      const indCount = chosen.filter(c => c.type === "INDIRECT").length;
+      const p = cat.filter(c => !chosenIds.has(c.id) && (c.type !== "INDIRECT" || indCount < (opts.maxIndClues||0)));
+      return shuffle(rng, p).sort((a, b) => {
+        const pa = pref.includes(a.diff) ? 0 : 1, pb = pref.includes(b.diff) ? 0 : 1;
+        if (pa !== pb) return pa - pb;
+        return (tc[a.type] || 0) - (tc[b.type] || 0);
+      });
+    }
+
+    // 1) garantisci almeno un indizio per sospetto (quando possibile)
+    for (const s of sus) {
+      if (chosen.some(c => c.subjectId === s.id)) continue;
+      const opt = poolSorted().find(c => c.subjectId === s.id && perCharCount(chosen, s.id) < maxPer);
+      if (opt) { chosen.push(opt); chosenIds.add(opt.id); }
+    }
+
+    // 2) aggiungi indizi MIRATI finché la soluzione è unica (o non c'è più modo)
+    const realSol = {}; m.entities.forEach(e => realSol[e.id] = { row: e.row, col: e.col });
+    let guard = 0;
+    while (guard++ < 500) {
+      const res = solve(m, chosen, ctx);
+      if (res.unique) break;
+      let next = null;
+      if (res.solutions.length < 2) {
+        // solver interrotto dal budget (o incoerente): aggiungi un vincolo forte per accelerare
+        next = cat.find(c => !chosenIds.has(c.id) && (c.type === "IN_ROW" || c.type === "IN_COL"))
+          || cat.find(c => !chosenIds.has(c.id));
+        if (!next) break;
+        chosen.push(next); chosenIds.add(next.id);
+        continue;
+      }
+      // l'altra soluzione (diversa dalla reale)
+      const other = res.solutions.find(s => m.entities.some(e => s[e.id].row !== e.row || s[e.id].col !== e.col)) || res.solutions[0];
+      // entità che differiscono
+      const diffIds = new Set(m.entities.filter(e => other[e.id].row !== e.row || other[e.id].col !== e.col).map(e => e.id));
+      const tc = typeCounts(chosen);
+      // candidati: indizi veri (dal catalogo) FALSI sull'altra soluzione
+      const indCount = chosen.filter(c => c.type === "INDIRECT").length;
+      let cands = cat.filter(c => !chosenIds.has(c.id) && !evalClue(ctx, c, other) && (c.type !== "INDIRECT" || indCount < (opts.maxIndClues||0)));
+      if (!cands.length) break;
+      // preferenza: soggetto che differisce > rispetta maxPer > costruttivo (non negativo debole) > non-posizionale > meno usato
+      const posTypes = new Set(["IN_ROW", "IN_COL", "EDGE", "NOT_EDGE_COL"]);
+      const weakTypes = new Set(["DIFF_AREA", "NOT_IN_AREA", "NOT_BESIDE_OBJECT", "NOT_CORNER", "NOT_EDGE_COL"]);
+      cands.sort((a, b) => {
+        const da = a.subjectId && diffIds.has(a.subjectId) ? 0 : 1;
+        const db = b.subjectId && diffIds.has(b.subjectId) ? 0 : 1;
+        if (da !== db) return da - db;
+        const ma = (!a.subjectId || perCharCount(chosen, a.subjectId) < maxPer) ? 0 : 1;
+        const mb = (!b.subjectId || perCharCount(chosen, b.subjectId) < maxPer) ? 0 : 1;
+        if (ma !== mb) return ma - mb;
+        const wa = weakTypes.has(a.type) ? 1 : 0, wb = weakTypes.has(b.type) ? 1 : 0;
+        if (wa !== wb) return wa - wb;
+        const pa = posTypes.has(a.type) ? 1 : 0, pb = posTypes.has(b.type) ? 1 : 0;
+        if (pa !== pb) return pa - pb;
+        return (tc[a.type] || 0) - (tc[b.type] || 0);
+      });
+      next = cands[0];
+      chosen.push(next); chosenIds.add(next.id);
+    }
+
+    // 3) minimizza: rimuovi indizi non preservati se resta unica e copertura ok
+    const preservedIds = new Set(preserved.map(c => c.id));
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (let i = 0; i < chosen.length; i++) {
+        const cl = chosen[i];
+        if (preservedIds.has(cl.id)) continue;
+        const trial = chosen.slice(0, i).concat(chosen.slice(i + 1));
+        // ogni sospetto deve restare coperto se possibile
+        const stillCovered = sus.every(s => trial.some(c => c.subjectId === s.id));
+        if (!stillCovered) continue;
+        const r = solve(m, trial, ctx);
+        if (r.unique) { chosen = trial; changed = true; break; }
+      }
+    }
+
+    // 4) riordina a rotazione per tipologia
+    chosen = rotateByType(chosen);
+
+    const res = solve(m, chosen, ctx);
+    return { clues: chosen, unique: res.unique, solutionsCount: res.solutions.length, ctx };
+  }
+
+  function rotateByType(list) {
+    const byType = {};
+    for (const c of list) (byType[c.type] = byType[c.type] || []).push(c);
+    const types = Object.keys(byType);
+    const out = []; let added = true;
+    while (added) {
+      added = false;
+      for (const t of types) { if (byType[t].length) { out.push(byType[t].shift()); added = true; } }
+    }
+    return out;
+  }
+
+  /* ============================================================================
+     SOLUZIONE RAGIONATA — catena di deduzioni nell'ordine del ragionamento.
+     Propagazione a "singoli": a ogni passo si colloca il sospetto il cui dominio
+     (celle compatibili con i suoi indizi, meno righe/colonne già occupate e i
+     vincoli con chi è già collocato) si è ridotto a una sola cella, spiegando il
+     perché. Se nessuno è forzato, si giustifica per contraddizione col solver.
+     ========================================================================== */
+  function reasonedSolution(m, clues, ctx) {
+    ctx = ctx || buildContext(m);
+    const sz = ctx.size;
+    const ents = m.entities;
+    const sus = ents.filter(e => e.kind === "suspect");
+    const vic = ents.find(e => e.kind === "victim");
+    const byId = {}; ents.forEach(e => byId[e.id] = e);
+    const rc = idx => "(" + (((idx / sz) | 0) + 1) + "," + ((idx % sz) + 1) + ")";
+    const solIdx = e => e.row * sz + e.col;
+    const areaAt = idx => ctx.analysis.areaOf[idx];
+
+    // classifica indizi
+    const unaryBySub = {}, aloneSet = new Set(), binByPair = [], globals = [];
+    const areaRestrict = {}; // sid -> [{clue, areaId}]  (da "con X in [area]")
+    for (const c of clues) {
+      if (c.scope === "global") { globals.push(c); continue; }
+      if (c.targetId) {
+        binByPair.push(c);
+        if (c.type === "WITH_IN_AREA" && c.fact && c.fact.areaId != null) {
+          (areaRestrict[c.subjectId] = areaRestrict[c.subjectId] || []).push({ clue: c, areaId: c.fact.areaId });
+          (areaRestrict[c.targetId] = areaRestrict[c.targetId] || []).push({ clue: c, areaId: c.fact.areaId });
+        }
+        continue;
+      }
+      if (c.type === "ALONE") { aloneSet.add(c.subjectId); continue; }
+      if (c._cand) (unaryBySub[c.subjectId] = unaryBySub[c.subjectId] || []).push(c);
+    }
+    const areaIdxSet = aid => new Set(ctx.occCells.filter(o => ctx.analysis.areaOf[o.row * sz + o.col] === aid).map(o => o.row * sz + o.col));
+    // celle da soli indizi unari (intersezione) + restrizioni d'area di "con X in [area]"
+    function unaryCells(sid) {
+      let set = null;
+      for (const c of (unaryBySub[sid] || [])) {
+        const s = new Set(c._cand(ctx).map(o => o.row * sz + o.col));
+        set = set === null ? s : new Set([...set].filter(x => s.has(x)));
+      }
+      for (const ar of (areaRestrict[sid] || [])) {
+        const s = areaIdxSet(ar.areaId);
+        set = set === null ? s : new Set([...set].filter(x => s.has(x)));
+      }
+      if (set === null) set = new Set(ctx.occCells.map(o => o.row * sz + o.col));
+      return set;
+    }
+    const unaryBase = {}; sus.forEach(s => unaryBase[s.id] = unaryCells(s.id));
+
+    const placed = {};                 // sid -> idx
+    const usedRow = new Set(), usedCol = new Set();
+    const occupantRow = {}, occupantCol = {}; // r/c -> entity (per citare chi occupa)
+
+    function binConstraintsFor(sid, onlyPlaced) {
+      return binByPair.filter(cl => (cl.subjectId === sid || cl.targetId === sid) &&
+        (!onlyPlaced || placed[cl.subjectId === sid ? cl.targetId : cl.subjectId] !== undefined));
+    }
+    function passesBin(sid, idx) {
+      const r = (idx / sz) | 0, c = idx % sz;
+      for (const cl of binByPair) {
+        if (cl.subjectId !== sid && cl.targetId !== sid) continue;
+        const other = cl.subjectId === sid ? cl.targetId : cl.subjectId;
+        if (placed[other] === undefined) continue;
+        const op = { row: (placed[other] / sz) | 0, col: placed[other] % sz };
+        const sp = cl.subjectId === sid ? { row: r, col: c } : op;
+        const tp = cl.targetId === sid ? { row: r, col: c } : op;
+        if (!checkBinary(cl, sp, tp, ctx)) return false;
+      }
+      return true;
+    }
+    function passesAlone(sid, idx) {
+      const a = areaAt(idx);
+      // aree di sospetti "da soli" già collocati sono vietate a chiunque
+      for (const pid in placed) if (aloneSet.has(pid) && areaAt(placed[pid]) === a) return false;
+      // se questo sospetto è "da solo", non può stare in un'area già occupata
+      if (aloneSet.has(sid)) for (const pid in placed) if (areaAt(placed[pid]) === a) return false;
+      return true;
+    }
+    function curDomain(sid) {
+      const out = [];
+      for (const idx of unaryBase[sid]) {
+        const r = (idx / sz) | 0, c = idx % sz;
+        if (usedRow.has(r) || usedCol.has(c)) continue;
+        if (!passesBin(sid, idx)) continue;
+        if (!passesAlone(sid, idx)) continue;
+        out.push(idx);
+      }
+      return out;
+    }
+    // solve con sospetti "appuntati" a celle fisse (per prove per assurdo)
+    function pinnedSolutions(fixed) {
+      const pins = Object.keys(fixed).map(sid => ({
+        id: "pin_" + sid, scope: "subject", subjectId: sid, type: "PIN",
+        _cand: () => [{ row: (fixed[sid] / sz) | 0, col: fixed[sid] % sz }],
+      }));
+      return solve(m, clues.concat(pins), ctx, 300000);
+    }
+
+    const steps = [];
+    let n = 0;
+    const cluesFor = sid => (clues.filter(c => c.subjectId === sid && c.scope !== "global"));
+    const citeList = arr => arr.map(c => "«" + clueText(ctx, c) + "»").join(", ");
+    const dedupById = arr => { const s = new Set(), o = []; for (const c of arr) if (!s.has(c.id)) { s.add(c.id); o.push(c); } return o; };
+
+    steps.push({
+      title: "Impostazione",
+      text: "Regola base del Murdoku: una sola persona per riga e una per colonna. " +
+        "Conviene partire da chi ha la posizione più vincolata e, dopo ogni collocazione, " +
+        "eliminare la riga e la colonna occupate: questo sblocca le deduzioni successive."
+    });
+
+    const listCells = dom => dom.length <= 8 ? dom.slice().sort((a, b) => a - b).map(rc).join(", ") : (dom.length + " celle");
+
+    // dominio di un sospetto data una mappa di collocazioni ipotetiche
+    function domainWith(placement, qid) {
+      const usedR = new Set(), usedC = new Set();
+      for (const k in placement) { usedR.add((placement[k] / sz) | 0); usedC.add(placement[k] % sz); }
+      const out = [];
+      for (const idx of unaryBase[qid]) {
+        const r = (idx / sz) | 0, c = idx % sz;
+        if (usedR.has(r) || usedC.has(c)) continue;
+        let ok = true;
+        for (const cl of binByPair) {
+          if (cl.subjectId !== qid && cl.targetId !== qid) continue;
+          const other = cl.subjectId === qid ? cl.targetId : cl.subjectId;
+          if (placement[other] === undefined) continue;
+          const op = { row: (placement[other] / sz) | 0, col: placement[other] % sz };
+          const sp = cl.subjectId === qid ? { row: r, col: c } : op;
+          const tp = cl.targetId === qid ? { row: r, col: c } : op;
+          if (!checkBinary(cl, sp, tp, ctx)) { ok = false; break; }
+        }
+        if (!ok) continue;
+        const a = areaAt(idx);
+        for (const k in placement) { if (aloneSet.has(k) && areaAt(placement[k]) === a) { ok = false; break; } }
+        if (aloneSet.has(qid)) for (const k in placement) { if (areaAt(placement[k]) === a) { ok = false; break; } }
+        if (!ok) continue;
+        out.push(idx);
+      }
+      return out;
+    }
+    // se collocassi altSid in altIdx, qualche sospetto resterebbe senza celle? (conflitto concreto)
+    function quickConflict(altSid, altIdx) {
+      const pm = Object.assign({}, placed, { [altSid]: altIdx });
+      for (const s of sus) {
+        if (pm[s.id] !== undefined) continue;
+        if (domainWith(pm, s.id).length === 0) return byId[s.id];
+      }
+      return null;
+    }
+    // citazioni di restrizione d'area ("con X in [area]") che toccano sid
+    const areaCitesFor = sid => (areaRestrict[sid] || []).map(a => a.clue);
+
+    function place(sid, idx, how, extra) {
+      const r = (idx / sz) | 0, c = idx % sz;
+      n++;
+      const e = byId[sid];
+      const mine = cluesFor(sid);
+      const unaryPure = mine.filter(c => c._cand && !c.targetId);
+      const areaCites = areaCitesFor(sid);
+      const posCite = dedupById(unaryPure.concat(areaCites)); // restrittori di posizione/area
+      const posIds = new Set(posCite.map(c => c.id));
+      const binPlaced = binByPair.filter(cl => (cl.subjectId === sid || cl.targetId === sid) &&
+        placed[cl.subjectId === sid ? cl.targetId : cl.subjectId] !== undefined);
+      const binOnly = binPlaced.filter(c => !posIds.has(c.id));
+      const cons = dedupById(posCite.concat(binOnly));
+      let text = "";
+      const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+      if (how === "single") {
+        const base = [...unaryBase[sid]];
+        if (posCite.length && base.length <= 1 && !binOnly.length) {
+          text = `${posCite.length === 1 ? "L'indizio" : "Gli indizi"} ${citeList(posCite)} ${posCite.length === 1 ? "colloca" : "collocano"} ${e.name} direttamente in ${rc(idx)}.`;
+        } else {
+          const rows = [...new Set(base.filter(x => x !== idx && usedRow.has((x / sz) | 0)).map(x => (x / sz) | 0))];
+          const cols = [...new Set(base.filter(x => x !== idx && usedCol.has(x % sz)).map(x => x % sz))];
+          const bits = [];
+          const elim = [];
+          if (rows.length) elim.push("le righe " + rows.map(x => (x + 1) + (occupantRow[x] ? " (" + occupantRow[x].name + ")" : "")).join(", "));
+          if (cols.length) elim.push("le colonne " + cols.map(x => (x + 1) + (occupantCol[x] ? " (" + occupantCol[x].name + ")" : "")).join(", "));
+          if (elim.length) bits.push("escludendo " + elim.join(" e "));
+          if (binOnly.length) bits.push("per " + citeList(binOnly));
+          if (posCite.length) {
+            text = `${posCite.length === 1 ? "L'indizio" : "Gli indizi"} ${citeList(posCite)} ${posCite.length === 1 ? "limita" : "limitano"} ${e.name} a ${listCells(base)}. `;
+            text += bits.length ? `${cap(bits.join(" e "))}, resta ${rc(idx)}.` : `Resta ${rc(idx)}.`;
+          } else {
+            text = `${bits.length ? cap(bits.join(" e ")) : "Per esclusione"}, ${e.name} può stare solo in ${rc(idx)}.`;
+          }
+        }
+      } else { // contra / uniqueness
+        const dom = (extra && extra.dom) || [idx];
+        const part1 = cons.length
+          ? `${cons.length === 1 ? "L'indizio" : "Gli indizi"} ${citeList(cons)} ${cons.length === 1 ? "restringe" : "restringono"} ${e.name} a ${listCells(dom)}.`
+          : `Restano possibili per ${e.name} le celle ${listCells(dom)}.`;
+        let part2;
+        const conflicts = (extra && extra.conflicts) || [];
+        const named = conflicts.filter(x => x.who);
+        if (named.length && dom.length <= 3) {
+          part2 = cap(named.map(x => `se fosse in ${rc(x.alt)}, ${x.who.name} resterebbe senza celle`).join("; ")) +
+            `: quindi ${e.name} è in ${rc(idx)}.`;
+        } else if (extra && extra.allVerified && dom.length > 1) {
+          part2 = `Provando le altre non si arriva a nessuna disposizione valida: resta ${rc(idx)}.`;
+        } else {
+          part2 = `L'unica posizione compatibile con tutti gli indizi è ${rc(idx)}.`;
+        }
+        text = part1 + " " + part2;
+      }
+
+      // aggiorna lo stato DOPO aver costruito la spiegazione
+      placed[sid] = idx; usedRow.add(r); usedCol.add(c);
+      occupantRow[r] = e; occupantCol[c] = e;
+      steps.push({ title: `${n}. ${e.name} (${e.initial})`, text });
+    }
+
+    // ciclo di propagazione
+    const trace = [];
+    const remaining = new Set(sus.map(s => s.id));
+    let safety = 0;
+    while (remaining.size && safety++ < 300) {
+      const cand = [...remaining].map(sid => {
+        const linked = binByPair.some(cl => (cl.subjectId === sid || cl.targetId === sid) &&
+          placed[cl.subjectId === sid ? cl.targetId : cl.subjectId] !== undefined);
+        return { sid, dom: curDomain(sid), linked, hasUnary: (unaryBySub[sid] || []).length > 0 || (areaRestrict[sid] || []).length > 0 };
+      }).sort((a, b) => a.dom.length - b.dom.length ||
+        (a.linked === b.linked ? 0 : a.linked ? -1 : 1) ||
+        (a.hasUnary === b.hasUnary ? 0 : a.hasUnary ? -1 : 1) ||
+        byId[a.sid].initial.localeCompare(byId[b.sid].initial));
+      const single = cand.find(x => x.dom.length === 1);
+      if (single) { trace.push({ kind: "single", sid: single.sid }); place(single.sid, single.dom[0], "single"); remaining.delete(single.sid); continue; }
+      const target = cand[0];
+      const trueIdx = solIdx(byId[target.sid]);
+      const alts = target.dom.filter(x => x !== trueIdx);
+      // conflitti concreti (per il caso di poche alternative)
+      let conflicts = [], allVerified = false;
+      if (alts.length && alts.length <= 3) {
+        conflicts = alts.map(alt => ({ alt, who: quickConflict(target.sid, alt) }));
+        allVerified = alts.every(alt => {
+          const rr = pinnedSolutions(Object.assign({}, placed, { [target.sid]: alt }));
+          return rr.solutions.length === 0 && !rr.aborted;
+        });
+      } else if (alts.length && alts.length <= 6) {
+        allVerified = alts.every(alt => {
+          const rr = pinnedSolutions(Object.assign({}, placed, { [target.sid]: alt }));
+          return rr.solutions.length === 0 && !rr.aborted;
+        });
+      }
+      trace.push({ kind: allVerified ? "contra" : "unique", sid: target.sid });
+      place(target.sid, trueIdx, "contra", { dom: target.dom.length ? target.dom : [trueIdx], allVerified, conflicts });
+      remaining.delete(target.sid);
+    }
+
+    // vittima
+    n++;
+    const vIdx = solIdx(vic);
+    const freeRows = []; for (let r = 0; r < sz; r++) if (!usedRow.has(r)) freeRows.push(r);
+    const freeCols = []; for (let c = 0; c < sz; c++) if (!usedCol.has(c)) freeCols.push(c);
+    let vText;
+    if (freeRows.length === 1 && freeCols.length === 1)
+      vText = `Tutti i sospetti sono collocati. Resta libera solo la riga ${freeRows[0] + 1} e la colonna ${freeCols[0] + 1}: ` +
+        `la vittima ${vic.name} è per forza in ${rc(vIdx)}.`;
+    else
+      vText = `La vittima ${vic.name} occupa ${rc(vIdx)}.`;
+    steps.push({ title: `${n}. La vittima`, text: vText });
+
+    // assassino
+    n++;
+    const va = areaAt(vIdx);
+    const inArea = sus.filter(s => areaAt(solIdx(s)) === va);
+    const murd = inArea.find(s => true);
+    steps.push({
+      title: `${n}. L'assassino`,
+      text: `La vittima si trova in ${areaName(ctx, va)}. Per l'indizio chiave, la vittima era sola con l'assassino: ` +
+        `l'unico sospetto presente in quell'area è ${murd ? murd.name + " (" + murd.initial + ")" : "?"} → ` +
+        `${murd ? murd.name : "?"} è l'assassino.`
+    });
+
+    // verifica vincoli globali (se presenti)
+    if (globals.length) {
+      steps.push({
+        title: "Controllo finale",
+        text: "I vincoli globali sono soddisfatti dalla disposizione trovata: " +
+          globals.map(c => "«" + clueText(ctx, c) + "»").join(", ") + "."
+      });
+    }
+    // metadati per il punteggio di eleganza
+    const nonGlobal = clues.filter(c => c.scope !== "global");
+    steps.meta = {
+      total: trace.length,
+      singles: trace.filter(t => t.kind === "single").length,
+      contras: trace.filter(t => t.kind === "contra").length,
+      uniques: trace.filter(t => t.kind === "unique").length,
+      nClues: clues.length,
+      typeCount: new Set(nonGlobal.map(c => c.type)).size,
+      catCount: new Set(clues.map(c => c.category)).size,
+      suspects: sus.length,
+    };
+    return steps;
+  }
+
+  /* ============================================================================
+     PUNTEGGIO DI ELEGANZA — quanto è "divertente da risolvere" un set di indizi.
+     Premia: deduzioni dirette (naked single), varietà di tipi e categorie,
+     concisione. Penalizza: passi risolti "per unicità" (poco spiegabili) e,
+     più lievemente, quelli per contraddizione verificata.
+     ========================================================================== */
+  function eleganceScore(m, clues, ctx) {
+    ctx = ctx || buildContext(m);
+    const steps = reasonedSolution(m, clues, ctx);
+    const meta = steps.meta || {};
+    let score = 100;
+    score -= (meta.uniques || 0) * 14;   // passi "fidati" (poco appaganti)
+    score -= (meta.contras || 0) * 5;    // contraddizioni verificate: legittime ma meno eleganti
+    const variety = meta.typeCount / Math.max(1, meta.nClues); // 0..1
+    score += Math.round((variety - 0.4) * 25);
+    if ((meta.catCount || 0) >= 3) score += 8;
+    if ((meta.catCount || 0) >= 4) score += 4;
+    const perChar = meta.nClues / Math.max(1, meta.suspects);
+    if (perChar > 2.2) score -= Math.round((perChar - 2.2) * 10); // troppi indizi = verboso
+    score = Math.max(0, Math.min(100, Math.round(score)));
+    const label = score >= 80 ? "Ottima" : score >= 65 ? "Buona" : score >= 45 ? "Discreta" : "Scarsa";
+    return { score, label, meta };
+  }
+
+  /* Genera più set di indizi (variando il caso) e restituisce il più elegante e unico. */
+  function generateBestClues(m, opts) {
+    opts = opts || {};
+    const tries = Math.max(1, opts.tries || 5);
+    const baseRng = opts.rng || makeRng((Math.random() * 1e9) | 0);
+    let best = null;
+    for (let i = 0; i < tries; i++) {
+      const rng = makeRng(((baseRng() * 1e9) | 0) ^ (i * 2654435761));
+      let g;
+      try {
+        g = generateClues(m, {
+          difficulty: opts.difficulty, maxCluesPerCharacter: opts.maxCluesPerCharacter,
+          allowedTypes: opts.allowedTypes, preservedClues: opts.preservedClues, rng,
+        });
+      } catch (e) { continue; }
+      if (!g.unique) continue;
+      const el = eleganceScore(m, g.clues, g.ctx);
+      if (!best || el.score > best.elegance.score)
+        best = { clues: g.clues, ctx: g.ctx, unique: true, solutionsCount: g.solutionsCount, elegance: el };
+    }
+    if (!best) { // nessun set unico trovato: ripiego su una generazione singola
+      const g = generateClues(m, {
+        difficulty: opts.difficulty, maxCluesPerCharacter: opts.maxCluesPerCharacter,
+        allowedTypes: opts.allowedTypes, preservedClues: opts.preservedClues, rng: baseRng,
+      });
+      best = { clues: g.clues, ctx: g.ctx, unique: g.unique, solutionsCount: g.solutionsCount, elegance: eleganceScore(m, g.clues, g.ctx) };
+    }
+    return best;
+  }
+
+  /* ---------- Pacchetto pubblico ---------- */
+  const API = {
+    makeRng, ri, pick, shuffle,
+    OBJECT_LIB, objLabel, objWalkable, ALPHABET, NAMES, nameFor,
+    emptyMap, cellAt, isOccupiable, hasWall, isWindow, isFrontWindow, wallKey, key, computeAreas, areaIdAt, isAreaCorner,
+    generateMap, placeSolution, buildContext, catalogFor, clueText,
+    solve, generateClues, generateBestClues, eleganceScore, reasonedSolution, suspects, entArea, areaName, getGender,
+    loadPredefinedMap, PREDEFINED_MAPS
+  };
+  root.MurdokuEngine = API;
+  if (typeof module !== "undefined" && module.exports) module.exports = API;
+})(typeof globalThis !== "undefined" ? globalThis : this);
+
+</script>
+<script>
+"use strict";
+const E = window.MurdokuEngine;
+const OBJ = E.OBJECT_LIB;
+
+/* --------- emoji per oggetti ed entità --------- */
+const OBJ_EMOJI = {
+  chair:"🪑", bed:"🛏️", boat:"⛵", car:"🚗",
+  bookcase:"📚", shelf:"🗄️", tv:"📺", plant:"🪴", tree:"🌳",
+  flowers:"🌷", statue:"🗿", boulder:"🪨",
+  scannetto:"🪑", tamburello:"🪘", apecar:"🛺", trattore:"🚜",
+  pumo:"🏺", cassapanca:"🧰", madia:"🪵", cascetta:"📦",
+  murosecco:"🧱", malota:"🪲", scrace:"🌿", ulivo:"🫒", muscia:"🐱",
+  faro:"🗼", pajaro:"🛖", luminarie:"✨", taccaro:"🪵",
+};
+
+/* AVATAR PERSONAGGI
+   ===================================================================== */
+function charAvatarSVG(s) {
+  const color = "#5b48a8";
+  const skin = "#f5cfa0";
+  const hair = "#3e2a14";
+  
+  let out = `<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">`;
+  out += `<circle cx="50" cy="50" r="48" fill="#f8f9fa" stroke="#e0e0e0" stroke-width="2"/>`;
+  out += `<defs><clipPath id="avatarClip_${s.id}"><circle cx="50" cy="50" r="48" /></clipPath></defs>`;
+  out += `<g clip-path="url(#avatarClip_${s.id})">`;
+  
+  // Corpo
+  out += `<path d="M 20 100 Q 50 40 80 100 Z" fill="${color}" />`;
+  out += `<rect x="42" y="60" width="16" height="20" fill="#e5bc8f" />`;
+
+  // Capelli posteriori (Donna)
+  if (s.gender === 'F') {
+    out += `<path d="M 25 45 L 25 80 Q 50 90 75 80 L 75 45 Z" fill="${hair}" />`;
+  }
+
+  // Testa
+  out += `<circle cx="50" cy="45" r="22" fill="${skin}" />`;
+
+  // Capelli anteriori
+  if (s.gender === 'F') {
+    out += `<path d="M 28 45 C 35 20, 65 20, 72 45 C 65 30, 35 30, 28 45 Z" fill="${hair}" />`;
+  } else {
+    out += `<path d="M 28 45 C 25 15, 75 15, 72 45 C 75 25, 25 25, 28 45 Z" fill="${hair}" />`;
+  }
+
+  // Occhi
+  out += `<circle cx="42" cy="45" r="2.5" fill="#333" />`;
+  out += `<circle cx="58" cy="45" r="2.5" fill="#333" />`;
+
+  // Occhiali
+  if (s.hasGlasses) {
+    out += `<circle cx="42" cy="45" r="7.5" fill="none" stroke="#222" stroke-width="2.5"/>`;
+    out += `<circle cx="58" cy="45" r="7.5" fill="none" stroke="#222" stroke-width="2.5"/>`;
+    out += `<line x1="49.5" y1="45" x2="50.5" y2="45" stroke="#222" stroke-width="2.5"/>`;
+    out += `<line x1="28" y1="42" x2="34.5" y2="45" stroke="#222" stroke-width="2.5"/>`;
+    out += `<line x1="72" y1="42" x2="65.5" y2="45" stroke="#222" stroke-width="2.5"/>`;
+  }
+
+  // Cappello
+  if (s.hasHat) {
+    out += `<ellipse cx="50" cy="22" rx="30" ry="6" fill="#444" />`;
+    out += `<path d="M 33 22 C 33 5, 67 5, 67 22 Z" fill="#333" />`;
+    out += `<path d="M 33 22 C 33 18, 67 18, 67 22 Z" fill="#b33939" />`;
+  }
+
+  out += `</g></svg>`;
+  return out;
+}
+
+/* RENDERING OGGETTI SU MAPPA
+   La logica per disegnare ogni oggetto in cella. La maggior parte in SVG puro se la 
+   forma va resa chiara e distinguibile; emoji per gli altri.
+   cx,cy = centro cella; CS = lato cella. */
+function objectGlyph(kind, cx, cy, CS){
+  const op = E.objWalkable(kind) ? 0.72 : 0.95;
+  const s = CS;
+  if(kind==="table"){
+    const w=s*0.60, topH=s*0.11, legH=s*0.28, topY=cy-s*0.17, col="#8a6a3e";
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${cx-w/2}" y="${topY}" width="${w}" height="${topH}" rx="2" fill="${col}"/>`+
+      `<rect x="${cx-w/2+w*0.10}" y="${topY+topH}" width="${w*0.11}" height="${legH}" fill="${col}"/>`+
+      `<rect x="${cx+w/2-w*0.21}" y="${topY+topH}" width="${w*0.11}" height="${legH}" fill="${col}"/>`+
+      `</g>`;
+  }
+  if(kind==="rug"||kind==="carpet"){                 // tappeto (vista dall'alto, con frange)
+    const w=s*0.64, h=s*0.46, x=cx-w/2, y=cy-h/2, base="#c25b3a", line="#f4efe4";
+    let fr="";
+    for(let i=0;i<4;i++){ const fy=y+h*(0.16+0.68*i/3);
+      fr+=`<line x1="${x-3.5}" y1="${fy}" x2="${x}" y2="${fy}"/><line x1="${x+w}" y1="${fy}" x2="${x+w+3.5}" y2="${fy}"/>`; }
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${base}"/>`+
+      `<rect x="${x+3}" y="${y+3}" width="${w-6}" height="${h-6}" rx="2" fill="none" stroke="${line}" stroke-width="1.5"/>`+
+      `<line x1="${cx}" y1="${y+4.5}" x2="${cx}" y2="${y+h-4.5}" stroke="${line}" stroke-width="1" opacity="0.6"/>`+
+      `<g stroke="${base}" stroke-width="1.4">${fr}</g></g>`;
+  }
+  if(kind==="scoglio"){                              // scoglio: roccia scura frastagliata sull'acqua
+    const w=s*0.66, base=cy+s*0.20, col="#57606a";
+    const p=[[cx-w/2,base],[cx-w*0.30,cy-s*0.06],[cx-w*0.12,cy+s*0.04],[cx-w*0.02,cy-s*0.20],
+      [cx+w*0.12,cy-s*0.02],[cx+w*0.26,cy-s*0.16],[cx+w*0.38,cy],[cx+w/2,base]]
+      .map(p=>p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<polygon points="${p}" fill="${col}" stroke="#3d444d" stroke-width="1"/>`+
+      `<path d="M ${cx-w/2-2} ${base+3} q ${w*0.16} -4 ${w*0.32} 0 q ${w*0.16} 4 ${w*0.32} 0 q ${w*0.16} -4 ${w*0.32} 0" fill="none" stroke="#3b82f6" stroke-width="1.4" opacity="0.7"/></g>`;
+  }
+  if(kind==="boa"){                                  // boa: anello di salvataggio rosso/bianco
+    const R=s*0.30, r2=s*0.145, bw=R*0.55, seg="#f4efe4";
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<circle cx="${cx}" cy="${cy}" r="${R}" fill="#e4483d"/>`+
+      `<rect x="${cx-bw/2}" y="${cy-R}" width="${bw}" height="${R-r2}" fill="${seg}"/>`+
+      `<rect x="${cx-bw/2}" y="${cy+r2}" width="${bw}" height="${R-r2}" fill="${seg}"/>`+
+      `<rect x="${cx-R}" y="${cy-bw/2}" width="${R-r2}" height="${bw}" fill="${seg}"/>`+
+      `<rect x="${cx+r2}" y="${cy-bw/2}" width="${R-r2}" height="${bw}" fill="${seg}"/>`+
+      `<circle cx="${cx}" cy="${cy}" r="${r2}" fill="#f4efe4"/>`+
+      `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#a5271f" stroke-width="1"/>`+
+      `<circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="#a5271f" stroke-width="1"/></g>`;
+  }
+  if(kind==="mattress"){                             // materassino da mare (gonfiabile, camere orizzontali)
+    const w=s*0.62, h=s*0.40, x=cx-w/2, y=cy-h/2, col="#1fb6c9";
+    let ln="";
+    for(let i=1;i<4;i++){ const ly=y+h*i/4; ln+=`<line x1="${x+4}" y1="${ly}" x2="${x+w-4}" y2="${ly}"/>`; }
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h*0.48}" fill="${col}"/>`+
+      `<g stroke="#e6fbff" stroke-width="1.5" stroke-linecap="round">${ln}</g></g>`;
+  }
+  if(kind==="towel"){                                // telo da mare (strisce verticali colorate)
+    const w=s*0.50, h=s*0.60, x=cx-w/2, y=cy-h/2, cols=["#f4a71d","#e4483d","#f4efe4","#2bb3c0"], ns=4, sw=w/ns;
+    let st="";
+    for(let i=0;i<ns;i++) st+=`<rect x="${x+i*sw}" y="${y}" width="${sw+0.5}" height="${h}" fill="${cols[i%cols.length]}"/>`;
+    return `<g opacity="${op}" pointer-events="none">${st}`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5" fill="none" stroke="#b9ad92" stroke-width="1"/></g>`;
+  }
+  if(kind==="umbrella"){                             // ombrellone da spiaggia (vista laterale)
+    const R=s*0.38, h=s*0.60;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<ellipse cx="${cx+2}" cy="${cy+h/2}" rx="${R*0.8}" ry="${R*0.25}" fill="#000" opacity="0.15"/>`+
+      `<line x1="${cx}" y1="${cy-h*0.3}" x2="${cx}" y2="${cy+h/2}" stroke="#d4a373" stroke-width="2.5" stroke-linecap="round"/>`+
+      `<path d="M ${cx-R} ${cy-h*0.1} A ${R} ${R} 0 0 1 ${cx+R} ${cy-h*0.1} Z" fill="#e05a47" stroke="#9a3412" stroke-width="1"/>`+
+      `<path d="M ${cx-R*0.4} ${cy-h*0.1} A ${R*0.7} ${R} 0 0 1 ${cx+R*0.4} ${cy-h*0.1} Z" fill="#f8f4eb"/>`+
+      `<circle cx="${cx}" cy="${cy-h*0.1-R}" r="2" fill="#c0392b"/>`+
+      `</g>`;
+  }
+  if(kind==="sunbed"){                               // lettino da spiaggia (tela azzurra, telaio e cuscino)
+    const w=s*0.44, h=s*0.68, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x+1.5}" y="${y+1.5}" width="${w}" height="${h}" rx="3.5" fill="#000" opacity="0.15"/>`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3.5" fill="#0ea5e9" stroke="#e0f2fe" stroke-width="1.6"/>`+
+      `<rect x="${x+1.5}" y="${y+1.5}" width="${w-3}" height="${h*0.30}" rx="2.5" fill="#0284c7"/>`+
+      `<rect x="${x+3}" y="${y+3}" width="${w-6}" height="${h*0.14}" rx="1.5" fill="#f8fafc" opacity="0.85"/>`+
+      `<line x1="${x+3}" y1="${y+h*0.48}" x2="${x+w-3}" y2="${y+h*0.48}" stroke="#bae6fd" stroke-width="1.2"/>`+
+      `<line x1="${x+3}" y1="${y+h*0.68}" x2="${x+w-3}" y2="${y+h*0.68}" stroke="#bae6fd" stroke-width="1.2"/>`+
+      `<line x1="${x+3}" y1="${y+h*0.86}" x2="${x+w-3}" y2="${y+h*0.86}" stroke="#bae6fd" stroke-width="1.2"/>`+
+      `<rect x="${x-1.5}" y="${y+5}" width="2" height="${h-10}" rx="1" fill="#94a3b8"/>`+
+      `<rect x="${x+w-0.5}" y="${y+5}" width="2" height="${h-10}" rx="1" fill="#94a3b8"/>`+
+      `</g>`;
+  }
+  if(kind==="surfboard"){                            // tavola da surf / SUP (sagoma affusolata con striscia)
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<ellipse cx="${cx+1}" cy="${cy+1}" rx="${s*0.14}" ry="${s*0.35}" fill="#000" opacity="0.15"/>`+
+      `<path d="M ${cx} ${cy-s*0.36} C ${cx+s*0.16} ${cy-s*0.15} ${cx+s*0.16} ${cy+s*0.20} ${cx} ${cy+s*0.36} C ${cx-s*0.16} ${cy+s*0.20} ${cx-s*0.16} ${cy-s*0.15} Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.2"/>`+
+      `<line x1="${cx}" y1="${cy-s*0.32}" x2="${cx}" y2="${cy+s*0.32}" stroke="#ef4444" stroke-width="1.8"/>`+
+      `<circle cx="${cx}" cy="${cy-s*0.08}" r="${s*0.05}" fill="#38bdf8"/>`+
+      `</g>`;
+  }
+  if(kind==="walkway"){                              // passerella in legno a doghe
+    const w=s*0.62, h=s*0.48, x=cx-w/2, y=cy-h/2;
+    let sl="";
+    for(let i=1;i<4;i++){ const lx=x+w*i/4; sl+=`<line x1="${lx}" y1="${y+1}" x2="${lx}" y2="${y+h-1}"/>`; }
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#d4a373" stroke="#8c5836" stroke-width="1.2"/>`+
+      `<g stroke="#8c5836" stroke-width="1">${sl}</g>`+
+      `<line x1="${x+1}" y1="${y+3}" x2="${x+w-1}" y2="${y+3}" stroke="#5c3820" stroke-width="0.8" stroke-dasharray="1 3"/>`+
+      `<line x1="${x+1}" y1="${y+h-3}" x2="${x+w-1}" y2="${y+h-3}" stroke="#5c3820" stroke-width="0.8" stroke-dasharray="1 3"/>`+
+      `</g>`;
+  }
+  if(kind==="pedalo"){                               // pedalò (doppio scafo con volante)
+    const w=s*0.58, h=s*0.64, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w*0.28}" height="${h}" rx="${w*0.14}" fill="#ec4899" stroke="#be185d" stroke-width="1"/>`+
+      `<rect x="${x+w*0.72}" y="${y}" width="${w*0.28}" height="${h}" rx="${w*0.14}" fill="#ec4899" stroke="#be185d" stroke-width="1"/>`+
+      `<rect x="${x+w*0.20}" y="${y+h*0.22}" width="${w*0.60}" height="${h*0.56}" rx="3" fill="#fdf2f8" stroke="#be185d" stroke-width="1"/>`+
+      `<circle cx="${cx}" cy="${cy-h*0.02}" r="${s*0.06}" fill="none" stroke="#be185d" stroke-width="1.3"/>`+
+      `<rect x="${cx-s*0.08}" y="${cy+h*0.12}" width="${s*0.16}" height="${h*0.14}" rx="1" fill="#f472b6"/>`+
+      `</g>`;
+  }
+  if(kind==="dock"){                                 // pontile / molo in legno con bitte
+    const w=s*0.52, h=s*0.68, x=cx-w/2, y=cy-h/2;
+    let ln="";
+    for(let i=1;i<5;i++){ const ly=y+h*i/5; ln+=`<line x1="${x+2}" y1="${ly}" x2="${x+w-2}" y2="${ly}"/>`; }
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#b08968" stroke="#6f4e37" stroke-width="1.2"/>`+
+      `<g stroke="#6f4e37" stroke-width="1">${ln}</g>`+
+      `<circle cx="${x+w*0.20}" cy="${y+4}" r="${s*0.04}" fill="#1e293b"/>`+
+      `<circle cx="${x+w*0.80}" cy="${y+4}" r="${s*0.04}" fill="#1e293b"/>`+
+      `</g>`;
+  }
+  if(kind==="cabin"){                                // cabina da spiaggia (righe bicolori e tetto a capanna)
+    const w=s*0.56, h=s*0.64, x=cx-w/2, y=cy-h/2, topH=h*0.28;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y+topH}" width="${w}" height="${h-topH}" rx="1" fill="#2563eb"/>`+
+      `<rect x="${x+w*0.25}" y="${y+topH}" width="${w*0.25}" height="${h-topH}" fill="#ffffff"/>`+
+      `<rect x="${x+w*0.75}" y="${y+topH}" width="${w*0.25}" height="${h-topH}" fill="#ffffff"/>`+
+      `<rect x="${x}" y="${y+topH}" width="${w}" height="${h-topH}" fill="none" stroke="#1d4ed8" stroke-width="1"/>`+
+      `<polygon points="${cx},${y} ${x-2},${y+topH} ${x+w+2},${y+topH}" fill="#ef4444" stroke="#b91c1c" stroke-width="1"/>`+
+      `<circle cx="${cx}" cy="${y+topH+h*0.22}" r="2" fill="#1e3a8a"/>`+
+      `</g>`;
+  }
+  if(kind==="lifeguard"){                            // torretta del bagnino
+    const w=s*0.54, h=s*0.64, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<line x1="${x+3}" y1="${y+h}" x2="${x+w*0.25}" y2="${y+h*0.35}" stroke="#78350f" stroke-width="1.8"/>`+
+      `<line x1="${x+w-3}" y1="${y+h}" x2="${x+w*0.75}" y2="${y+h*0.35}" stroke="#78350f" stroke-width="1.8"/>`+
+      `<line x1="${x+w*0.25}" y1="${y+h*0.35}" x2="${x+w*0.75}" y2="${y+h*0.35}" stroke="#78350f" stroke-width="1.5"/>`+
+      `<rect x="${x+w*0.15}" y="${y+h*0.22}" width="${w*0.70}" height="${h*0.16}" rx="2" fill="#dc2626"/>`+
+      `<polygon points="${cx},${y} ${x+w*0.08},${y+h*0.20} ${x+w*0.92},${y+h*0.20}" fill="#fbbf24" stroke="#d97706" stroke-width="0.8"/>`+
+      `<circle cx="${cx}" cy="${y+h*0.62}" r="${s*0.08}" fill="none" stroke="#ef4444" stroke-width="2"/>`+
+      `</g>`;
+  }
+  if(kind==="palm"){                                 // palma tropicale
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<path d="M ${cx} ${cy} q -${s*0.25} -${s*0.28} -${s*0.32} -${s*0.14} q ${s*0.18} ${s*0.20} ${s*0.32} ${s*0.14}" fill="#15803d" stroke="#166534" stroke-width="0.8"/>`+
+      `<path d="M ${cx} ${cy} q ${s*0.25} -${s*0.28} ${s*0.32} -${s*0.14} q -${s*0.18} ${s*0.20} -${s*0.32} ${s*0.14}" fill="#15803d" stroke="#166534" stroke-width="0.8"/>`+
+      `<path d="M ${cx} ${cy} q -${s*0.30} ${s*0.10} -${s*0.34} ${s*0.25} q ${s*0.24} -${s*0.08} ${s*0.34} -${s*0.25}" fill="#16a34a" stroke="#166534" stroke-width="0.8"/>`+
+      `<path d="M ${cx} ${cy} q ${s*0.30} ${s*0.10} ${s*0.34} ${s*0.25} q -${s*0.24} -${s*0.08} -${s*0.34} -${s*0.25}" fill="#16a34a" stroke="#166534" stroke-width="0.8"/>`+
+      `<path d="M ${cx} ${cy} q 0 -${s*0.35} ${s*0.08} -${s*0.36} q -${s*0.04} ${s*0.24} -${s*0.08} ${s*0.36}" fill="#22c55e" stroke="#166534" stroke-width="0.8"/>`+
+      `<circle cx="${cx}" cy="${cy}" r="${s*0.08}" fill="#78350f"/>`+
+      `<circle cx="${cx-1.5}" cy="${cy-1.5}" r="1.8" fill="#451a03"/>`+
+      `<circle cx="${cx+1.5}" cy="${cy+1.5}" r="1.8" fill="#451a03"/>`+
+      `</g>`;
+  }
+  if(kind==="shower"){                               // doccia da spiaggia
+    const w=s*0.50, h=s*0.64, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y+h*0.75}" width="${w}" height="${h*0.25}" rx="2" fill="#d4a373" stroke="#8c5836" stroke-width="1"/>`+
+      `<path d="M ${cx} ${y+h*0.75} L ${cx} ${y+h*0.18} q 0 -${h*0.14} ${w*0.28} -${h*0.14} L ${cx+w*0.34} ${y+h*0.10}" fill="none" stroke="#64748b" stroke-width="2.2" stroke-linecap="round"/>`+
+      `<ellipse cx="${cx+w*0.34}" cy="${y+h*0.12}" rx="${s*0.08}" ry="${s*0.04}" fill="#94a3b8"/>`+
+      `<circle cx="${cx+w*0.28}" cy="${y+h*0.28}" r="1" fill="#38bdf8"/>`+
+      `<circle cx="${cx+w*0.36}" cy="${y+h*0.34}" r="1" fill="#38bdf8"/>`+
+      `<circle cx="${cx+w*0.32}" cy="${y+h*0.42}" r="1" fill="#38bdf8"/>`+
+      `</g>`;
+  }
+  if(kind==="kiosk"){                                // chiringuito / bar
+    const w=s*0.62, h=s*0.62, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x+2}" y="${y+h*0.38}" width="${w-4}" height="${h*0.62}" rx="2" fill="#92400e" stroke="#78350f" stroke-width="1"/>`+
+      `<rect x="${x}" y="${y+h*0.34}" width="${w}" height="${h*0.10}" rx="1.5" fill="#fcd34d"/>`+
+      `<polygon points="${cx},${y} ${x-2},${y+h*0.34} ${x+w+2},${y+h*0.34}" fill="#fde047" stroke="#ca8a04" stroke-width="1"/>`+
+      `<rect x="${cx-4}" y="${y+h*0.50}" width="8" height="${h*0.48}" fill="#451a03"/>`+
+      `<rect x="${cx+w*0.22}" y="${y+h*0.24}" width="2.5" height="5" fill="#f43f5e"/>`+
+      `</g>`;
+  }
+  if(kind==="volleyball"){                           // rete da beach volley
+    const w=s*0.66, h=s*0.54, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<line x1="${x+1}" y1="${y}" x2="${x+1}" y2="${y+h}" stroke="#334155" stroke-width="2.5"/>`+
+      `<line x1="${x+w-1}" y1="${y}" x2="${x+w-1}" y2="${y+h}" stroke="#334155" stroke-width="2.5"/>`+
+      `<rect x="${x+1}" y="${y+2}" width="${w-2}" height="${h*0.52}" fill="#f8fafc" opacity="0.3" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="2 2"/>`+
+      `<rect x="${x+1}" y="${y+2}" width="${w-2}" height="3" fill="#facc15"/>`+
+      `<circle cx="${cx}" cy="${y-2}" r="${s*0.09}" fill="#fde047" stroke="#0284c7" stroke-width="1"/>`+
+      `</g>`;
+  }
+  if(kind==="cooler"){                               // borsa frigo portatile
+    const w=s*0.50, h=s*0.44, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y+h*0.24}" width="${w}" height="${h*0.76}" rx="3" fill="#0284c7" stroke="#0369a1" stroke-width="1"/>`+
+      `<rect x="${x-1}" y="${y+h*0.14}" width="${w+2}" height="${h*0.18}" rx="2" fill="#ffffff" stroke="#cbd5e1" stroke-width="1"/>`+
+      `<path d="M ${cx-w*0.28} ${y+h*0.14} L ${cx-w*0.28} ${y} L ${cx+w*0.28} ${y} L ${cx+w*0.28} ${y+h*0.14}" fill="none" stroke="#64748b" stroke-width="1.6"/>`+
+      `</g>`;
+  }
+  // Oggetti Salento & Tradizione
+  if(kind==="scannetto"){                            // sgabello basso rustico in legno e paglia
+    const w=s*0.48, h=s*0.42, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h*0.38}" rx="2" fill="#eab308" stroke="#a16207" stroke-width="1"/>`+
+      `<line x1="${x+w*0.33}" y1="${y}" x2="${x+w*0.33}" y2="${y+h*0.38}" stroke="#ca8a04" stroke-width="1"/>`+
+      `<line x1="${x+w*0.66}" y1="${y}" x2="${x+w*0.66}" y2="${y+h*0.38}" stroke="#ca8a04" stroke-width="1"/>`+
+      `<rect x="${x+2}" y="${y+h*0.38}" width="${w*0.18}" height="${h*0.62}" rx="1" fill="#78350f"/>`+
+      `<rect x="${x+w-w*0.18-2}" y="${y+h*0.38}" width="${w*0.18}" height="${h*0.62}" rx="1" fill="#78350f"/>`+
+      `<line x1="${x+2}" y1="${y+h*0.70}" x2="${x+w-2}" y2="${y+h*0.70}" stroke="#78350f" stroke-width="1.5"/>`+
+      `</g>`;
+  }
+  if(kind==="tamburello"){                           // tamburello salentino da pizzica con sonagli e nastrini
+    const R=s*0.26;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<circle cx="${cx}" cy="${cy}" r="${R}" fill="#fdf6e2" stroke="#854d0e" stroke-width="2.5"/>`+
+      `<circle cx="${cx}" cy="${cy}" r="${R*0.75}" fill="none" stroke="#ca8a04" stroke-width="0.8" stroke-dasharray="2 2"/>`+
+      `<circle cx="${cx-R}" cy="${cy}" r="${s*0.04}" fill="#94a3b8" stroke="#475569" stroke-width="0.8"/>`+
+      `<circle cx="${cx+R}" cy="${cy}" r="${s*0.04}" fill="#94a3b8" stroke="#475569" stroke-width="0.8"/>`+
+      `<circle cx="${cx}" cy="${cy-R}" r="${s*0.04}" fill="#94a3b8" stroke="#475569" stroke-width="0.8"/>`+
+      `<circle cx="${cx}" cy="${cy+R}" r="${s*0.04}" fill="#94a3b8" stroke="#475569" stroke-width="0.8"/>`+
+      `<path d="M ${cx+R*0.7} ${cy+R*0.7} Q ${cx+s*0.35} ${cy+s*0.30} ${cx+s*0.38} ${cy+s*0.42}" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round"/>`+
+      `<path d="M ${cx+R*0.7} ${cy+R*0.7} Q ${cx+s*0.42} ${cy+s*0.25} ${cx+s*0.46} ${cy+s*0.36}" fill="none" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round"/>`+
+      `</g>`;
+  }
+  if(kind==="pumo"){                                 // pumo leccese in ceramica su base
+    const w=s*0.44, h=s*0.58, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${cx-w*0.32}" y="${y+h*0.78}" width="${w*0.64}" height="${h*0.22}" rx="2" fill="#d97706" stroke="#92400e" stroke-width="1"/>`+
+      `<ellipse cx="${cx}" cy="${cy-h*0.05}" rx="${w*0.38}" ry="${h*0.38}" fill="#059669" stroke="#047857" stroke-width="1.2"/>`+
+      `<path d="M ${cx-w*0.38} ${cy+h*0.12} Q ${cx-w*0.46} ${cy-h*0.05} ${cx-w*0.18} ${cy-h*0.20}" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>`+
+      `<path d="M ${cx+w*0.38} ${cy+h*0.12} Q ${cx+w*0.46} ${cy-h*0.05} ${cx+w*0.18} ${cy-h*0.20}" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>`+
+      `<circle cx="${cx}" cy="${cy-h*0.42}" r="${s*0.04}" fill="#f59e0b"/>`+
+      `</g>`;
+  }
+  if(kind==="cassapanca"){                           // cassapanca / baule antico in legno d'ulivo
+    const w=s*0.62, h=s*0.44, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y+h*0.20}" width="${w}" height="${h*0.80}" rx="2" fill="#78350f" stroke="#451a03" stroke-width="1.2"/>`+
+      `<rect x="${x-1}" y="${y}" width="${w+2}" height="${h*0.25}" rx="2" fill="#92400e" stroke="#451a03" stroke-width="1.2"/>`+
+      `<line x1="${x+4}" y1="${y+h*0.55}" x2="${x+w-4}" y2="${y+h*0.55}" stroke="#451a03" stroke-width="1"/>`+
+      `<rect x="${cx-2.5}" y="${y+h*0.20}" width="5" height="7" rx="1" fill="#facc15" stroke="#78350f" stroke-width="0.8"/>`+
+      `<circle cx="${cx}" cy="${y+h*0.20+4}" r="1" fill="#000"/>`+
+      `</g>`;
+  }
+  if(kind==="madia"){                                // madia per il pane (cassa trapezoidale su piedi)
+    const w=s*0.60, h=s*0.50, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<polygon points="${x-2},${y} ${x+w+2},${y} ${x+w-4},${y+h*0.65} ${x+4},${y+h*0.65}" fill="#b45309" stroke="#78350f" stroke-width="1.2"/>`+
+      `<line x1="${x}" y1="${y+h*0.15}" x2="${x+w}" y2="${y+h*0.15}" stroke="#fef3c7" stroke-width="1" opacity="0.6"/>`+
+      `<rect x="${x+6}" y="${y+h*0.65}" width="4" height="${h*0.35}" fill="#78350f"/>`+
+      `<rect x="${x+w-10}" y="${y+h*0.65}" width="4" height="${h*0.35}" fill="#78350f"/>`+
+      `<circle cx="${cx-8}" cy="${y+h*0.35}" r="1.5" fill="#fde68a"/>`+
+      `<circle cx="${cx+8}" cy="${y+h*0.35}" r="1.5" fill="#fde68a"/>`+
+      `</g>`;
+  }
+  if(kind==="cascetta"){                             // cassetta da frutta in legno a listelli
+    const w=s*0.56, h=s*0.42, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5" fill="#d4a373" stroke="#8c5836" stroke-width="1.2"/>`+
+      `<line x1="${x}" y1="${y+h*0.33}" x2="${x+w}" y2="${y+h*0.33}" stroke="#8c5836" stroke-width="1"/>`+
+      `<line x1="${x}" y1="${y+h*0.66}" x2="${x+w}" y2="${y+h*0.66}" stroke="#8c5836" stroke-width="1"/>`+
+      `<rect x="${cx-6}" y="${y+h*0.12}" width="12" height="4" rx="2" fill="#5c3820"/>`+
+      `</g>`;
+  }
+  if(kind==="murosecco"){                            // muro a secco salentino a conci di pietra
+    const w=s*0.66, h=s*0.48, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#d6d3d1" stroke="#57534e" stroke-width="1.2"/>`+
+      `<rect x="${x+2}" y="${y+2}" width="${w*0.45}" height="${h*0.42}" rx="1" fill="#e7e5e4" stroke="#78716c" stroke-width="0.8"/>`+
+      `<rect x="${x+w*0.48}" y="${y+2}" width="${w*0.48}" height="${h*0.42}" rx="1" fill="#f5f5f4" stroke="#78716c" stroke-width="0.8"/>`+
+      `<rect x="${x+2}" y="${y+h*0.48}" width="${w*0.30}" height="${h*0.45}" rx="1" fill="#f5f5f4" stroke="#78716c" stroke-width="0.8"/>`+
+      `<rect x="${x+w*0.34}" y="${y+h*0.48}" width="${w*0.36}" height="${h*0.45}" rx="1" fill="#e7e5e4" stroke="#78716c" stroke-width="0.8"/>`+
+      `<rect x="${x+w*0.72}" y="${y+h*0.48}" width="${w*0.24}" height="${h*0.45}" rx="1" fill="#d6d3d1" stroke="#78716c" stroke-width="0.8"/>`+
+      `</g>`;
+  }
+  if(kind==="malota"){                               // malota (scarafaggio/blatta)
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<ellipse cx="${cx}" cy="${cy}" rx="${s*0.14}" ry="${s*0.24}" fill="#292524" stroke="#1c1917" stroke-width="1"/>`+
+      `<line x1="${cx}" y1="${cy-s*0.14}" x2="${cx}" y2="${cy+s*0.22}" stroke="#78716c" stroke-width="0.8"/>`+
+      `<circle cx="${cx}" cy="${cy-s*0.22}" r="${s*0.07}" fill="#44403c"/>`+
+      `<path d="M ${cx-2} ${cy-s*0.26} Q ${cx-s*0.20} ${cy-s*0.36} ${cx-s*0.24} ${cy-s*0.24}" fill="none" stroke="#1c1917" stroke-width="1"/>`+
+      `<path d="M ${cx+2} ${cy-s*0.26} Q ${cx+s*0.20} ${cy-s*0.36} ${cx+s*0.24} ${cy-s*0.24}" fill="none" stroke="#1c1917" stroke-width="1"/>`+
+      `<line x1="${cx-s*0.12}" y1="${cy-s*0.08}" x2="${cx-s*0.28}" y2="${cy-s*0.14}" stroke="#1c1917" stroke-width="1.2"/>`+
+      `<line x1="${cx+s*0.12}" y1="${cy-s*0.08}" x2="${cx+s*0.28}" y2="${cy-s*0.14}" stroke="#1c1917" stroke-width="1.2"/>`+
+      `<line x1="${cx-s*0.14}" y1="${cy+s*0.04}" x2="${cx-s*0.30}" y2="${cy+s*0.06}" stroke="#1c1917" stroke-width="1.2"/>`+
+      `<line x1="${cx+s*0.14}" y1="${cy+s*0.04}" x2="${cx+s*0.30}" y2="${cy+s*0.06}" stroke="#1c1917" stroke-width="1.2"/>`+
+      `</g>`;
+  }
+  if(kind==="scrace"){                               // scrace (cespuglio di rovi spinosi)
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<path d="M ${cx-s*0.30} ${cy+s*0.20} Q ${cx-s*0.10} ${cy-s*0.25} ${cx+s*0.28} ${cy-s*0.15}" fill="none" stroke="#3f3f46" stroke-width="1.8"/>`+
+      `<path d="M ${cx+s*0.25} ${cy+s*0.22} Q ${cx+s*0.05} ${cy-s*0.20} ${cx-s*0.26} ${cy-s*0.12}" fill="none" stroke="#27272a" stroke-width="1.8"/>`+
+      `<path d="M ${cx-s*0.20} ${cy+s*0.10} Q ${cx} ${cy+s*0.28} ${cx+s*0.20} ${cy+s*0.05}" fill="none" stroke="#52525b" stroke-width="1.4"/>`+
+      `<line x1="${cx-s*0.12}" y1="${cy-s*0.08}" x2="${cx-s*0.18}" y2="${cy-s*0.16}" stroke="#18181b" stroke-width="1.2"/>`+
+      `<line x1="${cx+s*0.10}" y1="${cy-s*0.06}" x2="${cx+s*0.16}" y2="${cy-s*0.14}" stroke="#18181b" stroke-width="1.2"/>`+
+      `<circle cx="${cx-s*0.06}" cy="${cy+s*0.04}" r="2" fill="#701a75"/>`+
+      `<circle cx="${cx+s*0.14}" cy="${cy+s*0.08}" r="2" fill="#701a75"/>`+
+      `</g>`;
+  }
+  if(kind==="ulivo"){                                // albero di ulivo secolare
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<path d="M ${cx-s*0.14} ${cy+s*0.34} C ${cx-s*0.22} ${cy+s*0.08}, ${cx-s*0.05} ${cy}, ${cx-s*0.18} ${cy-s*0.12} C ${cx-s*0.02} ${cy-s*0.08}, ${cx+s*0.08} ${cy-s*0.08}, ${cx+s*0.22} ${cy-s*0.10} C ${cx+s*0.08} ${cy}, ${cx+s*0.20} ${cy+s*0.10}, ${cx+s*0.14} ${cy+s*0.34} Z" fill="#78716c" stroke="#44403c" stroke-width="1.2"/>`+
+      `<ellipse cx="${cx-s*0.16}" cy="${cy-s*0.18}" rx="${s*0.18}" ry="${s*0.14}" fill="#65a30d" stroke="#4d7c0f" stroke-width="1"/>`+
+      `<ellipse cx="${cx+s*0.16}" cy="${cy-s*0.18}" rx="${s*0.18}" ry="${s*0.14}" fill="#84cc16" stroke="#4d7c0f" stroke-width="1"/>`+
+      `<ellipse cx="${cx}" cy="${cy-s*0.24}" rx="${s*0.22}" ry="${s*0.16}" fill="#a3e635" stroke="#4d7c0f" stroke-width="1"/>`+
+      `<circle cx="${cx-s*0.10}" cy="${cy-s*0.16}" r="1.5" fill="#365314"/>`+
+      `<circle cx="${cx+s*0.08}" cy="${cy-s*0.22}" r="1.5" fill="#365314"/>`+
+      `</g>`;
+  }
+  if(kind==="muscia"){                               // muscia (gatta salentina accovacciata)
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<ellipse cx="${cx}" cy="${cy+s*0.08}" rx="${s*0.22}" ry="${s*0.16}" fill="#475569" stroke="#1e293b" stroke-width="1"/>`+
+      `<circle cx="${cx-s*0.14}" cy="${cy-s*0.06}" r="${s*0.12}" fill="#475569" stroke="#1e293b" stroke-width="1"/>`+
+      `<polygon points="${cx-s*0.22},${cy-s*0.12} ${cx-s*0.18},${cy-s*0.24} ${cx-s*0.12},${cy-s*0.14}" fill="#1e293b"/>`+
+      `<polygon points="${cx-s*0.12},${cy-s*0.14} ${cx-s*0.06},${cy-s*0.24} ${cx-s*0.02},${cy-s*0.12}" fill="#1e293b"/>`+
+      `<circle cx="${cx-s*0.18}" cy="${cy-s*0.06}" r="1.5" fill="#facc15"/>`+
+      `<circle cx="${cx-s*0.10}" cy="${cy-s*0.06}" r="1.5" fill="#facc15"/>`+
+      `<path d="M ${cx+s*0.18} ${cy+s*0.12} Q ${cx+s*0.34} ${cy+s*0.05} ${cx+s*0.30} ${cy-s*0.12}" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>`+
+      `</g>`;
+  }
+  if(kind==="apecar"){                               // Ape Car Piaggio (tre ruote, cabina e cassone)
+    const w=s*0.68, h=s*0.48, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x+w*0.35}" y="${y}" width="${w*0.65}" height="${h*0.75}" rx="2" fill="#0284c7" stroke="#0369a1" stroke-width="1.2"/>`+
+      `<path d="M ${x} ${y+h*0.40} L ${x+w*0.15} ${y+h*0.08} L ${x+w*0.35} ${y+h*0.08} L ${x+w*0.35} ${y+h*0.75} L ${x} ${y+h*0.75} Z" fill="#38bdf8" stroke="#0284c7" stroke-width="1"/>`+
+      `<rect x="${x+w*0.12}" y="${y+h*0.14}" width="${w*0.18}" height="${h*0.32}" rx="1" fill="#e0f2fe"/>`+
+      `<circle cx="${x+w*0.14}" cy="${y+h*0.78}" r="${s*0.09}" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>`+
+      `<circle cx="${x+w*0.80}" cy="${y+h*0.78}" r="${s*0.09}" fill="#1e293b" stroke="#64748b" stroke-width="1.5"/>`+
+      `</g>`;
+  }
+  if(kind==="trattore"){                             // trattore agricolo
+    const w=s*0.66, h=s*0.54, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<rect x="${x}" y="${y+h*0.25}" width="${w*0.50}" height="${h*0.45}" rx="2" fill="#16a34a" stroke="#15803d" stroke-width="1.2"/>`+
+      `<rect x="${x+w*0.45}" y="${y}" width="${w*0.55}" height="${h*0.70}" rx="2" fill="#22c55e" stroke="#15803d" stroke-width="1.2"/>`+
+      `<rect x="${x+w*0.52}" y="${y+h*0.10}" width="${w*0.38}" height="${h*0.30}" rx="1" fill="#dcfce7"/>`+
+      `<line x1="${x+w*0.15}" y1="${y+h*0.25}" x2="${x+w*0.15}" y2="${y+h*0.05}" stroke="#334155" stroke-width="2" stroke-linecap="round"/>`+
+      `<circle cx="${x+w*0.20}" cy="${y+h*0.75}" r="${s*0.09}" fill="#eab308" stroke="#1e293b" stroke-width="2"/>`+
+      `<circle cx="${x+w*0.75}" cy="${y+h*0.70}" r="${s*0.16}" fill="#eab308" stroke="#1e293b" stroke-width="3"/>`+
+      `</g>`;
+  }
+  if(kind==="faro"){                                 // faro marittimo (fasce rosse/bianche e luce)
+    const w=s*0.46, h=s*0.68, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<polygon points="${cx-w*0.28},${y+h} ${cx+w*0.28},${y+h} ${cx+w*0.18},${y+h*0.25} ${cx-w*0.18},${y+h*0.25}" fill="#dc2626" stroke="#991b1b" stroke-width="1"/>`+
+      `<polygon points="${cx-w*0.25},${y+h*0.80} ${cx+w*0.25},${y+h*0.80} ${cx+w*0.21},${y+h*0.55} ${cx-w*0.21},${y+h*0.55}" fill="#ffffff"/>`+
+      `<rect x="${cx-w*0.18}" y="${y+h*0.12}" width="${w*0.36}" height="${h*0.15}" rx="1" fill="#fef08a" stroke="#ca8a04" stroke-width="1"/>`+
+      `<polygon points="${cx},${y} ${cx-w*0.22},${y+h*0.12} ${cx+w*0.22},${y+h*0.12}" fill="#1e293b"/>`+
+      `</g>`;
+  }
+  if(kind==="pajaro"){                               // pajaro / trullo in pietra a secco
+    const w=s*0.62, h=s*0.58, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<polygon points="${x},${y+h} ${x+w},${y+h} ${x+w-w*0.18},${y+h*0.40} ${x+w*0.18},${y+h*0.40}" fill="#e7e5e4" stroke="#78716c" stroke-width="1.2"/>`+
+      `<polygon points="${x+w*0.14},${y+h*0.42} ${x+w-w*0.14},${y+h*0.42} ${cx},${y}" fill="#d6d3d1" stroke="#78716c" stroke-width="1.2"/>`+
+      `<rect x="${cx-4}" y="${y+h*0.60}" width="8" height="${h*0.40}" rx="1" fill="#292524"/>`+
+      `</g>`;
+  }
+  if(kind==="luminarie"){                            // luminarie salentine da festa patronale
+    const w=s*0.64, h=s*0.56, x=cx-w/2, y=cy-h/2;
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<path d="M ${x} ${y+h} L ${x} ${y+h*0.35} Q ${cx} ${y-h*0.15} ${x+w} ${y+h*0.35} L ${x+w} ${y+h}" fill="none" stroke="#f8fafc" stroke-width="2.5"/>`+
+      `<circle cx="${x}" cy="${y+h*0.35}" r="2" fill="#ef4444"/>`+
+      `<circle cx="${x+w*0.20}" cy="${y+h*0.15}" r="2" fill="#eab308"/>`+
+      `<circle cx="${cx}" cy="${y+h*0.02}" r="2.5" fill="#3b82f6"/>`+
+      `<circle cx="${x+w*0.80}" cy="${y+h*0.15}" r="2" fill="#22c55e"/>`+
+      `<circle cx="${x+w}" cy="${y+h*0.35}" r="2" fill="#ec4899"/>`+
+      `<circle cx="${cx}" cy="${y+h*0.28}" r="2" fill="#a855f7"/>`+
+      `</g>`;
+  }
+  if(kind==="taccaro"){                              // taccaro (ceppo di legno tondo)
+    return `<g opacity="${op}" pointer-events="none">`+
+      `<ellipse cx="${cx}" cy="${cy+s*0.12}" rx="${s*0.35}" ry="${s*0.1}" fill="rgba(0,0,0,0.2)"/>`+
+      `<rect x="${cx-s*0.25}" y="${cy-s*0.15}" width="${s*0.5}" height="${s*0.3}" fill="#78350f" />`+
+      `<line x1="${cx-s*0.1}" y1="${cy-s*0.08}" x2="${cx+s*0.15}" y2="${cy-s*0.08}" stroke="#451a03" stroke-width="1.5" stroke-linecap="round"/>`+
+      `<line x1="${cx-s*0.15}" y1="${cy}" x2="${cx+s*0.2}" y2="${cy}" stroke="#451a03" stroke-width="1" stroke-linecap="round"/>`+
+      `<line x1="${cx-s*0.05}" y1="${cy+s*0.08}" x2="${cx+s*0.1}" y2="${cy+s*0.08}" stroke="#451a03" stroke-width="1.5" stroke-linecap="round"/>`+
+      `<ellipse cx="${cx-s*0.25}" cy="${cy}" rx="${s*0.08}" ry="${s*0.15}" fill="#b45309" stroke="#451a03" stroke-width="1.5"/>`+
+      `<ellipse cx="${cx-s*0.25}" cy="${cy}" rx="${s*0.04}" ry="${s*0.08}" fill="none" stroke="#d97706" stroke-width="1"/>`+
+      `<path d="M ${cx+s*0.25} ${cy-s*0.15} A ${s*0.08} ${s*0.15} 0 0 1 ${cx+s*0.25} ${cy+s*0.15}" fill="none" stroke="#451a03" stroke-width="1.5"/>`+
+      `</g>`;
+  }
+  const em = OBJ_EMOJI[kind]||"?";
+  return `<text x="${cx}" y="${cy+CS*0.18}" font-size="${CS*0.5}" text-anchor="middle" opacity="${op}" pointer-events="none">${em}</text>`;
+}
+
+/* Colore univoco per ciascuna area (le stanze restano delimitate dai muri).
+   Tonalità distribuite col rapporto aureo -> ogni area ha un colore diverso. */
+function areaColor(id){
+  if(id<0) return "#cfc6b4";
+  const hue = (id*137.508) % 360;
+  return `hsl(${hue.toFixed(1)} 46% 82%)`;
+}
+
+/* Pattern grafici SVG standard per i pavimenti */
+function svgDefs(prefix=""){
+  return `<defs>
+    <pattern id="${prefix}pattern-pavimento" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#e3caa5"/>
+      <rect x="0" y="0" width="16" height="8" fill="#dfc39a" opacity="0.4"/>
+      <rect x="0" y="16" width="20" height="8" fill="#ebd6b6" opacity="0.35"/>
+      <rect x="8" y="24" width="24" height="8" fill="#dcbfa0" opacity="0.3"/>
+      <line x1="0" y1="8" x2="32" y2="8" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="0" y1="16" x2="32" y2="16" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="0" y1="24" x2="32" y2="24" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="16" y1="0" x2="16" y2="8" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="0" y1="8" x2="0" y2="16" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="32" y1="8" x2="32" y2="16" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="20" y1="16" x2="20" y2="24" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="8" y1="24" x2="8" y2="32" stroke="#b39268" stroke-width="0.8"/>
+    </pattern>
+    <pattern id="${prefix}pattern-prato" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#a4d18c"/>
+      <path d="M 6 26 q -2 -9 2 -14 q 3 5 2 14 Z M 10 28 q 1 -11 6 -16 q -1 7 -2 16 Z M 22 14 q -2 -7 1 -11 q 2 4 2 11 Z M 25 15 q 2 -8 5 -12 q -1 5 -1 12 Z" fill="#6f9e52" opacity="0.65"/>
+      <circle cx="16" cy="20" r="1" fill="#88b56d"/>
+    </pattern>
+    <pattern id="${prefix}pattern-terra" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#d4b292"/>
+      <ellipse cx="8" cy="10" rx="3" ry="2" fill="#9e7b57" opacity="0.5"/>
+      <ellipse cx="24" cy="22" rx="4" ry="2.5" fill="#8f6c49" opacity="0.45"/>
+      <circle cx="18" cy="8" r="1.2" fill="#7d5937" opacity="0.5"/>
+      <circle cx="12" cy="26" r="1.5" fill="#7d5937" opacity="0.45"/>
+      <path d="M 2 18 q 6 2 10 -1 M 20 28 q 5 -2 9 1" stroke="#9e7b57" stroke-width="0.9" fill="none" opacity="0.4"/>
+    </pattern>
+    <pattern id="${prefix}pattern-mare" width="36" height="24" patternUnits="userSpaceOnUse">
+      <rect width="36" height="24" fill="#9cd0ea"/>
+      <path d="M 0 8 q 9 -4 18 0 t 18 0 M 0 20 q 9 -4 18 0 t 18 0" fill="none" stroke="#488cb8" stroke-width="1.3" opacity="0.6"/>
+      <path d="M 9 14 q 9 -3 18 0" fill="none" stroke="#ffffff" stroke-width="0.9" opacity="0.7"/>
+    </pattern>
+    <pattern id="${prefix}pattern-spiaggia" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#f2deaa"/>
+      <circle cx="6" cy="7" r="1.1" fill="#c4aa6c" opacity="0.55"/>
+      <circle cx="20" cy="12" r="1" fill="#c4aa6c" opacity="0.5"/>
+      <circle cx="12" cy="24" r="1.3" fill="#bfa361" opacity="0.6"/>
+      <circle cx="27" cy="26" r="0.9" fill="#c4aa6c" opacity="0.5"/>
+      <path d="M 0 16 q 8 3 16 0 t 16 0" fill="none" stroke="#d4be83" stroke-width="1" opacity="0.55"/>
+    </pattern>
+    <pattern id="${prefix}pattern-asfalto" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#5c5c5c"/>
+      <circle cx="5" cy="5" r="1" fill="#444" opacity="0.6"/>
+      <circle cx="25" cy="8" r="1.5" fill="#777" opacity="0.4"/>
+      <circle cx="12" cy="20" r="1" fill="#333" opacity="0.5"/>
+      <circle cx="28" cy="26" r="1" fill="#888" opacity="0.4"/>
+      <circle cx="18" cy="30" r="1.5" fill="#444" opacity="0.6"/>
+      <circle cx="8" cy="28" r="1" fill="#777" opacity="0.4"/>
+      <circle cx="20" cy="14" r="1" fill="#333" opacity="0.5"/>
+      <circle cx="2" cy="16" r="1.2" fill="#888" opacity="0.4"/>
+    </pattern>
+    <pattern id="${prefix}pattern-mattonelle" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#f0f0f0"/>
+      <rect x="16" y="0" width="16" height="16" fill="#3b3b3b"/>
+      <rect x="0" y="16" width="16" height="16" fill="#3b3b3b"/>
+    </pattern>
+    <pattern id="${prefix}pattern-ghiaccio" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#d4f1f9"/>
+      <path d="M 0 12 L 10 16 L 24 8 M 10 16 L 16 32 M 24 8 L 32 14" stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.8"/>
+      <path d="M 4 0 L 12 8 L 8 20 M 12 8 L 28 2" stroke="#b2ebf2" stroke-width="1" fill="none" opacity="0.7"/>
+    </pattern>
+  </defs>`;
+}
+
+/* Risolve il riempimento di un'area: pattern, colore personalizzato o colore di default */
+function getAreaFill(m, aid, prefix=""){
+  if(aid < 0) return "#cfc6b4";
+  const floor = (m && m.areaFloors && m.areaFloors[aid]);
+  if(floor){
+    if(floor.type === "pattern" && floor.value){
+      return `url(#${prefix}pattern-${floor.value})`;
+    }
+    if(floor.type === "color" && floor.value){
+      return floor.value;
+    }
+  }
+  return areaColor(aid);
+}
+
+/* Aggiorna l'interfaccia della sezione Pavimento & Stile Aree */
+function updateFloorUI(){
+  const m = state.map;
+  const aid = state.lastAreaClicked;
+  const lbl = $("#activeAreaLabel");
+  if(!lbl) return;
+  if(aid == null || aid < 0 || !m){
+    lbl.textContent = "clicca una cella…";
+    document.querySelectorAll("#patternGrid .floor-btn").forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll("#colorPresets .color-swatch").forEach(sw => sw.classList.remove("active"));
+    return;
+  }
+  const name = (m.areaNames && m.areaNames[aid]) || ("Area " + (+aid + 1));
+  lbl.textContent = `${name} (${areaLetter(aid)})`;
+  
+  const curFloor = (m.areaFloors && m.areaFloors[aid]);
+  document.querySelectorAll("#patternGrid .floor-btn").forEach(btn => {
+    btn.classList.toggle("active", !!(curFloor && curFloor.type === "pattern" && curFloor.value === btn.dataset.pattern));
+  });
+  document.querySelectorAll("#colorPresets .color-swatch").forEach(sw => {
+    sw.classList.toggle("active", !!(curFloor && curFloor.type === "color" && curFloor.value.toLowerCase() === sw.dataset.color.toLowerCase()));
+  });
+  if(curFloor && curFloor.type === "color" && curFloor.value.startsWith("#")){
+    $("#areaColorPicker").value = curFloor.value;
+  }
+}
+
+function setAreaFloor(type, value){
+  const m = state.map;
+  if(!m){ toast("Nessuna mappa"); return; }
+  const aid = state.lastAreaClicked;
+  if(aid == null || aid < 0){ toast("Clicca prima su una cella dell'area da personalizzare"); return; }
+  pushUndo();
+  if(!m.areaFloors) m.areaFloors = {};
+  m.areaFloors[aid] = { type, value };
+  updateFloorUI();
+  render();
+  autosave();
+  const name = (m.areaNames && m.areaNames[aid]) || ("Area " + (+aid + 1));
+  toast(`Pavimento di «${name}» aggiornato`);
+}
+
+function resetAreaFloor(){
+  const m = state.map;
+  if(!m){ toast("Nessuna mappa"); return; }
+  const aid = state.lastAreaClicked;
+  if(aid == null || aid < 0){ toast("Clicca prima su una cella dell'area"); return; }
+  if(m.areaFloors && m.areaFloors[aid]){
+    pushUndo();
+    delete m.areaFloors[aid];
+    updateFloorUI();
+    render();
+    autosave();
+    const name = (m.areaNames && m.areaNames[aid]) || ("Area " + (+aid + 1));
+    toast(`Ripristinato colore predefinito per «${name}»`);
+  } else {
+    toast("L'area usa già il colore predefinito");
+  }
+}
+
+/* codici brevi degli oggetti per la mappa testuale (minuscolo=calpestabile, MAIUSC=ostacolo) */
+const MD_CODE = {
+  chair:'ch', rug:'rg', bed:'bd', boat:'bt', car:'cr', mattress:'mt', towel:'tw', umbrella:'om', sunbed:'lt',
+  surfboard:'sb', walkway:'ps', pedalo:'pd', dock:'pt',
+  table:'TB', bookcase:'BK', shelf:'SF', tv:'TV', plant:'PL', tree:'TR', palm:'PM', flowers:'FL', statue:'ST',
+  boulder:'BL', scoglio:'SG', boa:'BO', cabin:'CB', lifeguard:'LG', shower:'DC', kiosk:'KS', volleyball:'VL', cooler:'BF',
+  scannetto:'sc', tamburello:'tm', apecar:'ap', trattore:'tr',
+  pumo:'PU', cassapanca:'CP', madia:'MD', cascetta:'CS', murosecco:'MS', malota:'ML', scrace:'SR', ulivo:'UL', muscia:'MC',
+  faro:'FR', pajaro:'PJ', luminarie:'LM', taccaro:'TC'
+};
+function areaLetter(id){ return id<0?'#':String.fromCharCode(65+(id%26)); }
+
+/* Categorie tematiche per il filtro oggetti */
+const OBJ_CATEGORIES = {
+  all: { label: "Tutti gli oggetti" },
+  salento: {
+    label: "☀️ Salento & Tradizione",
+    list: ["scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "murosecco", "malota", "scrace", "ulivo", "muscia", "apecar", "trattore", "faro", "pajaro", "luminarie", "taccaro"]
+  },
+  beach: {
+    label: "🏖️ Spiaggia & Mare",
+    list: ["umbrella", "sunbed", "towel", "mattress", "surfboard", "walkway", "pedalo", "dock", "boat", "cabin", "lifeguard", "palm", "shower", "kiosk", "volleyball", "cooler", "scoglio", "boa", "faro"]
+  },
+  house: {
+    label: "🏠 Casa & Interni",
+    list: ["chair", "table", "bed", "rug", "bookcase", "shelf", "tv", "plant", "scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "muscia"]
+  },
+  nature: {
+    label: "🌳 Natura & Esterni",
+    list: ["tree", "palm", "flowers", "statue", "boulder", "scoglio", "car", "ulivo", "murosecco", "malota", "scrace", "apecar", "trattore", "pajaro", "luminarie", "taccaro"]
+  },
+  walkable: {
+    label: "🟢 Solo calpestabili"
+  },
+  obstacle: {
+    label: "🔴 Solo ostacoli"
+  }
+};
+
+/* --------- stato e undo --------- */
+let undoStack = [];
+function cloneMap(m) {
+  if(!m) return null;
+  return {
+    size: m.size,
+    suspectCount: m.suspectCount,
+    cells: m.cells.map(c=>({...c})),
+    walls: new Set(m.walls),
+    windows: new Set(m.windows||[]),
+    areaNames: Object.assign({}, m.areaNames),
+    areaFloors: m.areaFloors ? Object.assign({}, m.areaFloors) : {},
+    entities: (m.entities||[]).map(e=>({...e}))
+  };
+}
+function pushUndo() {
+  if(!state.map) return;
+  undoStack.push(cloneMap(state.map));
+  if(undoStack.length > 10) undoStack.shift();
+  const btn = $("#undoBtn"); if(btn) btn.disabled = false;
+}
+function popUndo() {
+  if(undoStack.length === 0) return;
+  state.map = undoStack.pop();
+  const btn = $("#undoBtn"); if(btn) btn.disabled = undoStack.length === 0;
+  invalidateClues(); recomputeEntities(); render(); renderPalette(); autosave(); updateFloorUI();
+}
+
+let state = {
+  map: null,
+  mapTitle: "",
+  currentMapId: null,
+  lastElegance: null,
+  clueResult: null,     // {clues, unique, ctx}
+  clueObjs: [],         // oggetti indizio con closure (per spilla/rigenera)
+  preserved: new Set(), // id spillati
+  tool: "select",
+  selectedObj: "umbrella",
+  selectedChar: "A",
+  showSol: true,
+  lastAreaClicked: null,
+  theme: null,        // {title, intro}
+  narration: null,    // {clueText:{id:txt}, clueOk:{id:bool}, solution:[...], appliedCount, total}
+  narrated: false,
+  aiSolution: null,
+  hoverR: -1,         // riga cella in hover (-1 = nessuna)
+  hoverC: -1,         // colonna cella in hover
+  _lastAnalysis: null, // cache dell'ultimo computeAreas per hover
+  _lastCS: 0,         // cache dimensione cella per hover
+  _lastP: 0,          // cache padding per hover
+};
+
+
+/* --------- util --------- */
+const $ = s => document.querySelector(s);
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1900); }
+function rngNow(){ return E.makeRng((Math.random()*1e9)|0); }
+
+/* palette oggetti: bottoni con la stessa icona della mappa */
+const OBJ_ORDER = [
+  "scannetto","tamburello","apecar","trattore",
+  "pumo","cassapanca","madia","cascetta","murosecco","malota","scrace","ulivo","muscia","faro","pajaro","luminarie","taccaro",
+  "umbrella","sunbed","towel","mattress","surfboard","walkway","pedalo","dock","boat",
+  "cabin","lifeguard","palm","shower","kiosk","volleyball","cooler","scoglio","boa",
+  "chair","rug","bed","table","bookcase","shelf","tv","plant","tree","flowers","statue","boulder","car"
+];
+
+/* glifo di un personaggio per la palette (sospetto con la sua lettera, o vittima) */
+function charGlyph(ch, cx, cy, CS){
+  if(ch==="victim")
+    return `<circle cx="${cx}" cy="${cy}" r="${CS*0.34}" fill="none" stroke="#e4483d" stroke-width="2.5" stroke-dasharray="4 3"/>`+
+      `<text x="${cx}" y="${cy+CS*0.16}" font-size="${CS*0.42}" text-anchor="middle" fill="#e4483d" font-weight="700">✖</text>`;
+  return `<circle cx="${cx}" cy="${cy}" r="${CS*0.32}" fill="#5b48a8" stroke="#fff" stroke-width="1.5"/>`+
+    `<text x="${cx}" y="${cy+CS*0.16}" font-size="${CS*0.4}" text-anchor="middle" fill="#fff" font-weight="700">${ch}</text>`;
+}
+
+/* elenco dei personaggi possibili per la griglia corrente: sospetti A.. (lato-1) + vittima */
+function rosterChars(){
+  const size=(state.map&&state.map.size)||(+$("#size").value);
+  const susp=Math.max(1,size-1);
+  const arr=[];
+  for(let i=0;i<susp && i<E.ALPHABET.length;i++) arr.push(E.ALPHABET[i]);
+  arr.push("victim");
+  return arr;
+}
+
+function setTool(tool){
+  state.tool=tool;
+  document.querySelectorAll(".tool").forEach(x=>x.classList.toggle("active",x.dataset.tool===tool));
+  $("#objPickWrap").style.opacity = (tool==="object"||tool==="character") ? 1 : 0.5;
+  renderPalette();
+  render();
+}
+
+function renderPalette(){
+  const box=$("#objPalette"); if(!box) return;
+  const lbl=$("#palLabel"), hint=$("#palHint"), catSelect=$("#objCategory");
+  if(catSelect) catSelect.style.display = (state.tool === "character") ? "none" : "block";
+
+  if(state.tool==="character"){
+    if(lbl) lbl.textContent="Personaggio da posizionare";
+    if(hint) hint.innerHTML="Seleziona un personaggio (un sospetto o la vittima) e clicca una cella per posizionarlo. Il pallino verde indica chi è già posizionato; clicca di nuovo sulla sua cella per rimuoverlo.";
+    const byKey={}; ((state.map&&state.map.entities)||[]).forEach(e=>{ byKey[e.kind==="victim"?"victim":e.initial]=e; });
+    box.innerHTML = rosterChars().map(ch=>{
+      const ent=byKey[ch], placed=!!ent, sel=state.selectedChar===ch;
+      const title = (ch==="victim"?"Vittima":("Sospetto "+ch))+(placed?` — posizionato in (${ent.row+1},${ent.col+1})`:" — da posizionare");
+      return `<div class="pobj char${sel?' active':''}${ch==="victim"?' victim':''}" data-char="${ch}" title="${title}">`+
+        `<svg width="30" height="30" viewBox="0 0 30 30">${charGlyph(ch,15,15,26)}</svg>`+
+        `<span class="wk" style="background:${placed?'#4bbf83':'#8a809c'}"></span></div>`;
+    }).join("");
+    box.querySelectorAll(".pobj").forEach(el=>el.addEventListener("click",()=>{
+      state.selectedChar=el.dataset.char;
+      box.querySelectorAll(".pobj").forEach(x=>x.classList.toggle("active",x===el));
+      if(state.tool!=="character") setTool("character");
+    }));
+  } else {
+    if(lbl) lbl.textContent="Oggetto da posizionare";
+    if(hint) hint.innerHTML="Icone <b>calpestabili</b> (una persona può starci sopra) e <b>ostacoli</b>, come appaiono sulla mappa.";
+    const curCat = (catSelect && catSelect.value) || "all";
+    let list = OBJ_ORDER;
+    if(curCat === "walkable") {
+      list = OBJ_ORDER.filter(k => E.objWalkable(k));
+    } else if(curCat === "obstacle") {
+      list = OBJ_ORDER.filter(k => !E.objWalkable(k));
+    } else if(OBJ_CATEGORIES[curCat] && OBJ_CATEGORIES[curCat].list) {
+      list = OBJ_CATEGORIES[curCat].list;
+    }
+    box.innerHTML = list.map(k=>{
+      const walk=E.objWalkable(k);
+      return `<div class="pobj${k===state.selectedObj?' active':''}" data-kind="${k}" title="${E.objLabel(k)}${walk?' (calpestabile)':' (ostacolo)'}">`+
+        `<svg width="30" height="30" viewBox="0 0 30 30">${objectGlyph(k,15,15,26)}</svg>`+
+        `<span class="lbl">${E.objLabel(k)} <span style="font-size:11px; opacity:0.7;" title="${walk?'Calpestabile':'Ostacolo'}">${walk?'(c)':'(nc)'}</span></span>`+
+        `<span class="wk" style="background:${walk?'#4bbf83':'#e4483d'}"></span></div>`;
+    }).join("");
+    box.querySelectorAll(".pobj").forEach(el=>el.addEventListener("click",()=>{
+      state.selectedObj=el.dataset.kind;
+      box.querySelectorAll(".pobj").forEach(x=>x.classList.toggle("active",x===el));
+      if(state.tool!=="object") setTool("object");
+    }));
+  }
+}
+
+/* =====================================================================
+   RENDER GRIGLIA
+   ===================================================================== */
+function render(){
+  const m = state.map;
+  const svg = $("#board");
+  if(!m){ svg.innerHTML=""; return; }
+  
+  let wCount = 0, obsCount = 0, emptyCount = 0, disabledCount = 0;
+  const totCells = m.size * m.size;
+  for(let r=0;r<m.size;r++) for(let c=0;c<m.size;c++){
+    const cell = E.cellAt(m,r,c);
+    if (!cell.walkable && !cell.object) disabledCount++;
+    else if (cell.object) {
+      if (E.objWalkable(cell.object)) wCount++;
+      else obsCount++;
+    } else {
+      emptyCount++;
+    }
+  }
+  const elWalk = $("#statWalkable"), elObs = $("#statObstacles"), elEmpty = $("#statEmpty"), elDis = $("#statDisabled"), elTot = $("#statTotal");
+  if(elWalk) {
+    elWalk.innerText = `${wCount}/${totCells} (${Math.round(wCount/totCells*100)}%)`;
+    elObs.innerText = `${obsCount}/${totCells} (${Math.round(obsCount/totCells*100)}%)`;
+    elEmpty.innerText = `${emptyCount}/${totCells} (${Math.round(emptyCount/totCells*100)}%)`;
+    elDis.innerText = `${disabledCount}/${totCells} (${Math.round(disabledCount/totCells*100)}%)`;
+    elTot.innerText = totCells;
+  }
+  const N = m.size;
+  const CS = Math.max(38, Math.min(60, Math.floor(560/N)));
+  const P = 26; // padding per numeri
+  const W = P + N*CS + 8, H = P + N*CS + 8;
+  const analysis = E.computeAreas(m);
+  const showSol = state.showSol;
+
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  let s = "";
+
+  // sfondo carta
+  s += `<rect x="${P-4}" y="${P-4}" width="${N*CS+8}" height="${N*CS+8}" rx="6" fill="var(--paper)"/>`;
+
+  // celle
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+    const x=P+c*CS, y=P+r*CS;
+    const occ = E.isOccupiable(m,r,c);
+    const cell = E.cellAt(m,r,c);
+    let fill;
+    if(!cell.walkable && !cell.object){ fill="#2c2534"; } // cella bloccata
+    else {
+      const aid = analysis.visualArea[r*N+c];
+      fill = getAreaFill(m, aid, "");
+    }
+    let titleStr = "";
+    if(cell.object){
+      let l = E.objLabel(cell.object);
+      titleStr = l.charAt(0).toUpperCase() + l.slice(1);
+      titleStr += E.objWalkable(cell.object) ? " (c)" : " (nc)";
+    }
+    if (showSol && m.entities) {
+      const ent = m.entities.find(e => e.row === r && e.col === c);
+      if (ent) {
+        if (titleStr) titleStr += " + ";
+        titleStr += ent.name;
+      }
+    }
+
+    if (titleStr) s += `<g><title>${titleStr}</title>`;
+    s += `<rect class="cell" data-r="${r}" data-c="${c}" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="${fill}" stroke="var(--paper-line)" stroke-width="1"/>`;
+    // oggetto
+    if(cell.object){
+      if(!E.objWalkable(cell.object)) {
+        s += `<rect x="${x}" y="${y}" width="${CS}" height="${CS}" fill="rgba(0,0,0,0.08)" pointer-events="none"/>`;
+      }
+      s += objectGlyph(cell.object, x+CS/2, y+CS/2, CS);
+    }
+    if (titleStr) s += `</g>`;
+  }
+
+  // etichette aree (una per area, al centroide)
+  const centroid={};
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){ const a=analysis.areaOf[r*N+c]; if(a<0)continue; (centroid[a]=centroid[a]||{sx:0,sy:0,n:0}); centroid[a].sx+=c; centroid[a].sy+=r; centroid[a].n++; }
+  for(const a in centroid){ const g=centroid[a]; const cx=P+(g.sx/g.n+0.5)*CS, cy=P+(g.sy/g.n+0.5)*CS;
+    const nm=(m.areaNames&&m.areaNames[a])||("Area "+(+a+1));
+    s += `<text x="${cx}" y="${cy}" font-size="16" fill="#6a5f4a" text-anchor="middle" opacity="0.6" pointer-events="none" font-family="var(--mono)" style="text-transform:uppercase; letter-spacing:1px; font-weight:700">${escapeXml(nm)}</text>`;
+  }
+
+  // entità (soluzione)
+  if(showSol && m.entities){
+    s += `<g opacity="0.65">`;   // personaggi semi-trasparenti: si vede l'oggetto sottostante
+    for(const e of m.entities){
+      const x=P+e.col*CS, y=P+e.row*CS, cx=x+CS/2, cy=y+CS/2;
+      if(e.kind==="victim"){
+        s += `<circle cx="${cx}" cy="${cy}" r="${CS*0.34}" fill="none" stroke="var(--evidence)" stroke-width="2.5" stroke-dasharray="4 3" pointer-events="none"/>`;
+        s += `<text x="${cx}" y="${cy+CS*0.15}" font-size="${CS*0.45}" text-anchor="middle" fill="var(--evidence)" font-weight="700" pointer-events="none">✖</text>`;
+      } else {
+        const murd = e.isMurderer;
+        s += `<circle cx="${cx}" cy="${cy}" r="${CS*0.32}" fill="${murd?'#e4483d':'#5b48a8'}" stroke="#fff" stroke-width="1.5" pointer-events="none"/>`;
+        s += `<text x="${cx}" y="${cy+CS*0.15}" font-size="${CS*0.42}" text-anchor="middle" fill="#fff" font-weight="700" pointer-events="none">${e.initial}</text>`;
+      }
+    }
+    s += `</g>`;
+  }
+
+  // muri (spessi) + bordo esterno
+  s += `<g stroke="#2a2130" stroke-width="4" stroke-linecap="round" pointer-events="none">`;
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+    const x=P+c*CS, y=P+r*CS;
+    if(c+1<N && E.hasWall(m,r,c,r,c+1)) s+=`<line x1="${x+CS}" y1="${y}" x2="${x+CS}" y2="${y+CS}"/>`;
+    if(r+1<N && E.hasWall(m,r,c,r+1,c)) s+=`<line x1="${x}" y1="${y+CS}" x2="${x+CS}" y2="${y+CS}"/>`;
+  }
+  s += `</g><rect x="${P}" y="${P}" width="${N*CS}" height="${N*CS}" fill="none" stroke="#2a2130" stroke-width="4" rx="4" pointer-events="none"/>`;
+
+  // finestre (glifo stilizzato sovrapposto al muro)
+  if(m.windows && m.windows.size > 0){
+    s += `<g pointer-events="none">`;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      const x=P+c*CS, y=P+r*CS;
+      // Right window (inner and outer)
+      if(E.isWindow(m,r,c,r,c+1)){
+         s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+      }
+      // Left window (outer only)
+      if(c===0 && E.isWindow(m,r,c,r,c-1)){
+         s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+      }
+      // Bottom window (inner and outer)
+      if(E.isWindow(m,r,c,r+1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+      }
+      // Top window (outer only)
+      if(r===0 && E.isWindow(m,r,c,r-1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+      }
+    }
+    s += `</g>`;
+  }
+
+  // numeri riga/colonna (da 1 a N)
+  s += `<g font-family="var(--mono)" font-size="11" fill="var(--text-faint)" text-anchor="middle" font-weight="700">`;
+  for(let i=0;i<N;i++){
+    s += `<text x="${P+i*CS+CS/2}" y="${P-8}">${i+1}</text>`;
+    s += `<text x="${P-9}" y="${P+i*CS+CS/2+4}">${i+1}</text>`;
+  }
+  s += `</g>`;
+
+  // hitbox muri (solo con strumento muri o finestre)
+  if(state.tool==="wall" || state.tool==="window"){
+    s += `<g>`;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      const x=P+c*CS, y=P+r*CS;
+      if(c+1<N) s+=`<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r}" data-wc2="${c+1}" x="${x+CS-10}" y="${y+10}" width="20" height="${CS-20}" fill="transparent" style="cursor:pointer; pointer-events:all;"/>`;
+      if(r+1<N) s+=`<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r+1}" data-wc2="${c}" x="${x+10}" y="${y+CS-10}" width="${CS-20}" height="20" fill="transparent" style="cursor:pointer; pointer-events:all;"/>`;
+      
+      // Outer border hitboxes (for both wall and window tools)
+      if (state.tool === "window" || state.tool === "wall") {
+        if (c===0) s+=`<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r}" data-wc2="${c-1}" x="${x-10}" y="${y+10}" width="20" height="${CS-20}" fill="transparent" style="cursor:pointer; pointer-events:all;"/>`;
+        if (r===0) s+=`<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r-1}" data-wc2="${c}" x="${x+10}" y="${y-10}" width="${CS-20}" height="20" fill="transparent" style="cursor:pointer; pointer-events:all;"/>`;
+        if (c===N-1) s+=`<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r}" data-wc2="${c+1}" x="${x+CS-10}" y="${y+10}" width="20" height="${CS-20}" fill="transparent" style="cursor:pointer; pointer-events:all;"/>`;
+        if (r===N-1) s+=`<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r+1}" data-wc2="${c}" x="${x+10}" y="${y+CS-10}" width="${CS-20}" height="20" fill="transparent" style="cursor:pointer; pointer-events:all;"/>`;
+      }
+    }
+    s += `</g>`;
+  }
+
+  // gruppo overlay per hover highlight (inizialmente vuoto)
+  s += `<g id="hoverOverlay" pointer-events="none"></g>`;
+
+  svg.innerHTML = s;
+  state._lastAnalysis = analysis;
+  state._lastCS = CS;
+  state._lastP = P;
+  attachBoardEvents();
+  renderLegend(analysis);
+}
+
+function escapeXml(t){ return String(t).replace(/[<>&]/g,x=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[x])); }
+
+function renderLegend(){
+  const L=$("#legend");
+  L.innerHTML =
+    `<span class="sw"><span class="dot" style="background:#5b48a8"></span> Sospetto</span>`+
+    `<span class="sw"><span class="dot" style="background:#e4483d"></span> Assassino</span>`+
+    `<span class="sw"><span class="dot" style="background:transparent;border:2px dashed #e4483d"></span> Vittima</span>`+
+    `<span class="sw"><span class="dot" style="background:#2c2534"></span> Cella bloccata</span>`;
+}
+
+/* =====================================================================
+   INTERAZIONI SULLA GRIGLIA
+   ===================================================================== */
+function attachBoardEvents(){
+  const svg=$("#board");
+  svg.querySelectorAll(".cell").forEach(el=>{
+    el.addEventListener("click",()=>onCellClick(+el.dataset.r,+el.dataset.c));
+  });
+  svg.querySelectorAll(".whit").forEach(el=>{
+    el.addEventListener("click",()=>{
+      if (state.tool === "wall") toggleWall(+el.dataset.wr,+el.dataset.wc,+el.dataset.wr2,+el.dataset.wc2);
+      else if (state.tool === "window") toggleWindow(+el.dataset.wr,+el.dataset.wc,+el.dataset.wr2,+el.dataset.wc2);
+    });
+  });
+  // --- hover highlight ---
+  svg.addEventListener("mousemove", (evt) => {
+    const m = state.map;
+    if (!m) return;
+    const pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+    const CS = state._lastCS, P = state._lastP, N = m.size;
+    const c = Math.floor((svgPt.x - P) / CS);
+    const r = Math.floor((svgPt.y - P) / CS);
+    if (r < 0 || r >= N || c < 0 || c >= N) {
+      if (state.hoverR !== -1) { state.hoverR = -1; state.hoverC = -1; updateHoverHighlight(); }
+      return;
+    }
+    if (r !== state.hoverR || c !== state.hoverC) {
+      state.hoverR = r; state.hoverC = c;
+      updateHoverHighlight();
+    }
+  });
+  svg.addEventListener("mouseleave", () => {
+    if (state.hoverR !== -1) { state.hoverR = -1; state.hoverC = -1; updateHoverHighlight(); }
+  });
+}
+
+/* Aggiorna l'overlay di hover: bordo bianco sulla cella, bordo blu sull'area */
+function updateHoverHighlight() {
+  const overlay = document.getElementById("hoverOverlay");
+  if (!overlay) return;
+  const m = state.map;
+  const r = state.hoverR, c = state.hoverC;
+  if (!m || r < 0 || c < 0) { overlay.innerHTML = ""; return; }
+
+  const N = m.size, CS = state._lastCS, P = state._lastP;
+  const analysis = state._lastAnalysis;
+  if (!analysis) { overlay.innerHTML = ""; return; }
+
+  let s = "";
+
+  // 1) Bordo blu grassetto per l'intera area (stanza)
+  const hoveredArea = analysis.visualArea[r * N + c];
+  if (hoveredArea >= 0) {
+    // Disegna i bordi dell'area: per ogni cella dell'area, disegna un segmento
+    // sui lati dove c'è un confine con un'area diversa o il bordo della griglia
+    for (let ar = 0; ar < N; ar++) for (let ac = 0; ac < N; ac++) {
+      if (analysis.visualArea[ar * N + ac] !== hoveredArea) continue;
+      const x = P + ac * CS, y = P + ar * CS;
+      // lato superiore
+      if (ar === 0 || analysis.visualArea[(ar - 1) * N + ac] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y}" x2="${x + CS}" y2="${y}" stroke="#2196F3" stroke-width="3.5"/>`;
+      // lato inferiore
+      if (ar === N - 1 || analysis.visualArea[(ar + 1) * N + ac] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y + CS}" x2="${x + CS}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+      // lato sinistro
+      if (ac === 0 || analysis.visualArea[ar * N + (ac - 1)] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+      // lato destro
+      if (ac === N - 1 || analysis.visualArea[ar * N + (ac + 1)] !== hoveredArea)
+        s += `<line x1="${x + CS}" y1="${y}" x2="${x + CS}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+    }
+  }
+
+  // 2) Bordo bianco grassetto sulla cella in hover
+  const cx = P + c * CS, cy = P + r * CS;
+  s += `<rect x="${cx}" y="${cy}" width="${CS}" height="${CS}" fill="none" stroke="#ffffff" stroke-width="3"/>`;
+
+  overlay.innerHTML = s;
+}
+
+function toggleWall(r,c,r2,c2){
+  pushUndo();
+  const m=state.map; const k=E.wallKey({row:r,col:c},{row:r2,col:c2});
+  // Check if it's a boundary wall
+  if (r < 0 || r >= m.size || c < 0 || c >= m.size || r2 < 0 || r2 >= m.size || c2 < 0 || c2 >= m.size) {
+    toast("Il bordo della mappa è già un muro indistruttibile! Puoi però posizionarvi delle finestre usando lo strumento Finestre.");
+    return;
+  }
+  
+  if(m.walls.has(k)) { 
+    m.walls.delete(k); 
+    if(m.windows) m.windows.delete(k); 
+  } else { 
+    m.walls.add(k); 
+  }
+  invalidateClues(); render(); autosave();
+}
+
+function toggleWindow(r, c, r2, c2) {
+  pushUndo();
+  const m=state.map; const k=E.wallKey({row:r,col:c},{row:r2,col:c2});
+  if(!m.windows) m.windows=new Set();
+  
+  if(m.windows.has(k)) {
+    m.windows.delete(k); 
+  } else { 
+    if(!E.hasWall(m, r, c, r2, c2)) {
+      toast("Le finestre possono essere posizionate solo su un muro esistente.");
+      return;
+    }
+    m.windows.add(k);
+  }
+  invalidateClues(); render(); autosave();
+}
+
+function onCellClick(r,c){
+  const m=state.map; const cell=E.cellAt(m,r,c); const t=state.tool;
+  // ricorda area cliccata per rinomina e pavimenti
+  const an=E.computeAreas(m); const aid=an.visualArea[r*m.size+c];
+  state.lastAreaClicked=aid;
+  $("#areaName").value = (aid>=0 && m.areaNames[aid]) ? m.areaNames[aid] : "";
+  updateFloorUI();
+
+  if(t==="select") return; // solo selezione area
+
+  pushUndo();
+
+  if(t==="block"){
+    cell.walkable = !cell.walkable; if(!cell.walkable) delete cell.object;
+    removeEntityAt(r,c);
+  } else if(t==="object"){
+    const k=state.selectedObj;
+    if(cell.object===k){ delete cell.object; }
+    else { cell.object=k; cell.walkable=true; if(!E.objWalkable(k)) removeEntityAt(r,c); }
+  } else if(t==="character"){
+    placeCharacter(r,c);
+  } else if(t==="erase"){
+    // cancellazione a livelli: prima la persona, poi l'oggetto sotto, poi lo sblocco
+    if(entityAt(r,c)) removeEntityAt(r,c);
+    else if(cell.object) delete cell.object;
+    else if(!cell.walkable) cell.walkable=true;
+  }
+  invalidateClues(); recomputeEntities(); render(); renderPalette(); autosave();
+}
+
+function entityAt(r,c){ return (state.map.entities||[]).find(e=>e.row===r&&e.col===c); }
+function removeEntityAt(r,c){ const m=state.map; m.entities=(m.entities||[]).filter(e=>!(e.row===r&&e.col===c)); }
+/* posiziona/sposta/rimuove uno specifico personaggio (sospetto con lettera, o vittima) */
+function placeCharacter(r,c){
+  const m=state.map; const k=state.selectedChar||"A";
+  const occupant=entityAt(r,c);
+  if(k==="victim"){
+    const vic=(m.entities||[]).find(e=>e.kind==="victim");
+    if(vic && vic.row===r && vic.col===c){ removeEntityAt(r,c); return; }        // toggle via propria cella
+    if(occupant && occupant.kind!=="victim"){ toast("Cella occupata da "+occupant.initial); return; }
+    if(!E.isOccupiable(m,r,c)){ toast("Cella non occupabile"); return; }
+    m.entities=m.entities||[];
+    if(vic){ vic.row=r; vic.col=c; }
+    else m.entities.push({id:"victim", kind:"victim", initial:"V", name:E.nameFor(E.ALPHABET.indexOf("V")), row:r, col:c});
+  } else {
+    const ent=(m.entities||[]).find(e=>e.kind==="suspect" && e.initial===k);
+    if(ent && ent.row===r && ent.col===c){ removeEntityAt(r,c); return; }        // toggle via propria cella
+    if(occupant && occupant!==ent){ toast("Cella occupata da "+(occupant.kind==="victim"?"la vittima":occupant.initial)); return; }
+    if(!E.isOccupiable(m,r,c)){ toast("Cella non occupabile"); return; }
+    m.entities=m.entities||[];
+    if(ent){ ent.row=r; ent.col=c; }
+    else m.entities.push({id:"s_"+k+"_"+Math.random().toString(36).slice(2,7), kind:"suspect", initial:k, name:E.nameFor(E.ALPHABET.indexOf(k)), row:r, col:c});
+  }
+}
+/* mantiene le iniziali (identità dei personaggi), assegna nomi mancanti, ricalcola l'assassino */
+function recomputeEntities(){
+  const m=state.map; if(!m.entities) return;
+  const sus=m.entities.filter(e=>e.kind==="suspect");
+  sus.forEach(e=>{ 
+    e.isMurderer=false; 
+    if(!e.name){ const idx=Math.max(0,E.ALPHABET.indexOf(e.initial)); e.name=E.nameFor(idx); } 
+    if(!e.gender) e.gender = E.getGender(e.name);
+    if(e.hasHat === undefined) e.hasHat = Math.random() < 0.5;
+    if(e.hasGlasses === undefined) e.hasGlasses = Math.random() < 0.5;
+  });
+  const vic=m.entities.find(e=>e.kind==="victim");
+  if(vic){ 
+    if(!vic.name) vic.name=E.nameFor(E.ALPHABET.indexOf("V"));
+    if(!vic.gender) vic.gender = E.getGender(vic.name);
+    if(vic.hasHat === undefined) vic.hasHat = Math.random() < 0.5;
+    if(vic.hasGlasses === undefined) vic.hasGlasses = Math.random() < 0.5;
+    const an=E.computeAreas(m); const va=an.areaOf[vic.row*m.size+vic.col];
+    const inArea=sus.filter(e=>an.areaOf[e.row*m.size+e.col]===va);
+    if(inArea.length===1) inArea[0].isMurderer=true;
+  }
+  m.suspectCount=sus.length;
+}
+
+/* =====================================================================
+   AZIONI PRINCIPALI
+   ===================================================================== */
+function invalidateClues(){ /* la mappa è cambiata: gli indizi non sono più affidabili */ }
+
+$("#genMap").addEventListener("click", ()=>{
+  pushUndo();
+  const size=+$("#size").value;
+  const rng=rngNow();
+  let m=null;
+  for(let t=0;t<40;t++){ m=E.generateMap({size,rng}); const sol=E.placeSolution(m,{rng}); if(sol) break; m=null; }
+  if(!m){ toast("Generazione mappa non riuscita, riprova"); return; }
+  state.map=m; state.clueResult=null; state.clueObjs=[]; state.preserved.clear();
+  $("#cluesTitle").innerHTML = "Fascicolo indizi";
+  renderClues(); renderSteps(); setVerdict("warn","Mappa pronta. Premi «Genera indizi».");
+  setBoardStatus("ok",`Mappa ${size}×${size} · ${m.entities.filter(e=>e.kind==="suspect").length} sospetti + 1 vittima. Modificala con gli strumenti o genera gli indizi.`);
+  render(); renderPalette(); autosave();
+});
+
+function eleganceHtml(el){
+  const m=el.meta||{};
+  return `<span style="font-size:12px;color:var(--text-dim)">Eleganza <b style="color:var(--gold)">${el.score}/100</b> (${el.label}) · ${m.singles||0} dirette, ${m.contras||0} per contraddizione, ${m.uniques||0} per unicità</span>`;
+}
+function showClueResult(g){
+  state.clueResult=g; state.clueObjs=g.clues;
+  state.narration=null; state.narrated=false; if($("#narrateToggle")) $("#narrateToggle").checked=false;
+  const present=new Set(g.clues.map(c=>c.id));
+  state.preserved=new Set([...state.preserved].filter(id=>present.has(id)));
+  
+  if (g.difficulty) {
+    const diffMap = { "easy": "Facile 🟢", "medium": "Medio 🟡", "hard": "Difficile 🔴", "expert": "Esperto 🟣" };
+    $("#cluesTitle").innerHTML = `Fascicolo indizi <span style="font-size: 0.6em; font-weight: normal; margin-left: 8px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.1);">${diffMap[g.difficulty] || g.difficulty}</span>`;
+  } else {
+    $("#cluesTitle").innerHTML = "Fascicolo indizi";
+  }
+
+  renderClues(); renderSteps();
+  const el = g.elegance || E.eleganceScore(state.map, g.clues, g.ctx);
+  state.lastElegance = el;
+  if(g.unique) setVerdict("ok", `<span class="b">Soluzione unica.</span> ${g.clues.length} indizi. L'assassino è ${murdererName()}.<br>${eleganceHtml(el)}`);
+  else setVerdict("warn", `Gli indizi ammettono più soluzioni (${g.solutionsCount}${g.solutionsCount>=2?"+":""}). Prova «Più eleganti» o alza «max indizi».<br>${eleganceHtml(el)}`);
+  render(); renderPalette(); autosave();
+}
+
+$("#genClues").addEventListener("click", ()=>{
+  const m=state.map;
+  if(!m || !(m.entities&&m.entities.length)){ toast("Prima genera o disegna una mappa con le persone"); return; }
+  recomputeEntities();
+  const val=validateSolution();
+  if(!val.ok){ setVerdict("bad", val.msg); toast("Soluzione non valida: "+val.msg); return; }
+  const difficulty=$("#difficulty").value;
+  const maxPer=+$("#maxPer").value;
+  const maxIndClues=+$("#maxIndClues").value;
+  const rng=rngNow();
+  const preservedClues = state.clueObjs.filter(c=>state.preserved.has(c.id));
+  setVerdict("warn","Generazione in corso…");
+  setTimeout(()=>{
+    let g;
+    try{ g=E.generateClues(m,{difficulty,maxCluesPerCharacter:maxPer,maxIndClues,rng,preservedClues,
+      allowedTypes: allowedForDifficulty(difficulty)}); 
+      g.difficulty = difficulty;
+    }
+    catch(err){ setVerdict("bad","Errore: "+err.message); return; }
+    showClueResult(g);
+  },30);
+});
+
+$("#genBest").addEventListener("click", ()=>{
+  const m=state.map;
+  if(!m || !(m.entities&&m.entities.length)){ toast("Prima genera o disegna una mappa con le persone"); return; }
+  recomputeEntities();
+  const val=validateSolution();
+  if(!val.ok){ setVerdict("bad", val.msg); toast("Soluzione non valida: "+val.msg); return; }
+  const difficulty=$("#difficulty").value;
+  const maxPer=+$("#maxPer").value;
+  const maxIndClues=+$("#maxIndClues").value;
+  const tries=+$("#tries").value;
+  const preservedClues = state.clueObjs.filter(c=>state.preserved.has(c.id));
+  setVerdict("warn",`Cerco il set più elegante (${tries} tentativi)…`);
+  setTimeout(()=>{
+    let best;
+    try{ best=E.generateBestClues(m,{difficulty,maxCluesPerCharacter:maxPer,maxIndClues,tries,preservedClues,
+      allowedTypes: allowedForDifficulty(difficulty), rng: rngNow()}); 
+      if(best) best.difficulty = difficulty;
+    }
+    catch(err){ setVerdict("bad","Errore: "+err.message); return; }
+    showClueResult(best);
+  },30);
+});
+
+
+$("#autoFill").addEventListener("click", ()=>{
+  const m=state.map;
+  if(!m){ toast("Nessuna mappa"); return; }
+  pushUndo();
+  m.suspectCount = m.size - 1;      // permutazione completa
+  m.entities = [];                  // sostituisce eventuali personaggi esistenti
+  const rng=rngNow();
+  let sol=null;
+  for(let t=0;t<8 && !sol;t++) sol=E.placeSolution(m,{rng});
+  if(!sol){
+    setVerdict("bad","Impossibile completare: servono almeno due stanze (aggiungi muri) e abbastanza celle libere, così la vittima può restare sola con l'assassino.");
+    setBoardStatus("bad","Piazzamento non riuscito sulla mappa attuale.");
+    render(); renderPalette();
+    return;
+  }
+  const difficulty=$("#difficulty").value, maxPer=+$("#maxPer").value, maxIndClues=+$("#maxIndClues").value, tries=+$("#tries").value;
+  setVerdict("warn","Completamento in corso…");
+  render(); renderPalette();
+  setTimeout(()=>{
+    let best;
+    try{ best=E.generateBestClues(m,{difficulty,maxCluesPerCharacter:maxPer,maxIndClues,tries,allowedTypes:allowedForDifficulty(difficulty),rng}); }
+    catch(err){ setVerdict("bad","Errore: "+err.message); return; }
+    state.preserved.clear();
+    showClueResult(best);
+    setBoardStatus("ok",`Mappa completata: ${m.entities.filter(e=>e.kind==="suspect").length} sospetti + 1 vittima posizionati.`);
+  },30);
+});
+
+$("#verify").addEventListener("click", ()=>{
+  const m=state.map;
+  if(!m||!(m.entities&&m.entities.length)){ toast("Nessuna mappa"); return; }
+  recomputeEntities();
+  const val=validateSolution();
+  if(!val.ok){ setVerdict("bad",val.msg); return; }
+  if(!state.clueObjs.length){ setVerdict("warn","Nessun indizio da verificare. Genera gli indizi."); return; }
+  const ctx=E.buildContext(m);
+  const res=E.solve(m,state.clueObjs,ctx,2000000);
+  const trueFound=res.solutions.some(ssol=>m.entities.every(e=>ssol[e.id].row===e.row&&ssol[e.id].col===e.col));
+  if(res.aborted) setVerdict("warn","Verifica interrotta (griglia grande): impossibile confermare l'unicità entro il limite di tempo.");
+  else if(res.unique && trueFound) setVerdict("ok",`<span class="b">Verificato:</span> soluzione unica e coerente. Assassino: ${murdererName()}.`);
+  else if(!trueFound) setVerdict("bad","Gli indizi non sono coerenti con le posizioni attuali (hai modificato la mappa dopo aver generato gli indizi?).");
+  else setVerdict("warn",`Soluzione non unica: ${res.solutions.length} disposizioni compatibili.`);
+});
+
+function validateSolution(){
+  const m=state.map;
+  const sus=m.entities.filter(e=>e.kind==="suspect");
+  const vic=m.entities.find(e=>e.kind==="victim");
+  if(!vic) return {ok:false,msg:"Manca la vittima (strumento 💀)."};
+  if(sus.length<1) return {ok:false,msg:"Servono almeno 1 sospetto."};
+  const rows=new Set(), cols=new Set();
+  for(const e of m.entities){
+    if(!E.isOccupiable(m,e.row,e.col)) return {ok:false,msg:`${e.name||e.initial} è su una cella non occupabile.`};
+    if(rows.has(e.row)) return {ok:false,msg:`Due persone nella riga ${e.row+1} (vietato).`};
+    if(cols.has(e.col)) return {ok:false,msg:`Due persone nella colonna ${e.col+1} (vietato).`};
+    rows.add(e.row); cols.add(e.col);
+  }
+  const an=E.computeAreas(m); const va=an.areaOf[vic.row*m.size+vic.col];
+  const inArea=m.entities.filter(e=>an.areaOf[e.row*m.size+e.col]===va);
+  if(inArea.length!==2) return {ok:false,msg:`La vittima deve restare sola con un solo sospetto: nella sua area ci sono ${inArea.length} persone.`};
+  return {ok:true};
+}
+function murdererName(){ const e=(state.map.entities||[]).find(e=>e.isMurderer); return e?`<b>${e.name} (${e.initial})</b>`:"—"; }
+
+function allowedForDifficulty(d) {
+  if(d==="easy") return ["IN_AREA","IN_ROW","IN_COL","EDGE","ON_OBJECT","BESIDE_OBJECT","ALONE","ONLY_ON_OBJECT"];
+  if(d==="medium") return ["IN_AREA","IN_ROW","IN_COL","EDGE","ON_OBJECT","BESIDE_OBJECT","ALONE","ONLY_ON_OBJECT","SAME_AREA","WITH_IN_AREA","CORNER","FRONT_WINDOW"];
+  if(d==="hard") return ["IN_AREA","NOT_IN_AREA","IN_ROW","IN_COL","EDGE","NOT_EDGE_COL","ON_OBJECT","ONLY_ON_OBJECT","BESIDE_OBJECT","NOT_BESIDE_OBJECT","SAME_AREA","WITH_IN_AREA","DIFF_AREA","CARDINAL","ALONE","ALONE_WITH_TRAIT","ALONE_WITH_PERSON","CORNER","NOT_CORNER","ROWS_OFFSET","COLS_OFFSET","FRONT_WINDOW","OBJECT_DIR","IN_COL_OR","ON_OBJECT_OR","BESIDE_OBJECT_OR"];
+  return ["IN_AREA","NOT_IN_AREA","IN_ROW","IN_COL","EDGE","NOT_EDGE_COL","ON_OBJECT","ONLY_ON_OBJECT","BESIDE_OBJECT","NOT_BESIDE_OBJECT","SAME_AREA","WITH_IN_AREA","DIFF_AREA","CARDINAL","ALONE","ALONE_WITH_TRAIT","ALONE_WITH_PERSON","CORNER","NOT_CORNER","ROWS_OFFSET","COLS_OFFSET","FRONT_WINDOW","OBJECT_DIR","IN_COL_OR","ON_OBJECT_OR","BESIDE_OBJECT_OR","SOMEONE_OFFSET_ON","TRAIT_ON_OBJECT_IN_AREA","INDIRECT","EMPTY_ROWS","EMPTY_COLS","AREA_MIN_PEOPLE","AREA_PARITY"];
+}
+
+/* =====================================================================
+   PANNELLO INDIZI
+   ===================================================================== */
+const CAT_LABEL={posizione:"posizione",area:"area",oggetto:"oggetto",relazione:"relazione",globale:"globale"};
+function renderClues(){
+  const box=$("#clues");
+  const clues=state.clueObjs;
+  if(!clues || !clues.length){ box.innerHTML=`<div class="empty">Premi «Genera indizi». Spilla 📌 un indizio per conservarlo alla prossima generazione.</div>`; return; }
+  const ctx=(state.clueResult&&state.clueResult.ctx)||E.buildContext(state.map);
+  const m=state.map;
+  const sus=m.entities.filter(e=>e.kind==="suspect").sort((a,b)=>a.initial.localeCompare(b.initial));
+  let html=""; let n=0;
+  const bySubj={}; const globals=[];
+  for(const c of clues){ if(c.scope==="global") globals.push(c); else (bySubj[c.subjectId]=bySubj[c.subjectId]||[]).push(c); }
+  for(const s of sus){
+    const list=bySubj[s.id]||[];
+    if(!list.length) continue;
+    const color = s.isMurderer? "#e4483d":"#5b48a8";
+    const traitsText = `(${s.gender==='M'?'Uomo':'Donna'}${s.hasHat?', con cappello':''}${s.hasGlasses?', con occhiali':''})`;
+    const av = charAvatarSVG(s);
+    html+=`<div class="grp">
+      <div class="gh" style="display:flex; align-items:center; gap:10px;">
+        <div style="width:40px; height:40px; flex-shrink:0;">${av}</div>
+        <div style="display:flex; flex-direction:column; line-height:1.2;">
+          <div><span class="badge" style="background:${color}">${s.initial}</span> <span style="font-weight:700; font-size:14px; color:${color};">${escapeHtml(s.name)}</span></div>
+          <div style="font-size:10.5px; opacity:0.8; font-weight:normal; text-transform:none; margin-top:2px;">${traitsText}</div>
+        </div>
+      </div>`;
+    for(const c of list){ n++; html+=clueRow(ctx,c,n); }
+    html+=`</div>`;
+    delete bySubj[s.id];
+  }
+  const orphanedSubjects = Object.keys(bySubj);
+  if(orphanedSubjects.length > 0){
+    html+=`<div class="grp"><div class="gh"><span class="badge" style="background:#888;color:#fff">?</span> <span style="font-weight:700; font-size:14px; color:#888;">Personaggi rimossi</span></div>`;
+    for(const sid of orphanedSubjects){
+      for(const c of bySubj[sid]){ n++; html+=clueRow(ctx,c,n); }
+    }
+    html+=`</div>`;
+  }
+  if(globals.length){
+    html+=`<div class="grp"><div class="gh"><span class="badge" style="background:#d8b25a;color:#000">★</span> Vincoli globali</div>`;
+    for(const c of globals){ n++; html+=clueRow(ctx,c,n); }
+    html+=`</div>`;
+  }
+  box.innerHTML=html;
+  box.querySelectorAll(".pin").forEach(el=>el.addEventListener("click",()=>{
+    const id=el.dataset.id; if(state.preserved.has(id)) state.preserved.delete(id); else state.preserved.add(id);
+    renderClues();
+  }));
+  box.querySelectorAll(".del").forEach(el=>el.addEventListener("click",()=>{
+    const id=el.dataset.id; state.clueObjs=state.clueObjs.filter(c=>c.id!==id); state.preserved.delete(id);
+    if(state.clueResult) state.clueResult.clues=state.clueObjs;
+    renderClues(); renderSteps(); toast("Indizio rimosso — usa Verifica per controllare l'unicità");
+  }));
+}
+function clueRow(ctx,c,n){
+  const pinned=state.preserved.has(c.id);
+  const disp=clueDisplay(ctx,c);
+  const mark = disp.mark==="ok" ? `<span title="Riscrittura AI verificata" style="color:var(--ok)">✓</span>`
+             : disp.mark==="warn" ? `<span title="Riscrittura AI non verificata: uso il testo logico" style="color:var(--warn)">⚠︎</span>` : "";
+  return `<div class="clue ${c.scope==='global'?'global':''}">
+    <span class="num">${String(n).padStart(2,"0")}</span>
+    <span class="tx"><small style="opacity:0.5; margin-right:4px;">[${c.id}]</small> ${escapeHtml(disp.text)} ${mark}<span class="cat">${CAT_LABEL[c.category]||c.category}</span></span>
+    <span class="acts">
+      <span class="pin ${pinned?'on':''}" data-id="${c.id}" title="Spilla (conserva)">📌</span>
+      <span class="del" data-id="${c.id}" title="Rimuovi">✕</span>
+    </span>
+  </div>`;
+}
+function escapeHtml(t){ return String(t).replace(/[<>&]/g,x=>({"<":"&lt;",">":"&gt;","&":"&amp;"}[x])); }
+
+function renderSteps(){
+  const card=$("#aiStepsCard");
+  const box=$("#aiSteps");
+  if(!card || !box) return;
+  if(!state.aiSolution || !state.aiSolution.length){
+    card.style.display="none";
+    return;
+  }
+  card.style.display="block";
+  box.innerHTML=`<div class="steps">` + state.aiSolution.map((s)=>{
+    return `<div class="step">${escapeHtml(s)}</div>`;
+  }).join("")+`</div>`;
+}
+
+/* =====================================================================
+   VERDETTO / STATUS
+   ===================================================================== */
+function setVerdict(kind,html){ const v=$("#verdict"); v.className="status "+kind; v.innerHTML=html; }
+function setBoardStatus(kind,html){ const v=$("#boardStatus"); v.className="status "+kind; v.innerHTML=html; }
+
+/* =====================================================================
+   STRUMENTI / IMPOSTAZIONI
+   ===================================================================== */
+$("#tools").addEventListener("click",e=>{
+  const t=e.target.closest(".tool"); if(!t) return;
+  setTool(t.dataset.tool);
+});
+  let pendingPredefMapId = null;
+  document.querySelectorAll(".predef-map-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      pendingPredefMapId = btn.dataset.id;
+      $("#predefConfirmBox").style.display = "block";
+    });
+  });
+
+  $("#predefCancelBtn").addEventListener("click", () => {
+    pendingPredefMapId = null;
+    $("#predefConfirmBox").style.display = "none";
+  });
+
+  $("#predefConfirmBtn").addEventListener("click", () => {
+    if (!pendingPredefMapId) return;
+    const id = pendingPredefMapId;
+    $("#predefConfirmBox").style.display = "none";
+    pendingPredefMapId = null;
+    
+    const map = E.loadPredefinedMap(id);
+    if (map) {
+      state.map = map;
+      state.clueObjs = [];
+      state.clueResult = null;
+      state.preserved.clear();
+      state.steps = [];
+      setBoardStatus("ok", `Mappa "${map.mapTitle}" caricata.`);
+      setVerdict("ok", "Mappa caricata. Puoi modificare i dettagli o generare indizi.");
+      invalidateClues();
+      render();
+      autosave();
+    } else {
+      alert("Errore nel caricamento della mappa.");
+    }
+  });
+
+$("#undoBtn").addEventListener("click", popUndo);
+$("#size").addEventListener("input",e=>{ $("#sizeVal").textContent=e.target.value; });
+$("#maxPer").addEventListener("input",e=>{ $("#maxPerVal").textContent=e.target.value; });
+$("#maxIndClues").addEventListener("input",e=>{ $("#maxIndCluesVal").textContent=e.target.value; });
+$("#tries").addEventListener("input",e=>{ $("#triesVal").textContent=e.target.value; });
+$("#showSol").addEventListener("change",e=>{ state.showSol=e.target.checked; render(); });
+$("#areaName").addEventListener("change",e=>{
+  if(state.lastAreaClicked==null||state.lastAreaClicked<0){ toast("Clicca prima una cella dell'area"); return; }
+  pushUndo();
+  state.map.areaNames[state.lastAreaClicked]=e.target.value||("Area "+(state.lastAreaClicked+1));
+  invalidateClues(); render(); autosave();
+});
+function clearMap(keepWalls){
+  pushUndo();
+  const m=state.map; const size=(m&&m.size)||(+$("#size").value);
+  if(keepWalls && m){
+    for(const cell of m.cells){ cell.walkable=true; delete cell.object; } // rimuove oggetti e sblocca le celle
+    m.entities=[];                                                        // rimuove persone e vittima
+    // m.walls, m.areaNames e m.areaFloors restano invariati
+  } else {
+    state.map=E.emptyMap(size); state.map.areaNames={0:"Stanza"};
+    state.map.areaFloors={};
+    state.mapTitle="";
+    $("#mapTitle").value="";
+    state.currentMapId=null;
+  }
+  state.clueObjs=[]; state.clueResult=null; state.preserved.clear();
+  render(); renderPalette(); renderClues(); renderSteps(); updateFloorUI();
+  setVerdict("warn", keepWalls ? "Elementi rimossi: muri e aree mantenuti." : "Griglia completamente svuotata.");
+  setBoardStatus("warn", keepWalls ? "Oggetti, persone e celle bloccate rimossi. La struttura delle stanze (muri) è stata mantenuta." : "Tutto cancellato, muri inclusi.");
+  autosave();
+}
+$("#clearElems").addEventListener("click",()=>{
+  if(!state.map){ toast("Nessuna mappa"); return; }
+  clearMap(true);
+  toast("Elementi rimossi (muri mantenuti)");
+});
+let clearAllArmed=false, clearAllTimer=null;
+$("#clearAll").addEventListener("click",()=>{
+  const btn=$("#clearAll");
+  if(!clearAllArmed){
+    clearAllArmed=true;
+    if(!btn.dataset.label) btn.dataset.label=btn.textContent;
+    btn.textContent="⚠️ Confermi? Clicca di nuovo";
+    btn.style.borderColor="var(--evidence)";
+    clearAllTimer=setTimeout(()=>{ clearAllArmed=false; btn.textContent=btn.dataset.label; btn.style.borderColor=""; },3000);
+    return;
+  }
+  clearTimeout(clearAllTimer); clearAllArmed=false;
+  btn.textContent=btn.dataset.label; btn.style.borderColor="";
+  clearMap(false);
+  toast("Griglia svuotata (muri inclusi)");
+});
+
+/* =====================================================================
+   HELPER NOMI FILE ED EXPORT
+   ===================================================================== */
+function slugify(t){
+  return (t || "")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // rimuove accenti
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "murdoku";
+}
+
+function getExportFilename(suffix, ext){
+  const title = (state.mapTitle || (state.map && state.map.title) || "").trim();
+  const base = title ? slugify(title) : "murdoku";
+  const s = suffix ? `-${suffix}` : "";
+  return `${base}${s}.${ext}`;
+}
+
+/* =====================================================================
+   EXPORT / IMPORT / PERSISTENZA
+   ===================================================================== */
+function serialize(){
+  const m=state.map; if(!m) return null;
+  return {
+    version:1,
+    title:(state.mapTitle||"").trim(),
+    size:m.size,
+    cells:m.cells.map(c=>({row:c.row,col:c.col,walkable:c.walkable!==false, object:c.object||null})),
+    walls:[...m.walls], windows:[...(m.windows||[])], areaNames:m.areaNames,
+    areaFloors:m.areaFloors ? Object.assign({}, m.areaFloors) : {},
+    entities:(m.entities||[]).map(e=>({id:e.id,kind:e.kind,initial:e.initial,name:e.name,row:e.row,col:e.col,isMurderer:!!e.isMurderer, gender:e.gender, hasHat:e.hasHat, hasGlasses:e.hasGlasses})),
+    suspectCount:m.suspectCount||0,
+    clues:(state.clueObjs||[]).map(c=>({...c, text:E.clueText((state.clueResult&&state.clueResult.ctx)||E.buildContext(m),c)})),
+    theme:state.theme||null,
+    narration:state.narration||null,
+    narrated:!!state.narrated
+  };
+}
+
+function deserialize(d){
+  const m=E.emptyMap(d.size);
+  for(const c of d.cells){ const cell=E.cellAt(m,c.row,c.col); cell.walkable=c.walkable!==false; if(c.object) cell.object=c.object; }
+  m.walls=new Set(d.walls||[]); m.windows=new Set(d.windows||[]); m.areaNames=d.areaNames||{};
+  m.areaFloors=d.areaFloors ? Object.assign({}, d.areaFloors) : {};
+  m.entities=(d.entities||[]).map(e=>({...e})); m.suspectCount=d.suspectCount||0;
+  state.map=m; state.clueObjs=[]; state.clueResult=null; state.preserved.clear();
+  state.mapTitle = d.title || "";
+  $("#mapTitle").value = state.mapTitle;
+  if(d.theme) state.theme = d.theme;
+  if(d.narration) state.narration = d.narration;
+  state.narrated = !!d.narrated;
+  if($("#narrateToggle")) $("#narrateToggle").checked = state.narrated;
+  
+  if(d.clues && d.clues.length > 0) {
+    state.clueObjs = d.clues;
+    state.clueResult = { clues: d.clues, ctx: E.buildContext(m), unique: true, solutionsCount: 1 };
+  }
+
+  render(); renderPalette(); renderClues(); renderSteps(); updateFloorUI();
+  
+  if(state.clueObjs.length > 0) {
+    setVerdict("ok", `Progetto importato con successo (${state.clueObjs.length} indizi).`);
+  } else {
+    setVerdict("warn", "Progetto importato. Genera gli indizi per giocare.");
+  }
+}
+
+/* =====================================================================
+   LIBRERIA MAPPE SALVATE (LOCAL STORAGE)
+   ===================================================================== */
+function getSavedMaps(){
+  try {
+    const raw = localStorage.getItem("murdoku:saved_maps");
+    return raw ? JSON.parse(raw) : [];
+  } catch(e) { return []; }
+}
+
+function setSavedMaps(list){
+  try {
+    localStorage.setItem("murdoku:saved_maps", JSON.stringify(list));
+  } catch(e) {}
+  updateSavedCount();
+}
+
+function updateSavedCount(){
+  const list = getSavedMaps();
+  const cnt = list.length;
+  const b1 = $("#savedCountBadge"), b2 = $("#savedCount"), s = $("#savedMapsSummary");
+  if(b1) b1.textContent = cnt;
+  if(b2) b2.textContent = cnt;
+  if(s) s.textContent = `${cnt} ${cnt===1 ? "mappa archiviata" : "mappe archiviate"} in locale`;
+}
+
+function saveCurrentMap(forceNew){
+  const m = state.map;
+  if(!m){ toast("Nessuna mappa da salvare"); return; }
+  recomputeEntities();
+  const serialized = serialize();
+  if(!serialized){ toast("Nessun dato da salvare"); return; }
+  
+  let list = getSavedMaps();
+  const defaultName = `Mappa ${m.size}×${m.size} (${new Date().toLocaleDateString('it-IT')})`;
+  const title = (state.mapTitle || "").trim() || defaultName;
+  state.mapTitle = title;
+  $("#mapTitle").value = title;
+  
+  const now = new Date().toISOString();
+  if (!forceNew && state.currentMapId) {
+    const idx = list.findIndex(item => item.id === state.currentMapId);
+    if (idx !== -1) {
+      list[idx] = {
+        id: state.currentMapId,
+        title,
+        savedAt: now,
+        size: m.size,
+        suspects: (m.entities || []).filter(e => e.kind === "suspect").length,
+        cluesCount: (state.clueObjs || []).length,
+        elegance: state.lastElegance ? state.lastElegance.score : null,
+        data: serialized
+      };
+      setSavedMaps(list);
+      toast(`Mappa «${title}» aggiornata`);
+      renderSavedMapsList();
+      return;
+    }
+  }
+  
+  const newId = "map_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
+  state.currentMapId = newId;
+  list.unshift({
+    id: newId,
+    title,
+    savedAt: now,
+    size: m.size,
+    suspects: (m.entities || []).filter(e => e.kind === "suspect").length,
+    cluesCount: (state.clueObjs || []).length,
+    elegance: state.lastElegance ? state.lastElegance.score : null,
+    data: serialized
+  });
+  setSavedMaps(list);
+  toast(`Mappa «${title}» salvata`);
+  renderSavedMapsList();
+}
+
+function loadSavedMap(id){
+  const list = getSavedMaps();
+  const item = list.find(x => x.id === id);
+  if(!item || !item.data){ toast("Mappa non trovata"); return; }
+  deserialize(item.data);
+  state.currentMapId = item.id;
+  state.mapTitle = item.title || item.data.title || "";
+  $("#mapTitle").value = state.mapTitle;
+  $("#size").value = state.map.size;
+  $("#sizeVal").textContent = state.map.size;
+  autosave();
+  $("#savedMapsModal").style.display = "none";
+  toast(`Mappa «${item.title}» caricata`);
+}
+
+function deleteSavedMap(id){
+  let list = getSavedMaps();
+  list = list.filter(x => x.id !== id);
+  setSavedMaps(list);
+  if (state.currentMapId === id) state.currentMapId = null;
+  renderSavedMapsList();
+  toast("Mappa rimossa dal catalogo");
+}
+
+function renderSavedMapsList(){
+  const box = $("#savedMapsList");
+  if(!box) return;
+  const list = getSavedMaps();
+  updateSavedCount();
+  if(!list.length){
+    box.innerHTML = `<div class="empty">Nessuna mappa salvata. Clicca su «Salva mappa» per archiviare la configurazione corrente.</div>`;
+    return;
+  }
+  
+  box.innerHTML = list.map(item => {
+    const d = new Date(item.savedAt);
+    const dateStr = !isNaN(d.getTime()) ? d.toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+    const isCurrent = state.currentMapId === item.id;
+    const elegBadge = item.elegance != null ? `<span class="saved-map-badge ok">✨ ${item.elegance}/100</span>` : "";
+    const cluesBadge = item.cluesCount > 0 ? `<span class="saved-map-badge">🔍 ${item.cluesCount} indizi</span>` : `<span class="saved-map-badge">Nessun indizio</span>`;
+    
+    return `<div class="saved-map-item">
+      <div class="saved-map-info">
+        <div class="saved-map-title">
+          ${escapeHtml(item.title)}
+          ${isCurrent ? '<span class="badge" style="background:var(--violet); font-size:9px; width:auto; padding:2px 6px; border-radius:4px">IN USO</span>' : ''}
+        </div>
+        <div class="saved-map-meta">
+          <span class="saved-map-badge">📐 ${item.size}×${item.size}</span>
+          <span class="saved-map-badge">🧑 ${item.suspects || (item.size - 1)} sospetti</span>
+          ${cluesBadge}
+          ${elegBadge}
+          <span>🕒 ${dateStr}</span>
+        </div>
+      </div>
+      <div class="saved-map-actions">
+        <button class="btn primary load-map-btn" data-id="${item.id}" style="padding:6px 11px; font-size:12px">📂 Carica</button>
+        <button class="btn ghost update-map-btn" data-id="${item.id}" title="Sovrascrivi con la mappa corrente" style="padding:6px 9px; font-size:12px">💾</button>
+        <button class="btn ghost del-map-btn" data-id="${item.id}" title="Elimina mappa (doppio clic)" style="padding:6px 9px; font-size:12px">🗑️</button>
+      </div>
+    </div>`;
+  }).join("");
+  
+  box.querySelectorAll(".load-map-btn").forEach(btn => {
+    btn.addEventListener("click", () => loadSavedMap(btn.dataset.id));
+  });
+  
+  box.querySelectorAll(".update-map-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.currentMapId = btn.dataset.id;
+      saveCurrentMap(false);
+    });
+  });
+  
+  box.querySelectorAll(".del-map-btn").forEach(btn => {
+    let armed = false, timer = null;
+    btn.addEventListener("click", () => {
+      if(!armed){
+        armed = true;
+        btn.textContent = "⚠️ Confermi?";
+        btn.style.borderColor = "var(--evidence)";
+        timer = setTimeout(() => { armed = false; btn.textContent = "🗑️"; btn.style.borderColor = ""; }, 3000);
+        return;
+      }
+      clearTimeout(timer);
+      deleteSavedMap(btn.dataset.id);
+    });
+  });
+}
+
+function openSavedMapsModal(){
+  renderSavedMapsList();
+  $("#savedMapsModal").style.display = "flex";
+}
+
+$("#savedMapsBtn").addEventListener("click", openSavedMapsModal);
+if($("#savedMapsCardBtn")) $("#savedMapsCardBtn").addEventListener("click", openSavedMapsModal);
+$("#savedMapsClose").addEventListener("click", () => $("#savedMapsModal").style.display = "none");
+$("#savedMapsModal").addEventListener("click", e => { if(e.target.id === "savedMapsModal") $("#savedMapsModal").style.display = "none"; });
+$("#saveCurrentMap").addEventListener("click", () => saveCurrentMap(false));
+$("#savedMapsSaveNew").addEventListener("click", () => {
+  saveCurrentMap(true);
+});
+
+$("#mapTitle").addEventListener("input", e => {
+  state.mapTitle = e.target.value;
+  autosave();
+});
+
+$("#expJson").addEventListener("click",()=>{
+  const d=serialize(); if(!d){ toast("Niente da esportare"); return; }
+  const blob=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=getExportFilename(null, "json"); a.click();
+});
+$("#impMarkdown").addEventListener("click",()=>{
+  $("#importText").value = "";
+  $("#importModal").style.display = "flex";
+  $("#importText").focus();
+});
+$("#importClose").addEventListener("click",()=>$("#importModal").style.display="none");
+$("#importModal").addEventListener("click",e=>{ if(e.target.id==="importModal") $("#importModal").style.display="none"; });
+$("#importConfirm").addEventListener("click",()=>{
+  const txt = $("#importText").value;
+  const match = txt.match(/<!-- MURDOKU_STATE_B64:\s*(.*?)\s*-->/);
+  if(!match) {
+    toast("Testo non valido: impossibile trovare i dati della mappa.");
+    return;
+  }
+  try {
+    const jsonStr = decodeURIComponent(escape(atob(match[1].trim())));
+    const data = JSON.parse(jsonStr);
+    deserialize(data);
+    toast("Mappa importata con successo");
+    autosave();
+    $("#importModal").style.display="none";
+  } catch(e) {
+    toast("Errore durante l'importazione dei dati.");
+  }
+});
+
+let currentMdFilename = null;
+function openMdModal(title, text, filename){
+  currentMdFilename = filename || getExportFilename("documento", "md");
+  $("#mdTitle").textContent = title;
+  $("#mdText").value = text;
+  $("#mdModal").style.display = "flex";
+  copyText(text).then(ok=>{ if(ok) toast("Copiato negli appunti"); });
+}
+
+/* ---------- Copia configurazione mappa (elementi, muri, personaggi, aree) ---------- */
+function buildMapConfigMarkdown(){
+  const m=state.map, N=m.size;
+  const an=E.computeAreas(m);
+  recomputeEntities();
+  const sus=m.entities.filter(e=>e.kind==="suspect").sort((a,b)=>a.initial.localeCompare(b.initial));
+  const vic=m.entities.find(e=>e.kind==="victim");
+  const murd=m.entities.find(e=>e.isMurderer);
+  const L=[];
+  const caseTitle = (state.mapTitle || "").trim() || "Murdoku";
+  L.push(`# Configurazione mappa "${caseTitle}"`,"");
+  L.push("Descrizione completa della mappa: stanze (aree), muri, oggetti e personaggi. Coordinate come (riga, colonna) a partire da 1.","");
+  L.push(`Griglia ${N}×${N}. Regole: una sola persona per riga e per colonna; \"accanto\" = celle adiacenti nella stessa area (i muri bloccano); la vittima è sola con l'assassino (nella sua area c'è esattamente un sospetto).`,"");
+
+  // stanze / aree
+  const usedAreas=[...new Set(Array.from({length:N*N},(_,i)=>an.areaOf[i]).filter(a=>a>=0))].sort((a,b)=>a-b);
+  L.push("## Stanze / aree","");
+  usedAreas.forEach(a=>{
+    const cells=[];
+    for(let r=0;r<N;r++)for(let c=0;c<N;c++) if(an.areaOf[r*N+c]===a) cells.push(`(${r+1},${c+1})`);
+    let floorInfo = "";
+    if (m.areaFloors && m.areaFloors[a]) {
+      const f = m.areaFloors[a];
+      floorInfo = ` [Stile: ${f.type}=${f.value}]`;
+    }
+    L.push(`- **${areaLetter(a)} = ${m.areaNames[a]||("Area "+(a+1))}**${floorInfo} — celle occupabili: ${cells.join(", ")||"nessuna"}`);
+  });
+  L.push("");
+
+  // griglia aree + muri
+  let head="    "; for(let c=0;c<N;c++) head+=" "+(c+1)+"  ";
+  L.push("**Griglia di aree e muri** — `┃`/`━` = muro tra due celle; `#` = cella bloccata:","```");
+  L.push(head);
+  for(let r=0;r<N;r++){
+    let line=(r+1)+" | ";
+    for(let c=0;c<N;c++){
+      const occ=E.isOccupiable(m,r,c);
+      const al=occ?areaLetter(an.areaOf[r*N+c]):(E.cellAt(m,r,c).object?areaLetter(an.visualArea[r*N+c]).toLowerCase():'#');
+      line+=" "+al+" ";
+      if(c<N-1) line += E.hasWall(m,r,c,r,c+1)?"┃":" ";
+    }
+    L.push(line);
+    if(r<N-1){ let sep="  | "; for(let c=0;c<N;c++){ sep+=E.hasWall(m,r,c,r+1,c)?"━━━":"   "; if(c<N-1) sep+=" "; } L.push(sep); }
+  }
+  L.push("```","");
+
+  // muri espliciti
+  const vw=[], hw=[];
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    if(c+1<N&&E.hasWall(m,r,c,r,c+1)) vw.push(`(${r+1},${c+1})|(${r+1},${c+2})`);
+    if(r+1<N&&E.hasWall(m,r,c,r+1,c)) hw.push(`(${r+1},${c+1})|(${r+2},${c+1})`);
+  }
+  L.push("## Muri (coppie di celle separate)","");
+  L.push("- stessa riga: "+(vw.join(", ")||"nessuno"));
+  L.push("- stessa colonna: "+(hw.join(", ")||"nessuno"));
+  L.push("");
+
+  // oggetti
+  L.push("## Oggetti (elementi)","");
+  L.push("Minuscolo = calpestabile, MAIUSCOLO = ostacolo, `..` = vuota, `##` = bloccata:","```");
+  L.push(head);
+  for(let r=0;r<N;r++){
+    let line=(r+1)+" | ";
+    for(let c=0;c<N;c++){ const cell=E.cellAt(m,r,c); line+=(cell.object?MD_CODE[cell.object]:(cell.walkable?'..':'##'))+" "; }
+    L.push(line);
+  }
+  L.push("```","");
+  const usedObj=[...new Set(m.cells.filter(c=>c.object).map(c=>c.object))];
+  if(usedObj.length){
+    L.push("**Legenda oggetti:**");
+    usedObj.forEach(k=>L.push(`- \`${MD_CODE[k]}\` = ${E.objLabel(k)} (${E.objWalkable(k)?"calpestabile":"ostacolo"})`));
+  } else L.push("_Nessun oggetto._");
+  const blocked=[];
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){ const cell=E.cellAt(m,r,c); if(!cell.walkable&&!cell.object) blocked.push(`(${r+1},${c+1})`); }
+  L.push("");
+  L.push("**Celle bloccate:** "+(blocked.join(", ")||"nessuna"));
+  L.push("");
+  // elenco oggetti per cella (esplicito)
+  const objList=[];
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){ const o=E.cellAt(m,r,c).object; if(o) objList.push(`(${r+1},${c+1}) ${E.objLabel(o)} (${E.objWalkable(o)?"calpestabile":"ostacolo"})`); }
+  if(objList.length){ L.push("**Oggetti per cella:** "+objList.join("; ")+"."); L.push(""); }
+
+  // personaggi
+  L.push("## Personaggi","");
+  if(sus.length) sus.forEach(e=>L.push(`- ${e.initial} = ${e.name}: (${e.row+1},${e.col+1})${e.isMurderer?" — **assassino**":""}`));
+  else L.push("- (nessun sospetto posizionato)");
+  if(vic) L.push(`- V = ${vic.name} (vittima): (${vic.row+1},${vic.col+1})`);
+  L.push("");
+  if(murd) L.push(`**Assassino: ${murd.name}** — unico sospetto nell'area della vittima.`);
+  else if(vic) L.push("_Assassino non determinato: la vittima non è sola con esattamente un sospetto._");
+  L.push("");
+  L.push("<!-- MURDOKU_STATE_B64: " + btoa(unescape(encodeURIComponent(JSON.stringify(serialize())))) + " -->");
+  return L.join("\n");
+}
+
+/* ===================== AI / Narrazione (flusso paste-back) ===================== */
+function clueNumbers(c){
+  const f=c.fact||{}; const out=[];
+  if(f.row!=null) out.push(String(f.row+1));
+  if(f.col!=null) out.push(String(f.col+1));
+  if(f.rowsNorth!=null) out.push(String(Math.abs(f.rowsNorth)));
+  if(f.k!=null) out.push(String(f.k));
+  if(f.n!=null) out.push(String(f.n));
+  return out;
+}
+function checkReferents(c, text, ctx){
+  if(!text || !text.trim()) return false;
+  const t=text.toLowerCase();
+  const byId={}; state.map.entities.forEach(e=>byId[e.id]=e);
+  const need=[];
+  if(c.subjectId && byId[c.subjectId]) need.push(byId[c.subjectId].name);
+  if(c.targetId && byId[c.targetId]) need.push(byId[c.targetId].name);
+  const f=c.fact||{};
+  if(f.areaId!=null) need.push(E.areaName(ctx, f.areaId));
+  if(f.objectKind) need.push(E.objLabel(f.objectKind));
+  for(const nm of need){ if(nm && !t.includes(String(nm).toLowerCase())) return false; }
+  for(const num of clueNumbers(c)){ if(!t.includes(num)) return false; }
+  return true;
+}
+function buildEmbellishPrompt(){
+  const m=state.map, N=m.size;
+  const ctx=(state.clueResult&&state.clueResult.ctx)||E.buildContext(m);
+  const an=E.computeAreas(m);
+  const sus=m.entities.filter(e=>e.kind==="suspect").sort((a,b)=>a.initial.localeCompare(b.initial));
+  const vic=m.entities.find(e=>e.kind==="victim");
+  const theme=($("#aiTheme").value||"").trim(), tone=$("#aiTone").value;
+  const steps=E.reasonedSolution(m, state.clueObjs, ctx);
+  const usedAreas=[...new Set(Array.from({length:N*N},(_,i)=>an.areaOf[i]).filter(a=>a>=0))].sort((a,b)=>a-b);
+  const usedObj=[...new Set(m.cells.filter(c=>c.object).map(c=>c.object))];
+  const L=[];
+  L.push("# Abbellimento di un enigma \"Murdoku\"","");
+  L.push("Sei uno scrittore di gialli. Rendi PIÙ ACCATTIVANTE la presentazione di un enigma logico, SENZA cambiarne la logica.","");
+  L.push(`Tono richiesto: **${tone}**.`+(theme?` Ambientazione: **${theme}**.`:""),"");
+  L.push("**Regole assolute (non negoziabili):**");
+  L.push("- NON cambiare i fatti: ogni indizio riscritto deve riferirsi alle STESSE persone, agli STESSI luoghi, agli STESSI oggetti e agli STESSI numeri dell'originale.");
+  L.push("- Mantieni i **numeri come cifre** (es. \"riga 3\", \"colonna 5\", \"2 righe\").");
+  L.push("- Se rinomini personaggi o aree, usa quei nuovi nomi in modo COERENTE in tutti gli indizi e nei passi.");
+  L.push("- Rispondi con **SOLO un oggetto JSON valido**, senza testo prima o dopo, senza backtick.","");
+  L.push("## Personaggi (iniziale → nome attuale)");
+  sus.forEach(e=>L.push(`- ${e.initial}: ${e.name}`));
+  if(vic) L.push(`- victim: ${vic.name} (la vittima)`);
+  L.push("");
+  L.push("## Aree (id → nome attuale)");
+  usedAreas.forEach(a=>L.push(`- ${a}: ${m.areaNames[a]||("Area "+(a+1))}`));
+  L.push("");
+  if(usedObj.length){ L.push("## Oggetti presenti"); L.push(usedObj.map(k=>E.objLabel(k)).join(", ")+"."); L.push(""); }
+  L.push("## Indizi da riscrivere (id → testo originale)");
+  state.clueObjs.forEach(c=>L.push(`- ${c.id}: ${E.clueText(ctx,c)}`));
+  L.push("");
+  L.push("## Passi della soluzione da narrare (in ordine)");
+  steps.forEach((s,i)=>L.push(`- ${i}: ${s.title}. ${s.text}`));
+  L.push("");
+  L.push("## Formato della risposta (SOLO questo JSON)");
+  L.push("```");
+  L.push(JSON.stringify({
+    caseTitle:(state.mapTitle || "titolo evocativo del caso"),
+    intro:"2-3 frasi di atmosfera che introducono il delitto",
+    characters:Object.assign({}, ...sus.map(e=>({[e.initial]:"Nome a tema"})), vic?{victim:"Nome vittima"}:{}),
+    areas:Object.assign({}, ...usedAreas.map(a=>({[a]:"Nome stanza a tema"}))),
+    clues:Object.assign({}, ...state.clueObjs.map(c=>({[c.id]:"riscrittura dell'indizio, stessi fatti"}))),
+    solution:steps.map((s,i)=>"passo "+i+" narrato")
+  }, null, 2));
+  L.push("```");
+  L.push("");
+  L.push("Ricorda: puoi cambiare SOLO lo stile e i nomi (coerentemente), mai i fatti, i luoghi, gli oggetti o i numeri.");
+  return L.join("\n");
+}
+function buildLevelDesignerMapPrompt() {
+  const m = state.map, N = m.size;
+  const an = E.computeAreas(m);
+  const usedAreas = [...new Set(Array.from({length: N * N}, (_, i) => an.areaOf[i]).filter(a => a >= 0))].sort((a, b) => a - b);
+  const usedObj = m.cells.filter(c => c.object).map(c => ({r: c.row, c: c.col, kind: c.object, lbl: E.objLabel(c.object)}));
+  const L = [];
+  L.push("# AI Level Designer: Analisi Piantina e Arredi", "");
+  L.push("Sei un Level Designer esperto per puzzle logici deduttivi (Murdoku).", "");
+  L.push("La mappa ha dimensioni " + N + "x" + N + ".", "");
+  L.push("## Aree / Stanze (ID: Nome, Dimensione, Muri)");
+  usedAreas.forEach(a => {
+    let cells = 0, walls = 0;
+    for(let r=0; r<N; r++) for(let c=0; c<N; c++) {
+      if(an.areaOf[r*N+c] === a) {
+        cells++;
+        if(r===0 || E.hasWall(m,r,c,r-1,c)) walls++;
+        if(r===N-1 || E.hasWall(m,r,c,r+1,c)) walls++;
+        if(c===0 || E.hasWall(m,r,c,r,c-1)) walls++;
+        if(c===N-1 || E.hasWall(m,r,c,r,c+1)) walls++;
+      }
+    }
+    L.push(`- Area ${a}: ${m.areaNames[a] || ("Stanza "+(a+1))} (${cells} celle)`);
+  });
+  L.push("");
+  L.push("## Arredi / Oggetti attuali");
+  if (usedObj.length === 0) L.push("Nessun oggetto posizionato.");
+  usedObj.forEach(o => L.push(`- ${o.lbl} in [${o.r}, ${o.c}]`));
+  L.push("");
+  L.push("## Istruzioni");
+  L.push("Analizza la piantina, le proporzioni delle stanze e il posizionamento degli arredi.");
+  L.push("Il tuo obiettivo è suggerire spostamenti, aggiunte o rimozioni di oggetti (come tavoli, sedie, letti, ombrelloni, ecc.) per rendere la mappa più interessante prima di generare gli indizi.");
+  L.push("Considera che gli oggetti servono come *ancoraggio* per indizi spaziali (es. \"accanto al tavolo\", \"su un letto\").");
+  L.push("Rispondi con un JSON che contiene una recensione testuale e un array di azioni di modifica.");
+  L.push("");
+  L.push("```json");
+  L.push(JSON.stringify({
+    "review": "Recensione del flow della mappa. Cosa funziona e cosa si può migliorare spostando arredi.",
+    "actions": [
+      { "type": "move_object", "kind": "table", "from": [0,1], "to": [2,2] },
+      { "type": "remove_object", "row": 1, "col": 1 },
+      { "type": "add_object", "kind": "chair", "row": 4, "col": 4 }
+    ]
+  }, null, 2));
+  L.push("```");
+  L.push("Nota: Assicurati che le coordinate siano comprese tra 0 e " + (N - 1) + ". Rispondi ESCLUSIVAMENTE con il blocco JSON.");
+  return L.join("\n");
+}
+
+function buildLevelDesignerPlaytestPrompt() {
+  const L = [];
+  L.push("# AI Playtester e Level Designer (Uso Code Interpreter)", "");
+  L.push("Sei un Playtester e Level Designer per un puzzle logico deduttivo. Il puzzle corrente ha una soluzione valida, ma vogliamo massimizzare l'eleganza logica e il \"divertimento\" del giocatore.");
+  L.push("");
+  L.push("**ISTRUZIONE CRITICA**: Devi utilizzare il tuo Code Interpreter (Python o Node.js) per caricare il codice della piattaforma Murdoku e TESTARE in autonomia le modifiche prima di suggerirle.");
+  L.push("Il file sorgente `murdoku-studio.html` che contiene la definizione di `MurdokuEngine` e il generatore logico ti verrà fornito in allegato, nel prompt precedente, OPPURE è già presente nella Knowledge/Project della chat attuale.");
+  L.push("1. Estrai il motore o scrivi uno script che replichi il solver per verificare l'unicità.");
+  L.push("2. Prova a spostare oggetti (per sbloccare nuove varianti logiche) o a sostituire un indizio debole con uno migliore.");
+  L.push("3. Valuta l'eleganza. Se la soluzione resta unica e l'eleganza sale, includi le modifiche nelle `actions`.");
+  L.push("");
+  L.push("## Stato Attuale della Mappa (JSON)");
+  L.push("```json\n" + JSON.stringify(serialize(), null, 2) + "\n```");
+  L.push("");
+  L.push("## Soluzione Ragionata Attuale");
+  const ctx = (state.clueResult && state.clueResult.ctx) || E.buildContext(state.map);
+  const steps = E.reasonedSolution(state.map, state.clueObjs, ctx);
+  steps.forEach((s, i) => L.push(`- Passo ${i}: ${s.title}. ${s.text}`));
+  L.push(`Meta attuali: Eleganza ${E.eleganceScore(state.map, state.clueObjs, ctx).score}/100.`);
+  L.push("");
+  L.push("## Istruzioni Output");
+  L.push("Dopo aver effettuato le tue simulazioni, restituisci ESCLUSIVAMENTE questo JSON (nessun testo fuori dal JSON):");
+  L.push("```json");
+  L.push(JSON.stringify({
+    "review": "Descrizione del perché le modifiche aumentano il divertimento logico e il risultato del tuo playtest.",
+    "actions": [
+      { "type": "move_object", "kind": "umbrella", "from": [3,3], "to": [4,4] },
+      { "type": "replace_clue", "id": "c1", "new_type": "ONLY_ON_OBJECT" }
+    ]
+  }, null, 2));
+  L.push("```");
+  return L.join("\n");
+}
+
+function buildLevelDesignerSolverPrompt() {
+  const L = [];
+  L.push("# AI Risolutore", "");
+  L.push("Sei un Risolutore esperto per puzzle logici deduttivi. Ti verrà fornita una mappa e un set di indizi (con la soluzione finale chiave).");
+  L.push("Il tuo compito è scrivere la *soluzione ragionata* passo dopo passo simulando esattamente i passaggi mentali di un giocatore umano che risolve il puzzle partendo da zero.");
+  L.push("");
+  L.push("## Regole del Gioco Murdoku");
+  L.push("- **Griglia**: La mappa è divisa in celle e in stanze (delimitate da muri).");
+  L.push("- **Regola Aurea (Sudoku)**: C'è esattamente UN SOLO personaggio per ogni riga e per ogni colonna dell'intera mappa.");
+  const m = state.map;
+  const mapObjs = [...new Set(m.cells.map(c => c.object).filter(Boolean))];
+  const walkableObjs = mapObjs.filter(k => E.objWalkable(k)).map(k => E.objLabel(k));
+  const obstacleObjs = mapObjs.filter(k => !E.objWalkable(k)).map(k => E.objLabel(k));
+  const walkableText = walkableObjs.length > 0 ? `Gli oggetti calpestabili presenti sono: ${walkableObjs.join(", ")}.` : `Non ci sono oggetti calpestabili in questa mappa.`;
+  const obstacleText = obstacleObjs.length > 0 ? `Gli ostacoli presenti sono: ${obstacleObjs.join(", ")}.` : `Non ci sono ostacoli in questa mappa.`;
+
+  L.push("- **Movimento/Ostacoli**: I personaggi possono occupare solo celle vuote o celle con oggetti calpestabili. Non possono stare su ostacoli. " + walkableText + " " + obstacleText);
+  L.push("- **Vicinanza (Accanto)**: Due elementi sono \"accanto\" se si trovano in celle adiacenti in orizzontale o verticale, SENZA un muro di mezzo (e quindi nella stessa stanza).");
+  L.push("- **Assassino e Vittima**: L'assassino è l'UNICO sospetto che si trova nella stessa stanza della vittima. (Se un sospetto è da solo nella stanza della vittima, allora è l'assassino).");
+  L.push("");
+  L.push("1. IMPORTANTE: NON devi elencare le posizioni dei personaggi in ordine alfabetico o in base al loro nome. Devi ricostruire la soluzione seguendo ESCLUSIVAMENTE l'ordine logico delle deduzioni (dal primo indizio più ovvio e immediato, fino all'ultima deduzione, a catena).");
+  L.push("2. NON descrivere il codice o formattazioni. Spiega logicamente come si arriva alla soluzione finale. Usa un tono deduttivo (es. \"Dato che la stanza X è occupata, allora Y deve trovarsi in Z\").");
+  L.push("3. Rispondi ESCLUSIVAMENTE con il seguente JSON (nessun testo prima o dopo):");
+  L.push("```json");
+  L.push(JSON.stringify({
+    "reasoning_steps": [
+      "Passo 1: deduzione iniziale (es. partendo da un indizio assoluto)...",
+      "Passo 2: deduzione logica derivata (es. incrocio di indizi)...",
+      "Passo 3: deduzione finale per esclusione..."
+    ]
+  }, null, 2));
+  L.push("```");
+  L.push("");
+  L.push("## Mappa, Indizi e Soluzione");
+  L.push("```json\n" + JSON.stringify(serialize(), null, 2) + "\n```");
+  return L.join("\n");
+}
+
+function applyAiJson(text){
+  let raw=(text||"").trim();
+  raw=raw.replace(/^```(json)?/i,"").replace(/```$/,"").trim();
+  let data;
+  try{ data=JSON.parse(raw); }
+  catch(e){ return {ok:false, msg:"JSON non valido: "+e.message}; }
+  
+  if (data.actions && Array.isArray(data.actions)) {
+    return applyLevelDesignActions(data);
+  }
+
+  if (data.reasoning_steps && Array.isArray(data.reasoning_steps)) {
+    state.aiSolution = data.reasoning_steps.map(s => typeof s === "string" ? s.trim() : String(s));
+    renderSteps();
+    saveState();
+    return {ok:true, msg:"Soluzione ragionata AI importata con successo."};
+  }
+
+  const m=state.map;
+  if(typeof data.caseTitle==="string" && data.caseTitle.trim()){
+    state.mapTitle = data.caseTitle.trim();
+    $("#mapTitle").value = state.mapTitle;
+  }
+  if(typeof data.caseTitle==="string" || typeof data.intro==="string")
+    state.theme={ title:(data.caseTitle||"").toString().slice(0,120), intro:(data.intro||"").toString().slice(0,600) };
+  if(data.characters && typeof data.characters==="object"){
+    m.entities.forEach(e=>{
+      const key=e.kind==="victim"?"victim":e.initial;
+      const nm=data.characters[key];
+      if(typeof nm==="string" && nm.trim()) e.name=nm.trim().slice(0,40);
+    });
+  }
+  if(data.areas && typeof data.areas==="object"){
+    for(const k of Object.keys(data.areas)){
+      const nm=data.areas[k];
+      if(typeof nm==="string" && nm.trim()) m.areaNames[k]=nm.trim().slice(0,40);
+    }
+  }
+  const ctx=(state.clueResult&&state.clueResult.ctx)||E.buildContext(m);
+  const clueText={}, clueOk={}; let applied=0;
+  if(data.clues && typeof data.clues==="object"){
+    for(const c of state.clueObjs){
+      const txt=data.clues[c.id];
+      if(typeof txt==="string" && txt.trim()){
+        const ok=checkReferents(c, txt, ctx);
+        clueText[c.id]=txt.trim(); clueOk[c.id]=ok; if(ok) applied++;
+      }
+    }
+  }
+  let solution=null;
+  const canonSteps=E.reasonedSolution(m, state.clueObjs, ctx);
+  if(Array.isArray(data.solution) && data.solution.length===canonSteps.length &&
+     data.solution.every(s=>typeof s==="string" && s.trim()))
+    solution=data.solution.map(s=>s.trim());
+  state.narration={ clueText, clueOk, solution, appliedCount:applied, total:state.clueObjs.length };
+  state.narrated=true; $("#narrateToggle").checked=true;
+  return {ok:true, msg:`Applicato: ${applied}/${state.clueObjs.length} indizi verificati`+(solution?", soluzione narrata":", soluzione: testo originale")};
+}
+
+function applyLevelDesignActions(data) {
+  const m = state.map;
+  let appliedActions = 0;
+  for (const act of data.actions) {
+    if (act.type === "move_object" || act.type === "remove_object" || act.type === "add_object") {
+      if (act.from) { E.cellAt(m, act.from[0], act.from[1]).object = null; }
+      if (act.row !== undefined && act.type === "remove_object") { E.cellAt(m, act.row, act.col).object = null; }
+      if ((act.type === "move_object" || act.type === "add_object") && act.to) {
+        E.cellAt(m, act.to[0], act.to[1]).object = act.kind;
+      }
+      if (act.type === "add_object" && act.row !== undefined) {
+        E.cellAt(m, act.row, act.col).object = act.kind;
+      }
+      appliedActions++;
+    } else if (act.type === "replace_clue" && act.id && act.new_type) {
+      const idx = state.clueObjs.findIndex(c => c.id === act.id);
+      if (idx >= 0) {
+        state.clueObjs[idx] = { 
+          ...state.clueObjs[idx], 
+          type: act.new_type, 
+          subjectId: act.subjectId, 
+          targetId: act.targetId, 
+          fact: act.fact 
+        };
+        appliedActions++;
+      }
+    }
+  }
+  if (state.clueResult) state.clueResult.clues = state.clueObjs;
+  recomputeEntities();
+  render();
+  saveState();
+  return {ok: true, msg: `Playtest AI: applicate ${appliedActions} azioni alla mappa. Recensione: ${data.review ? data.review.slice(0,50)+"..." : "OK"}`};
+}
+
+function clueDisplay(ctx, c){
+  const canon=E.clueText(ctx,c);
+  if(state.narrated && state.narration && state.narration.clueText[c.id]!=null){
+    if(state.narration.clueOk[c.id]) return {text:state.narration.clueText[c.id], mark:"ok"};
+    return {text:canon, mark:"warn"};
+  }
+  return {text:canon, mark:null};
+}
+$("#aiPrompt").addEventListener("click",()=>{
+  const m=state.map;
+  if(!m || !(m.entities&&m.entities.length)){ toast("Prima genera o disegna una mappa con le persone"); return; }
+  if(!state.clueObjs.length){ toast("Genera prima gli indizi"); return; }
+  recomputeEntities();
+  openMdModal("Prompt abbellimento (AI)", buildEmbellishPrompt(), getExportFilename("prompt-ai", "md"));
+});
+$("#aiLevelDesignerMap").addEventListener("click", () => {
+  const m=state.map;
+  if(!m){ toast("Prima genera una mappa"); return; }
+  openMdModal("AI Level Designer (Mappa)", buildLevelDesignerMapPrompt(), getExportFilename("prompt-ld-map", "md"));
+});
+$("#aiLevelDesignerPlaytest").addEventListener("click", () => {
+  const m=state.map;
+  if(!m || !state.clueObjs.length){ toast("Genera mappa e indizi prima di fare playtest"); return; }
+  openMdModal("AI Playtester (Full)", buildLevelDesignerPlaytestPrompt(), getExportFilename("prompt-ld-playtest", "md"));
+});
+$("#aiSolver").addEventListener("click", () => {
+  const m=state.map;
+  if(!m || !state.clueObjs.length){ toast("Genera mappa e indizi prima di invocare il risolutore"); return; }
+  openMdModal("AI Risolutore", buildLevelDesignerSolverPrompt(), getExportFilename("prompt-solver", "md"));
+});
+$("#aiApply").addEventListener("click",()=>{
+  if(!state.clueObjs.length){ toast("Genera prima gli indizi"); return; }
+  $("#aiInput").value=""; $("#aiApplyMsg").textContent="";
+  $("#aiModal").style.display="flex"; $("#aiInput").focus();
+});
+$("#aiClose").addEventListener("click",()=>$("#aiModal").style.display="none");
+$("#aiModal").addEventListener("click",e=>{ if(e.target.id==="aiModal") $("#aiModal").style.display="none"; });
+$("#aiDoApply").addEventListener("click",()=>{
+  const res=applyAiJson($("#aiInput").value);
+  $("#aiApplyMsg").textContent=res.msg;
+  if(res.ok){
+    recomputeEntities();
+    renderClues(); renderSteps(); render(); renderPalette(); autosave();
+    toast(res.msg);
+    setTimeout(()=>$("#aiModal").style.display="none", 700);
+  } else { toast(res.msg); }
+});
+$("#narrateToggle").addEventListener("change",e=>{
+  state.narrated=e.target.checked;
+  if(state.narrated && !state.narration) toast("Applica prima una risposta AI");
+  renderClues(); renderSteps();
+});
+
+$("#fileInput").addEventListener("change",e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader(); rd.onload=()=>{ try{ deserialize(JSON.parse(rd.result)); toast("Importato"); autosave(); }catch(err){ toast("File non valido"); } };
+  rd.readAsText(f); e.target.value="";
+});
+
+/* ---------- Prompt Markdown per LLM ---------- */
+function buildLLMMarkdown(){
+  const m=state.map, N=m.size;
+  const an=E.computeAreas(m);
+  const ctx=(state.clueResult&&state.clueResult.ctx)||E.buildContext(m);
+  const sus=m.entities.filter(e=>e.kind==="suspect").sort((a,b)=>a.initial.localeCompare(b.initial));
+  const vic=m.entities.find(e=>e.kind==="victim");
+  const murd=m.entities.find(e=>e.isMurderer);
+  const L=[];
+  const caseTitle = (state.mapTitle || "").trim() || "Murdoku";
+  L.push(`# Verifica di un enigma logico "${caseTitle}"`,"");
+  L.push("Sei un esperto di puzzle logici deduttivi. Di seguito trovi la **mappa** di un enigma Murdoku, i suoi **indizi** e la **soluzione finale (chiave)**.","");
+  L.push("**Compito**: analizza la mappa e gli indizi, poi **verifica che l'enigma sia risolvibile da un essere umano** usando solo gli indizi. In particolare valuta se:","");
+  L.push("- gli indizi forniscono informazioni sufficienti per dedurre univocamente la posizione di ciascun personaggio senza dover tirare a indovinare;");
+  L.push("- la soluzione finale è coerente con **tutti** gli indizi ed è l'**unica** possibile;");
+  L.push("- proponi una spiegazione passo-passo chiara, logica e comprensibile per un umano per arrivare alla soluzione.");
+  L.push("");
+  L.push("Alla fine dai un giudizio complessivo sulla qualità e risolutezza dell'enigma.","");
+  L.push("## Regole del Murdoku","");
+  L.push(`- Griglia ${N}×${N}. Coordinate come (riga, colonna), numerate a partire da 1.`);
+  L.push("- Ogni sospetto e la vittima occupano una cella; **al più una persona per riga e una per colonna**.");
+  L.push("- Le celle sono raggruppate in **aree** (stanze) delimitate da **muri**.");
+  L.push("- \"accanto a\" = cella ortogonalmente adiacente **nella stessa area** (i muri bloccano l'adiacenza).");
+  L.push("- \"in un angolo della sua area\" = cella che tocca 2 muri (o bordi della griglia) ortogonali della stanza, a prescindere da arredi o oggetti.");
+  L.push("- Direzioni sulle coordinate: **nord** = riga minore, **sud** = riga maggiore, **sinistra** = colonna minore, **destra** = colonna maggiore.");
+  L.push("- La **vittima è sola con l'assassino**: nell'area della vittima c'è esattamente un sospetto, ed è l'assassino.");
+  L.push("- Oggetti **calpestabili** possono ospitare una persona; gli **ostacoli** no.","");
+  L.push("## Mappa","");
+  const usedAreas=[...new Set(Array.from({length:N*N},(_,i)=>an.areaOf[i]).filter(a=>a>=0))].sort((a,b)=>a-b);
+  L.push("**Aree** (lettera = area):");
+  usedAreas.forEach(a=>L.push(`- ${areaLetter(a)} = ${m.areaNames[a]||("Area "+(a+1))}`));
+  L.push("");
+  let head="    "; for(let c=0;c<N;c++) head+=" "+(c+1)+"  ";
+  L.push("**Griglia di aree e muri** — `┃` e `━` indicano un muro tra due celle adiacenti; `#` = cella bloccata (non calpestabile):","```");
+  L.push(head);
+  for(let r=0;r<N;r++){
+    let line=(r+1)+" | ";
+    for(let c=0;c<N;c++){
+      const occ=E.isOccupiable(m,r,c);
+      const al=occ?areaLetter(an.areaOf[r*N+c]):(E.cellAt(m,r,c).object?areaLetter(an.visualArea[r*N+c]).toLowerCase():'#');
+      line+=" "+al+" ";
+      if(c<N-1) line += E.hasWall(m,r,c,r,c+1)?"┃":" ";
+    }
+    L.push(line);
+    if(r<N-1){
+      let sep="  | ";
+      for(let c=0;c<N;c++){ sep+=E.hasWall(m,r,c,r+1,c)?"━━━":"   "; if(c<N-1) sep+=" "; }
+      L.push(sep);
+    }
+  }
+  L.push("```","");
+  L.push("**Oggetti** — minuscolo = calpestabile, MAIUSCOLO = ostacolo, `..` = cella vuota, `##` = cella bloccata:","```");
+  L.push(head);
+  for(let r=0;r<N;r++){
+    let line=(r+1)+" | ";
+    for(let c=0;c<N;c++){ const cell=E.cellAt(m,r,c); line+=(cell.object?MD_CODE[cell.object]:(cell.walkable?'..':'##'))+" "; }
+    L.push(line);
+  }
+  L.push("```","");
+  const usedObj=[...new Set(m.cells.filter(c=>c.object).map(c=>c.object))];
+  if(usedObj.length){
+    L.push("**Legenda oggetti:**");
+    usedObj.forEach(k=>L.push(`- \`${MD_CODE[k]}\` = ${E.objLabel(k)} (${E.objWalkable(k)?"calpestabile":"ostacolo"})`));
+    L.push("");
+  }
+  const vw=[], hw=[];
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    if(c+1<N&&E.hasWall(m,r,c,r,c+1)) vw.push(`(${r+1},${c+1})|(${r+1},${c+2})`);
+    if(r+1<N&&E.hasWall(m,r,c,r+1,c)) hw.push(`(${r+1},${c+1})|(${r+2},${c+1})`);
+  }
+  L.push("**Muri espliciti** (coppie di celle separate da un muro, per evitare ambiguità):");
+  L.push("- tra celle sulla stessa riga: "+(vw.join(", ")||"nessuno"));
+  L.push("- tra celle sulla stessa colonna: "+(hw.join(", ")||"nessuno"));
+  L.push("");
+  L.push("## Indizi","");
+  state.clueObjs.forEach((c,i)=>L.push(`${i+1}. ${E.clueText(ctx,c)}`));
+  L.push("");
+  L.push("## Soluzione finale (chiave)","");
+  sus.forEach(e=>L.push(`- ${e.initial} = ${e.name}: (${e.row+1},${e.col+1})${e.isMurderer?" — **assassino**":""}`));
+  if(vic) L.push(`- V = ${vic.name} (vittima): (${vic.row+1},${vic.col+1})`);
+  L.push("");
+  L.push(`**Assassino: ${murd?murd.name:"?"}** — l'unico sospetto nella stessa area della vittima.`);
+  L.push("");
+  L.push("<!-- MURDOKU_STATE_B64: " + btoa(unescape(encodeURIComponent(JSON.stringify(serialize())))) + " -->");
+  return L.join("\n");
+}
+async function copyText(t){
+  try{ if(navigator.clipboard&&navigator.clipboard.writeText){ await navigator.clipboard.writeText(t); return true; } }catch(e){}
+  try{ const ta=$("#mdText"); ta.focus(); ta.select(); const ok=document.execCommand("copy"); ta.setSelectionRange(0,0); return ok; }catch(e){ return false; }
+}
+function downloadMd(t){
+  const filename = currentMdFilename || getExportFilename("prompt", "md");
+  const blob=new Blob([t],{type:"text/markdown"}); const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+}
+$("#genMd").addEventListener("click",()=>{
+  const m=state.map;
+  if(!m||!(m.entities&&m.entities.length)){ toast("Prima genera o disegna una mappa con le persone"); return; }
+  if(!state.clueObjs.length){ toast("Genera prima gli indizi"); return; }
+  recomputeEntities();
+  openMdModal("Prompt per LLM", buildLLMMarkdown(), getExportFilename("prompt-llm", "md"));
+});
+$("#copyCfg").addEventListener("click",()=>{
+  const m=state.map;
+  if(!m){ toast("Nessuna mappa"); return; }
+  openMdModal("Configurazione mappa", buildMapConfigMarkdown(), getExportFilename("config-mappa", "md"));
+});
+$("#mdClose").addEventListener("click",()=>$("#mdModal").style.display="none");
+$("#mdModal").addEventListener("click",e=>{ if(e.target.id==="mdModal") $("#mdModal").style.display="none"; });
+$("#mdCopy").addEventListener("click",async()=>{ const ok=await copyText($("#mdText").value); toast(ok?"Copiato negli appunti":"Copia non riuscita: seleziona il testo e copia a mano"); });
+$("#mdDownload").addEventListener("click",()=>downloadMd($("#mdText").value));
+
+function buildPrintObjectsLegend(m){
+  if(!m) return "";
+  const used = [...new Set(m.cells.filter(c=>c.object).map(c=>c.object))];
+  const hasBlocked = m.cells.some(c => !c.walkable && !c.object);
+  if(!used.length && !hasBlocked) return "";
+  
+  let html = `<div class="p-obj-grid">`;
+  for(const k of used){
+    const walk = E.objWalkable(k);
+    html += `<div class="p-obj-item">
+      <svg width="22" height="22" viewBox="0 0 22 22" style="background:#f5f3ee; border-radius:4px; border:1px solid #ccc">${objectGlyph(k, 11, 11, 20)}</svg>
+      <span class="p-obj-name"><b>${escapeHtml(E.objLabel(k))}</b> <span class="p-obj-type">(${walk ? "c" : "nc"})</span></span>
+    </div>`;
+  }
+  if(hasBlocked){
+    html += `<div class="p-obj-item">
+      <span style="display:inline-block;width:20px;height:20px;background:#333;border-radius:4px;border:1px solid #111"></span>
+      <span class="p-obj-name"><b>Cella bloccata</b> <span class="p-obj-type">(nc)</span></span>
+    </div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+
+$("#doPrint").addEventListener("click",()=>{
+  const m=state.map; if(!m){ toast("Niente da stampare"); return; }
+  const ctx=(state.clueResult&&state.clueResult.ctx)||E.buildContext(m);
+  const puzzleSVG=boardSVGForPrint(false);
+  const solSVG=boardSVGForPrint(true);
+  const objLegendHtml=buildPrintObjectsLegend(m);
+  const clues=state.clueObjs||[];
+  const bySubj={}; const globals=[];
+  const sus=m.entities.filter(e=>e.kind==="suspect").sort((a,b)=>a.initial.localeCompare(b.initial));
+  for(const c of clues){ if(c.scope==="global") globals.push(c); else (bySubj[c.subjectId]=bySubj[c.subjectId]||[]).push(c); }
+  
+  let clueHtml=""; 
+  for(const s of sus){ 
+    const list=bySubj[s.id]||[]; 
+    const traitsText = `(${s.gender==='M'?'Uomo':'Donna'}${s.hasHat?', con cappello':''}${s.hasGlasses?', con occhiali':''})`;
+    const av = charAvatarSVG(s);
+    clueHtml+=`<div class="p-char-box">
+      <div class="p-char-h" style="display:flex; align-items:center; gap:8px;">
+        <div style="width:36px; height:36px; flex-shrink:0;">${av}</div>
+        <div style="display:flex; flex-direction:column; line-height:1.2;">
+          <div><span style="background:#555; color:#fff; padding:1px 5px; border-radius:3px; margin-right:5px">${s.initial}</span> ${escapeHtml(s.name)}</div>
+          <div class="p-char-traits" style="font-weight:normal; font-size:10px; margin-top:2px;">${traitsText}</div>
+        </div>
+      </div>`;
+    if (list.length) {
+      for(const c of list){ clueHtml+=`<div class="p-clue">• ${escapeHtml(clueDisplay(ctx,c).text)}</div>`; }
+    } else {
+      clueHtml+=`<div class="p-clue" style="font-style:italic; color:#888">(Nessun indizio diretto)</div>`;
+    }
+    clueHtml+=`</div>`;
+  }
+  if(globals.length){ 
+    clueHtml+=`<div class="p-char-box">
+      <div class="p-char-h">Vincoli Globali <span class="p-char-traits" style="display:inline; margin-left:4px; font-weight:normal; font-size:10px">(Si applicano all'intera mappa)</span></div>`;
+    for(const c of globals){ clueHtml+=`<div class="p-clue">• ${escapeHtml(clueDisplay(ctx,c).text)}</div>`; } 
+    clueHtml+=`</div>`;
+  }
+
+  const stepsHtml = (state.aiSolution && state.aiSolution.length) ? state.aiSolution.map(s=>`<div class="p-step">${escapeHtml(s)}</div>`).join("") : "";
+  
+  const customTitle = (state.mapTitle || "").trim();
+  const caseTitle = (state.narrated && state.theme && state.theme.title) ? state.theme.title : (customTitle || "Murdoku — l'enigma");
+  const caseIntro = (state.narrated && state.theme && state.theme.intro) ? state.theme.intro : "";
+  const diffStr = state.clueResult && state.clueResult.difficulty ? ` [${state.clueResult.difficulty.toUpperCase()}]` : "";
+  
+  $("#printArea").innerHTML=`
+    <div class="p-sheet">
+      <div class="p-title">${escapeHtml(caseTitle)}</div>
+      ${caseIntro ? `<div class="p-sub">${escapeHtml(caseIntro)}</div>` : ""}
+      <div class="p-map-wrap">${puzzleSVG}</div>
+      ${objLegendHtml}
+      <div class="p-h">Indizi & Personaggi${diffStr}</div>
+      <div class="p-clues-grid">
+        ${clueHtml}
+      </div>
+    </div>
+    <div class="p-sheet">
+      <div class="p-title">${escapeHtml(customTitle ? customTitle + " — Soluzione" : "Murdoku — la soluzione")}</div>
+      <div class="p-sub">Chiave di lettura</div>
+      <div class="p-map-wrap">${solSVG}</div>
+      ${objLegendHtml}
+      ${stepsHtml?`<div class="p-h">Ragionamento</div><div class="p-reasoning-grid">${stepsHtml}</div>`:""}
+    </div>`;
+  
+  const oldDocTitle = document.title;
+  document.title = (customTitle ? slugify(customTitle) : "murdoku") + "-fascicolo";
+  window.print();
+  setTimeout(()=>{ document.title = oldDocTitle; }, 1000);
+});
+
+/* SVG statico per la stampa (nero su bianco) */
+function boardSVGForPrint(withSolution){
+  const m=state.map, N=m.size, CS=46, P=22, W=P+N*CS+6, H=P+N*CS+6;
+  const an=E.computeAreas(m);
+  let s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${Math.min(W,520)}">${svgDefs("p-")}<rect x="${P-3}" y="${P-3}" width="${N*CS+6}" height="${N*CS+6}" fill="#fff"/>`;
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+    const x=P+c*CS,y=P+r*CS; const cell=E.cellAt(m,r,c);
+    let fill="#fff";
+    if(!cell.walkable&&!cell.object) fill="#333";
+    else {
+      const a=an.visualArea[r*N+c];
+      fill=getAreaFill(m, a, "p-");
+    }
+    s+=`<rect x="${x}" y="${y}" width="${CS}" height="${CS}" fill="${fill}" stroke="#bbb"/>`;
+    if(cell.object){ s+=objectGlyph(cell.object, x+CS/2, y+CS/2, CS); }
+  }
+  // etichette aree
+  const cen={}; for(let r=0;r<N;r++)for(let c=0;c<N;c++){const a=an.areaOf[r*N+c];if(a<0)continue;(cen[a]=cen[a]||{sx:0,sy:0,n:0});cen[a].sx+=c;cen[a].sy+=r;cen[a].n++;}
+  for(const a in cen){const g=cen[a];s+=`<text x="${P+(g.sx/g.n+0.5)*CS}" y="${P+(g.sy/g.n+0.5)*CS}" font-size="8" fill="#555" text-anchor="middle" font-weight="700">${escapeXml((m.areaNames&&m.areaNames[a])||("Area "+(+a+1)))}</text>`;}
+  if(withSolution){ for(const e of m.entities){ const x=P+e.col*CS,y=P+e.row*CS,cx=x+CS/2,cy=y+CS/2;
+    if(e.kind==="victim"){ s+=`<circle cx="${cx}" cy="${cy}" r="${CS*0.33}" fill="none" stroke="#c00" stroke-width="2" stroke-dasharray="3 2"/><text x="${cx}" y="${cy+5}" font-size="16" text-anchor="middle" fill="#c00">✖</text>`; }
+    else { s+=`<circle cx="${cx}" cy="${cy}" r="${CS*0.31}" fill="${e.isMurderer?'#c00':'#333'}"/><text x="${cx}" y="${cy+5}" font-size="15" text-anchor="middle" fill="#fff" font-weight="700">${e.initial}</text>`; } } }
+  s+=`<g stroke="#111" stroke-width="3">`;
+  for(let r=0;r<N;r++)for(let c=0;c<N;c++){const x=P+c*CS,y=P+r*CS;
+    if(c+1<N&&E.hasWall(m,r,c,r,c+1)) s+=`<line x1="${x+CS}" y1="${y}" x2="${x+CS}" y2="${y+CS}"/>`;
+    if(r+1<N&&E.hasWall(m,r,c,r+1,c)) s+=`<line x1="${x}" y1="${y+CS}" x2="${x+CS}" y2="${y+CS}"/>`;}
+  s+=`</g><rect x="${P}" y="${P}" width="${N*CS}" height="${N*CS}" fill="none" stroke="#111" stroke-width="3"/>`;
+
+  if(m.windows && m.windows.size > 0){
+    s += `<g pointer-events="none">`;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      const x=P+c*CS, y=P+r*CS;
+      if(c+1<N && E.isWindow(m,r,c,r,c+1)){ 
+         s+=`<rect x="${x+CS-4}" y="${y+CS*0.15}" width="8" height="${CS*0.7}" fill="#e6f2fa" stroke="#333" stroke-width="1.5" rx="1.5" />`;
+         s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#333" stroke-width="1.5" />`; 
+      }
+      if(r+1<N && E.isWindow(m,r,c,r+1,c)){ 
+         s+=`<rect x="${x+CS*0.15}" y="${y+CS-4}" width="${CS*0.7}" height="8" fill="#e6f2fa" stroke="#333" stroke-width="1.5" rx="1.5" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#333" stroke-width="1.5" />`; 
+      }
+    }
+    s += `</g>`;
+  }
+  for(let i=0;i<N;i++){ s+=`<text x="${P+i*CS+CS/2}" y="${P-6}" font-size="10" fill="#666" text-anchor="middle">${i+1}</text><text x="${P-7}" y="${P+i*CS+CS/2+3}" font-size="10" fill="#666" text-anchor="middle">${i+1}</text>`; }
+  s+=`</svg>`; return s;
+}
+
+$("#difficulty").addEventListener("change",invalidateClues);
+$("#maxPer").addEventListener("input",e=>{ $("#maxPerVal").textContent=e.target.value; });
+$("#maxIndClues").addEventListener("input",e=>{ $("#maxIndCluesVal").textContent=e.target.value; });
+$("#tries").addEventListener("input",e=>{ $("#triesVal").textContent=e.target.value; });
+
+/* =====================================================================
+   GESTIONE EVENTI PAVIMENTI E PATTERN
+   ===================================================================== */
+document.querySelectorAll("#patternGrid .floor-btn").forEach(btn => {
+  btn.addEventListener("click", () => setAreaFloor("pattern", btn.dataset.pattern));
+});
+
+document.querySelectorAll("#colorPresets .color-swatch").forEach(sw => {
+  sw.addEventListener("click", () => setAreaFloor("color", sw.dataset.color));
+});
+
+$("#areaColorPicker").addEventListener("input", e => {
+  setAreaFloor("color", e.target.value);
+});
+
+$("#resetAreaFloor").addEventListener("click", resetAreaFloor);
+
+const objCatEl = $("#objCategory");
+if(objCatEl){
+  objCatEl.addEventListener("change", () => {
+    renderPalette();
+  });
+}
+
+/* =====================================================================
+   AUTOSAVE
+   ===================================================================== */
+function autosave(){ try{ const d=serialize(); if(d) localStorage.setItem("murdoku:autosave",JSON.stringify(d)); }catch(e){} }
+function restore(){ try{ const raw=localStorage.getItem("murdoku:autosave"); if(raw){ deserialize(JSON.parse(raw)); return true; } }catch(e){} return false; }
+
+/* =====================================================================
+   AVVIO
+   ===================================================================== */
+$("#foot-model").textContent = "";
+document.body.insertAdjacentHTML("afterbegin", `<svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;">${svgDefs("")}</svg>`);
+
+if(!restore()){
+  // mappa iniziale di esempio
+  const rng=E.makeRng(42); let m=null;
+  for(let t=0;t<40;t++){ m=E.generateMap({size:9,rng}); if(E.placeSolution(m,{rng})) break; m=null; }
+  if(m){ state.map=m; setBoardStatus("ok","Mappa di esempio 9×9. Premi «Genera indizi», oppure modifica con gli strumenti."); }
+  else { state.map=E.emptyMap(9); state.map.areaNames={0:"Stanza"}; }
+}
+$("#objPickWrap").style.opacity=0.5;
+updateSavedCount();
+renderPalette();
+render(); renderClues(); renderSteps();
+
+/* =====================================================================
+   PLAYER MODE LOGIC
+   ===================================================================== */
+let playerState = {
+  map: null,
+  clues: null,
+  entities: [],
+  placed: {}, // r_c => char object { id, initial, kind }
+  notes: {}, // r_c => [charObj...]
+  activeChar: null, // char object
+  cellSize: 0,
+  padding: 26
+};
+
+$("#modeEditorBtn").addEventListener("click", () => {
+  $("#modeEditorBtn").classList.add("active");
+  $("#modePlayerBtn").classList.remove("active");
+  $("#editor-view").style.display = "grid"; // because original main is grid
+  $("#player-view").style.display = "none";
+  $(".toprow").style.display = "flex"; // show toprow buttons
+  $("#playerOpenImportBtn").style.display = "none";
+});
+
+$("#modePlayerBtn").addEventListener("click", () => {
+  $("#modePlayerBtn").classList.add("active");
+  $("#modeEditorBtn").classList.remove("active");
+  $("#editor-view").style.display = "none";
+  $("#player-view").style.display = "block";
+  $(".toprow").style.display = "none"; // hide editor toprow buttons
+  $("#playerOpenImportBtn").style.display = "inline-flex";
+  
+  // Sincronizzazione automatica della mappa dall'Editor al Player
+  if (state.map && state.clueObjs && state.clueObjs.length > 0) {
+    const d = serialize();
+    if (d) {
+      playerState.map = state.map;
+      playerState.clues = d.clues;
+      playerState.entities = state.map.entities;
+      playerState.placed = {};
+      playerState.notes = {};
+      playerState.activeChar = null;
+      renderPlayerUI();
+    }
+  }
+});
+
+$("#playerOpenImportBtn").addEventListener("click", () => {
+  $("#playerImportSection").style.display = "block";
+  $("#playerOpenImportBtn").style.display = "none";
+});
+
+$("#playerCancelImportBtn").addEventListener("click", () => {
+  $("#playerImportSection").style.display = "none";
+  $("#playerOpenImportBtn").style.display = "inline-flex";
+});
+
+$("#playerDoPasteBtn").addEventListener("click", async () => {
+  try {
+    const text = await navigator.clipboard.readText();
+    $("#playerImportText").value = text;
+  } catch(err) {
+    alert("Errore nella lettura degli appunti: " + err.message);
+  }
+});
+
+$("#playerConfirmImportBtn").addEventListener("click", () => {
+  const text = $("#playerImportText").value;
+  if(!text.trim()) { alert("Il testo è vuoto"); return; }
+  
+  let jsonStr = "";
+  const match = text.match(/<!-- MURDOKU_STATE_B64: (.*?) -->/);
+  if(match && match[1]) {
+    try {
+      jsonStr = decodeURIComponent(escape(atob(match[1])));
+    } catch(e) {
+      alert("Errore nella decodifica del Base64");
+      return;
+    }
+  } else {
+    jsonStr = text; // fallback: try parsing as raw JSON
+  }
+  
+  try {
+    const data = JSON.parse(jsonStr);
+    if(!data.size || !data.cells) throw new Error("Dati mappa non validi");
+    
+    const m = E.emptyMap(data.size);
+    for(const c of data.cells){ const cell=E.cellAt(m,c.row,c.col); cell.walkable=c.walkable!==false; if(c.object) cell.object=c.object; }
+    m.walls=new Set(data.walls||[]); m.windows=new Set(data.windows||[]); m.areaNames=data.areaNames||{};
+    m.areaFloors=data.areaFloors ? Object.assign({}, data.areaFloors) : {};
+    m.entities=(data.entities||[]).map(e=>({...e})); m.suspectCount=data.suspectCount||0;
+
+    playerState.map = m;
+    playerState.clues = data.clues || [];
+    playerState.entities = m.entities || [];
+    playerState.placed = {};
+    playerState.notes = {};
+    playerState.activeChar = null;
+    
+    $("#playerImportSection").style.display = "none";
+    $("#playerOpenImportBtn").style.display = "inline-flex";
+    $("#playerImportText").value = "";
+    
+    renderPlayerUI();
+  } catch(err) {
+    alert("Errore nella lettura o nel parsing del testo incollato: " + err.message);
+  }
+});
+
+function renderPlayerUI() {
+  const m = playerState.map;
+  if(!m) return;
+  
+  $("#playerPalette").style.display = "flex";
+  $("#playerGridWrap").style.display = "flex";
+  
+  // Prepare characters from entities
+  const chars = playerState.entities.map(e => ({
+    id: e.id,
+    initial: e.initial || (e.kind==="victim" ? "✖" : e.name.charAt(0)),
+    kind: e.kind,
+    name: e.name,
+    gender: e.gender,
+    hasHat: e.hasHat,
+    hasGlasses: e.hasGlasses
+  }));
+  
+  // Add the generic X blocker to the palette
+  chars.push({ id: "_blocker", initial: "X", kind: "blocker", name: "Cella Bloccata" });
+  
+  playerState.charsList = chars;
+  
+  updatePlayerPalette();
+  drawPlayerGrid();
+  updatePlayerOverlay();
+  renderPlayerLegend();
+  renderPlayerClues();
+}
+
+function updatePlayerPalette() {
+  const pal = $("#playerPalette");
+  pal.innerHTML = "";
+  playerState.charsList.forEach(char => {
+    // check if already placed
+    let isPlaced = false;
+    if (char.id !== "_blocker") {
+      for(let k in playerState.placed) {
+        if(playerState.placed[k].id === char.id) isPlaced = true;
+      }
+    }
+    
+    const div = document.createElement("div");
+    div.className = "player-char" + (char.kind==="victim" || char.kind==="blocker" ? " victim" : "");
+    if(char.id === "_blocker") {
+      div.style.marginLeft = "30px";
+    }
+    if(isPlaced) div.classList.add("placed");
+    if(playerState.activeChar && playerState.activeChar.id === char.id) div.classList.add("active");
+    
+    div.innerText = char.initial;
+    let tooltip = char.name;
+    if(char.kind === "suspect"){
+      tooltip += ` (${char.gender==='M'?'Uomo':'Donna'}${char.hasHat?', cappello':''}${char.hasGlasses?', occhiali':''})`;
+    }
+    div.title = tooltip;
+    
+    div.addEventListener("click", () => {
+      if(isPlaced) return;
+      playerState.activeChar = (playerState.activeChar === char) ? null : char;
+      updatePlayerPalette();
+    });
+    
+    pal.appendChild(div);
+  });
+}
+
+function drawPlayerGrid() {
+  const m = playerState.map;
+  const svg = $("#playerBoard");
+  const N = m.size;
+  const CS = Math.max(38, Math.min(60, Math.floor(560/N)));
+  playerState.cellSize = CS;
+  const P = playerState.padding;
+  const W = P + N*CS + 8, H = P + N*CS + 8;
+  const analysis = E.computeAreas(m);
+  
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  
+  let s = `<rect x="${P-4}" y="${P-4}" width="${N*CS+8}" height="${N*CS+8}" rx="6" fill="var(--paper)"/>`;
+  
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+    const x=P+c*CS, y=P+r*CS;
+    const cell = E.cellAt(m,r,c);
+    let fill;
+    if(!cell.walkable && !cell.object) fill="#2c2534";
+    else {
+      const aid = analysis.visualArea[r*N+c];
+      fill = getAreaFill(m, aid, "");
+    }
+    s += `<rect class="cell" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="${fill}" stroke="var(--paper-line)" stroke-width="1"/>`;
+    if(cell.object) {
+      if(!E.objWalkable(cell.object)) {
+        s += `<rect x="${x}" y="${y}" width="${CS}" height="${CS}" fill="rgba(0,0,0,0.08)" pointer-events="none"/>`;
+      }
+      s += objectGlyph(cell.object, x+CS/2, y+CS/2, CS);
+    }
+  }
+  
+  const centroid={};
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){ const a=analysis.areaOf[r*N+c]; if(a<0)continue; (centroid[a]=centroid[a]||{sx:0,sy:0,n:0}); centroid[a].sx+=c; centroid[a].sy+=r; centroid[a].n++; }
+  for(const a in centroid){ const g=centroid[a]; const cx=P+(g.sx/g.n+0.5)*CS, cy=P+(g.sy/g.n+0.5)*CS;
+    const nm=(m.areaNames&&m.areaNames[a])||("Area "+(+a+1));
+    s += `<text x="${cx}" y="${cy}" font-size="16" fill="#6a5f4a" text-anchor="middle" opacity="0.6" pointer-events="none" font-family="var(--mono)" style="text-transform:uppercase; letter-spacing:1px; font-weight:700">${escapeXml(nm)}</text>`;
+  }
+  
+  // muri (spessi) + bordo esterno
+  s += `<g stroke="#2a2130" stroke-width="4" stroke-linecap="round" pointer-events="none">`;
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+    const x=P+c*CS, y=P+r*CS;
+    if(c+1<N && E.hasWall(m,r,c,r,c+1)) s+=`<line x1="${x+CS}" y1="${y}" x2="${x+CS}" y2="${y+CS}"/>`;
+    if(r+1<N && E.hasWall(m,r,c,r+1,c)) s+=`<line x1="${x}" y1="${y+CS}" x2="${x+CS}" y2="${y+CS}"/>`;
+  }
+  s += `</g><rect x="${P}" y="${P}" width="${N*CS}" height="${N*CS}" fill="none" stroke="#2a2130" stroke-width="4" rx="4" pointer-events="none"/>`;
+
+  // finestre (glifo stilizzato sovrapposto al muro)
+  if(m.windows && m.windows.size > 0){
+    s += `<g pointer-events="none">`;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      const x=P+c*CS, y=P+r*CS;
+      // Right window (inner and outer)
+      if(E.isWindow(m,r,c,r,c+1)){
+         s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+      }
+      // Left window (outer only)
+      if(c===0 && E.isWindow(m,r,c,r,c-1)){
+         s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+      }
+      // Bottom window (inner and outer)
+      if(E.isWindow(m,r,c,r+1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+      }
+      // Top window (outer only)
+      if(r===0 && E.isWindow(m,r,c,r-1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+      }
+    }
+    s += `</g>`;
+  }
+  
+  // numeri coordinate
+  for(let i=0;i<N;i++){
+    s += `<text x="${P/2}" y="${P+i*CS+CS/2+4}" font-family="var(--mono)" font-size="12" fill="var(--text-faint)" text-anchor="middle">${i+1}</text>`;
+    s += `<text x="${P+i*CS+CS/2}" y="${P/2+4}" font-family="var(--mono)" font-size="12" fill="var(--text-faint)" text-anchor="middle">${i+1}</text>`;
+  }
+  
+  svg.innerHTML = s;
+}
+
+$("#playerClickLayer").addEventListener("click", e => {
+  const m = playerState.map;
+  if(!m) return;
+  const svg = $("#playerBoard");
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+  
+  const P = playerState.padding;
+  const CS = playerState.cellSize;
+  const c = Math.floor((svgPt.x - P) / CS);
+  const r = Math.floor((svgPt.y - P) / CS);
+  if(r < 0 || r >= m.size || c < 0 || c >= m.size) return;
+  
+  const k = r+"_"+c;
+  if(playerState.placed[k]) return; // clicking on placed char handled by itself
+  if(!E.isOccupiable(m, r, c)) return;
+  
+  if(playerState.activeChar) {
+    if(playerState.activeChar.id === "_blocker") {
+      playerState.placed[k] = playerState.activeChar;
+      updatePlayerPalette();
+      updatePlayerOverlay();
+      renderPlayerClues();
+    } else {
+      if(!playerState.notes[k]) playerState.notes[k] = [];
+      const idx = playerState.notes[k].findIndex(ch => ch.id === playerState.activeChar.id);
+      if(idx !== -1) {
+        playerState.notes[k].splice(idx, 1);
+      } else if(playerState.notes[k].length < 4) {
+        playerState.notes[k].push(playerState.activeChar);
+      }
+      updatePlayerOverlay();
+    }
+  }
+});
+
+$("#playerClickLayer").addEventListener("dblclick", e => {
+  const m = playerState.map;
+  if(!m) return;
+  const svg = $("#playerBoard");
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+  
+  const P = playerState.padding;
+  const CS = playerState.cellSize;
+  const c = Math.floor((svgPt.x - P) / CS);
+  const r = Math.floor((svgPt.y - P) / CS);
+  if(r < 0 || r >= m.size || c < 0 || c >= m.size) return;
+  
+  const k = r+"_"+c;
+  if(playerState.placed[k]) return;
+  if(!E.isOccupiable(m, r, c)) return;
+  
+  if(playerState.activeChar) {
+    playerState.placed[k] = playerState.activeChar;
+    // Remove all notes for this character globally
+    for(let key in playerState.notes) {
+      playerState.notes[key] = playerState.notes[key].filter(ch => ch.id !== playerState.activeChar.id);
+    }
+    if(playerState.activeChar.id !== "_blocker") {
+      playerState.activeChar = null; // deselect after placing
+    }
+    updatePlayerPalette();
+    updatePlayerOverlay();
+    renderPlayerClues();
+  }
+});
+
+function updatePlayerOverlay() {
+  const ov = $("#playerOverlay");
+  ov.innerHTML = "";
+  const m = playerState.map;
+  if(!m) return;
+  const N = m.size;
+  const P = playerState.padding;
+  const CS = playerState.cellSize;
+  
+  const markedR = new Set();
+  const markedC = new Set();
+  
+  for(let k in playerState.placed) {
+    if(playerState.placed[k].id === "_blocker") continue; // Xs do not generate row/col crosses
+    const [rs, cs] = k.split("_");
+    markedR.add(+rs);
+    markedC.add(+cs);
+  }
+  
+  // Draw crosses
+  for(let r=0;r<N;r++) {
+    for(let c=0;c<N;c++) {
+      const cell = E.cellAt(m, r, c);
+      if((markedR.has(r) || markedC.has(c)) && !playerState.placed[r+"_"+c] && (cell.walkable || cell.object)) {
+        const x = P + c*CS;
+        const y = P + r*CS;
+        const xdiv = document.createElement("div");
+        xdiv.className = "player-x-cross";
+        xdiv.style.left = x + "px";
+        xdiv.style.top = y + "px";
+        xdiv.style.width = CS + "px";
+        xdiv.style.height = CS + "px";
+        ov.appendChild(xdiv);
+      }
+    }
+  }
+  
+  // Draw placed characters
+  for(let k in playerState.placed) {
+    const [rs, cs] = k.split("_");
+    const r = +rs, c = +cs;
+    const char = playerState.placed[k];
+    const x = P + c*CS;
+    const y = P + r*CS;
+    
+    const cdiv = document.createElement("div");
+    
+    if (char.id === "_blocker") {
+      cdiv.className = "player-x-cross";
+      cdiv.style.left = x + "px";
+      cdiv.style.top = y + "px";
+      cdiv.style.width = CS + "px";
+      cdiv.style.height = CS + "px";
+      cdiv.style.pointerEvents = "auto";
+      cdiv.style.cursor = "pointer";
+      cdiv.style.zIndex = "10";
+    } else {
+      cdiv.className = "player-char-on-grid" + (char.kind==="victim" ? " victim" : "");
+      cdiv.style.left = (x + CS*0.1) + "px";
+      cdiv.style.top = (y + CS*0.1) + "px";
+      cdiv.style.width = (CS*0.8) + "px";
+      cdiv.style.height = (CS*0.8) + "px";
+      cdiv.style.fontSize = (CS*0.5) + "px";
+      cdiv.innerText = char.initial;
+      cdiv.style.pointerEvents = "auto";
+    }
+    cdiv.addEventListener("click", (e) => {
+      e.stopPropagation();
+      delete playerState.placed[k];
+      updatePlayerPalette();
+      updatePlayerOverlay();
+      renderPlayerClues();
+    });
+    
+    ov.appendChild(cdiv);
+  }
+  
+  // Draw notes
+  for(let k in playerState.notes) {
+    if(playerState.placed[k]) continue; // don't draw notes under a placed character
+    const notesArr = playerState.notes[k];
+    if(!notesArr || notesArr.length === 0) continue;
+    
+    const [rs, cs] = k.split("_");
+    const r = +rs, c = +cs;
+    const x = P + c*CS;
+    const y = P + r*CS;
+    
+    const noteSize = CS * 0.28;
+    const margin = 2;
+    const positions = [
+      { top: margin, left: margin }, // top-left
+      { top: margin, left: CS - noteSize - margin }, // top-right
+      { top: CS - noteSize - margin, left: CS - noteSize - margin }, // bottom-right
+      { top: CS - noteSize - margin, left: margin } // bottom-left
+    ];
+    
+    notesArr.forEach((char, idx) => {
+      if(idx > 3) return;
+      const pos = positions[idx];
+      const ndiv = document.createElement("div");
+      ndiv.className = "player-char-on-grid" + (char.kind==="victim" ? " victim" : "");
+      ndiv.style.left = (x + pos.left) + "px";
+      ndiv.style.top = (y + pos.top) + "px";
+      ndiv.style.width = noteSize + "px";
+      ndiv.style.height = noteSize + "px";
+      ndiv.style.fontSize = (noteSize * 0.65) + "px";
+      ndiv.style.borderWidth = "1.5px";
+      ndiv.style.opacity = "0.65";
+      ndiv.style.filter = "grayscale(40%)";
+      ndiv.style.pointerEvents = "auto";
+      ndiv.innerText = char.initial;
+      
+      ndiv.addEventListener("click", e => {
+        e.stopPropagation();
+        playerState.notes[k] = playerState.notes[k].filter(ch => ch.id !== char.id);
+        updatePlayerOverlay();
+      });
+      
+      ov.appendChild(ndiv);
+    });
+  }
+}
+
+function renderPlayerLegend() {
+  const leg = $("#playerLegend");
+  const m = playerState.map;
+  leg.innerHTML = "";
+  const used = [...new Set(m.cells.filter(c=>c.object).map(c=>c.object))];
+  
+  if(used.length === 0) {
+    leg.innerHTML += "<p>Nessun oggetto in scena.</p>";
+    return;
+  }
+  
+  const grid = document.createElement("div");
+  grid.className = "player-legend-grid";
+  
+  let s = "";
+  for(const k of used.sort()){
+    const walk = E.objWalkable(k);
+    s += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+      <svg width="22" height="22" viewBox="0 0 22 22" style="background:#f5f3ee; border-radius:4px; border:1px solid #ccc; flex-shrink:0;">${objectGlyph(k, 11, 11, 20)}</svg>
+      <span><b>${escapeHtml(E.objLabel(k))}</b> <small>(${walk ? "calpestabile" : "ostacolo"})</small></span>
+    </div>`;
+  }
+  
+  grid.innerHTML = s;
+  leg.appendChild(grid);
+}
+
+window.selectPlayerChar = function(id) {
+  if (!playerState || !playerState.charsList) return;
+  const char = playerState.charsList.find(c => c.id === id);
+  if(!char) return;
+  let isPlaced = false;
+  for(let k in playerState.placed) {
+    if(playerState.placed[k].id === char.id) isPlaced = true;
+  }
+  if(isPlaced) return;
+  
+  playerState.activeChar = (playerState.activeChar && playerState.activeChar.id === char.id) ? null : char;
+  updatePlayerPalette();
+};
+
+function renderPlayerClues() {
+  const box = $("#playerClues");
+  const clues = playerState.clues;
+  
+  if(!clues || clues.length === 0) {
+    box.innerHTML = "<div class='empty'>Nessun indizio disponibile.</div>";
+    return;
+  }
+  
+  const m = playerState.map;
+  const sus = m.entities.filter(e=>e.kind==="suspect").sort((a,b)=>a.initial.localeCompare(b.initial));
+  let html = ""; 
+  let n = 0;
+  
+  const bySubj = {}; const globals = [];
+  for(const c of clues) { 
+    if(c.scope==="global" || !c.scope) globals.push(c); 
+    else (bySubj[c.subjectId] = bySubj[c.subjectId] || []).push(c); 
+  }
+  
+  const placedIds = new Set(Object.values(playerState.placed).map(p => p.id));
+  
+  const boxesHtml = [];
+  
+  for(const s of sus){
+    const list = bySubj[s.id] || [];
+    if(!list.length) continue;
+    const color = "#5b48a8";
+    const traitsText = `(${s.gender==='M'?'Uomo':'Donna'}${s.hasHat?', con cappello':''}${s.hasGlasses?', con occhiali':''})`;
+    const av = charAvatarSVG(s);
+    
+    const isPlaced = placedIds.has(s.id);
+    const opStyle = isPlaced ? "opacity:0.4; filter:grayscale(80%);" : "opacity:1;";
+    
+    let boxStr = `<div class="grp" style="transition:all 0.3s ease; ${opStyle} break-inside:avoid; background:#fff; color:var(--ink); border:1px solid var(--line2); padding:16px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+      <div class="gh" style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="selectPlayerChar('${s.id}')">
+        <div style="width:40px; height:40px; flex-shrink:0;">${av}</div>
+        <div style="display:flex; flex-direction:column; line-height:1.2;">
+          <div><span class="badge" style="background:${color}">${s.initial}</span> <span style="font-weight:700; font-size:14px; color:${color};">${escapeHtml(s.name)}</span></div>
+          <div style="font-size:10.5px; opacity:0.8; font-weight:normal; text-transform:none; margin-top:2px;">${traitsText}</div>
+        </div>
+      </div>`;
+    for(const c of list){ 
+      n++; 
+      boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
+        <span class="num" style="color:var(--violet-bright); font-size:13px;">${n}.</span>
+        <div class="txt">${escapeHtml(c.text)}</div>
+      </div>`;
+    }
+    boxStr += `</div>`;
+    boxesHtml.push(boxStr);
+  }
+  
+  if(globals.length){
+    let boxStr = `<div class="grp" style="transition:all 0.3s ease; break-inside:avoid; background:#fff; color:var(--ink); border:1px solid var(--line2); padding:16px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);"><div class="gh"><span class="badge" style="background:#d8b25a;color:#000">★</span> Vincoli globali</div>`;
+    for(const c of globals){ 
+      n++; 
+      boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
+        <span class="num" style="color:var(--violet-bright); font-size:13px;">${n}.</span>
+        <div class="txt">${escapeHtml(c.text)}</div>
+      </div>`;
+    }
+    boxStr += `</div>`;
+    boxesHtml.push(boxStr);
+  }
+  
+  // Chunking in groups of 3
+  const columns = [];
+  for (let i = 0; i < boxesHtml.length; i += 3) {
+    columns.push(boxesHtml.slice(i, i + 3));
+  }
+  
+  let finalHtml = "";
+  for (const col of columns) {
+    finalHtml += `<div style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:240px; max-width:340px;">${col.join("")}</div>`;
+  }
+  
+  box.innerHTML = finalHtml;
+}
+
+// Interazioni Hover per il Player
+$("#playerClickLayer").addEventListener("mousemove", (evt) => {
+  const m = playerState.map;
+  if (!m) return;
+  const svg = $("#playerBoard");
+  const pt = svg.createSVGPoint();
+  pt.x = evt.clientX; pt.y = evt.clientY;
+  const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+  
+  const CS = playerState.cellSize;
+  const P = playerState.padding;
+  
+  const c = Math.floor((svgPt.x - P) / CS);
+  const r = Math.floor((svgPt.y - P) / CS);
+  const N = m.size;
+  
+  if (r < 0 || r >= N || c < 0 || c >= N) {
+    if (playerState.hoverR !== -1) { playerState.hoverR = -1; playerState.hoverC = -1; updatePlayerHoverHighlight(); }
+    return;
+  }
+  if (r !== playerState.hoverR || c !== playerState.hoverC) {
+    playerState.hoverR = r; playerState.hoverC = c;
+    updatePlayerHoverHighlight();
+  }
+});
+
+$("#playerClickLayer").addEventListener("mouseleave", () => {
+  if (playerState.hoverR !== -1) { playerState.hoverR = -1; playerState.hoverC = -1; updatePlayerHoverHighlight(); }
+});
+
+function updatePlayerHoverHighlight() {
+  const overlay = document.getElementById("playerHoverOverlay");
+  if (!overlay) return;
+  const m = playerState.map;
+  const r = playerState.hoverR, c = playerState.hoverC;
+  if (!m || r < 0 || c < 0) { overlay.innerHTML = ""; return; }
+
+  const N = m.size, CS = playerState.cellSize, P = playerState.padding;
+  const analysis = E.computeAreas(m);
+  
+  // Set dimensions for the SVG overlay
+  const W = P + N*CS + 8, H = P + N*CS + 8;
+  overlay.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  overlay.setAttribute("width", W);
+  overlay.setAttribute("height", H);
+  
+  let s = "";
+  // 1) Bordo blu grassetto per l'intera area
+  const hoveredArea = analysis.visualArea[r * N + c];
+  if (hoveredArea >= 0) {
+    for (let ar = 0; ar < N; ar++) for (let ac = 0; ac < N; ac++) {
+      if (analysis.visualArea[ar * N + ac] !== hoveredArea) continue;
+      const x = P + ac * CS, y = P + ar * CS;
+      if (ar === 0 || analysis.visualArea[(ar - 1) * N + ac] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y}" x2="${x + CS}" y2="${y}" stroke="#2196F3" stroke-width="3.5"/>`;
+      if (ar === N - 1 || analysis.visualArea[(ar + 1) * N + ac] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y + CS}" x2="${x + CS}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+      if (ac === 0 || analysis.visualArea[ar * N + (ac - 1)] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+      if (ac === N - 1 || analysis.visualArea[ar * N + (ac + 1)] !== hoveredArea)
+        s += `<line x1="${x + CS}" y1="${y}" x2="${x + CS}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+    }
+  }
+  // 2) Bordo bianco grassetto sulla cella in hover
+  const cx = P + c * CS, cy = P + r * CS;
+  s += `<rect x="${cx}" y="${cy}" width="${CS}" height="${CS}" fill="rgba(255,255,255,0.15)" stroke="#fff" stroke-width="3" pointer-events="none" />`;
+  
+  overlay.innerHTML = s;
+}
+
