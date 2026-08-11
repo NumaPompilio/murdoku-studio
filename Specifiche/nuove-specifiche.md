@@ -417,9 +417,10 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 ### 40. Allineamento Verticale Palette Personaggi su Mobile (v2.6)
 - **Centratura rispetto alla Plancia**: Sempre in modalità MOBILE, la colonna laterale che contiene la palette dei personaggi (dalla A alla X) è stata allineata al centro esatto dell'asse verticale rispetto alla plancia di gioco, anziché essere allineata al margine superiore. Questo garantisce un risultato visivo più bilanciato e simmetrico.
 
-### 41. Avvio Diretto in Modalità Player da URL (v2.7 e v2.10)
+### 41. Avvio Diretto in Modalità Player da URL (v2.7, v2.10 e v2.11)
 - **Logica di Accesso Diretto**: È stato aggiunto un listener `DOMContentLoaded` per interpretare i parametri della URL. Se la URL contiene l'ancora `#player` (es. `https://.../#player`) oppure il parametro in querystring `?mode=player` (es. `https://.../?mode=player`), l'applicazione simula in automatico il clic sul pulsante "Gioca" all'avvio, aprendosi direttamente nella visualizzazione Player ed omettendo l'Editor.
 - **Precaricamento Mappa (v2.10)**: Aggiungendo il parametro `&map=[NOME]` (es. `?mode=player&map=123`), l'applicativo, subito dopo essersi avviato in modalità Player, invoca autonomamente la funzione di scaricamento da GitHub e pre-carica il file `.md` corrispondente nella plancia di gioco, azzerando i passaggi manuali necessari.
+- **Pulizia UI Dinamica (v2.11)**: All'avvio diretto con `?mode=player`, il selettore di modalità (i pulsanti "Editor", "Gioca" e "Incolla") viene nascosto per bloccare l'interfaccia nella vista Player. Se l'utente non ha specificato una mappa (`&map`), il sistema lascerà tuttavia visibile l'unico pulsante "Seleziona Mappa", permettendo di immettere il nome manualmente. Se invece il parametro `&map` è presente, anche il tasto "Seleziona Mappa" sparirà per restituire una vista completamente pulita e immersiva.
 
 ### 42. Salvataggio su Cartella Locale e Caricamento da GitHub (v2.9)
 - **Logica Editor (Salvataggio Locale)**:

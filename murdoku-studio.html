@@ -263,7 +263,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.10</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.11</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -5933,9 +5933,16 @@ window.addEventListener('DOMContentLoaded', () => {
         const mapToLoad = urlParams.get('map');
         if (mapToLoad) {
           loadMapFromGithub(mapToLoad);
+          const modeSwitch = document.querySelector('.mode-switch');
+          if(modeSwitch) modeSwitch.style.display = 'none';
+        } else {
+          const edBtn = document.getElementById('modeEditorBtn');
+          if(edBtn) edBtn.style.display = 'none';
+          const plBtn = document.getElementById('modePlayerBtn');
+          if(plBtn) plBtn.style.display = 'none';
+          const impBtn = document.getElementById('playerOpenImportBtn');
+          if(impBtn) impBtn.style.display = 'none';
         }
-        const modeSwitch = document.querySelector('.mode-switch');
-        if(modeSwitch) modeSwitch.style.display = 'none';
       }, 50);
     }
   }
