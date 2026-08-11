@@ -263,7 +263,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.6</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.7</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -5785,6 +5785,17 @@ function updatePlayerHoverHighlight() {
   
   overlay.innerHTML = s;
 }
+
+// Controllo URL per avvio diretto in modalità PLAYER
+window.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (window.location.hash === '#player' || urlParams.get('mode') === 'player') {
+    const playerBtn = document.getElementById('modePlayerBtn');
+    if (playerBtn) {
+      setTimeout(() => playerBtn.click(), 50);
+    }
+  }
+});
 
 </script>
 </body>

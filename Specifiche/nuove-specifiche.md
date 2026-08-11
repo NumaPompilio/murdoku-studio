@@ -416,3 +416,6 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### 40. Allineamento Verticale Palette Personaggi su Mobile (v2.6)
 - **Centratura rispetto alla Plancia**: Sempre in modalità MOBILE, la colonna laterale che contiene la palette dei personaggi (dalla A alla X) è stata allineata al centro esatto dell'asse verticale rispetto alla plancia di gioco, anziché essere allineata al margine superiore. Questo garantisce un risultato visivo più bilanciato e simmetrico.
+
+### 41. Avvio Diretto in Modalità Player da URL (v2.7)
+- **Logica di Accesso Diretto**: È stato aggiunto un listener `DOMContentLoaded` per interpretare i parametri della URL. Se la URL contiene l'ancora `#player` (es. `https://.../#player`) oppure il parametro in querystring `?mode=player` (es. `https://.../?mode=player`), l'applicazione simula in automatico il clic sul pulsante "Gioca" all'avvio, aprendosi direttamente nella visualizzazione Player ed omettendo l'Editor.
