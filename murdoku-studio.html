@@ -2968,7 +2968,10 @@ function objectGlyph(kind, cx, cy, CS){
       let sc = dyn.scale || 1;
       let actualS = s * sc;
       let injectStr = `x="${cx-actualS/2}" y="${cy-actualS/2}" width="${actualS}" height="${actualS}" opacity="${op}" pointer-events="none" `;
-      raw = raw.replace(/<svg\s+/, `<svg ${injectStr}`);
+      raw = raw.replace(/<svg[^>]*>/, (match) => {
+        let clean = match.replace(/\b(width|height|x|y|opacity)="[^"]*"/g, "");
+        return clean.replace(/<svg\s*/, `<svg ${injectStr}`);
+      });
       return raw;
     }
   }
