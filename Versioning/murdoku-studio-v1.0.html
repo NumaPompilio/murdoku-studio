@@ -233,22 +233,6 @@
   .player-clue-item{margin-bottom:12px; font-size:14px; display:flex; gap:10px; align-items:baseline;}
   .player-clue-num{font-weight:bold; color:var(--evidence);}
 
-  @media (max-width: 768px) {
-    #playerLegend { display: none !important; }
-    #player-view { padding: 10px; }
-    .player-palette { gap: 6px; padding: 6px; }
-    .player-char { width: 34px; height: 34px; font-size: 16px; }
-    .player-grid-wrap { display: flex !important; flex-direction: column !important; gap: 15px; flex-wrap: nowrap !important; margin-bottom: 0; }
-    .player-left-col { flex: 0 0 auto; display: flex; justify-content: center; }
-    #playerBoardContainer { touch-action: manipulation; }
-    #playerBoard { max-width: 100vw; height: auto; }
-    .player-right-col { flex: 0 0 auto; overflow-x: auto !important; width: 100vw; margin-left: -10px; padding-left: 10px; padding-bottom: 20px; }
-    #playerClues { display: flex !important; flex-direction: row !important; gap: 15px; width: max-content !important; padding-right: 20px; }
-    .player-clue-col { display: contents; }
-    .grp { width: 280px; flex-shrink: 0; }
-    .clue-icon { display: none !important; }
-  }
-
   @media (max-width:1000px){ main{grid-template-columns:1fr} .left,.right{border:none} }
 </style>
 </head>
@@ -257,7 +241,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.0</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v1.0</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -5347,7 +5331,7 @@ function drawPlayerGrid() {
   svg.innerHTML = s;
 }
 
-function handlePlayerSingleClick(e) {
+$("#playerClickLayer").addEventListener("click", e => {
   const m = playerState.map;
   if(!m) return;
   const svg = $("#playerBoard");
@@ -5382,9 +5366,9 @@ function handlePlayerSingleClick(e) {
       updatePlayerOverlay();
     }
   }
-}
+});
 
-function handlePlayerDoubleClick(e) {
+$("#playerClickLayer").addEventListener("dblclick", e => {
   const m = playerState.map;
   if(!m) return;
   const svg = $("#playerBoard");
@@ -5414,27 +5398,6 @@ function handlePlayerDoubleClick(e) {
     updatePlayerPalette();
     updatePlayerOverlay();
     renderPlayerClues();
-  }
-}
-
-$("#playerClickLayer").addEventListener("click", handlePlayerSingleClick);
-$("#playerClickLayer").addEventListener("dblclick", handlePlayerDoubleClick);
-
-let lastPlayerTouchTime = 0;
-$("#playerClickLayer").addEventListener("touchend", e => {
-  if (e.changedTouches.length !== 1) return;
-  e.preventDefault(); // Prevents simulated mouse events
-  
-  const now = Date.now();
-  const touch = e.changedTouches[0];
-  const fakeEvent = { clientX: touch.clientX, clientY: touch.clientY };
-
-  if (now - lastPlayerTouchTime < 300) {
-    lastPlayerTouchTime = 0;
-    handlePlayerDoubleClick(fakeEvent);
-  } else {
-    lastPlayerTouchTime = now;
-    handlePlayerSingleClick(fakeEvent);
   }
 });
 
@@ -5639,7 +5602,7 @@ function renderPlayerClues() {
     
     let boxStr = `<div class="grp" style="transition:all 0.3s ease; ${opStyle} break-inside:avoid; background:#fff; color:var(--ink); border:1px solid var(--line2); padding:16px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
       <div class="gh" style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="selectPlayerChar('${s.id}')">
-        <div class="clue-icon" style="width:40px; height:40px; flex-shrink:0;">${av}</div>
+        <div style="width:40px; height:40px; flex-shrink:0;">${av}</div>
         <div style="display:flex; flex-direction:column; line-height:1.2;">
           <div><span class="badge" style="background:${color}">${s.initial}</span> <span style="font-weight:700; font-size:14px; color:${color};">${escapeHtml(s.name)}</span></div>
           <div style="font-size:10.5px; opacity:0.8; font-weight:normal; text-transform:none; margin-top:2px;">${traitsText}</div>
@@ -5677,7 +5640,7 @@ function renderPlayerClues() {
   
   let finalHtml = "";
   for (const col of columns) {
-    finalHtml += `<div class="player-clue-col" style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:240px; max-width:340px;">${col.join("")}</div>`;
+    finalHtml += `<div style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:240px; max-width:340px;">${col.join("")}</div>`;
   }
   
   box.innerHTML = finalHtml;

@@ -19,3 +19,9 @@ Ogni volta che viene effettuata una modifica al codice di `murdoku-studio.html`,
 - **Bugfixing**: NON comporta un avanzamento di versione.
 
 **ATTENZIONE - Backup di versione**: PRIMA di applicare qualsiasi modifica che comporti l'avanzamento della versione, devi copiare la *vecchia* versione del file `murdoku-studio.html` all'interno della cartella `Versioning/`, rinominandola in base alla versione uscente (es. `murdoku-studio-v1.0.html`). Se la cartella `Versioning` non esiste, creala.
+
+## Pubblicazione Online
+Quando l'utente chiede di pubblicare l'editor online (o aggiornare il repo), devi:
+1. Sovrascrivere `index.html` creando una copia aggiornata dell'ultimo `murdoku-studio.html`.
+2. Eseguire in locale `git add .` e `git commit -m "Aggiornamento versione [VERSIONE]"`.
+3. Chiedere esplicitamente all'utente di eseguire `git push origin main` dal suo terminale per completare il deploy (poiché il sandbox di rete blocca i push automatici).

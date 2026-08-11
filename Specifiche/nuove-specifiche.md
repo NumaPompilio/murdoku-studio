@@ -378,3 +378,15 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
   - **`🖨 PDF Mappa`**: Genera un documento stampabile di **una sola pagina** contenente esclusivamente l'enigma da risolvere (la planimetria senza i personaggi), la legenda e l'elenco degli indizi. In questo layout, la mappa viene affiancata da un riquadro laterale esplicativo contenente le regole generali del Murdoku e un **Glossario Indizi** generato dinamicamente, che spiega ai giocatori le regole esatte esclusivamente per le tipologie di indizio utilizzate in quella specifica mappa.
   - **`🖨 PDF Mappa + Soluzione`**: Conserva il comportamento originale a **due pagine**, includendo tutto il contenuto del "PDF Mappa" nella prima pagina, e aggiungendo una seconda pagina con la "Chiave di Lettura" (personaggi visibili sulla griglia) e l'eventuale step-by-step della "Soluzione Ragionata".
 - L'intestazione della pagina generata usa ora il titolo custom della mappa per comporre il nome del file (es. `nome-mappa-solo-mappa.pdf` o `nome-mappa-con-soluzione.pdf`).
+
+### 35. Ottimizzazione Player per Mobile (v2.0)
+- **Responsive Layout (CSS Media Queries):** 
+  - Applicate regole specifiche per viewport <= 768px (`@media (max-width: 768px)`).
+  - La Legenda Oggetti del Player (`#playerLegend`) viene nascosta per risparmiare spazio verticale e semplificare l'interfaccia su schermi piccoli.
+  - La mappa (`#playerBoardContainer`) viene fissata con una larghezza massima pari a quella dello schermo, disabilitando lo scroll orizzontale e verticale della pagina per mantenere la planimetria in evidenza.
+  - La lista degli indizi (`#playerClues`) è stata riposizionata al di sotto della mappa in un contenitore a scorrimento orizzontale continuo, con i box allineati in fila (ordinati alfabeticamente).
+  - Nei box degli indizi, l'icona (avatar) del personaggio viene automaticamente nascosta su mobile (`.clue-icon`), lasciando intatte unicamente l'iniziale, il nome e le caratteristiche fisiche testuali per massimizzare la leggibilità.
+- **Interazioni Touch Personalizzate:**
+  - Sostituzione dei tradizionali eventi mouse `click` e `dblclick` (inaffidabili su Safari/iOS per il doppio-tap-zoom) con eventi pointer/touch nativi (`touchend`) che misurano il Delta Time tra i tocchi per una fluidità ottimale.
+  - **Singolo Tap:** Registra un'annotazione provvisoria (nota a margine o croce rossa X) senza alterare le preclusioni di riga e colonna.
+  - **Doppio Tap:** Conferma il piazzamento definitivo del personaggio e fa scattare l'evidenziazione automatica (X rosse) su riga e colonna.
