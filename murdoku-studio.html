@@ -6230,20 +6230,35 @@ window.DYNAMIC_SVGS = {};
 
 async function loadRemoteObjects() {
   try {
-    const rawUrl = `https://raw.githubusercontent.com/NumaPompilio/murdoku-studio/main/assets/objects.md?t=${new Date().getTime()}`;
-    const res = await fetch(rawUrl);
-    if (!res.ok) {
-      console.warn("Nessun file objects.md remoto trovato (HTTP " + res.status + ")");
-      return;
+    let text = "";
+    try {
+      const apiUrl = `https://api.github.com/repos/NumaPompilio/murdoku-studio/contents/assets/objects.md?ref=main&t=${new Date().getTime()}`;
+      const res = await fetch(apiUrl);
+      if (res.ok) {
+        const jsonRes = await res.json();
+        // Decode base64 to unicode string safely
+        text = decodeURIComponent(escape(atob(jsonRes.content.replace(/\s/g, ''))));
+      } else {
+        throw new Error("API limit hit or file missing");
+      }
+    } catch(apiErr) {
+      console.warn("Fallback to raw github due to API error", apiErr);
+      const rawUrl = `https://raw.githubusercontent.com/NumaPompilio/murdoku-studio/main/assets/objects.md?t=${new Date().getTime()}`;
+      const res = await fetch(rawUrl);
+      if (!res.ok) {
+        console.warn("Nessun file objects.md remoto trovato (HTTP " + res.status + ")");
+        return;
+      }
+      text = await res.text();
     }
-    const text = await res.text();
+
     const match = text.match(/```json\n([\s\S]*?)\n```/);
     if (match) {
       const arr = JSON.parse(match[1]);
       for (const o of arr) {
-        if (!OBJECT_LIB[o.id]) OBJ_ORDER.push(o.id);
+        if (!E.OBJECT_LIB[o.id]) OBJ_ORDER.push(o.id);
         
-        OBJECT_LIB[o.id] = { label: o.label, walkable: !!o.walkable };
+        E.OBJECT_LIB[o.id] = { label: o.label, walkable: !!o.walkable };
         if (o.article) OBJ_ART[o.id] = o.article;
         if (o.symbol) OBJ_SYMBOL[o.id] = o.symbol;
 
