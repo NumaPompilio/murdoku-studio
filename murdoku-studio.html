@@ -6267,13 +6267,17 @@ async function loadRemoteObjects() {
       }
       
       console.log(`Caricati dinamicamente ${arr.length} oggetti remoti.`);
+      toast(`Caricati ${arr.length} oggetti da GitHub!`);
       
       // Ritocca UI
       renderPalette();
       render();
+    } else {
+      toast("Il JSON remoto non è stato trovato nel file!");
     }
   } catch(e) {
     console.error("Errore nel parsing o fetch di objects.md", e);
+    toast("Errore fetch: " + e.message);
   }
 }
 
