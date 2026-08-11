@@ -2963,8 +2963,10 @@ function objectGlyph(kind, cx, cy, CS){
   }
   if(window.DYNAMIC_SVGS && window.DYNAMIC_SVGS[kind]) {
     let dyn = window.DYNAMIC_SVGS[kind];
+    if(kind === "automobile2") console.log("automobile2 DYN:", dyn);
     if(dyn.type === "svg") {
       let raw = dyn.code;
+      if(kind === "automobile2") console.log("automobile2 RAW BEFORE:", raw);
       let sc = dyn.scale || 1;
       let actualS = s * sc;
       let injectStr = `x="${cx-actualS/2}" y="${cy-actualS/2}" width="${actualS}" height="${actualS}" opacity="${op}" pointer-events="none" `;
@@ -2972,8 +2974,14 @@ function objectGlyph(kind, cx, cy, CS){
         let clean = match.replace(/\b(width|height|x|y|opacity)="[^"]*"/g, "");
         return clean.replace(/<svg\s*/, `<svg ${injectStr}`);
       });
+      if(kind === "automobile2") console.log("automobile2 RAW AFTER:", raw);
       return raw;
     }
+  }
+
+  if(kind === "automobile2") {
+    console.log("automobile2 FALLBACK! DYNAMIC_SVGS:", window.DYNAMIC_SVGS && window.DYNAMIC_SVGS[kind]);
+    toast("Auto2 in fallback. Controlla la console.");
   }
 
   const em = OBJ_EMOJI[kind]||"?";
