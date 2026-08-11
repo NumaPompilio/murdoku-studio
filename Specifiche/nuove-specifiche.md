@@ -381,9 +381,9 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### 35. Ottimizzazione Player per Mobile (v2.0)
 - **Responsive Layout (CSS Media Queries):** 
-  - Applicate regole specifiche per viewport <= 768px (`@media (max-width: 768px)`).
-  - La Legenda Oggetti del Player (`#playerLegend`) viene nascosta per risparmiare spazio verticale e semplificare l'interfaccia su schermi piccoli.
-  - La mappa (`#playerBoardContainer`) viene fissata con una larghezza massima pari a quella dello schermo, disabilitando lo scroll orizzontale e verticale della pagina per mantenere la planimetria in evidenza.
+  - Applicate regole specifiche estese per viewport <= 1024px (`@media (max-width: 1024px)`), abbracciando così anche i tablet in modalità verticale.
+  - La Legenda Oggetti del Player (`#playerLegend`) viene nascosta per risparmiare spazio verticale e semplificare l'interfaccia su schermi piccoli e tablet.
+  - La mappa (`#playerBoardContainer`) e la palette dei personaggi sono state fissate in alto usando la proprietà CSS `position: sticky`. In questo modo, scorrendo l'interfaccia verticalmente (se lo schermo è basso), la mappa resta sempre in primissimo piano e solo la lista degli indizi scorre al di sotto di essa.
   - La lista degli indizi (`#playerClues`) è stata riposizionata al di sotto della mappa in un contenitore a scorrimento orizzontale continuo, con i box allineati in fila (ordinati alfabeticamente).
   - Nei box degli indizi, l'icona (avatar) del personaggio viene automaticamente nascosta su mobile (`.clue-icon`), lasciando intatte unicamente l'iniziale, il nome e le caratteristiche fisiche testuali per massimizzare la leggibilità.
 - **Interazioni Touch Personalizzate:**
