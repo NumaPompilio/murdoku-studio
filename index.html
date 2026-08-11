@@ -242,10 +242,10 @@
     .player-left-col { flex: 0 0 auto; display: flex; justify-content: center; width: 100%; max-width: 100vw; position: sticky; top: 60px; z-index: 20; background: var(--ink); padding-bottom: 10px; }
     #playerBoardContainer { touch-action: manipulation; width: 100%; max-width: 500px; display: flex; justify-content: center; position: relative; }
     #playerBoard, #playerHoverOverlay { width: 100% !important; height: auto !important; max-width: 100vw; }
-    .player-right-col { flex: 0 0 auto; overflow-x: auto !important; width: 100vw; margin-left: -10px; padding-left: 10px; padding-bottom: 20px; }
-    #playerClues { display: flex !important; flex-direction: row !important; gap: 15px; width: max-content !important; padding-right: 20px; }
-    .player-clue-col { display: contents; }
-    .grp { width: 280px; flex-shrink: 0; margin-bottom: 0 !important; }
+    .player-right-col { flex: 0 0 auto; width: 100%; margin-left: 0; padding-left: 0; padding-bottom: 20px; overflow: visible !important; }
+    #playerClues { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 15px; width: 100% !important; padding-right: 0; }
+    .player-clue-col { display: contents !important; }
+    .grp { width: auto !important; flex: 1 1 280px; margin-bottom: 0 !important; }
     .clue-icon { display: none !important; }
     .clue-name-wrap { flex-direction: row !important; align-items: center; gap: 6px; flex-wrap: wrap; }
     .clue-traits { margin-top: 0 !important; font-size: 11.5px !important; }
