@@ -263,7 +263,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.9</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.10</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -4330,9 +4330,7 @@ $("#playerOpenFolderLoadBtn").addEventListener("click", () => {
 $("#folderLoadClose").addEventListener("click", () => $("#folderLoadModal").style.display="none");
 $("#folderLoadModal").addEventListener("click", e => { if(e.target.id==="folderLoadModal") $("#folderLoadModal").style.display="none"; });
 
-$("#folderLoadConfirm").addEventListener("click", async () => {
-  let filename = $("#folderLoadFilename").value.trim();
-  if(!filename){ toast("Il nome del file è obbligatorio"); return; }
+async function loadMapFromGithub(filename) {
   if(!filename.toLowerCase().endsWith(".md")) filename += ".md";
   try {
     const rawUrl = `https://raw.githubusercontent.com/NumaPompilio/murdoku-studio/main/Mappe%20Salvate/${encodeURIComponent(filename)}`;
@@ -4372,6 +4370,12 @@ $("#folderLoadConfirm").addEventListener("click", async () => {
     console.error(err);
     if(err.name !== 'AbortError') toast("Errore durante il caricamento del file.");
   }
+}
+
+$("#folderLoadConfirm").addEventListener("click", async () => {
+  let filename = $("#folderLoadFilename").value.trim();
+  if(!filename){ toast("Il nome del file è obbligatorio"); return; }
+  await loadMapFromGithub(filename);
 });
 
 let currentMdFilename = null;
@@ -5918,13 +5922,21 @@ function updatePlayerHoverHighlight() {
   overlay.innerHTML = s;
 }
 
-// Controllo URL per avvio diretto in modalità PLAYER
+// Controllo URL per avvio diretto in modalità PLAYER e caricamento automatico mappa
 window.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   if (window.location.hash === '#player' || urlParams.get('mode') === 'player') {
     const playerBtn = document.getElementById('modePlayerBtn');
     if (playerBtn) {
-      setTimeout(() => playerBtn.click(), 50);
+      setTimeout(() => {
+        playerBtn.click();
+        const mapToLoad = urlParams.get('map');
+        if (mapToLoad) {
+          loadMapFromGithub(mapToLoad);
+        }
+        const modeSwitch = document.querySelector('.mode-switch');
+        if(modeSwitch) modeSwitch.style.display = 'none';
+      }, 50);
     }
   }
 });
