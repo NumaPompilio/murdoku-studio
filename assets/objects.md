@@ -1,10 +1,10 @@
 ```json
 [
   {
-    "id": "automobile",
-    "label": "Auto",
+    "id": "automobile2",
+    "label": "Auto2",
     "article": "un",
-    "symbol": "au",
+    "symbol": "a2",
     "walkable": false,
     "categories": [
       "nature"
