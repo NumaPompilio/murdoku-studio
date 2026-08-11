@@ -263,7 +263,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.11</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.12</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -553,6 +553,7 @@
     </div>
     <div class="player-right-col" style="flex:1; min-width:300px; overflow-x:auto;">
       <div id="playerClues" class="player-clues-box" style="margin-top:0; display:flex; gap:20px; align-items:start; padding:0 0 10px 0; width:100%;"></div>
+      <div id="playerResult" style="display:none; text-align:center; padding:15px; margin-top:20px; font-weight:bold; font-size:20px; border-radius:8px; width:100%;"></div>
     </div>
   </div>
   <div id="playerLegend" class="player-legend" style="margin-top:20px; width:100%; max-width:100%; background:var(--paper); padding:20px; border-radius:8px; color:var(--ink);"></div>
@@ -5700,6 +5701,50 @@ function updatePlayerOverlay() {
       g.addEventListener("touchend", handler);
       ov.appendChild(g);
     });
+  }
+  
+  checkPlayerWinCondition();
+}
+
+function checkPlayerWinCondition() {
+  const resultDiv = document.getElementById("playerResult");
+  if(!resultDiv) return;
+  
+  if(!playerState.entities || playerState.entities.length === 0) {
+    resultDiv.style.display = "none";
+    return;
+  }
+  
+  let placedCount = 0;
+  let correctCount = 0;
+  
+  for(let k in playerState.placed) {
+    const char = playerState.placed[k];
+    if(char.id === "_blocker") continue;
+    
+    placedCount++;
+    const [r, c] = k.split("_").map(Number);
+    const origEntity = playerState.entities.find(e => e.id === char.id);
+    if(origEntity && origEntity.row === r && origEntity.col === c) {
+      correctCount++;
+    }
+  }
+  
+  if(placedCount < playerState.entities.length) {
+    resultDiv.style.display = "none";
+  } else {
+    resultDiv.style.display = "block";
+    if(correctCount === playerState.entities.length) {
+      resultDiv.innerHTML = "BRAVO! HAI TROVATO L'ASSASSINO";
+      resultDiv.style.backgroundColor = "rgba(40,167,69,0.15)";
+      resultDiv.style.color = "#28a745";
+      resultDiv.style.border = "1px solid #28a745";
+    } else {
+      resultDiv.innerHTML = "NON HAI TROVATO L'ASSASSINO";
+      resultDiv.style.backgroundColor = "rgba(228,72,61,0.15)";
+      resultDiv.style.color = "var(--evidence)";
+      resultDiv.style.border = "1px solid var(--evidence)";
+    }
   }
 }
 
