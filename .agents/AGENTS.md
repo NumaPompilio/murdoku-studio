@@ -27,6 +27,7 @@ Quando l'utente chiede di pubblicare l'editor online (o aggiornare il repo), dev
 3. Chiedere esplicitamente all'utente di eseguire `git push origin main` dal suo terminale per completare il deploy (poiché il sandbox di rete blocca i push automatici).
 
 ## Terminologia
-- **PLAYER**: si riferisce alla modalità "PLAY", ovvero la sezione dell'applicazione che si apre cliccando sul pulsante "PLAY".
+- **Murdoku Studio** (o **Studio**, o **Questo programma**): si riferisce all'intero applicativo software/web-app sviluppato (l'ambiente che racchiude Editor e Player).
+- **PLAYER**: si riferisce alla modalità "PLAY", ovvero la sezione dell'applicazione che si apre cliccando sul pulsante "PLAY" (o "Player").
 - **Editor**: si riferisce alla modalità "Editor", ovvero la parte dell'applicazione che si apre cliccando sul pulsante "Editor".
 - **MOBILE**: si riferisce solo ed esclusivamente alla visualizzazione da dispositivi mobili (layout responsive, media query), differenziandola dalla modalità desktop.

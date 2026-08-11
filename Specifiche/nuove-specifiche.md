@@ -435,3 +435,12 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 ### 43. Verifica Condizione di Vittoria (v2.12)
 - **Logica di Verifica Automatica**: Nel Player, ogni volta che viene aggiunto, rimosso o spostato un personaggio sulla griglia, il sistema analizza i piazzamenti. Se tutti i personaggi previsti per il caso sono stati collocati in plancia, il sistema confronta le loro posizioni con la soluzione memorizzata nella mappa (le coordinate originali degli `entities`).
 - **Feedback Visivo**: Se tutte le posizioni corrispondono esattamente, viene mostrato il messaggio "BRAVO! HAI TROVATO L'ASSASSINO" con sfondo verde in calce agli indizi. Se anche un solo personaggio è in una posizione errata (ma tutti sono stati inseriti), viene mostrato il messaggio "NON HAI TROVATO L'ASSASSINO" in rosso, spronando il giocatore a correggere la sua logica.
+
+### 44. Rinomina Pulsante Gioca (v2.13)
+- **Modifica UI**: Il pulsante principale per accedere alla modalità di gioco è stato rinominato da "Gioca" a "Player" nell'intestazione dell'applicazione, per maggiore uniformità con la terminologia del progetto.
+
+### 45. Nuova Icona Libreria Vettoriale (v2.14)
+- **Asset Aggiornati**: Inserito un nodo SVG personalizzato complesso per renderizzare l'oggetto `bookcase` (libreria), in sostituzione del precedente fallback tramite emoji 📚. Il nuovo asset viene renderizzato in modo nativo su mappa alla stregua degli altri elementi vettoriali (tavolo, scogli, ecc.), scalandosi in tempo reale.
+
+### 46. Restyling Popup "Incolla Mappa" (v2.15)
+- **Modifica UI**: Il box inline adibito all'importazione manuale della mappa (attivato dal pulsante "Incolla Mappa" nel Player) è stato convertito in un vero e proprio modale fluttuante (`modal`), uniformandone l'aspetto e l'UX con il modale di "Seleziona Mappa da Cartella". Lo sfondo ora viene oscurato per far risaltare la finestra di importazione.
