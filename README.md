@@ -2,6 +2,8 @@
 
 Generatore ed editor di enigmi logici deduttivi **Murdoku** (fascicolo noir).
 
+🎮 **[Gioca online a Murdoku Studio](https://numapompilio.github.io/murdoku-studio/)**
+
 L'applicazione è contenuta interamente nel file **[`murdoku-studio.html`](murdoku-studio.html)**: è standalone, apribile con un doppio clic su qualsiasi browser moderno, utilizzabile completamente offline e priva di dipendenze o CDN esterne.
 
 ---
