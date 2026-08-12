@@ -475,3 +475,8 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
   - *Regole Generali*: Spiega il meccanismo di riga e colonna univoca (stile Sudoku) e la regola che obbliga l'assassino a trovarsi sempre solo con la vittima.
   - *Regole degli Oggetti*: Definisce la differenza fondamentale tra oggetti calpestabili (su cui è consentito stare) e ostacoli (che non possono essere occupati), e chiarisce il concetto spaziale di "accanto a" e "sopra a" un oggetto.
   - *Come Giocare (Comandi)*: Illustra visivamente (con icone SVG personalizzate) la differenza tra il doppio clic/tap per posizionare definitivamente un personaggio e il singolo clic/tap per inserire una nota provvisoria (fino a 4 per cella).
+
+### 52. Testo identificativo su Porte e Finestre (v2.25)
+- **Etichette Testuali**: Le icone grafiche di Porte e Finestre sulla mappa ora presentano una piccola dicitura testuale di identificazione ("Porta" o "Finestra" rispettivamente) per rendere immediato il loro significato.
+- **Supporto Omnipresente**: Le etichette sono visualizzate e regolate dinamicamente sia nell'Editor, sia nel Player, sia nella stampa PDF (nella quale il testo adotta una dimensione proporzionata per una resa pulita).
+- **Rotazione SVG**: Se il muro contenente la porta o la finestra è verticale, il testo viene ruotato automaticamente di -90 gradi per rimanere centrato e contenuto all'interno dell'elemento di delimitazione.

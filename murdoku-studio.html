@@ -271,7 +271,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.24</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.25</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -3531,21 +3531,25 @@ function render(){
       if(E.isWindow(m,r,c,r,c+1)){
          s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
       // Left window (outer only)
       if(c===0 && E.isWindow(m,r,c,r,c-1)){
          s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x}" y="${y+CS/2}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
       // Bottom window (inner and outer)
       if(E.isWindow(m,r,c,r+1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
       // Top window (outer only)
       if(r===0 && E.isWindow(m,r,c,r-1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
     }
     s += `</g>`;
@@ -3560,21 +3564,25 @@ function render(){
       if(E.isDoor(m,r,c,r,c+1)){
          s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
       // Left door (outer only)
       if(c===0 && E.isDoor(m,r,c,r,c-1)){
          s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x}" y="${y+CS/2}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
       // Bottom door
       if(E.isDoor(m,r,c,r+1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
       // Top door (outer only)
       if(r===0 && E.isDoor(m,r,c,r-1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
     }
     s += `</g>`;
@@ -5502,10 +5510,12 @@ function boardSVGForPrint(withSolution){
       if(c+1<N && E.isWindow(m,r,c,r,c+1)){ 
          s+=`<rect x="${x+CS-4}" y="${y+CS*0.15}" width="8" height="${CS*0.7}" fill="#e6f2fa" stroke="#333" stroke-width="1.5" rx="1.5" />`;
          s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#333" stroke-width="1.5" />`; 
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="6.5" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
       if(r+1<N && E.isWindow(m,r,c,r+1,c)){ 
          s+=`<rect x="${x+CS*0.15}" y="${y+CS-4}" width="${CS*0.7}" height="8" fill="#e6f2fa" stroke="#333" stroke-width="1.5" rx="1.5" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#333" stroke-width="1.5" />`; 
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="6.5" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
     }
     s += `</g>`;
@@ -5518,10 +5528,12 @@ function boardSVGForPrint(withSolution){
       if(c+1<N && E.isDoor(m,r,c,r,c+1)){ 
          s+=`<rect x="${x+CS-4}" y="${y+CS*0.15}" width="8" height="${CS*0.7}" fill="#f5e1cd" stroke="#333" stroke-width="1.5" rx="1.5" />`;
          s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#333" stroke-width="1.5" />`; 
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="6.5" fill="#854d0e" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
       if(r+1<N && E.isDoor(m,r,c,r+1,c)){ 
          s+=`<rect x="${x+CS*0.15}" y="${y+CS-4}" width="${CS*0.7}" height="8" fill="#f5e1cd" stroke="#333" stroke-width="1.5" rx="1.5" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#333" stroke-width="1.5" />`; 
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="6.5" fill="#854d0e" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
     }
     s += `</g>`;
@@ -5856,21 +5868,25 @@ function drawPlayerGrid() {
       if(E.isWindow(m,r,c,r,c+1)){
          s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
       // Left window (outer only)
       if(c===0 && E.isWindow(m,r,c,r,c-1)){
          s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x}" y="${y+CS/2}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
       // Bottom window (inner and outer)
       if(E.isWindow(m,r,c,r+1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
       // Top window (outer only)
       if(r===0 && E.isWindow(m,r,c,r-1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y}" font-size="7" fill="#1e3a8a" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Finestra</text>`;
       }
     }
     s += `</g>`;
@@ -5885,21 +5901,25 @@ function drawPlayerGrid() {
       if(E.isDoor(m,r,c,r,c+1)){
          s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
       // Left door (outer only)
       if(c===0 && E.isDoor(m,r,c,r,c-1)){
          s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x}" y="${y+CS/2}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
       // Bottom door
       if(E.isDoor(m,r,c,r+1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
       // Top door (outer only)
       if(r===0 && E.isDoor(m,r,c,r-1,c)){
          s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
          s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y}" font-size="7" fill="#fff" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Porta</text>`;
       }
     }
     s += `</g>`;
