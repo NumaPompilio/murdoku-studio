@@ -1,34 +1,1742 @@
-```json
 [
   {
-    "id": "autosportiva",
-    "label": "auto sportiva",
+    "id": "sedia",
+    "label": "Sedia",
     "article": "una",
-    "symbol": "as",
-    "walkable": false,
+    "symbol": "se",
+    "walkable": true,
     "categories": [
-      "nature"
+      "Casa & Interni"
     ],
     "render": {
       "type": "svg",
       "scale": 0.8,
-      "svgCode": "<svg\n  width=\"768\"\n  height=\"260\"\n  viewBox=\"0 0 768 260\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  role=\"img\"\n  aria-labelledby=\"carTitle carDesc\"\n>\n  <title id=\"carTitle\">Icona vettoriale auto sportiva rossa</title>\n  <desc id=\"carDesc\">Icona SVG stilizzata di una coupé sportiva rossa vista lateralmente.</desc>\n\n  <defs>\n    <linearGradient id=\"carRed\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#ff3442\"/>\n      <stop offset=\"35%\" stop-color=\"#df0715\"/>\n      <stop offset=\"70%\" stop-color=\"#a6000b\"/>\n      <stop offset=\"100%\" stop-color=\"#640006\"/>\n    </linearGradient>\n\n    <linearGradient id=\"carHighlight\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\">\n      <stop offset=\"0%\" stop-color=\"#ffffff\" stop-opacity=\"0.15\"/>\n      <stop offset=\"45%\" stop-color=\"#ffffff\" stop-opacity=\"0.85\"/>\n      <stop offset=\"100%\" stop-color=\"#ffffff\" stop-opacity=\"0.08\"/>\n    </linearGradient>\n\n    <linearGradient id=\"windowGradient\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#252525\"/>\n      <stop offset=\"55%\" stop-color=\"#080808\"/>\n      <stop offset=\"100%\" stop-color=\"#3c3c3c\"/>\n    </linearGradient>\n\n    <radialGradient id=\"wheelDark\" cx=\"50%\" cy=\"50%\" r=\"50%\">\n      <stop offset=\"0%\" stop-color=\"#555\"/>\n      <stop offset=\"45%\" stop-color=\"#181818\"/>\n      <stop offset=\"100%\" stop-color=\"#050505\"/>\n    </radialGradient>\n\n    <radialGradient id=\"rimGradient\" cx=\"50%\" cy=\"50%\" r=\"50%\">\n      <stop offset=\"0%\" stop-color=\"#eeeeee\"/>\n      <stop offset=\"40%\" stop-color=\"#8c8c8c\"/>\n      <stop offset=\"75%\" stop-color=\"#2f2f2f\"/>\n      <stop offset=\"100%\" stop-color=\"#d8d8d8\"/>\n    </radialGradient>\n\n    <filter id=\"carShadow\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"160%\">\n      <feDropShadow dx=\"0\" dy=\"10\" stdDeviation=\"8\" flood-color=\"#000000\" flood-opacity=\"0.35\"/>\n    </filter>\n  </defs>\n\n  <!-- Ombra a terra -->\n  <ellipse\n    cx=\"384\"\n    cy=\"226\"\n    rx=\"330\"\n    ry=\"18\"\n    fill=\"#000000\"\n    opacity=\"0.22\"\n  />\n\n  <g filter=\"url(#carShadow)\">\n\n    <!-- Corpo principale -->\n    <path\n      d=\"M22 158\n         C39 122 82 96 136 86\n         C205 73 269 71 325 46\n         C382 20 459 7 537 18\n         C597 27 650 51 691 76\n         C721 93 745 96 758 104\n         L760 142\n         C750 171 735 191 713 205\n         L642 205\n         C634 165 605 139 568 139\n         C529 139 501 166 493 205\n         L240 205\n         C231 165 202 139 164 139\n         C126 139 97 166 88 205\n         L31 205\n         C18 193 12 176 22 158Z\"\n      fill=\"url(#carRed)\"\n      stroke=\"#7d0008\"\n      stroke-width=\"3\"\n      stroke-linejoin=\"round\"\n    />\n\n    <!-- Cofano anteriore -->\n    <path\n      d=\"M32 151\n         C72 116 132 97 203 91\n         C166 115 105 136 32 151Z\"\n      fill=\"#f62232\"\n      opacity=\"0.85\"\n    />\n\n    <!-- Tetto / abitacolo -->\n    <path\n      d=\"M289 74\n         C334 34 387 20 463 22\n         C538 24 594 43 642 77\n         C556 68 404 64 289 74Z\"\n      fill=\"#141414\"\n      stroke=\"#080808\"\n      stroke-width=\"4\"\n      stroke-linejoin=\"round\"\n    />\n\n    <!-- Parabrezza -->\n    <path\n      d=\"M306 70\n         C344 39 392 29 447 30\n         L428 68\n         C383 67 341 68 306 70Z\"\n      fill=\"url(#windowGradient)\"\n      opacity=\"0.95\"\n    />\n\n    <!-- Finestrino laterale -->\n    <path\n      d=\"M435 30\n         C513 31 574 47 621 74\n         C567 70 508 68 438 68Z\"\n      fill=\"url(#windowGradient)\"\n      opacity=\"0.95\"\n    />\n\n    <!-- Riflesso vetri -->\n    <path\n      d=\"M325 50\n         C389 34 529 36 604 65\"\n      stroke=\"#ffffff\"\n      stroke-width=\"5\"\n      opacity=\"0.28\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n    />\n\n    <!-- Montante centrale -->\n    <path\n      d=\"M510 28 L516 70\"\n      stroke=\"#2b2b2b\"\n      stroke-width=\"5\"\n      opacity=\"0.85\"\n    />\n\n    <!-- Porta -->\n    <path\n      d=\"M292 82\n         L290 201\n         M527 82\n         C535 115 533 160 518 199\"\n      stroke=\"#7f0007\"\n      stroke-width=\"3\"\n      opacity=\"0.85\"\n      fill=\"none\"\n    />\n\n    <!-- Maniglia -->\n    <path\n      d=\"M510 101\n         C526 98 537 100 541 105\n         C532 110 520 111 508 109\"\n      stroke=\"#ffb8b8\"\n      stroke-width=\"4\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n      opacity=\"0.75\"\n    />\n\n    <!-- Presa laterale -->\n    <path\n      d=\"M226 125\n         C310 121 395 120 485 118\n         C470 137 458 156 448 178\n         C366 174 287 173 219 173\n         C218 153 220 139 226 125Z\"\n      fill=\"#930009\"\n      opacity=\"0.82\"\n    />\n\n    <path\n      d=\"M245 137\n         C323 134 393 133 464 132\"\n      stroke=\"url(#carHighlight)\"\n      stroke-width=\"8\"\n      stroke-linecap=\"round\"\n      opacity=\"0.65\"\n    />\n\n    <!-- Minigonna laterale -->\n    <path\n      d=\"M219 198\n         C325 202 449 202 547 198\n         C569 205 592 207 616 204\n         L614 213\n         L223 213Z\"\n      fill=\"#620006\"\n      opacity=\"0.9\"\n    />\n\n    <!-- Paraurti anteriore -->\n    <path\n      d=\"M22 158\n         L55 151\n         C48 171 42 187 31 205\n         C17 193 12 176 22 158Z\"\n      fill=\"#b9000d\"\n      opacity=\"0.95\"\n    />\n\n    <!-- Faro anteriore -->\n    <path\n      d=\"M52 126\n         C75 115 95 108 119 106\n         C108 119 82 130 54 134Z\"\n      fill=\"#dcecff\"\n      stroke=\"#4b4b4b\"\n      stroke-width=\"2\"\n      opacity=\"0.9\"\n    />\n\n    <path\n      d=\"M59 125 C77 118 93 114 109 113\"\n      stroke=\"#ffffff\"\n      stroke-width=\"3\"\n      opacity=\"0.9\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n    />\n\n    <!-- Coda posteriore -->\n    <path\n      d=\"M651 82\n         C691 85 731 91 758 104\n         L760 142\n         C746 136 713 130 676 128\n         C669 108 660 94 651 82Z\"\n      fill=\"#c80010\"\n      opacity=\"0.95\"\n    />\n\n    <!-- Faro posteriore -->\n    <path\n      d=\"M707 101\n         C729 101 747 104 756 110\n         L754 126\n         C732 121 716 115 707 101Z\"\n      fill=\"#ff2934\"\n      stroke=\"#720006\"\n      stroke-width=\"3\"\n    />\n\n    <path\n      d=\"M716 106 C731 106 744 109 753 113\"\n      stroke=\"#ffb5b5\"\n      stroke-width=\"3\"\n      opacity=\"0.75\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n    />\n\n    <!-- Spoiler -->\n    <path\n      d=\"M695 77\n         C725 77 747 74 759 72\n         L762 83\n         C738 88 717 88 690 85Z\"\n      fill=\"#a6000b\"\n      stroke=\"#6e0006\"\n      stroke-width=\"2\"\n    />\n\n    <!-- Riflessi carrozzeria -->\n    <path\n      d=\"M73 96\n         C164 77 255 83 330 74\n         C405 66 529 68 641 83\"\n      stroke=\"#ffffff\"\n      stroke-width=\"9\"\n      opacity=\"0.28\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n    />\n\n    <path\n      d=\"M96 119\n         C191 103 276 100 364 96\n         C459 92 563 95 669 111\"\n      stroke=\"#ffb5b5\"\n      stroke-width=\"5\"\n      opacity=\"0.28\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n    />\n\n    <path\n      d=\"M275 151\n         C359 143 454 143 537 151\"\n      stroke=\"#ffffff\"\n      stroke-width=\"6\"\n      opacity=\"0.45\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n    />\n\n    <path\n      d=\"M560 119\n         C600 111 640 105 684 105\"\n      stroke=\"#ffffff\"\n      stroke-width=\"5\"\n      opacity=\"0.32\"\n      fill=\"none\"\n      stroke-linecap=\"round\"\n    />\n\n    <!-- Passaruota anteriori e posteriori -->\n    <path\n      d=\"M88 205\n         C96 163 126 135 164 135\n         C204 135 234 163 240 205\"\n      fill=\"none\"\n      stroke=\"#420004\"\n      stroke-width=\"9\"\n      stroke-linecap=\"round\"\n    />\n\n    <path\n      d=\"M493 205\n         C501 163 530 135 568 135\n         C608 135 636 163 642 205\"\n      fill=\"none\"\n      stroke=\"#420004\"\n      stroke-width=\"9\"\n      stroke-linecap=\"round\"\n    />\n\n    <!-- Ruota anteriore -->\n    <g transform=\"translate(164 205)\">\n      <circle r=\"55\" fill=\"#090909\"/>\n      <circle r=\"45\" fill=\"url(#wheelDark)\"/>\n      <circle r=\"34\" fill=\"url(#rimGradient)\"/>\n      <circle r=\"10\" fill=\"#222\"/>\n      <circle r=\"5\" fill=\"#dddddd\"/>\n\n      <g fill=\"#1a1a1a\" stroke=\"#d7d7d7\" stroke-width=\"2\">\n        <path d=\"M-5 -34 L5 -34 L11 -12 L-11 -12Z\"/>\n        <path d=\"M-5 34 L5 34 L11 12 L-11 12Z\"/>\n        <path d=\"M-34 -5 L-34 5 L-12 11 L-12 -11Z\"/>\n        <path d=\"M34 -5 L34 5 L12 11 L12 -11Z\"/>\n        <path d=\"M-28 -23 L-20 -31 L-5 -11 L-13 -5Z\"/>\n        <path d=\"M28 23 L20 31 L5 11 L13 5Z\"/>\n        <path d=\"M28 -23 L20 -31 L5 -11 L13 -5Z\"/>\n        <path d=\"M-28 23 L-20 31 L-5 11 L-13 5Z\"/>\n      </g>\n\n      <circle r=\"50\" fill=\"none\" stroke=\"#cfcfcf\" stroke-width=\"4\" opacity=\"0.8\"/>\n      <circle r=\"24\" fill=\"none\" stroke=\"#111\" stroke-width=\"5\" opacity=\"0.8\"/>\n    </g>\n\n    <!-- Ruota posteriore -->\n    <g transform=\"translate(568 205)\">\n      <circle r=\"55\" fill=\"#090909\"/>\n      <circle r=\"45\" fill=\"url(#wheelDark)\"/>\n      <circle r=\"34\" fill=\"url(#rimGradient)\"/>\n      <circle r=\"10\" fill=\"#222\"/>\n      <circle r=\"5\" fill=\"#dddddd\"/>\n\n      <g fill=\"#1a1a1a\" stroke=\"#d7d7d7\" stroke-width=\"2\">\n        <path d=\"M-5 -34 L5 -34 L11 -12 L-11 -12Z\"/>\n        <path d=\"M-5 34 L5 34 L11 12 L-11 12Z\"/>\n        <path d=\"M-34 -5 L-34 5 L-12 11 L-12 -11Z\"/>\n        <path d=\"M34 -5 L34 5 L12 11 L12 -11Z\"/>\n        <path d=\"M-28 -23 L-20 -31 L-5 -11 L-13 -5Z\"/>\n        <path d=\"M28 23 L20 31 L5 11 L13 5Z\"/>\n        <path d=\"M28 -23 L20 -31 L5 -11 L13 -5Z\"/>\n        <path d=\"M-28 23 L-20 31 L-5 11 L-13 5Z\"/>\n      </g>\n\n      <circle r=\"50\" fill=\"none\" stroke=\"#cfcfcf\" stroke-width=\"4\" opacity=\"0.8\"/>\n      <circle r=\"24\" fill=\"none\" stroke=\"#111\" stroke-width=\"5\" opacity=\"0.8\"/>\n    </g>\n\n  </g>\n</svg>"
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='20' y='25' width='24' height='16' rx='3' fill='#b97a45' stroke='#5b3420' stroke-width='2'/><rect x='21' y='12' width='22' height='15' rx='3' fill='#d39a60' stroke='#5b3420' stroke-width='2'/><path d='M23 41v13M41 41v13M24 27v-7M40 27v-7' stroke='#5b3420' stroke-width='3' stroke-linecap='round'/></svg>"
+    }
+  },
+  {
+    "id": "divano",
+    "label": "Divano",
+    "article": "un",
+    "symbol": "di",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='12' y='25' width='40' height='19' rx='7' fill='#4f8fcf' stroke='#1f4f80' stroke-width='2'/><rect x='15' y='17' width='34' height='16' rx='6' fill='#79afe0' stroke='#1f4f80' stroke-width='2'/><rect x='8' y='28' width='10' height='17' rx='5' fill='#3f7fbd'/><rect x='46' y='28' width='10' height='17' rx='5' fill='#3f7fbd'/><path d='M19 34h26M18 45v5M46 45v5' stroke='#1f4f80' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "poltrona",
+    "label": "Poltrona",
+    "article": "una",
+    "symbol": "po",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='19' y='22' width='26' height='25' rx='8' fill='#9b6ad6' stroke='#4d2c7a' stroke-width='2'/><rect x='21' y='15' width='22' height='17' rx='7' fill='#b58ce4' stroke='#4d2c7a' stroke-width='2'/><rect x='13' y='28' width='11' height='18' rx='6' fill='#8256be'/><rect x='40' y='28' width='11' height='18' rx='6' fill='#8256be'/></svg>"
+    }
+  },
+  {
+    "id": "tavolo",
+    "label": "Tavolo",
+    "article": "un",
+    "symbol": "ta",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='25' rx='22' ry='13' fill='#c58b50' stroke='#5d371c' stroke-width='2'/><path d='M18 32v16M46 32v16M27 35v17M37 35v17' stroke='#5d371c' stroke-width='4' stroke-linecap='round'/></svg>"
+    }
+  },
+  {
+    "id": "lampada",
+    "label": "Lampada",
+    "article": "una",
+    "symbol": "la",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M23 24h18l-4-13H27z' fill='#ffd166' stroke='#795548' stroke-width='2'/><path d='M32 24v24M22 52h20' stroke='#795548' stroke-width='4' stroke-linecap='round'/><circle cx='32' cy='20' r='5' fill='#fff3b0' opacity='.8'/></svg>"
+    }
+  },
+  {
+    "id": "pouf",
+    "label": "Pouf",
+    "article": "un",
+    "symbol": "po2",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='41' rx='18' ry='8' fill='#8ecae6' stroke='#246982' stroke-width='2'/><rect x='14' y='24' width='36' height='18' rx='9' fill='#a8dadc' stroke='#246982' stroke-width='2'/><ellipse cx='32' cy='24' rx='18' ry='8' fill='#c7f2f2' stroke='#246982' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "fornello",
+    "label": "Fornello",
+    "article": "un",
+    "symbol": "fo",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='12' y='16' width='40' height='35' rx='4' fill='#d9dde3' stroke='#555' stroke-width='2'/><circle cx='23' cy='28' r='6' fill='none' stroke='#333' stroke-width='3'/><circle cx='41' cy='28' r='6' fill='none' stroke='#333' stroke-width='3'/><circle cx='23' cy='43' r='4' fill='#333'/><circle cx='41' cy='43' r='4' fill='#333'/></svg>"
+    }
+  },
+  {
+    "id": "frigorifero",
+    "label": "Frigorifero",
+    "article": "un",
+    "symbol": "fr",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='20' y='8' width='26' height='48' rx='4' fill='#e9f2f7' stroke='#597080' stroke-width='2'/><path d='M20 27h26M41 15v8M41 34v13' stroke='#597080' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "forno",
+    "label": "Forno",
+    "article": "un",
+    "symbol": "fo2",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='12' y='15' width='40' height='36' rx='4' fill='#555' stroke='#222' stroke-width='2'/><rect x='18' y='25' width='28' height='18' rx='2' fill='#9fd3ff'/><circle cx='21' cy='20' r='2' fill='#eee'/><circle cx='29' cy='20' r='2' fill='#eee'/><circle cx='37' cy='20' r='2' fill='#eee'/></svg>"
+    }
+  },
+  {
+    "id": "microonde",
+    "label": "Microonde",
+    "article": "un",
+    "symbol": "mi",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='10' y='19' width='44' height='28' rx='4' fill='#ccd5dd' stroke='#4a5964' stroke-width='2'/><rect x='15' y='24' width='25' height='18' rx='2' fill='#7cb7d8'/><rect x='44' y='24' width='6' height='18' rx='2' fill='#607d8b'/><circle cx='47' cy='29' r='1.5' fill='#fff'/><circle cx='47' cy='36' r='1.5' fill='#fff'/></svg>"
+    }
+  },
+  {
+    "id": "cestino",
+    "label": "Cestino",
+    "article": "un",
+    "symbol": "ce",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M20 20h24l-3 34H23z' fill='#78909c' stroke='#37474f' stroke-width='2'/><path d='M18 20h28M24 16h16M26 27v20M32 27v20M38 27v20' stroke='#37474f' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "buccia_di_banana",
+    "label": "Buccia di banana",
+    "article": "una",
+    "symbol": "bdb",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M31 21c-5 12-12 16-19 19 10 0 16-3 21-12z' fill='#ffd54f' stroke='#8a6d00' stroke-width='2'/><path d='M33 21c4 12 10 17 18 20-10 1-17-3-21-13z' fill='#ffeb80' stroke='#8a6d00' stroke-width='2'/><path d='M32 20c-2 13 0 22 3 30-7-6-9-16-6-30z' fill='#f6c343' stroke='#8a6d00' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "water",
+    "label": "Water",
+    "article": "un",
+    "symbol": "wa",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='22' y='10' width='22' height='13' rx='3' fill='#eaf8ff' stroke='#5d8aa8' stroke-width='2'/><ellipse cx='32' cy='36' rx='15' ry='12' fill='#ffffff' stroke='#5d8aa8' stroke-width='2'/><ellipse cx='32' cy='34' rx='8' ry='5' fill='#bde9ff'/><path d='M24 46h16l4 8H20z' fill='#eaf8ff' stroke='#5d8aa8' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "doccia",
+    "label": "Doccia",
+    "article": "una",
+    "symbol": "do",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='15' y='46' width='34' height='7' rx='3' fill='#cfd8dc' stroke='#607d8b' stroke-width='2'/><path d='M22 46V15h19' stroke='#607d8b' stroke-width='3' fill='none'/><path d='M41 16c8 3 10 8 8 14' stroke='#607d8b' stroke-width='3' fill='none'/><path d='M36 31l-2 5M43 32l-1 6M50 31l2 5' stroke='#4fc3f7' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "lavandino",
+    "label": "Lavandino",
+    "article": "un",
+    "symbol": "la2",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='31' rx='19' ry='10' fill='#fff' stroke='#5d8aa8' stroke-width='2'/><path d='M24 39h16l3 14H21zM31 20v-5h8' stroke='#5d8aa8' stroke-width='3' fill='none'/><circle cx='32' cy='31' r='2' fill='#5d8aa8'/></svg>"
+    }
+  },
+  {
+    "id": "lavatrice",
+    "label": "Lavatrice",
+    "article": "una",
+    "symbol": "la3",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='17' y='10' width='30' height='46' rx='4' fill='#e8edf1' stroke='#50616b' stroke-width='2'/><circle cx='32' cy='36' r='12' fill='#9fd3ff' stroke='#50616b' stroke-width='3'/><circle cx='25' cy='18' r='2' fill='#50616b'/><rect x='31' y='16' width='10' height='4' rx='1' fill='#b0bec5'/></svg>"
+    }
+  },
+  {
+    "id": "armadio",
+    "label": "Armadio",
+    "article": "un",
+    "symbol": "ar",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='16' y='8' width='32' height='49' rx='3' fill='#b9824a' stroke='#5a351b' stroke-width='2'/><path d='M32 9v47M27 32h-3M40 32h-3' stroke='#5a351b' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "comodino",
+    "label": "Comodino",
+    "article": "un",
+    "symbol": "co",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='19' y='23' width='26' height='27' rx='3' fill='#c48a52' stroke='#5a351b' stroke-width='2'/><path d='M19 34h26M32 27v3M32 39v3' stroke='#5a351b' stroke-width='2'/><rect x='22' y='17' width='20' height='6' rx='2' fill='#d5a16b'/></svg>"
+    }
+  },
+  {
+    "id": "letto",
+    "label": "Letto",
+    "article": "un",
+    "symbol": "le",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='14' y='16' width='36' height='38' rx='5' fill='#456f9f' stroke='#1f3f5f' stroke-width='2'/><rect x='18' y='20' width='28' height='11' rx='3' fill='#f8f1df'/><path d='M14 36h36' stroke='#1f3f5f' stroke-width='2'/><rect x='18' y='38' width='28' height='11' rx='3' fill='#6ea8d9'/></svg>"
+    }
+  },
+  {
+    "id": "cassettiera",
+    "label": "Cassettiera",
+    "article": "una",
+    "symbol": "ca",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='16' y='14' width='32' height='40' rx='3' fill='#bd7f43' stroke='#5a351b' stroke-width='2'/><path d='M16 26h32M16 38h32M16 50h32' stroke='#5a351b' stroke-width='2'/><circle cx='32' cy='20' r='2' fill='#5a351b'/><circle cx='32' cy='32' r='2' fill='#5a351b'/><circle cx='32' cy='44' r='2' fill='#5a351b'/></svg>"
+    }
+  },
+  {
+    "id": "tappeto",
+    "label": "Tappeto",
+    "article": "un",
+    "symbol": "ta2",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='13' y='17' width='38' height='30' rx='4' fill='#ef476f' stroke='#8c1d3a' stroke-width='2'/><path d='M18 24h28M18 32h28M18 40h28' stroke='#ffd166' stroke-width='2'/><path d='M13 20l-5 2M13 44l-5 2M51 20l5 2M51 44l5 2' stroke='#8c1d3a' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "libreria",
+    "label": "Libreria",
+    "article": "una",
+    "symbol": "li",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='13' y='10' width='38' height='47' rx='3' fill='#8d6e63' stroke='#4e342e' stroke-width='2'/><path d='M13 23h38M13 36h38M13 49h38' stroke='#4e342e' stroke-width='2'/><rect x='17' y='13' width='5' height='10' fill='#e76f51'/><rect x='24' y='13' width='4' height='10' fill='#2a9d8f'/><rect x='31' y='26' width='5' height='10' fill='#e9c46a'/><rect x='39' y='39' width='6' height='10' fill='#457b9d'/></svg>"
+    }
+  },
+  {
+    "id": "vaso_di_piante",
+    "label": "Vaso di piante",
+    "article": "un",
+    "symbol": "vdp",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni",
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M23 40h18l-3 15H26z' fill='#b5651d' stroke='#5d3414' stroke-width='2'/><ellipse cx='32' cy='39' rx='11' ry='4' fill='#8a4f20'/><path d='M32 38C20 31 22 19 34 28C42 18 50 30 36 38C27 23 16 28 25 39' fill='#4caf50' stroke='#1b5e20' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "tv",
+    "label": "TV",
+    "article": "una",
+    "symbol": "tv",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='10' y='15' width='44' height='29' rx='3' fill='#111' stroke='#555' stroke-width='2'/><rect x='16' y='21' width='32' height='17' fill='#263238'/><path d='M32 44v8M22 52h20' stroke='#555' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "pc",
+    "label": "PC",
+    "article": "un",
+    "symbol": "pc",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='14' y='12' width='36' height='25' rx='3' fill='#263238' stroke='#546e7a' stroke-width='2'/><rect x='20' y='18' width='24' height='13' fill='#90caf9'/><path d='M32 37v8M22 46h20' stroke='#546e7a' stroke-width='3'/><rect x='16' y='50' width='30' height='5' rx='2' fill='#37474f'/><ellipse cx='50' cy='52' rx='4' ry='3' fill='#37474f'/></svg>"
+    }
+  },
+  {
+    "id": "sgabello",
+    "label": "Sgabello",
+    "article": "un",
+    "symbol": "sg",
+    "walkable": true,
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='23' rx='15' ry='7' fill='#d79b5b' stroke='#6d3b18' stroke-width='2'/><path d='M23 28l-5 23M41 28l5 23M32 30v22M20 43h24' stroke='#6d3b18' stroke-width='3' stroke-linecap='round'/></svg>"
+    }
+  },
+  {
+    "id": "gatto",
+    "label": "Gatto",
+    "article": "un",
+    "symbol": "ga",
+    "walkable": false,
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#7d5a4f' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-8M40 20l5-8' fill='#7d5a4f' stroke='#4a332a' stroke-width='2'/><circle cx='32' cy='24' r='11' fill='#7d5a4f' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M48 36c9 0 7-10 1-9' stroke='#4a332a' stroke-width='3' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "cane",
+    "label": "Cane",
+    "article": "un",
+    "symbol": "ca2",
+    "walkable": false,
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#b8793c' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-8M40 20l5-8' fill='#b8793c' stroke='#4a332a' stroke-width='2'/><circle cx='32' cy='24' r='11' fill='#b8793c' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M48 36c9 0 7-10 1-9' stroke='#4a332a' stroke-width='3' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "coniglio",
+    "label": "Coniglio",
+    "article": "un",
+    "symbol": "co2",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#d9d9d9' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-11M40 20l5-11' stroke='#d9d9d9' stroke-width='6' stroke-linecap='round'/><circle cx='32' cy='24' r='11' fill='#d9d9d9' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "criceto",
+    "label": "Criceto",
+    "article": "un",
+    "symbol": "cr",
+    "walkable": false,
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#d9a066' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-8M40 20l5-8' fill='#d9a066' stroke='#4a332a' stroke-width='2'/><circle cx='32' cy='24' r='11' fill='#d9a066' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "cavallo",
+    "label": "Cavallo",
+    "article": "un",
+    "symbol": "ca3",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Campagna",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#8b5a2b' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-8M40 20l5-8' fill='#8b5a2b' stroke='#4a332a' stroke-width='2'/><circle cx='32' cy='24' r='11' fill='#8b5a2b' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M48 36c9 0 7-10 1-9' stroke='#4a332a' stroke-width='3' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "mucca",
+    "label": "Mucca",
+    "article": "una",
+    "symbol": "mu",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#f6f6f6' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-8M40 20l5-8' fill='#f6f6f6' stroke='#4a332a' stroke-width='2'/><path d='M20 20l-5-6M44 20l5-6' stroke='#5a3b25' stroke-width='3'/><circle cx='32' cy='24' r='11' fill='#f6f6f6' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M27 35c4-8 9 1 3 5M39 28c5 2 3 8-2 6' fill='#333'/><path d='M48 36c9 0 7-10 1-9' stroke='#4a332a' stroke-width='3' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "asino",
+    "label": "Asino",
+    "article": "un",
+    "symbol": "as",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Campagna",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#9e9e9e' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-11M40 20l5-11' stroke='#9e9e9e' stroke-width='6' stroke-linecap='round'/><circle cx='32' cy='24' r='11' fill='#9e9e9e' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M48 36c9 0 7-10 1-9' stroke='#4a332a' stroke-width='3' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "toro",
+    "label": "Toro",
+    "article": "un",
+    "symbol": "to",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='18' ry='13' fill='#6d4c41' stroke='#4a332a' stroke-width='2'/><path d='M24 20l-5-8M40 20l5-8' fill='#6d4c41' stroke='#4a332a' stroke-width='2'/><path d='M20 20l-5-6M44 20l5-6' stroke='#5a3b25' stroke-width='3'/><circle cx='32' cy='24' r='11' fill='#6d4c41' stroke='#4a332a' stroke-width='2'/><circle cx='28' cy='23' r='1.7' fill='#111'/><circle cx='36' cy='23' r='1.7' fill='#111'/><path d='M30 28q2 2 4 0' stroke='#111' stroke-width='2' fill='none'/><path d='M48 36c9 0 7-10 1-9' stroke='#4a332a' stroke-width='3' fill='none'/><path d='M23 47v6M41 47v6' stroke='#4a332a' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "pesce",
+    "label": "Pesce",
+    "article": "un",
+    "symbol": "pe",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='30' cy='32' rx='18' ry='11' fill='#4cc9f0' stroke='#176b87' stroke-width='2'/><path d='M47 32l11-9v18z' fill='#48cae4' stroke='#176b87' stroke-width='2'/><circle cx='22' cy='29' r='2' fill='#111'/><path d='M29 22l7-8M30 42l7 8' stroke='#176b87' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "polipo",
+    "label": "Polipo",
+    "article": "un",
+    "symbol": "po3",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='24' rx='14' ry='13' fill='#b565d9' stroke='#5e2a80' stroke-width='2'/><circle cx='27' cy='22' r='2' fill='#111'/><circle cx='37' cy='22' r='2' fill='#111'/><path d='M18 35c-8 8 2 12 4 5M25 36c-6 13 8 10 5 0M32 37c-2 14 10 12 6 0M40 36c3 13 15 6 5-1M47 34c11 8 1 14-4 6' stroke='#5e2a80' stroke-width='4' fill='none' stroke-linecap='round'/></svg>"
+    }
+  },
+  {
+    "id": "cozza",
+    "label": "Cozza",
+    "article": "una",
+    "symbol": "co3",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='33' rx='16' ry='24' fill='#263238' stroke='#111' stroke-width='2'/><path d='M21 21c9 5 13 18 8 34M32 10c2 17 3 32 0 46M43 21c-9 5-13 18-8 34' stroke='#607d8b' stroke-width='2' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "riccio_di_mare",
+    "label": "Riccio di mare",
+    "article": "un",
+    "symbol": "rdm",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><g stroke='#1b1b1b' stroke-width='3' stroke-linecap='round'><path d='M32 5v54M5 32h54M13 13l38 38M51 13L13 51M21 7l22 50M7 21l50 22M43 7L21 57M57 21L7 43'/></g><circle cx='32' cy='32' r='16' fill='#2d2d2d' stroke='#111' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "scarafaggio",
+    "label": "Scarafaggio",
+    "article": "un",
+    "symbol": "sc",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='34' rx='11' ry='18' fill='#6d3b1f' stroke='#2e160b' stroke-width='2'/><path d='M32 16v36M21 30h22M22 38h20M24 19C16 9 11 13 8 8M40 19c8-10 13-6 16-11M22 30L9 24M42 30l13-6M22 39L9 45M42 39l13 6' stroke='#2e160b' stroke-width='2' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "geco",
+    "label": "Geco",
+    "article": "un",
+    "symbol": "ge",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Casa & Interni",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M18 33c10-16 28-10 29 0c-6 4-19 5-29 0z' fill='#7bc96f' stroke='#2e7d32' stroke-width='2'/><path d='M16 33C7 39 10 47 20 42M47 33c9 6 6 14-4 9M29 39l-7 11M37 39l7 11M18 33l-9-7M46 33l9-7' stroke='#2e7d32' stroke-width='3' fill='none' stroke-linecap='round'/><circle cx='26' cy='29' r='2' fill='#111'/><circle cx='38' cy='29' r='2' fill='#111'/></svg>"
+    }
+  },
+  {
+    "id": "serpente",
+    "label": "Serpente",
+    "article": "un",
+    "symbol": "se2",
+    "walkable": false,
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M11 40c11-17 26 10 39-7c7-6 1-16-8-12' stroke='#4caf50' stroke-width='9' fill='none' stroke-linecap='round'/><path d='M44 20l7-5M45 21l8 2' stroke='#2e7d32' stroke-width='2'/><circle cx='39' cy='19' r='1.5' fill='#111'/></svg>"
+    }
+  },
+  {
+    "id": "lampione",
+    "label": "Lampione",
+    "article": "un",
+    "symbol": "la4",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M23 24h18l-4-13H27z' fill='#ffd166' stroke='#795548' stroke-width='2'/><path d='M32 24v24M22 52h20' stroke='#795548' stroke-width='4' stroke-linecap='round'/><circle cx='32' cy='20' r='5' fill='#fff3b0' opacity='.8'/></svg>"
+    }
+  },
+  {
+    "id": "cassonetto",
+    "label": "Cassonetto",
+    "article": "un",
+    "symbol": "ca4",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='10' y='21' width='44' height='29' rx='4' fill='#4caf50' stroke='#1b5e20' stroke-width='2'/><path d='M14 18h36l4 7H10z' fill='#66bb6a' stroke='#1b5e20' stroke-width='2'/><circle cx='20' cy='52' r='4' fill='#333'/><circle cx='44' cy='52' r='4' fill='#333'/></svg>"
+    }
+  },
+  {
+    "id": "panchina",
+    "label": "Panchina",
+    "article": "una",
+    "symbol": "pa",
+    "walkable": true,
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M13 25h38M13 33h38M16 41h32' stroke='#8d5524' stroke-width='5' stroke-linecap='round'/><path d='M20 43v9M44 43v9M18 22v22M46 22v22' stroke='#4e342e' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "aiuola",
+    "label": "Aiuola",
+    "article": "una",
+    "symbol": "ai",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='38' rx='23' ry='13' fill='#8d6e63' stroke='#5d4037' stroke-width='2'/><circle cx='23' cy='31' r='5' fill='#ff6b6b'/><circle cx='34' cy='28' r='5' fill='#ffd166'/><circle cx='44' cy='33' r='5' fill='#9b5de5'/><path d='M24 36v9M34 33v11M44 38v7' stroke='#2e7d32' stroke-width='2'/></svg>"
     }
   },
   {
     "id": "fontana",
-    "label": "fontana",
+    "label": "Fontana",
     "article": "una",
-    "symbol": "ft",
+    "symbol": "fo3",
     "walkable": false,
     "categories": [
-      "nature"
+      "Esterno urbano",
+      "Casa & Interni"
     ],
     "render": {
       "type": "svg",
       "scale": 0.8,
-      "svgCode": "<svg\n  width=\"512\"\n  height=\"512\"\n  viewBox=\"0 0 512 512\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  role=\"img\"\n  aria-labelledby=\"fountainTitle fountainDesc\"\n>\n  <title id=\"fountainTitle\">Icona vettoriale fontana</title>\n  <desc id=\"fountainDesc\">Icona SVG stilizzata di una fontana classica con getti d'acqua blu luminosi.</desc>\n\n  <defs>\n    <linearGradient id=\"stoneBase\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#f4dfb7\"/>\n      <stop offset=\"45%\" stop-color=\"#c89b5c\"/>\n      <stop offset=\"100%\" stop-color=\"#8d632f\"/>\n    </linearGradient>\n\n    <linearGradient id=\"stoneLight\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#fff4d8\"/>\n      <stop offset=\"50%\" stop-color=\"#d3b17a\"/>\n      <stop offset=\"100%\" stop-color=\"#9b7139\"/>\n    </linearGradient>\n\n    <linearGradient id=\"waterBlue\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#3145ff\" stop-opacity=\"0.85\"/>\n      <stop offset=\"45%\" stop-color=\"#4f8dff\" stop-opacity=\"0.55\"/>\n      <stop offset=\"100%\" stop-color=\"#9ed8ff\" stop-opacity=\"0.15\"/>\n    </linearGradient>\n\n    <radialGradient id=\"waterGlow\" cx=\"50%\" cy=\"50%\" r=\"50%\">\n      <stop offset=\"0%\" stop-color=\"#ffffff\" stop-opacity=\"0.95\"/>\n      <stop offset=\"35%\" stop-color=\"#4f8dff\" stop-opacity=\"0.75\"/>\n      <stop offset=\"70%\" stop-color=\"#3048ff\" stop-opacity=\"0.35\"/>\n      <stop offset=\"100%\" stop-color=\"#3048ff\" stop-opacity=\"0\"/>\n    </radialGradient>\n\n    <linearGradient id=\"rimDark\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n      <stop offset=\"0%\" stop-color=\"#6b4a22\"/>\n      <stop offset=\"50%\" stop-color=\"#c5914a\"/>\n      <stop offset=\"100%\" stop-color=\"#4d3517\"/>\n    </linearGradient>\n\n    <filter id=\"softFountainShadow\" x=\"-30%\" y=\"-30%\" width=\"160%\" height=\"180%\">\n      <feDropShadow dx=\"0\" dy=\"12\" stdDeviation=\"10\" flood-color=\"#000000\" flood-opacity=\"0.28\"/>\n    </filter>\n\n    <filter id=\"blueGlow\" x=\"-60%\" y=\"-60%\" width=\"220%\" height=\"220%\">\n      <feGaussianBlur stdDeviation=\"4\" result=\"blur\"/>\n      <feMerge>\n        <feMergeNode in=\"blur\"/>\n        <feMergeNode in=\"SourceGraphic\"/>\n      </feMerge>\n    </filter>\n  </defs>\n\n  <!-- Ombra a terra -->\n  <ellipse\n    cx=\"256\"\n    cy=\"451\"\n    rx=\"155\"\n    ry=\"26\"\n    fill=\"#000000\"\n    opacity=\"0.20\"\n  />\n\n  <g filter=\"url(#softFountainShadow)\">\n\n    <!-- Getto centrale alto -->\n    <g filter=\"url(#blueGlow)\" fill=\"none\" stroke-linecap=\"round\">\n      <path\n        d=\"M256 98 C252 145 253 205 256 297\"\n        stroke=\"#3150ff\"\n        stroke-width=\"7\"\n        opacity=\"0.75\"\n      />\n      <path\n        d=\"M256 98 C261 153 260 213 256 300\"\n        stroke=\"#94c8ff\"\n        stroke-width=\"3\"\n        opacity=\"0.9\"\n      />\n\n      <ellipse\n        cx=\"256\"\n        cy=\"76\"\n        rx=\"13\"\n        ry=\"28\"\n        fill=\"#3346ff\"\n        opacity=\"0.75\"\n      />\n\n      <path\n        d=\"M248 93 C238 115 238 139 247 158\"\n        stroke=\"#3150ff\"\n        stroke-width=\"3\"\n        opacity=\"0.45\"\n      />\n      <path\n        d=\"M264 94 C274 117 273 139 265 158\"\n        stroke=\"#3150ff\"\n        stroke-width=\"3\"\n        opacity=\"0.45\"\n      />\n    </g>\n\n    <!-- Getti verticali interni -->\n    <g fill=\"none\" stroke-linecap=\"round\" filter=\"url(#blueGlow)\">\n      <path d=\"M205 305 C202 228 202 184 211 158\" stroke=\"url(#waterBlue)\" stroke-width=\"5\"/>\n      <path d=\"M225 305 C223 220 225 168 235 145\" stroke=\"url(#waterBlue)\" stroke-width=\"5\"/>\n      <path d=\"M246 305 C244 220 246 160 253 139\" stroke=\"url(#waterBlue)\" stroke-width=\"5\"/>\n      <path d=\"M267 305 C270 220 268 160 260 139\" stroke=\"url(#waterBlue)\" stroke-width=\"5\"/>\n      <path d=\"M287 305 C290 220 288 168 278 145\" stroke=\"url(#waterBlue)\" stroke-width=\"5\"/>\n      <path d=\"M307 305 C310 228 310 184 301 158\" stroke=\"url(#waterBlue)\" stroke-width=\"5\"/>\n\n      <path d=\"M218 305 C216 236 217 189 223 165\" stroke=\"#8dc5ff\" stroke-width=\"2\" opacity=\"0.8\"/>\n      <path d=\"M236 305 C234 233 235 178 241 154\" stroke=\"#8dc5ff\" stroke-width=\"2\" opacity=\"0.8\"/>\n      <path d=\"M276 305 C278 233 277 178 271 154\" stroke=\"#8dc5ff\" stroke-width=\"2\" opacity=\"0.8\"/>\n      <path d=\"M294 305 C296 236 295 189 289 165\" stroke=\"#8dc5ff\" stroke-width=\"2\" opacity=\"0.8\"/>\n    </g>\n\n    <!-- Archi d'acqua esterni -->\n    <g fill=\"none\" stroke-linecap=\"round\" filter=\"url(#blueGlow)\">\n      <path d=\"M103 310 C114 244 143 244 153 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.7\"/>\n      <path d=\"M126 310 C136 239 165 239 175 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.7\"/>\n      <path d=\"M149 310 C159 245 185 245 194 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.7\"/>\n      <path d=\"M181 310 C188 250 207 250 213 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.65\"/>\n\n      <path d=\"M409 310 C398 244 369 244 359 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.7\"/>\n      <path d=\"M386 310 C376 239 347 239 337 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.7\"/>\n      <path d=\"M363 310 C353 245 327 245 318 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.7\"/>\n      <path d=\"M331 310 C324 250 305 250 299 310\" stroke=\"#3150ff\" stroke-width=\"4\" opacity=\"0.65\"/>\n\n      <path d=\"M103 310 C116 257 141 257 153 310\" stroke=\"#9bd2ff\" stroke-width=\"2\" opacity=\"0.9\"/>\n      <path d=\"M409 310 C396 257 371 257 359 310\" stroke=\"#9bd2ff\" stroke-width=\"2\" opacity=\"0.9\"/>\n    </g>\n\n    <!-- Bagliore dell'acqua nella vasca -->\n    <ellipse\n      cx=\"256\"\n      cy=\"306\"\n      rx=\"162\"\n      ry=\"24\"\n      fill=\"url(#waterGlow)\"\n      opacity=\"0.95\"\n      filter=\"url(#blueGlow)\"\n    />\n\n    <!-- Vasca superiore interna -->\n    <ellipse\n      cx=\"256\"\n      cy=\"307\"\n      rx=\"178\"\n      ry=\"33\"\n      fill=\"#1b1b1b\"\n      opacity=\"0.45\"\n    />\n\n    <ellipse\n      cx=\"256\"\n      cy=\"304\"\n      rx=\"168\"\n      ry=\"24\"\n      fill=\"#2432ff\"\n      opacity=\"0.28\"\n    />\n\n    <!-- Bordo alto della vasca -->\n    <path\n      d=\"M76 298\n         C88 275 424 275 436 298\n         C445 315 425 326 394 330\n         C316 340 194 340 116 330\n         C86 326 67 315 76 298Z\"\n      fill=\"url(#rimDark)\"\n      stroke=\"#4d3213\"\n      stroke-width=\"4\"\n      stroke-linejoin=\"round\"\n    />\n\n    <ellipse\n      cx=\"256\"\n      cy=\"296\"\n      rx=\"180\"\n      ry=\"31\"\n      fill=\"none\"\n      stroke=\"#f2c982\"\n      stroke-width=\"5\"\n      opacity=\"0.8\"\n    />\n\n    <!-- Rigature del bordo -->\n    <g stroke=\"#3f2b15\" stroke-width=\"2\" opacity=\"0.55\">\n      <path d=\"M91 287 L91 320\"/>\n      <path d=\"M105 284 L105 324\"/>\n      <path d=\"M119 282 L119 326\"/>\n      <path d=\"M133 281 L133 328\"/>\n      <path d=\"M147 280 L147 329\"/>\n      <path d=\"M161 279 L161 330\"/>\n      <path d=\"M175 278 L175 331\"/>\n      <path d=\"M189 277 L189 332\"/>\n      <path d=\"M203 276 L203 333\"/>\n      <path d=\"M217 276 L217 333\"/>\n      <path d=\"M231 275 L231 334\"/>\n      <path d=\"M245 275 L245 334\"/>\n      <path d=\"M259 275 L259 334\"/>\n      <path d=\"M273 275 L273 334\"/>\n      <path d=\"M287 276 L287 333\"/>\n      <path d=\"M301 276 L301 333\"/>\n      <path d=\"M315 277 L315 332\"/>\n      <path d=\"M329 278 L329 331\"/>\n      <path d=\"M343 279 L343 330\"/>\n      <path d=\"M357 280 L357 329\"/>\n      <path d=\"M371 281 L371 328\"/>\n      <path d=\"M385 282 L385 326\"/>\n      <path d=\"M399 284 L399 324\"/>\n      <path d=\"M413 287 L413 320\"/>\n    </g>\n\n    <!-- Coppa della fontana -->\n    <path\n      d=\"M105 324\n         C135 360 176 380 256 381\n         C336 380 377 360 407 324\n         C368 338 304 347 256 347\n         C208 347 144 338 105 324Z\"\n      fill=\"url(#stoneLight)\"\n      stroke=\"#8d632f\"\n      stroke-width=\"4\"\n      stroke-linejoin=\"round\"\n    />\n\n    <!-- Ombra sottocoppa -->\n    <path\n      d=\"M124 338\n         C178 354 334 354 388 338\n         C364 366 326 380 256 381\n         C186 380 148 366 124 338Z\"\n      fill=\"#8d632f\"\n      opacity=\"0.35\"\n    />\n\n    <!-- Decorazioni coppa -->\n    <g stroke=\"#7a5a32\" stroke-width=\"2\" opacity=\"0.45\">\n      <path d=\"M166 345 C175 363 180 373 186 380\"/>\n      <path d=\"M188 350 C195 366 201 376 207 382\"/>\n      <path d=\"M210 354 C216 369 222 379 228 384\"/>\n      <path d=\"M232 356 C236 370 242 380 248 384\"/>\n      <path d=\"M256 357 C256 371 256 379 256 385\"/>\n      <path d=\"M280 356 C276 370 270 380 264 384\"/>\n      <path d=\"M302 354 C296 369 290 379 284 384\"/>\n      <path d=\"M324 350 C317 366 311 376 305 382\"/>\n      <path d=\"M346 345 C337 363 332 373 326 380\"/>\n    </g>\n\n    <!-- Colonna centrale -->\n    <path\n      d=\"M204 379\n         C214 366 298 366 308 379\n         L322 432\n         C306 451 206 451 190 432Z\"\n      fill=\"url(#stoneLight)\"\n      stroke=\"#8d632f\"\n      stroke-width=\"4\"\n      stroke-linejoin=\"round\"\n    />\n\n    <path\n      d=\"M205 383\n         C224 395 287 395 307 383\"\n      fill=\"none\"\n      stroke=\"#fff1d3\"\n      stroke-width=\"4\"\n      opacity=\"0.8\"\n    />\n\n    <path\n      d=\"M194 428\n         C212 441 300 441 318 428\"\n      fill=\"none\"\n      stroke=\"#7a5528\"\n      stroke-width=\"4\"\n      opacity=\"0.65\"\n    />\n\n    <!-- Trama colonna -->\n    <g stroke=\"#8a6332\" stroke-width=\"2\" opacity=\"0.35\">\n      <path d=\"M211 384 L242 442\"/>\n      <path d=\"M225 381 L256 445\"/>\n      <path d=\"M239 379 L270 445\"/>\n      <path d=\"M253 378 L284 443\"/>\n      <path d=\"M267 378 L298 439\"/>\n      <path d=\"M281 380 L309 431\"/>\n      <path d=\"M301 383 L226 442\"/>\n      <path d=\"M286 379 L211 431\"/>\n    </g>\n\n    <!-- Base inferiore -->\n    <path\n      d=\"M150 419\n         C177 397 335 397 362 419\n         C386 438 369 468 329 476\n         C288 485 224 485 183 476\n         C143 468 126 438 150 419Z\"\n      fill=\"url(#stoneBase)\"\n      stroke=\"#7b5526\"\n      stroke-width=\"4\"\n      stroke-linejoin=\"round\"\n    />\n\n    <ellipse\n      cx=\"256\"\n      cy=\"420\"\n      rx=\"109\"\n      ry=\"31\"\n      fill=\"#b9823d\"\n      opacity=\"0.45\"\n    />\n\n    <ellipse\n      cx=\"256\"\n      cy=\"424\"\n      rx=\"112\"\n      ry=\"33\"\n      fill=\"none\"\n      stroke=\"#f3cc8f\"\n      stroke-width=\"4\"\n      opacity=\"0.85\"\n    />\n\n    <!-- Rigature base -->\n    <g stroke=\"#6f4d25\" stroke-width=\"2\" opacity=\"0.55\">\n      <path d=\"M154 423 L183 475\"/>\n      <path d=\"M169 413 L201 480\"/>\n      <path d=\"M185 407 L219 482\"/>\n      <path d=\"M202 403 L237 484\"/>\n      <path d=\"M220 401 L253 485\"/>\n      <path d=\"M238 399 L268 485\"/>\n      <path d=\"M256 398 L283 484\"/>\n      <path d=\"M274 399 L300 482\"/>\n      <path d=\"M292 401 L317 478\"/>\n      <path d=\"M310 404 L335 472\"/>\n      <path d=\"M328 409 L350 461\"/>\n      <path d=\"M346 417 L363 443\"/>\n    </g>\n\n    <!-- Bordo inferiore -->\n    <path\n      d=\"M151 447\n         C194 467 318 467 361 447\n         C354 465 332 476 298 481\n         C270 485 242 485 214 481\n         C180 476 158 465 151 447Z\"\n      fill=\"#9c6b31\"\n      opacity=\"0.35\"\n    />\n\n    <!-- Luce centrale acqua -->\n    <circle\n      cx=\"256\"\n      cy=\"306\"\n      r=\"18\"\n      fill=\"#ffffff\"\n      opacity=\"0.75\"\n      filter=\"url(#blueGlow)\"\n    />\n\n  </g>\n</svg>"
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='47' rx='22' ry='8' fill='#90caf9' stroke='#3b82a0' stroke-width='2'/><path d='M22 43h20l-4 8H26z' fill='#cfd8dc' stroke='#607d8b' stroke-width='2'/><rect x='27' y='23' width='10' height='20' rx='3' fill='#d7dde2' stroke='#607d8b' stroke-width='2'/><path d='M32 22c-4-8 4-8 0-15c4 7 12 9 7 18M32 22c4-8-4-8 0-15c-4 7-12 9-7 18' stroke='#4fc3f7' stroke-width='2' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "albero",
+    "label": "Albero",
+    "article": "un",
+    "symbol": "al",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='28' y='32' width='8' height='22' rx='3' fill='#795548'/><circle cx='24' cy='27' r='13' fill='#4caf50'/><circle cx='38' cy='25' r='14' fill='#43a047'/><circle cx='33' cy='16' r='12' fill='#66bb6a'/></svg>"
+    }
+  },
+  {
+    "id": "buca",
+    "label": "Buca",
+    "article": "una",
+    "symbol": "bu",
+    "walkable": true,
+    "categories": [
+      "Esterno urbano",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='36' rx='22' ry='12' fill='#3e2723'/><ellipse cx='32' cy='32' rx='16' ry='7' fill='#1b0f0b'/><path d='M14 34l5-5M45 28l6 5M27 44l-4 5' stroke='#795548' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "statua",
+    "label": "Statua",
+    "article": "una",
+    "symbol": "st",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='20' y='52' width='24' height='6' rx='2' fill='#90a4ae'/><circle cx='32' cy='18' r='7' fill='#cfd8dc' stroke='#607d8b' stroke-width='2'/><path d='M24 47c2-18 4-25 8-25s6 7 8 25z' fill='#dce3e6' stroke='#607d8b' stroke-width='2'/><path d='M24 29l-8 9M40 29l8-9' stroke='#607d8b' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "segnale_stradale",
+    "label": "Segnale stradale",
+    "article": "un",
+    "symbol": "ss",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M32 8l19 19l-19 19L13 27z' fill='#ffeb3b' stroke='#111' stroke-width='3'/><path d='M32 46v12' stroke='#555' stroke-width='4'/><path d='M24 27h16' stroke='#111' stroke-width='4'/></svg>"
+    }
+  },
+  {
+    "id": "semaforo",
+    "label": "Semaforo",
+    "article": "un",
+    "symbol": "se3",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='23' y='8' width='18' height='43' rx='5' fill='#263238' stroke='#111' stroke-width='2'/><circle cx='32' cy='18' r='5' fill='#e53935'/><circle cx='32' cy='30' r='5' fill='#fdd835'/><circle cx='32' cy='42' r='5' fill='#43a047'/><path d='M32 51v8' stroke='#555' stroke-width='4'/></svg>"
+    }
+  },
+  {
+    "id": "atm",
+    "label": "ATM",
+    "article": "un",
+    "symbol": "at",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='13' y='10' width='38' height='46' rx='4' fill='#2d6cdf' stroke='#173b7a' stroke-width='2'/><rect x='19' y='16' width='26' height='14' rx='2' fill='#b3e5fc'/><rect x='21' y='37' width='22' height='4' rx='1' fill='#102a54'/><g fill='#e8f0ff'><rect x='21' y='33' width='4' height='3'/><rect x='29' y='33' width='4' height='3'/><rect x='37' y='33' width='4' height='3'/><rect x='25' y='43' width='14' height='5'/></g></svg>"
+    }
+  },
+  {
+    "id": "auto",
+    "label": "Auto",
+    "article": "una",
+    "symbol": "au",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M12 36l6-12h27l8 12v8H12z' fill='#e63946' stroke='#7a1d25' stroke-width='2'/><rect x='23' y='26' width='17' height='9' fill='#a8dadc'/><circle cx='22' cy='45' r='5' fill='#222'/><circle cx='45' cy='45' r='5' fill='#222'/></svg>"
+    }
+  },
+  {
+    "id": "camion",
+    "label": "Camion",
+    "article": "un",
+    "symbol": "ca5",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='8' y='26' width='28' height='16' rx='2' fill='#4caf50' stroke='#1b5e20' stroke-width='2'/><rect x='36' y='21' width='18' height='21' rx='3' fill='#81c784' stroke='#1b5e20' stroke-width='2'/><rect x='41' y='25' width='8' height='7' fill='#b3e5fc'/><circle cx='20' cy='45' r='5' fill='#222'/><circle cx='45' cy='45' r='5' fill='#222'/></svg>"
+    }
+  },
+  {
+    "id": "ape_car",
+    "label": "Ape car",
+    "article": "una",
+    "symbol": "ac",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Esterno urbano",
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='10' y='29' width='24' height='13' rx='2' fill='#3fb8af' stroke='#145c58' stroke-width='2'/><path d='M34 23h14l6 10v9H34z' fill='#75d1cb' stroke='#145c58' stroke-width='2'/><rect x='39' y='26' width='8' height='7' fill='#d9fbff'/><circle cx='21' cy='45' r='5' fill='#222'/><circle cx='45' cy='45' r='5' fill='#222'/><circle cx='52' cy='39' r='4' fill='#222'/></svg>"
+    }
+  },
+  {
+    "id": "bicicletta",
+    "label": "Bicicletta",
+    "article": "una",
+    "symbol": "bi",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='20' cy='43' r='10' fill='none' stroke='#263238' stroke-width='3'/><circle cx='46' cy='43' r='10' fill='none' stroke='#263238' stroke-width='3'/><path d='M20 43l10-16l7 16H20l12 0l14 0l-11-16h-5M42 25h8M29 27h-8' stroke='#263238' stroke-width='3' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "moto",
+    "label": "Moto",
+    "article": "una",
+    "symbol": "mo",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='19' cy='43' r='8' fill='none' stroke='#222' stroke-width='3'/><circle cx='47' cy='43' r='8' fill='none' stroke='#222' stroke-width='3'/><path d='M20 43l11-14h13l5 14M31 29l-2-8h9M43 29l7-6' stroke='#222' stroke-width='3' fill='none'/><path d='M27 33h18l-4 8H22z' fill='#e63946'/></svg>"
+    }
+  },
+  {
+    "id": "triciclo",
+    "label": "Triciclo",
+    "article": "un",
+    "symbol": "tr",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='20' cy='44' r='7' fill='none' stroke='#222' stroke-width='3'/><circle cx='43' cy='46' r='6' fill='none' stroke='#222' stroke-width='3'/><circle cx='52' cy='46' r='6' fill='none' stroke='#222' stroke-width='3'/><path d='M20 44l16-16l10 18M36 28h10M35 29l-6-10M26 22h12' stroke='#222' stroke-width='3' fill='none'/><rect x='37' y='24' width='12' height='6' rx='2' fill='#ffb703'/></svg>"
+    }
+  },
+  {
+    "id": "motozappa",
+    "label": "Motozappa",
+    "article": "una",
+    "symbol": "mo2",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='25' y='27' width='18' height='12' rx='3' fill='#ef6c00' stroke='#5d2e00' stroke-width='2'/><path d='M26 29L10 18M42 31l12-8M29 39l-8 12M35 39l2 13M42 39l8 10' stroke='#5d2e00' stroke-width='3' fill='none' stroke-linecap='round'/><path d='M19 50c3 4 9 4 12 0M36 51c4 4 10 3 13-1' stroke='#455a64' stroke-width='3' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "trattore",
+    "label": "Trattore",
+    "article": "un",
+    "symbol": "tr2",
+    "walkable": false,
+    "categories": [
+      "Trasporti",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='20' cy='43' r='10' fill='#222'/><circle cx='48' cy='45' r='6' fill='#222'/><rect x='22' y='26' width='20' height='14' rx='2' fill='#66bb6a' stroke='#1b5e20' stroke-width='2'/><rect x='31' y='15' width='13' height='14' rx='2' fill='#a5d6a7' stroke='#1b5e20' stroke-width='2'/><path d='M44 32h8' stroke='#1b5e20' stroke-width='4'/></svg>"
+    }
+  },
+  {
+    "id": "albero_ulivo",
+    "label": "Albero ulivo",
+    "article": "un",
+    "symbol": "au2",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M31 53c-2-12 6-18-2-30M33 53c5-13-2-22 7-31' stroke='#6d4c41' stroke-width='5' fill='none' stroke-linecap='round'/><ellipse cx='25' cy='25' rx='14' ry='10' fill='#9caf88'/><ellipse cx='40' cy='24' rx='15' ry='10' fill='#b0be8e'/><ellipse cx='33' cy='16' rx='13' ry='9' fill='#c0c99c'/></svg>"
+    }
+  },
+  {
+    "id": "rovi",
+    "label": "Rovi",
+    "article": "un",
+    "symbol": "ro",
+    "walkable": false,
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='23' cy='37' r='13' fill='#2e7d32'/><circle cx='36' cy='33' r='16' fill='#388e3c'/><circle cx='45' cy='40' r='12' fill='#2e7d32'/><path d='M14 34l38 10M18 47l28-23M12 43l44-8' stroke='#5d4037' stroke-width='2'/><path d='M24 32l-4-4M41 38l5-4M34 45l-2 5' stroke='#d32f2f' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "fico_d_india",
+    "label": "Fico d’India",
+    "article": "un",
+    "symbol": "fdi",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='34' rx='9' ry='18' fill='#43a047' stroke='#1b5e20' stroke-width='2'/><ellipse cx='21' cy='32' rx='8' ry='13' fill='#66bb6a' stroke='#1b5e20' stroke-width='2'/><ellipse cx='44' cy='28' rx='8' ry='13' fill='#66bb6a' stroke='#1b5e20' stroke-width='2'/><g fill='#d32f2f'><circle cx='20' cy='22' r='3'/><circle cx='45' cy='17' r='3'/><circle cx='34' cy='20' r='3'/></g><g stroke='#e8f5e9'><path d='M31 30h2M26 41h2M42 31h2M19 36h2'/></g></svg>"
+    }
+  },
+  {
+    "id": "pino",
+    "label": "Pino",
+    "article": "un",
+    "symbol": "pi",
+    "walkable": false,
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='29' y='35' width='7' height='20' fill='#795548'/><path d='M32 8c-10 8-16 16-21 27c14 1 28 1 42 0C48 24 42 16 32 8z' fill='#2e7d32' stroke='#1b5e20' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "pezzo_di_legno",
+    "label": "Pezzo di legno",
+    "article": "un",
+    "symbol": "pdl",
+    "walkable": false,
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M13 42l36-22l5 9l-36 22z' fill='#9c6b3d' stroke='#4e2d12' stroke-width='2'/><ellipse cx='51' cy='25' rx='5' ry='6' transform='rotate(-31 51 25)' fill='#c08a58' stroke='#4e2d12' stroke-width='2'/><path d='M22 38l20-12M27 45l17-10' stroke='#5d3817' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "fiori",
+    "label": "Fiori",
+    "article": "un",
+    "symbol": "fi",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M22 46V32M32 48V29M43 46V33' stroke='#2e7d32' stroke-width='2'/><g><circle cx='22' cy='28' r='4' fill='#ff5d8f'/><circle cx='18' cy='32' r='4' fill='#ff5d8f'/><circle cx='26' cy='32' r='4' fill='#ff5d8f'/><circle cx='22' cy='32' r='2' fill='#ffd166'/></g><g><circle cx='32' cy='25' r='4' fill='#9b5de5'/><circle cx='28' cy='29' r='4' fill='#9b5de5'/><circle cx='36' cy='29' r='4' fill='#9b5de5'/><circle cx='32' cy='29' r='2' fill='#ffd166'/></g><g><circle cx='43' cy='29' r='4' fill='#f15bb5'/><circle cx='39' cy='33' r='4' fill='#f15bb5'/><circle cx='47' cy='33' r='4' fill='#f15bb5'/><circle cx='43' cy='33' r='2' fill='#ffd166'/></g></svg>"
+    }
+  },
+  {
+    "id": "palma",
+    "label": "Palma",
+    "article": "una",
+    "symbol": "pa2",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Mare",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M30 54c7-16 1-29 5-43' stroke='#8d5524' stroke-width='6' fill='none'/><path d='M35 12c-12 1-21 7-25 16M35 12c-3 12-10 18-22 23M35 12c10 1 18 7 22 16M35 12c3 11 10 18 19 24M35 12c-1 10-3 18-7 25' stroke='#2e7d32' stroke-width='5' fill='none' stroke-linecap='round'/></svg>"
+    }
+  },
+  {
+    "id": "pajaro",
+    "label": "Pajaro",
+    "article": "un",
+    "symbol": "pa3",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M15 47h34L43 25L32 10L21 25z' fill='#9e9e9e' stroke='#424242' stroke-width='2'/><path d='M24 47V35c0-6 16-6 16 0v12' fill='#4e342e'/><path d='M22 26h20M19 35h26M16 44h32' stroke='#616161' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "muro_a_secco",
+    "label": "Muro a secco",
+    "article": "un",
+    "symbol": "mas",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M8 44h48v10H8zM12 32h40v12H12zM17 21h30v11H17z' fill='#9e9e9e' stroke='#424242' stroke-width='2'/><path d='M24 21v11M36 21v11M25 32v12M39 32v12M20 44v10M34 44v10M48 44v10' stroke='#616161' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "cassetta_di_legno",
+    "label": "Cassetta di legno",
+    "article": "una",
+    "symbol": "cdl",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='12' y='24' width='40' height='25' rx='2' fill='#c58b50' stroke='#5d371c' stroke-width='2'/><path d='M12 32h40M12 41h40M22 24v25M42 24v25' stroke='#5d371c' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "zappa",
+    "label": "Zappa",
+    "article": "una",
+    "symbol": "za",
+    "walkable": false,
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M22 52L43 10' stroke='#8d5524' stroke-width='4' stroke-linecap='round'/><path d='M39 14l12 6l-7 9' fill='none' stroke='#607d8b' stroke-width='4' stroke-linecap='round'/></svg>"
+    }
+  },
+  {
+    "id": "cernitrice",
+    "label": "Cernitrice",
+    "article": "una",
+    "symbol": "ce2",
+    "walkable": false,
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M17 17h30l-6 16H23z' fill='#90a4ae' stroke='#37474f' stroke-width='2'/><rect x='19' y='34' width='26' height='13' rx='2' fill='#cfd8dc' stroke='#37474f' stroke-width='2'/><path d='M22 47v8M42 47v8M25 28h14M24 40h16' stroke='#37474f' stroke-width='2'/><circle cx='25' cy='21' r='2' fill='#6b8e23'/><circle cx='33' cy='24' r='2' fill='#6b8e23'/><circle cx='40' cy='21' r='2' fill='#6b8e23'/></svg>"
+    }
+  },
+  {
+    "id": "cespuglio",
+    "label": "Cespuglio",
+    "article": "un",
+    "symbol": "ce3",
+    "walkable": false,
+    "categories": [
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='23' cy='37' r='13' fill='#2e7d32'/><circle cx='36' cy='33' r='16' fill='#388e3c'/><circle cx='45' cy='40' r='12' fill='#2e7d32'/></svg>"
+    }
+  },
+  {
+    "id": "scoglio",
+    "label": "Scoglio",
+    "article": "un",
+    "symbol": "sc2",
+    "walkable": false,
+    "categories": [
+      "Mare",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M12 48l8-21l14-9l12 8l7 22z' fill='#8d99ae' stroke='#4a5568' stroke-width='2'/><path d='M21 28l7 8l8-15M35 36l10-10' stroke='#6b7280' stroke-width='2' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "ombrellone",
+    "label": "Ombrellone",
+    "article": "un",
+    "symbol": "om",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M10 31c10-22 34-22 44 0z' fill='#ff595e' stroke='#8c1d23' stroke-width='2'/><path d='M10 31c8-6 13-6 22 0c8-6 14-6 22 0M32 31v25' stroke='#8c1d23' stroke-width='3'/><path d='M32 31l-9-18M32 31l9-18' stroke='#ffd166' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "lettino",
+    "label": "Lettino",
+    "article": "un",
+    "symbol": "le2",
+    "walkable": true,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M13 43h39' stroke='#6d4c41' stroke-width='5'/><path d='M21 39l15-20l15 15' fill='none' stroke='#4cc9f0' stroke-width='7' stroke-linecap='round'/><path d='M18 45l-5 8M46 45l5 8' stroke='#6d4c41' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "secchiello",
+    "label": "Secchiello",
+    "article": "un",
+    "symbol": "se4",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M20 26h24l-3 25H23z' fill='#ffca3a' stroke='#8a6a00' stroke-width='2'/><path d='M22 25c0-15 20-15 20 0' fill='none' stroke='#8a6a00' stroke-width='3'/><path d='M40 45l12 7M48 39l-4 11l10-4z' fill='#ef476f' stroke='#8a1d35' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "acquascooter",
+    "label": "Acquascooter",
+    "article": "un",
+    "symbol": "ac2",
+    "walkable": false,
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M11 40c12-16 32-16 43-1c-10 7-31 8-43 1z' fill='#00a8e8' stroke='#005f73' stroke-width='2'/><path d='M28 28h17l-7 9H22z' fill='#ffb703' stroke='#8a5f00' stroke-width='2'/><path d='M42 28l7-6' stroke='#005f73' stroke-width='3'/><path d='M12 47c10 3 26 3 40 0' stroke='#90e0ef' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "telo_da_mare",
+    "label": "Telo da mare",
+    "article": "un",
+    "symbol": "tdm",
+    "walkable": true,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='13' y='17' width='38' height='30' rx='4' fill='#ef476f' stroke='#8c1d3a' stroke-width='2'/><path d='M18 24h28M18 32h28M18 40h28' stroke='#ffd166' stroke-width='2'/><path d='M13 20l-5 2M13 44l-5 2M51 20l5 2M51 44l5 2' stroke='#8c1d3a' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "materassino",
+    "label": "Materassino",
+    "article": "un",
+    "symbol": "ma",
+    "walkable": true,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='18' y='11' width='28' height='44' rx='12' fill='#00bbf9' stroke='#006494' stroke-width='2'/><path d='M22 20h20M20 31h24M20 42h24' stroke='#caf0f8' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "sup",
+    "label": "SUP",
+    "article": "un",
+    "symbol": "su",
+    "walkable": true,
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M32 5c12 12 13 43 0 54C19 48 20 17 32 5z' fill='#f4a261' stroke='#8a4b1c' stroke-width='2'/><path d='M15 50L49 14M47 12l5-5M12 53l-5 5' stroke='#5d4037' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "pedalo",
+    "label": "Pedalò",
+    "article": "un",
+    "symbol": "pe2",
+    "walkable": false,
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M10 38h44l-6 10H16z' fill='#ffca3a' stroke='#8a6a00' stroke-width='2'/><rect x='18' y='25' width='10' height='10' rx='2' fill='#4cc9f0'/><rect x='36' y='25' width='10' height='10' rx='2' fill='#4cc9f0'/><path d='M23 35v8M41 35v8M28 43h8' stroke='#8a6a00' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "tavola_da_surf",
+    "label": "Tavola da surf",
+    "article": "un",
+    "symbol": "tds",
+    "walkable": true,
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M32 5c13 14 13 40 0 54C19 45 19 19 32 5z' fill='#00f5d4' stroke='#00857a' stroke-width='2'/><path d='M32 8v48M22 28c7 4 13 4 20 0' stroke='#00857a' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "cabina",
+    "label": "Cabina",
+    "article": "una",
+    "symbol": "ca6",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='17' y='17' width='30' height='40' rx='2' fill='#ffd166' stroke='#8a6a00' stroke-width='2'/><path d='M14 17h36l-5-8H19z' fill='#ef476f' stroke='#8a1d35' stroke-width='2'/><path d='M32 18v39M25 32h2M38 32h2' stroke='#8a6a00' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "boa",
+    "label": "Boa",
+    "article": "una",
+    "symbol": "bo",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='33' rx='15' ry='20' fill='#ff5a5f' stroke='#8a1d23' stroke-width='2'/><path d='M21 24h22M19 37h26' stroke='#fff' stroke-width='6'/><path d='M32 53v6' stroke='#555' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "gommone",
+    "label": "Gommone",
+    "article": "un",
+    "symbol": "go",
+    "walkable": false,
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='38' rx='23' ry='12' fill='none' stroke='#ff7b00' stroke-width='8'/><rect x='24' y='33' width='16' height='9' rx='2' fill='#e9ecef'/><rect x='50' y='34' width='5' height='12' rx='2' fill='#444'/></svg>"
+    }
+  },
+  {
+    "id": "barca_a_vela",
+    "label": "Barca a vela",
+    "article": "una",
+    "symbol": "bav",
+    "walkable": false,
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M16 45h35l-8 10H24z' fill='#8ecae6' stroke='#126782' stroke-width='2'/><path d='M32 10v35' stroke='#5d4037' stroke-width='3'/><path d='M34 13v25h18z' fill='#ffffff' stroke='#126782' stroke-width='2'/><path d='M30 17v22H14z' fill='#ffb703' stroke='#8a6a00' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "torretta_bagnino",
+    "label": "Torretta bagnino",
+    "article": "una",
+    "symbol": "tb",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='22' y='14' width='20' height='17' rx='2' fill='#ffb703' stroke='#8a6a00' stroke-width='2'/><path d='M25 31l-9 25M39 31l9 25M19 44h26M24 37h16' stroke='#8a6a00' stroke-width='3'/><path d='M22 14l10-8l10 8' fill='#ef476f' stroke='#8a1d35' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "salvagente",
+    "label": "Salvagente",
+    "article": "un",
+    "symbol": "sa",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='32' cy='32' r='22' fill='#fff' stroke='#d62828' stroke-width='5'/><circle cx='32' cy='32' r='10' fill='none' stroke='#d62828' stroke-width='4'/><path d='M32 10v12M32 42v12M10 32h12M42 32h12' stroke='#ff5a5f' stroke-width='8'/></svg>"
+    }
+  },
+  {
+    "id": "chiringuito",
+    "label": "Chiringuito",
+    "article": "un",
+    "symbol": "ch",
+    "walkable": false,
+    "categories": [
+      "Mare",
+      "Commerciale",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='14' y='31' width='36' height='20' rx='2' fill='#c58b50' stroke='#5d371c' stroke-width='2'/><path d='M10 31h44l-7-14H17z' fill='#f4a261' stroke='#8a4b1c' stroke-width='2'/><path d='M18 38h28M20 51v6M44 51v6' stroke='#5d371c' stroke-width='2'/><rect x='24' y='37' width='16' height='8' fill='#ffeb99'/></svg>"
+    }
+  },
+  {
+    "id": "faro",
+    "label": "Faro",
+    "article": "un",
+    "symbol": "fa",
+    "walkable": false,
+    "categories": [
+      "Mare",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M23 55h18l-3-35H26z' fill='#ffffff' stroke='#607d8b' stroke-width='2'/><path d='M26 29h12M25 40h14' stroke='#ef476f' stroke-width='5'/><rect x='24' y='12' width='16' height='9' rx='2' fill='#ffd166' stroke='#607d8b' stroke-width='2'/><path d='M15 17L4 11M49 17l11-6' stroke='#ffd166' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "castello_di_sabbia",
+    "label": "Castello di sabbia",
+    "article": "un",
+    "symbol": "cds",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='16' y='32' width='32' height='20' fill='#d4a15f' stroke='#8a5f25' stroke-width='2'/><rect x='20' y='22' width='9' height='10' fill='#d4a15f' stroke='#8a5f25' stroke-width='2'/><rect x='35' y='22' width='9' height='10' fill='#d4a15f' stroke='#8a5f25' stroke-width='2'/><path d='M20 22v-5h3v5M26 22v-5h3v5M35 22v-5h3v5M41 22v-5h3v5M28 52V40c0-7 8-7 8 0v12' stroke='#8a5f25' stroke-width='2' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "sdraio",
+    "label": "Sdraio",
+    "article": "una",
+    "symbol": "sd",
+    "walkable": true,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M15 45h37M20 44l22-24' stroke='#6d4c41' stroke-width='4'/><path d='M20 42l18-20l12 13l-18 15z' fill='#4cc9f0' stroke='#126782' stroke-width='2'/><path d='M20 45l-6 9M42 45l7 9' stroke='#6d4c41' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "scaffale",
+    "label": "Scaffale",
+    "article": "un",
+    "symbol": "sc3",
+    "walkable": false,
+    "categories": [
+      "Commerciale",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='13' y='10' width='38' height='47' rx='3' fill='#8d6e63' stroke='#4e342e' stroke-width='2'/><path d='M13 23h38M13 36h38M13 49h38' stroke='#4e342e' stroke-width='2'/><rect x='17' y='13' width='5' height='10' fill='#e76f51'/><rect x='24' y='13' width='4' height='10' fill='#2a9d8f'/><rect x='31' y='26' width='5' height='10' fill='#e9c46a'/><rect x='39' y='39' width='6' height='10' fill='#457b9d'/></svg>"
+    }
+  },
+  {
+    "id": "registratore_di_cassa",
+    "label": "Registratore di cassa",
+    "article": "un",
+    "symbol": "rdc",
+    "walkable": false,
+    "categories": [
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='14' y='31' width='36' height='20' rx='3' fill='#607d8b' stroke='#263238' stroke-width='2'/><rect x='22' y='18' width='20' height='12' rx='2' fill='#b0bec5' stroke='#263238' stroke-width='2'/><rect x='18' y='37' width='28' height='4' fill='#263238'/><g fill='#eceff1'><circle cx='21' cy='45' r='2'/><circle cx='29' cy='45' r='2'/><circle cx='37' cy='45' r='2'/></g></svg>"
+    }
+  },
+  {
+    "id": "pumo",
+    "label": "Pumo",
+    "article": "un",
+    "symbol": "pu",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M32 8c11 12 16 24 13 34c-3 11-23 11-26 0C16 32 21 20 32 8z' fill='#2ec4b6' stroke='#006d67' stroke-width='2'/><path d='M22 50h20v6H22zM25 34c6-3 9-8 7-20c4 10 8 17 10 22' stroke='#006d67' stroke-width='2' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "luminarie",
+    "label": "Luminarie",
+    "article": "un",
+    "symbol": "lu",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M10 53V23c0-12 44-12 44 0v30M18 53V30c0-8 28-8 28 0v23' stroke='#f9c74f' stroke-width='3' fill='none'/><g fill='#fff3b0'><circle cx='16' cy='27' r='3'/><circle cx='25' cy='20' r='3'/><circle cx='32' cy='19' r='3'/><circle cx='41' cy='20' r='3'/><circle cx='48' cy='27' r='3'/></g></svg>"
+    }
+  },
+  {
+    "id": "sant_oronzo",
+    "label": "Sant’Oronzo",
+    "article": "un",
+    "symbol": "so",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='32' cy='13' r='8' fill='none' stroke='#f9d65c' stroke-width='2'/><rect x='20' y='52' width='24' height='6' rx='2' fill='#90a4ae'/><circle cx='32' cy='18' r='7' fill='#cfd8dc' stroke='#607d8b' stroke-width='2'/><path d='M24 47c2-18 4-25 8-25s6 7 8 25z' fill='#dce3e6' stroke='#607d8b' stroke-width='2'/><path d='M24 29l-8 9M40 29l8-9' stroke='#607d8b' stroke-width='3'/><rect x='27' y='38' width='10' height='15' fill='#b0bec5' stroke='#607d8b' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "pasticciotto",
+    "label": "Pasticciotto",
+    "article": "un",
+    "symbol": "pa4",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='34' rx='22' ry='15' fill='#d99a3d' stroke='#8a5a18' stroke-width='2'/><ellipse cx='32' cy='31' rx='18' ry='10' fill='#f0b85b'/><path d='M20 36c8 5 17 5 25 0' stroke='#8a5a18' stroke-width='2' fill='none'/></svg>"
+    }
+  },
+  {
+    "id": "rustico",
+    "label": "Rustico",
+    "article": "un",
+    "symbol": "ru",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='32' cy='32' r='21' fill='#d99a3d' stroke='#8a5a18' stroke-width='2'/><circle cx='32' cy='32' r='14' fill='#f0b85b' stroke='#8a5a18' stroke-width='2'/><path d='M18 24c9-4 19-4 28 0M18 40c9 4 19 4 28 0' stroke='#fff0b3' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "puccio",
+    "label": "Puccio",
+    "article": "un",
+    "symbol": "pu2",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='34' rx='22' ry='16' fill='#e6c27a' stroke='#8a6a2f' stroke-width='2'/><path d='M14 34h36' stroke='#8a6a2f' stroke-width='2'/><g fill='#8a6a2f'><circle cx='24' cy='25' r='1.5'/><circle cx='34' cy='23' r='1.5'/><circle cx='43' cy='29' r='1.5'/></g></svg>"
+    }
+  },
+  {
+    "id": "bancarella",
+    "label": "Bancarella",
+    "article": "una",
+    "symbol": "ba",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Commerciale",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='13' y='32' width='38' height='20' rx='2' fill='#8d5524' stroke='#4e2a12' stroke-width='2'/><path d='M9 31h46l-5-13H14z' fill='#ef476f' stroke='#8a1d35' stroke-width='2'/><path d='M18 18v13M27 18v13M36 18v13M45 18v13' stroke='#ffd166' stroke-width='2'/><circle cx='22' cy='42' r='4' fill='#4caf50'/><rect x='31' y='38' width='13' height='7' fill='#ffd166'/></svg>"
+    }
+  },
+  {
+    "id": "fico",
+    "label": "Fico",
+    "article": "un",
+    "symbol": "fi2",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='28' y='32' width='8' height='22' rx='3' fill='#795548'/><circle cx='24' cy='27' r='13' fill='#4caf50'/><circle cx='38' cy='25' r='14' fill='#43a047'/><circle cx='33' cy='16' r='12' fill='#66bb6a'/><circle cx='23' cy='25' r='3' fill='#6a1b9a'/><circle cx='42' cy='30' r='3' fill='#6a1b9a'/></svg>"
+    }
+  },
+  {
+    "id": "caffe_in_ghiaccio",
+    "label": "Caffè in ghiaccio",
+    "article": "un",
+    "symbol": "cig",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M21 14h22l-4 40H25z' fill='#d8f3ff' stroke='#607d8b' stroke-width='2'/><path d='M23 32h18l-2 20H25z' fill='#5d2f16'/><rect x='27' y='21' width='7' height='7' fill='#e3f2fd' opacity='.8'/><rect x='35' y='25' width='6' height='6' fill='#e3f2fd' opacity='.8'/><path d='M23 32h18' stroke='#f6d7a7' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "frisella",
+    "label": "Frisella",
+    "article": "una",
+    "symbol": "fr2",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='32' cy='34' r='20' fill='#d6a354' stroke='#8a5a18' stroke-width='2'/><circle cx='32' cy='34' r='8' fill='#f4e0ad' stroke='#8a5a18' stroke-width='2'/><g fill='#e63946'><circle cx='23' cy='29' r='4'/><circle cx='39' cy='27' r='4'/><circle cx='41' cy='42' r='4'/></g><path d='M20 42c10-6 18-6 25 1' stroke='#2e7d32' stroke-width='2'/></svg>"
+    }
+  },
+  {
+    "id": "cupezza",
+    "label": "Cupezza",
+    "article": "una",
+    "symbol": "cu",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M14 24h36l-5 27H19z' fill='#c77d2d' stroke='#7a4516' stroke-width='2'/><g fill='#f2d49b'><ellipse cx='23' cy='32' rx='4' ry='3'/><ellipse cx='34' cy='29' rx='4' ry='3'/><ellipse cx='42' cy='40' rx='4' ry='3'/><ellipse cx='29' cy='43' rx='4' ry='3'/></g></svg>"
+    }
+  },
+  {
+    "id": "tagata",
+    "label": "Tagatà",
+    "article": "un",
+    "symbol": "ta3",
+    "walkable": true,
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='38' rx='24' ry='13' fill='#ff006e' stroke='#7a0034' stroke-width='2'/><ellipse cx='32' cy='34' rx='16' ry='8' fill='#ffbe0b' stroke='#7a5d00' stroke-width='2'/><path d='M32 20v14M18 38h28M23 29l-7-8M41 29l7-8' stroke='#3a86ff' stroke-width='3'/><circle cx='32' cy='19' r='5' fill='#8338ec'/></svg>"
+    }
+  },
+  {
+    "id": "giostra",
+    "label": "Giostra",
+    "article": "una",
+    "symbol": "gi",
+    "walkable": true,
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='38' rx='24' ry='13' fill='#ff006e' stroke='#7a0034' stroke-width='2'/><ellipse cx='32' cy='34' rx='16' ry='8' fill='#ffbe0b' stroke='#7a5d00' stroke-width='2'/><path d='M32 20v14M18 38h28M23 29l-7-8M41 29l7-8' stroke='#3a86ff' stroke-width='3'/><circle cx='32' cy='19' r='5' fill='#8338ec'/></svg>"
+    }
+  },
+  {
+    "id": "fuoco",
+    "label": "Fuoco",
+    "article": "un",
+    "symbol": "fu",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Campagna",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M32 57c-14-9-14-22-4-33c0 9 8 10 5-8c13 13 18 29-1 41z' fill='#ff6b00' stroke='#9c2700' stroke-width='2'/><path d='M32 53c-7-7-5-15 1-23c4 8 9 14-1 23z' fill='#ffd166'/></svg>"
+    }
+  },
+  {
+    "id": "statua_della_madonna",
+    "label": "Statua della Madonna",
+    "article": "una",
+    "symbol": "sdm",
+    "walkable": false,
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='32' cy='13' r='8' fill='none' stroke='#f9d65c' stroke-width='2'/><rect x='20' y='52' width='24' height='6' rx='2' fill='#90a4ae'/><circle cx='32' cy='18' r='7' fill='#cfd8dc' stroke='#607d8b' stroke-width='2'/><path d='M24 47c2-18 4-25 8-25s6 7 8 25z' fill='#dce3e6' stroke='#607d8b' stroke-width='2'/><path d='M24 29l-8 9M40 29l8-9' stroke='#607d8b' stroke-width='3'/></svg>"
+    }
+  },
+  {
+    "id": "tamburello",
+    "label": "Tamburello",
+    "article": "un",
+    "symbol": "ta4",
+    "walkable": false,
+    "categories": [
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='32' cy='32' r='22' fill='#d6a354' stroke='#6d4c41' stroke-width='4'/><circle cx='32' cy='32' r='15' fill='#f5e6c8' stroke='#6d4c41' stroke-width='2'/><g fill='#f9c74f' stroke='#6d4c41'><circle cx='32' cy='9' r='4'/><circle cx='53' cy='32' r='4'/><circle cx='32' cy='55' r='4'/><circle cx='11' cy='32' r='4'/></g></svg>"
     }
   }
 ]
-```
