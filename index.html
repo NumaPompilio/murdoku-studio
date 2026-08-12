@@ -5842,7 +5842,7 @@ function drawPlayerGrid() {
       s += objectGlyph(cell.object, x+CS/2, y+CS/2, CS);
       const label = E.objLabel(cell.object);
       const textLenAttr = label.length > 8 ? ` textLength="${CS-4}" lengthAdjust="spacingAndGlyphs"` : "";
-      s += `<text x="${x+CS/2}" y="${y+CS-2}" font-size="6.5" fill="#000" stroke="#fff" stroke-width="1.5" paint-order="stroke fill" font-weight="bold" font-family="var(--sans)" text-anchor="middle" pointer-events="none"${textLenAttr}>${escapeXml(label)}</text>`;
+      s += `<text x="${x+CS/2}" y="${y+CS-2}" font-size="8" fill="#000" font-weight="bold" font-family="var(--sans)" text-anchor="middle" pointer-events="none"${textLenAttr}>${escapeXml(label)}</text>`;
     }
   }
   
