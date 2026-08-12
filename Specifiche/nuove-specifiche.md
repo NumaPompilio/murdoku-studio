@@ -474,4 +474,4 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Contenuto Informativo**: La modale include due sezioni principali:
   - *Regole Generali*: Spiega il meccanismo di riga e colonna univoca (stile Sudoku) e la regola che obbliga l'assassino a trovarsi sempre solo con la vittima.
   - *Regole degli Oggetti*: Definisce la differenza fondamentale tra oggetti calpestabili (su cui è consentito stare) e ostacoli (che non possono essere occupati), e chiarisce il concetto spaziale di "accanto a" e "sopra a" un oggetto.
-  - *Come Giocare (Comandi)*: Illustra visivamente (con icone SVG personalizzate) la differenza tra il doppio clic/tap per piazzare definitivamente un personaggio e il singolo clic/tap per inserire una nota provvisoria (fino a 4 per cella).
+  - *Come Giocare (Comandi)*: Illustra visivamente (con icone SVG personalizzate) la differenza tra il doppio clic/tap per posizionare definitivamente un personaggio e il singolo clic/tap per inserire una nota provvisoria (fino a 4 per cella).
