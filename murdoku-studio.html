@@ -264,7 +264,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.20</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.21</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -355,12 +355,14 @@
             <button class="btn ghost" id="btnOpenAddObject" style="padding:3px 8px; font-size:11px; border:1px solid var(--line2);">➕ Aggiungi</button>
             <select id="objCategory" style="font-size:11px; padding:3px 8px; border-radius:6px; background:var(--panel2); color:var(--text); border:1px solid var(--line2); cursor:pointer">
             <option value="all">Tutti gli oggetti</option>
-            <option value="salento">☀️ Salento & Tradizione</option>
-            <option value="beach" selected>🏖️ Spiaggia & Mare</option>
             <option value="house">🏠 Casa & Interni</option>
-            <option value="nature">🌳 Natura & Esterni</option>
-            <option value="walkable">🟢 Solo calpestabili</option>
-            <option value="obstacle">🔴 Solo ostacoli</option>
+            <option value="animals">🐾 Animali</option>
+            <option value="urban">🏙️ Esterno urbano</option>
+            <option value="transport">🚗 Trasporti</option>
+            <option value="countryside">🌾 Campagna</option>
+            <option value="sea" selected>🌊 Mare</option>
+            <option value="commercial">🏬 Commerciale</option>
+            <option value="salento">☀️ Salento</option>
             </select>
           </div>
         </div>
@@ -3155,27 +3157,37 @@ function areaLetter(id){ return id<0?'#':String.fromCharCode(65+(id%26)); }
 /* Categorie tematiche per il filtro oggetti */
 const OBJ_CATEGORIES = {
   all: { label: "Tutti gli oggetti" },
-  salento: {
-    label: "☀️ Salento & Tradizione",
-    list: ["scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "murosecco", "malota", "scrace", "ulivo", "muscia", "apecar", "trattore", "faro", "pajaro", "luminarie", "taccaro", "santoronzo"]
-  },
-  beach: {
-    label: "🏖️ Spiaggia & Mare",
-    list: ["umbrella", "sunbed", "towel", "mattress", "surfboard", "walkway", "pedalo", "dock", "boat", "cabin", "lifeguard", "palm", "shower", "kiosk", "volleyball", "cooler", "scoglio", "boa", "faro"]
-  },
   house: {
     label: "🏠 Casa & Interni",
-    list: ["chair", "table", "bed", "rug", "bookcase", "shelf", "tv", "plant", "scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "muscia"]
+    list: ["chair", "rug", "bed", "table", "bookcase", "shelf", "tv", "plant", "shower", "pumo", "cassapanca", "madia"]
   },
-  nature: {
-    label: "🌳 Natura & Esterni",
-    list: ["tree", "palm", "flowers", "statue", "boulder", "scoglio", "car", "ulivo", "murosecco", "malota", "scrace", "apecar", "trattore", "pajaro", "luminarie", "taccaro", "santoronzo"]
+  animals: {
+    label: "🐾 Animali",
+    list: ["muscia"]
   },
-  walkable: {
-    label: "🟢 Solo calpestabili"
+  urban: {
+    label: "🏙️ Esterno urbano",
+    list: ["statue", "boulder", "tree", "flowers", "plant", "car", "palm", "faro", "luminarie", "santoronzo"]
   },
-  obstacle: {
-    label: "🔴 Solo ostacoli"
+  transport: {
+    label: "🚗 Trasporti",
+    list: ["car", "apecar", "trattore", "boat", "pedalo"]
+  },
+  countryside: {
+    label: "🌾 Campagna",
+    list: ["tree", "flowers", "boulder", "ulivo", "murosecco", "malota", "scrace", "pajaro", "taccaro", "cascetta", "trattore"]
+  },
+  sea: {
+    label: "🌊 Mare",
+    list: ["umbrella", "sunbed", "towel", "mattress", "surfboard", "walkway", "pedalo", "dock", "boat", "cabin", "lifeguard", "palm", "shower", "kiosk", "volleyball", "cooler", "scoglio", "boa", "faro"]
+  },
+  commercial: {
+    label: "🏬 Commerciale",
+    list: ["kiosk", "luminarie", "bookcase", "shelf"]
+  },
+  salento: {
+    label: "☀️ Salento",
+    list: ["scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "murosecco", "malota", "scrace", "ulivo", "muscia", "apecar", "trattore", "faro", "pajaro", "luminarie", "taccaro", "santoronzo"]
   }
 };
 
@@ -6295,8 +6307,19 @@ async function loadRemoteObjects() {
     }
 
     const match = text.match(/```json\n([\s\S]*?)\n```/);
+    let arr = null;
+    
     if (match) {
-      const arr = JSON.parse(match[1]);
+      arr = JSON.parse(match[1]);
+    } else {
+      try {
+        arr = JSON.parse(text);
+      } catch(e) {
+        // Fallback in caso non sia un JSON valido
+      }
+    }
+
+    if (arr && Array.isArray(arr)) {
       for (const o of arr) {
         if (!E.OBJECT_LIB[o.id]) OBJ_ORDER.push(o.id);
         
@@ -6314,9 +6337,17 @@ async function loadRemoteObjects() {
         
         if (o.categories && Array.isArray(o.categories)) {
           for (const cat of o.categories) {
-            if (OBJ_CATEGORIES[cat]) {
-              if (!OBJ_CATEGORIES[cat].list.includes(o.id)) {
-                OBJ_CATEGORIES[cat].list.push(o.id);
+            let targetCatKey = cat;
+            if (!OBJ_CATEGORIES[targetCatKey]) {
+              // Cerca per nome (es: "Casa & Interni" in "🏠 Casa & Interni")
+              targetCatKey = Object.keys(OBJ_CATEGORIES).find(k => 
+                OBJ_CATEGORIES[k].label && OBJ_CATEGORIES[k].label.includes(cat)
+              );
+            }
+            if (targetCatKey && OBJ_CATEGORIES[targetCatKey]) {
+              if (!OBJ_CATEGORIES[targetCatKey].list) OBJ_CATEGORIES[targetCatKey].list = [];
+              if (!OBJ_CATEGORIES[targetCatKey].list.includes(o.id)) {
+                OBJ_CATEGORIES[targetCatKey].list.push(o.id);
               }
             }
           }
@@ -6330,7 +6361,7 @@ async function loadRemoteObjects() {
       renderPalette();
       render();
     } else {
-      toast("Il JSON remoto non è stato trovato nel file!");
+      toast("Il JSON remoto non è stato trovato o non è valido!");
     }
   } catch(e) {
     console.error("Errore nel parsing o fetch di objects.md", e);
