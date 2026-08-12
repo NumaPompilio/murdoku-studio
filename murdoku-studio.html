@@ -272,6 +272,7 @@
     <button class="btn" id="modePlayerBtn">🎮 Player</button>
     <button class="btn primary" id="playerOpenImportBtn" style="display:none; margin-left:10px;"><span class="k">📂</span> Incolla Mappa</button>
     <button class="btn primary" id="playerOpenFolderLoadBtn" style="display:none; margin-left:10px;"><span class="k">📁</span> Seleziona Mappa</button>
+    <button class="btn secondary" id="playerCopyLinkBtn" style="display:none; margin-left:10px;" title="Copia link per giocare questa mappa"><span class="k">🔗</span> Copia Link</button>
   </div>
   <div class="spacer"></div>
   <div class="toprow">
@@ -4630,9 +4631,11 @@ async function loadMapFromGithub(filename) {
     playerState.placed = {};
     playerState.notes = {};
     playerState.activeChar = null;
+    playerState.mapId = filename.replace(/\.md$/i, "");
 
     toast(`Mappa ${filename} caricata con successo`);
     $("#folderLoadModal").style.display = "none";
+    $("#playerCopyLinkBtn").style.display = "inline-flex";
     renderPlayerUI();
   } catch (err) {
     console.error(err);
@@ -4644,6 +4647,15 @@ $("#folderLoadConfirm").addEventListener("click", async () => {
   let filename = $("#folderLoadFilename").value.trim();
   if(!filename){ toast("Il nome del file è obbligatorio"); return; }
   await loadMapFromGithub(filename);
+});
+
+$("#playerCopyLinkBtn").addEventListener("click", () => {
+  if (playerState && playerState.mapId) {
+    const link = `https://numapompilio.github.io/murdoku-studio/?mode=player&map=${encodeURIComponent(playerState.mapId)}`;
+    copyText(link).then(ok => {
+      if (ok) toast("Link della mappa copiato negli appunti!");
+    });
+  }
 });
 
 let currentMdFilename = null;
@@ -5496,6 +5508,7 @@ $("#modeEditorBtn").addEventListener("click", () => {
   $(".toprow").style.display = "flex"; // show toprow buttons
   $("#playerOpenImportBtn").style.display = "none";
   $("#playerOpenFolderLoadBtn").style.display = "none";
+  $("#playerCopyLinkBtn").style.display = "none";
 });
 
 $("#modePlayerBtn").addEventListener("click", () => {
@@ -5507,6 +5520,11 @@ $("#modePlayerBtn").addEventListener("click", () => {
     $(".toprow").style.display = "none"; // hide editor toprow buttons
     $("#playerOpenImportBtn").style.display = "inline-flex";
     $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
+    if (playerState && playerState.mapId) {
+      $("#playerCopyLinkBtn").style.display = "inline-flex";
+    } else {
+      $("#playerCopyLinkBtn").style.display = "none";
+    }
     
     // Sincronizzazione automatica della mappa dall'Editor al Player
     if (state.map && state.clueObjs && state.clueObjs.length > 0) {
@@ -5518,6 +5536,8 @@ $("#modePlayerBtn").addEventListener("click", () => {
         playerState.placed = {};
         playerState.notes = {};
         playerState.activeChar = null;
+        playerState.mapId = null;
+        $("#playerCopyLinkBtn").style.display = "none";
         renderPlayerUI();
       }
     }
@@ -5539,12 +5559,16 @@ $("#playerOpenImportBtn").addEventListener("click", () => {
   $("#playerImportSection").style.display = "flex";
   $("#playerOpenImportBtn").style.display = "none";
   $("#playerOpenFolderLoadBtn").style.display = "none";
+  $("#playerCopyLinkBtn").style.display = "none";
 });
 
 $("#playerCancelImportBtn").addEventListener("click", () => {
   $("#playerImportSection").style.display = "none";
   $("#playerOpenImportBtn").style.display = "inline-flex";
   $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
+  if (playerState && playerState.mapId) {
+    $("#playerCopyLinkBtn").style.display = "inline-flex";
+  }
 });
 
 $("#playerDoPasteBtn").addEventListener("click", async () => {
@@ -5576,7 +5600,16 @@ $("#playerConfirmImportBtn").addEventListener("click", () => {
   try {
     const data = JSON.parse(jsonStr);
     if(!data.size || !data.cells) throw new Error("Dati mappa non validi");
-    
+    playerState.placed = {};
+    playerState.notes = {};
+    playerState.activeChar = null;
+    playerState.mapId = null;
+
+    $("#playerImportSection").style.display = "none";
+    $("#playerOpenImportBtn").style.display = "inline-flex";
+    $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
+    $("#playerCopyLinkBtn").style.display = "none";
+    renderPlayerUI();
     const m = E.emptyMap(data.size);
     for(const c of data.cells){ const cell=E.cellAt(m,c.row,c.col); cell.walkable=c.walkable!==false; if(c.object) cell.object=c.object; }
     m.walls=new Set(data.walls||[]); m.windows=new Set(data.windows||[]); m.areaNames=data.areaNames||{};
