@@ -4725,7 +4725,7 @@ async function loadMapFromGithub(filename) {
     if(!data.size || !data.cells) throw new Error("Dati mappa non validi");
     const m = E.emptyMap(data.size);
     for(const c of data.cells){ const cell=E.cellAt(m,c.row,c.col); cell.walkable=c.walkable!==false; if(c.object) cell.object=c.object; }
-    m.walls=new Set(data.walls||[]); m.windows=new Set(data.windows||[]); m.areaNames=data.areaNames||{};
+    m.walls=new Set(data.walls||[]); m.windows=new Set(data.windows||[]); m.doors=new Set(data.doors||[]); m.areaNames=data.areaNames||{};
     m.areaFloors=data.areaFloors ? Object.assign({}, data.areaFloors) : {};
     m.entities=(data.entities||[]).map(e=>({...e})); m.suspectCount=data.suspectCount||0;
 
