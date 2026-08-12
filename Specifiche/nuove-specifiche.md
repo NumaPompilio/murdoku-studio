@@ -467,3 +467,11 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
   1. Estrazione del JSON racchiuso in blocchi markdown (` ```json ... ``` `).
   2. Fallback diretto: nel caso in cui il file sia composto da codice JSON puro senza blocchi markdown (es. file .md caricato ma non formattato in markdown rigoroso), la logica decodifica comunque l'intera stringa in modo sicuro per popolare la palette, evitando l'errore precedente "Il JSON remoto non è stato trovato nel file!".
 - **Mappatura Categorie Remote**: Risolto il problema per cui le stringhe testuali di categoria provenienti dal JSON remoto (es. "Casa & Interni") non venivano associate alle chiavi interne corrette (le quali includevano un'emoji, es. "🏠 Casa & Interni"). Adesso la mappatura funziona per inclusione parziale della stringa per garantire l'affidabilità totale e smistare ogni nuovo oggetto nella palette corretta.
+
+### 51. Modale Regole del Gioco nel Player (v2.22)
+- **Aggiunta Collegamento**: È stato inserito un link ("Regole del gioco") nella colonna di destra del Player, subito sopra il contenitore degli indizi. Questo link è stato progettato per scorrere insieme agli indizi anche nella visualizzazione Mobile, beneficiando del layout esistente.
+- **Finestra Modale Dedicata**: Il clic sul link apre una nuova finestra modale (`#rulesModal`) che illustra in modo chiaro e conciso le regole di Murdoku per i nuovi giocatori.
+- **Contenuto Informativo**: La modale include due sezioni principali:
+  - *Regole Generali*: Spiega il meccanismo di riga e colonna univoca (stile Sudoku) e la regola che obbliga l'assassino a trovarsi sempre solo con la vittima.
+  - *Regole degli Oggetti*: Definisce la differenza fondamentale tra oggetti calpestabili (su cui è consentito stare) e ostacoli (che non possono essere occupati), e chiarisce il concetto spaziale di "accanto a" e "sopra a" un oggetto.
+  - *Come Giocare (Comandi)*: Illustra visivamente (con icone SVG personalizzate) la differenza tra il doppio clic/tap per piazzare definitivamente un personaggio e il singolo clic/tap per inserire una nota provvisoria (fino a 4 per cella).

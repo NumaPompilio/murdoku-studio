@@ -252,7 +252,6 @@
     #playerBoardContainer { touch-action: manipulation; width: 100%; max-width: 500px; display: flex; justify-content: center; position: relative; }
     #playerBoard, #playerHoverOverlay, #playerOverlay { width: 100% !important; height: auto !important; max-width: 100vw; }
     .player-right-col { flex: 0 0 auto; width: 100%; margin-left: 0; padding-left: 0; padding-bottom: 20px; overflow: visible !important; }
-    .player-rules-link-container { text-align: center !important; }
     #playerClues { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 15px; width: 100% !important; padding-right: 0; }
     .player-clue-col { display: contents !important; }
     .grp { width: auto !important; flex: 1 1 280px; margin-bottom: 0 !important; padding: 10px 12px !important; }
@@ -271,7 +270,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.24</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.21</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -605,6 +604,7 @@
     <ul>
       <li><b>Obiettivo:</b> Trovare l'assassino e posizionare tutti i personaggi (i sospettati e la vittima) sulla mappa in modo corretto.</li>
       <li><b>La Mappa:</b> Il gioco si svolge su una mappa divisa in "aree" (le stanze colorate) separate da dei muri.</li>
+      <li><b>I Personaggi:</b> Il numero totale dei personaggi (sospettati + 1 vittima) è uguale al numero di celle del lato della griglia.</li>
       <li><b>Regola della Vittima:</b> L'assassino si trova <b>sempre</b> nella stessa area della vittima. Inoltre, sono gli unici due personaggi in quell'area (non c'è nessun altro con loro).</li>
       <li><b>Regola delle Righe e Colonne:</b> Come nel Sudoku, ogni riga e ogni colonna della griglia può contenere <b>solo un personaggio</b>. Due personaggi non possono mai trovarsi nella stessa riga o nella stessa colonna.</li>
     </ul>
@@ -616,47 +616,6 @@
       <li><b>Accanto a un oggetto:</b> Se un indizio dice che un personaggio è "accanto" a un tavolo, significa che si trova in una delle 4 celle adiacenti (Nord, Sud, Est, Ovest). <b>Attenzione:</b> il personaggio deve essere nella <i>stessa area</i> dell'oggetto e non ci devono essere <i>muri</i> a separarli.</li>
       <li><b>Sopra un oggetto:</b> Se un indizio dice che un personaggio è "su" o "sopra" un oggetto, significa che occupa esattamente la cella di quel mobile (che deve essere calpestabile).</li>
     </ul>
-    <h4>Come Giocare (Comandi)</h4>
-    <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:10px;">
-      <!-- Blocco Piazzamento (Doppio clic) -->
-      <div style="flex:1; min-width:200px; background:var(--panel2); padding:15px; border-radius:8px; border:1px solid var(--line2); text-align:center;">
-        <svg width="60" height="60" viewBox="0 0 64 64" style="margin-bottom:10px;">
-          <!-- Rappresentazione grafica di una cella con il personaggio intero -->
-          <rect x="2" y="2" width="60" height="60" fill="var(--paper)" stroke="var(--line2)" stroke-width="2" rx="4"/>
-          <circle cx="32" cy="32" r="20" fill="var(--desk)" stroke="var(--violet-bright)" stroke-width="3"/>
-          <text x="32" y="38" font-family="var(--serif)" font-size="20" fill="var(--violet-bright)" text-anchor="middle" font-weight="bold">A</text>
-          <!-- Cursore / Dito -->
-          <path d="M42,42 L52,55 M40,40 L44,48 M42,42 L48,44" stroke="var(--text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="42" cy="42" r="4" fill="var(--evidence)" opacity="0.8"/>
-        </svg>
-        <div style="font-weight:bold; margin-bottom:5px;">Piazzare un Personaggio</div>
-        <div style="font-size:13px; color:var(--text-dim);">
-          <b>Desktop:</b> Doppio clic sulla cella<br>
-          <b>Mobile:</b> Doppio tap sulla cella
-        </div>
-      </div>
-
-      <!-- Blocco Annotazione (Singolo clic) -->
-      <div style="flex:1; min-width:200px; background:var(--panel2); padding:15px; border-radius:8px; border:1px solid var(--line2); text-align:center;">
-        <svg width="60" height="60" viewBox="0 0 64 64" style="margin-bottom:10px;">
-          <!-- Rappresentazione grafica di una cella con la nota piccola in un angolo -->
-          <rect x="2" y="2" width="60" height="60" fill="var(--paper)" stroke="var(--line2)" stroke-width="2" rx="4"/>
-          <circle cx="16" cy="16" r="10" fill="var(--desk)" stroke="var(--text-dim)" stroke-width="2" opacity="0.6"/>
-          <text x="16" y="20" font-family="var(--serif)" font-size="10" fill="var(--text-dim)" text-anchor="middle" font-weight="bold" opacity="0.6">A</text>
-          <!-- Cursore / Dito -->
-          <path d="M42,42 L52,55 M40,40 L44,48 M42,42 L48,44" stroke="var(--text)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="42" cy="42" r="4" fill="var(--violet-bright)" opacity="0.8"/>
-        </svg>
-        <div style="font-weight:bold; margin-bottom:5px;">Annotare (Nota)</div>
-        <div style="font-size:13px; color:var(--text-dim);">
-          <b>Desktop:</b> Singolo clic sulla cella<br>
-          <b>Mobile:</b> Singolo tap sulla cella
-        </div>
-      </div>
-    </div>
-    <p style="font-size:13px; margin-top:15px; color:var(--text-dim);">
-      <i>Suggerimento:</i> Puoi inserire fino a 4 note in una singola cella. Quando piazzi definitivamente un personaggio, tutte le sue note spariranno automaticamente dalla mappa!
-    </p>
   </div>
 </div></div>
 
