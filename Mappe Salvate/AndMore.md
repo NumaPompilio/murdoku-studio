@@ -9,7 +9,7 @@ Griglia 9×9. Regole: una sola persona per riga e per colonna; "accanto" = celle
 - **A = Magazzino** — celle occupabili: (1,3), (1,4), (1,5), (2,1), (2,2), (2,3), (2,4), (2,6)
 - **C = And More Abbigliamento** — celle occupabili: (3,2), (3,3), (3,4), (4,4), (5,2), (5,3), (5,4), (5,5), (5,6), (5,7), (5,9), (6,1), (6,3), (6,4), (6,5), (6,6), (6,8), (6,9), (7,1), (7,2), (7,3), (7,4), (7,5), (7,6), (7,7), (7,8)
 - **D = Camerino** — celle occupabili: (3,5), (3,6), (4,5), (4,6)
-- **E = Via Alcide de Gasperi** — celle occupabili: (8,1), (8,2), (8,3), (8,4), (8,6), (8,7), (8,8), (8,9), (9,1), (9,2), (9,3), (9,4), (9,5), (9,6), (9,7), (9,8), (9,9)
+- **E = Via Alcide de Gasperi** — celle occupabili: (8,1), (8,2), (8,3), (8,4), (8,6), (8,7), (8,8), (8,9), (9,1), (9,2), (9,4), (9,5), (9,6), (9,7), (9,8), (9,9)
 
 **Griglia di aree e muri** — `┃`/`━` = muro tra due celle; `#` = cella bloccata:
 ```
@@ -30,7 +30,7 @@ Griglia 9×9. Regole: una sola persona per riga e per colonna; "accanto" = celle
   | ━━━ ━━━ ━━━ ━━━ ━━━ ━━━ ━━━ ━━━ ━━━
 8 |  E   E   E   E   e   E   E   E   E 
   |                                    
-9 |  E   E   E   E   E   E   E   E   E 
+9 |  E   E   e   E   E   E   E   E   E 
 ```
 
 ## Muri (coppie di celle separate)
@@ -63,11 +63,11 @@ Minuscolo = calpestabile, MAIUSCOLO = ostacolo, `..` = vuota, `##` = bloccata:
 - `cr` = auto (calpestabile)
 - `PM` = palma (ostacolo)
 - `ap` = Ape car (calpestabile)
-- `tr` = trattore (calpestabile)
+- `tr` = Trattore (ostacolo)
 
 **Celle bloccate:** (1,7), (1,8), (1,9), (2,7), (2,8), (2,9), (3,7), (3,8), (3,9), (4,7), (4,8), (4,9)
 
-**Oggetti per cella:** (1,1) scaffale (ostacolo); (1,2) scaffale (ostacolo); (1,6) scaffale (ostacolo); (2,1) sedia (calpestabile); (2,5) scaffale (ostacolo); (3,1) scaffale (ostacolo); (3,6) sedia (calpestabile); (4,1) scaffale (ostacolo); (4,2) tavolo (ostacolo); (4,3) tavolo (ostacolo); (5,1) pianta (ostacolo); (5,8) scaffale (ostacolo); (6,2) tavolo (ostacolo); (6,4) tappeto (calpestabile); (6,6) sedia (calpestabile); (6,7) tavolo (ostacolo); (7,2) sedia (calpestabile); (7,9) scaffale (ostacolo); (8,4) auto (calpestabile); (8,5) palma (ostacolo); (9,1) Ape car (calpestabile); (9,3) trattore (calpestabile); (9,6) auto (calpestabile); (9,9) auto (calpestabile).
+**Oggetti per cella:** (1,1) scaffale (ostacolo); (1,2) scaffale (ostacolo); (1,6) scaffale (ostacolo); (2,1) sedia (calpestabile); (2,5) scaffale (ostacolo); (3,1) scaffale (ostacolo); (3,6) sedia (calpestabile); (4,1) scaffale (ostacolo); (4,2) tavolo (ostacolo); (4,3) tavolo (ostacolo); (5,1) pianta (ostacolo); (5,8) scaffale (ostacolo); (6,2) tavolo (ostacolo); (6,4) tappeto (calpestabile); (6,6) sedia (calpestabile); (6,7) tavolo (ostacolo); (7,2) sedia (calpestabile); (7,9) scaffale (ostacolo); (8,4) auto (calpestabile); (8,5) palma (ostacolo); (9,1) Ape car (calpestabile); (9,3) Trattore (ostacolo); (9,6) auto (calpestabile); (9,9) auto (calpestabile).
 
 ## Personaggi
 
