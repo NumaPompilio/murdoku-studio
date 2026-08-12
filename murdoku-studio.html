@@ -253,6 +253,7 @@
     .clue-icon { display: none !important; }
     .clue-name-wrap { flex-direction: row !important; align-items: center; gap: 6px; flex-wrap: wrap; }
     .clue-traits { margin-top: 0 !important; font-size: 11.5px !important; }
+    body.pure-player-mode header { display: none !important; }
   }
 
   @media (max-width:1000px){ main{grid-template-columns:1fr} .left,.right{border:none} }
@@ -6344,6 +6345,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const urlParams = new URLSearchParams(window.location.search);
   if (window.location.hash === '#player' || urlParams.get('mode') === 'player') {
+    document.body.classList.add('pure-player-mode');
     const playerBtn = document.getElementById('modePlayerBtn');
     if (playerBtn) {
       setTimeout(() => {

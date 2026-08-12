@@ -29,5 +29,6 @@ Quando l'utente chiede di pubblicare l'editor online (o aggiornare il repo), dev
 ## Terminologia
 - **Murdoku Studio** (o **Studio**, o **Questo programma**): si riferisce all'intero applicativo software/web-app sviluppato (l'ambiente che racchiude Editor e Player).
 - **PLAYER**: si riferisce alla modalità "PLAY", ovvero la sezione dell'applicazione che si apre cliccando sul pulsante "PLAY" (o "Player").
+- **PLAYER MODE**: si riferisce specificamente al Player avviato in modalità "pura" o isolata, accessibile tramite URL con il parametro `?mode=player`.
 - **Editor**: si riferisce alla modalità "Editor", ovvero la parte dell'applicazione che si apre cliccando sul pulsante "Editor".
 - **MOBILE**: si riferisce solo ed esclusivamente alla visualizzazione da dispositivi mobili (layout responsive, media query), differenziandola dalla modalità desktop.

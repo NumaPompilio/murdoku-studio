@@ -383,6 +383,7 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Responsive Layout (CSS Media Queries):** 
   - Applicate regole specifiche estese per viewport <= 1024px (`@media (max-width: 1024px)`), abbracciando così anche i tablet in modalità verticale.
   - La Legenda Oggetti del Player (`#playerLegend`) viene nascosta per risparmiare spazio verticale e semplificare l'interfaccia su schermi piccoli e tablet.
+  - **In PLAYER MODE (URL con `?mode=player`)**, l'intero banner superiore (`<header>`, contenente titolo e logo dell'applicazione) viene completamente nascosto, massimizzando lo spazio disponibile sullo schermo del dispositivo mobile per la sola interfaccia di gioco.
   - La mappa (`#playerBoardContainer`) e la palette dei personaggi sono state fissate in alto usando la proprietà CSS `position: sticky`. In questo modo, scorrendo l'interfaccia verticalmente (se lo schermo è basso), la mappa resta sempre in primissimo piano e solo la lista degli indizi scorre al di sotto di essa.
   - La lista degli indizi (`#playerClues`) è stata riposizionata al di sotto della mappa in un contenitore a scorrimento orizzontale continuo, con i box allineati in fila (ordinati alfabeticamente).
   - Nei box degli indizi, l'icona (avatar) del personaggio viene automaticamente nascosta su mobile (`.clue-icon`), lasciando intatte unicamente l'iniziale, il nome e le caratteristiche fisiche testuali per massimizzare la leggibilità.
