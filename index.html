@@ -1060,8 +1060,7 @@
     "Cantina", "Bagno", "Corridoio", "Sala", "Terrazzo", "Giardino", "Serra",
     "Officina", "Deposito", "Atrio", "Loggia", "Portico", "Galleria",
   ];
-  const WALKABLE_OBJS = ["chair", "rug", "bed", "mattress", "towel", "umbrella", "sunbed", "surfboard", "walkway", "pedalo", "dock"];
-  const BLOCK_OBJS = ["table", "bookcase", "shelf", "tv", "plant", "tree", "palm", "flowers", "statue", "boulder", "scoglio", "boa", "cabin", "lifeguard", "shower", "kiosk", "volleyball", "cooler"];
+  // WALKABLE_OBJS e BLOCK_OBJS vengono calcolate dinamicamente da OBJECT_LIB in generateMap.
 
   function generateMap(opts) {
     const size = opts.size;
@@ -1138,6 +1137,13 @@
     const nBlocked = Math.round(total * (0.02 + rng() * 0.05));
     const freeCells = shuffle(rng, cellsAll);
     let ptr = 0;
+    // Liste oggetti derivate dinamicamente da OBJECT_LIB (popolato da GitHub)
+    const allObjKeys = Object.keys(OBJECT_LIB);
+    const dynamicWalkable = allObjKeys.filter(k => OBJECT_LIB[k].walkable);
+    const dynamicBlock    = allObjKeys.filter(k => !OBJECT_LIB[k].walkable);
+    // Fallback minimale se gli oggetti non sono ancora stati caricati
+    const WALKABLE_OBJS = dynamicWalkable.length > 0 ? dynamicWalkable : ["sedia", "tappeto", "letto"];
+    const BLOCK_OBJS    = dynamicBlock.length    > 0 ? dynamicBlock    : ["tavolo", "libreria", "scaffale"];
     const usedWalkKinds = shuffle(rng, WALKABLE_OBJS).slice(0, 2 + ri(rng, 2));
     const usedBlockKinds = shuffle(rng, BLOCK_OBJS).slice(0, 3 + ri(rng, 3));
     for (let i = 0; i < nWalkObj && ptr < freeCells.length; i++, ptr++) {
