@@ -6332,6 +6332,7 @@ const CATEGORY_NAME_MAP = {
 
 
 async function loadRemoteObjects() {
+  // Restituisce una Promise risolta quando il caricamento è completato
   try {
     let text = "";
     try {
@@ -6458,30 +6459,30 @@ async function loadRemoteObjects() {
 
 
 // Controllo URL per avvio diretto in modalità PLAYER e caricamento automatico mappa
-window.addEventListener('DOMContentLoaded', () => {
-  loadRemoteObjects(); // Innesca caricamento ibrido oggetti esterni
+window.addEventListener('DOMContentLoaded', async () => {
+  // Carica objects.md PRIMA di qualsiasi altra operazione di rendering
+  await loadRemoteObjects();
 
   const urlParams = new URLSearchParams(window.location.search);
   if (window.location.hash === '#player' || urlParams.get('mode') === 'player') {
     document.body.classList.add('pure-player-mode');
     const playerBtn = document.getElementById('modePlayerBtn');
     if (playerBtn) {
-      setTimeout(() => {
-        playerBtn.click();
-        const mapToLoad = urlParams.get('map');
-        if (mapToLoad) {
-          loadMapFromGithub(mapToLoad);
-          const modeSwitch = document.querySelector('.mode-switch');
-          if(modeSwitch) modeSwitch.style.display = 'none';
-        } else {
-          const edBtn = document.getElementById('modeEditorBtn');
-          if(edBtn) edBtn.style.display = 'none';
-          const plBtn = document.getElementById('modePlayerBtn');
-          if(plBtn) plBtn.style.display = 'none';
-          const impBtn = document.getElementById('playerOpenImportBtn');
-          if(impBtn) impBtn.style.display = 'none';
-        }
-      }, 50);
+      playerBtn.click();
+      const mapToLoad = urlParams.get('map');
+      if (mapToLoad) {
+        // DYNAMIC_SVGS è ora popolato → gli oggetti saranno renderizzati correttamente
+        await loadMapFromGithub(mapToLoad);
+        const modeSwitch = document.querySelector('.mode-switch');
+        if(modeSwitch) modeSwitch.style.display = 'none';
+      } else {
+        const edBtn = document.getElementById('modeEditorBtn');
+        if(edBtn) edBtn.style.display = 'none';
+        const plBtn = document.getElementById('modePlayerBtn');
+        if(plBtn) plBtn.style.display = 'none';
+        const impBtn = document.getElementById('playerOpenImportBtn');
+        if(impBtn) impBtn.style.display = 'none';
+      }
     }
   }
 });
