@@ -485,3 +485,17 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Caricamento Esterno Immagini Raster**: L'editor è ora in grado di caricare dinamicamente immagini in formato raster ottimizzato (`.webp`) per la rappresentazione grafica degli oggetti (invece del solo SVG inline).
 - **Definizione JSON**: Nei file di definizione degli oggetti (come `objects.md`), è possibile specificare nel blocco `render` la chiave `type: "webp"`. L'editor estrarrà automaticamente l'id dell'oggetto e proverà a recuperare il file d'immagine al path relativo `assets/objects_webp/{id}.webp`.
 - **Risoluzione Errori e Fallback (Graceful degradation)**: Il motore di rendering SVG dell'editor (funzione `objectGlyph`) utilizza il tag `<image>` nativo accoppiato a una stringa `<text>?</text>` nascosta. In caso di errore nel caricamento dell'immagine (file mancante o errore 404), viene attivato un gestore `onerror` che nasconde il box rotto dell'immagine ed espone un punto interrogativo di fallback elegante sulla griglia e sulla palette.
+
+### 54. Rimozione completa degli oggetti hardcoded — Sistema 100% dinamico (v3.0)
+- **Motivazione architetturale**: Fino alla v2.26, le strutture dati degli oggetti erano duplicate: presenti sia nel codice HTML hardcoded sia nel file `assets/objects.md` su GitHub. Questo causava disallineamento e rendeva necessario aggiornare il codice ogni volta che si aggiungeva un nuovo oggetto.
+- **Strutture dati svuotate**: Le seguenti strutture sono ora inizializzate vuote e popolate interamente da `loadRemoteObjects()` all'avvio:
+  - `OBJECT_LIB` (engine): label e walkable di ogni oggetto.
+  - `OBJ_ART` (engine): articolo italiano per ogni oggetto.
+  - `OBJ_EMOJI`: emoji di fallback per la visualizzazione testuale.
+  - `MD_CODE`: codici brevi per la mappa testuale (da campo `symbol` nel JSON; minuscolo per calpestabili, MAIUSCOLO per ostacoli).
+  - `OBJ_CATEGORIES`: categorie tematiche con le relative liste di oggetti.
+  - `OBJ_ORDER`: ordine di visualizzazione nella palette (rispetta l'ordine del file `objects.md`).
+- **Nuovo `CATEGORY_NAME_MAP`**: Dizionario che mappa i nomi di categoria nel JSON (es. "Casa & Interni") alle chiavi interne usate in `OBJ_CATEGORIES` (es. "house"), evitando la ricerca fuzzy per inclusione stringa.
+- **Aggiornamento dinamico del `<select>` categorie**: Dopo il caricamento, il selettore di categoria nella palette dell'Editor viene ricostruito dinamicamente con le categorie presenti nel file remoto.
+- **Reset completo a ogni caricamento**: `OBJ_ORDER` viene azzerato e le categorie (eccetto `all`) vengono ripulite prima di ogni ciclo di caricamento, eliminando ogni residuo di dati precedenti.
+- **Compatibilità**: Il caricamento avviene all'evento `DOMContentLoaded`, prima di qualsiasi interazione utente. I dati remoti sono la singola fonte di verità per tutti gli oggetti.

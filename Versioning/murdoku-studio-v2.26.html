@@ -271,7 +271,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v3.0</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.26</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -810,9 +810,60 @@
   }
 
   /* ---------- Palette oggetti (calpestabile = occupabile) ---------- */
-  // Gli oggetti vengono caricati dinamicamente da GitHub (assets/objects.md).
-  // Questo oggetto viene popolato da loadRemoteObjects() all'avvio.
-  const OBJECT_LIB = {};
+  // Ogni tema definisce quali oggetti usa. label italiana, walkable = ci si può stare sopra.
+  const OBJECT_LIB = {
+    chair:     { label: "sedia",                walkable: true  },
+    rug:       { label: "tappeto",              walkable: true  },
+    carpet:    { label: "tappeto",              walkable: true  }, // alias retro-compatibile
+    bed:       { label: "letto",                walkable: true  },
+    boat:      { label: "barca",                walkable: true  },
+    car:       { label: "auto",                 walkable: true  },
+    mattress:  { label: "materassino",          walkable: true  },
+    towel:     { label: "telo da mare",         walkable: true  },
+    umbrella:  { label: "ombrellone",           walkable: true  },
+    sunbed:    { label: "lettino da spiaggia",  walkable: true  },
+    surfboard: { label: "tavola da surf",       walkable: true  },
+    walkway:   { label: "passerella",           walkable: true  },
+    pedalo:    { label: "pedalò",               walkable: true  },
+    dock:      { label: "pontile",              walkable: true  },
+    table:     { label: "tavolo",               walkable: false },
+    bookcase:  { label: "libreria",             walkable: false },
+    shelf:     { label: "scaffale",             walkable: false },
+    tv:        { label: "TV",                   walkable: false },
+    plant:     { label: "pianta",               walkable: false },
+    tree:      { label: "albero",               walkable: false },
+    palm:      { label: "palma",                walkable: false },
+    flowers:   { label: "fiori",                walkable: false },
+    statue:    { label: "statua",               walkable: false },
+    boulder:   { label: "masso",                walkable: false },
+    scoglio:   { label: "scoglio",              walkable: false },
+    boa:       { label: "boa",                  walkable: false },
+    cabin:     { label: "cabina",               walkable: false },
+    lifeguard: { label: "torretta bagnino",     walkable: false },
+    shower:    { label: "doccia",               walkable: false },
+    kiosk:     { label: "chiringuito",          walkable: false },
+    volleyball:{ label: "rete da volley",       walkable: false },
+    cooler:    { label: "borsa frigo",          walkable: false },
+    // Oggetti Salento & Tradizione
+    scannetto: { label: "scannetto",            walkable: true  },
+    tamburello:{ label: "tamburello",           walkable: true  },
+    apecar:    { label: "Ape car",              walkable: true  },
+    trattore:  { label: "trattore",             walkable: true  },
+    pumo:      { label: "pumo",                 walkable: false },
+    cassapanca:{ label: "cassapanca",           walkable: false },
+    madia:     { label: "madia",                walkable: false },
+    cascetta:  { label: "cascetta",             walkable: false },
+    murosecco: { label: "muro a secco",         walkable: false },
+    malota:    { label: "malota",               walkable: false },
+    scrace:    { label: "scrace",               walkable: false },
+    ulivo:     { label: "albero di ulivo",      walkable: false },
+    muscia:    { label: "muscia",               walkable: false },
+    faro:      { label: "faro",                 walkable: false },
+    pajaro:    { label: "pajaro",               walkable: false },
+    luminarie: { label: "luminarie",            walkable: false },
+    taccaro:   { label: "taccaro",              walkable: false },
+    santoronzo:{ label: "Sant'Oronzo",          walkable: false },
+  };
   function objLabel(kind) { return (OBJECT_LIB[kind] && OBJECT_LIB[kind].label) || kind; }
   function objWalkable(kind) { return !!(OBJECT_LIB[kind] && OBJECT_LIB[kind].walkable); }
 
@@ -1684,8 +1735,18 @@
     }
     return out;
   }
-  // Gli articoli vengono caricati dinamicamente da GitHub (assets/objects.md).
-  const OBJ_ART = {};
+  const OBJ_ART = {
+    chair:"una", carpet:"un", rug:"un", bed:"un", boat:"una", car:"un'",
+    mattress:"un", towel:"un", umbrella:"un", sunbed:"un",
+    surfboard:"una", walkway:"una", pedalo:"un", dock:"un",
+    table:"un", bookcase:"una", shelf:"uno", tv:"una", plant:"una", tree:"un", palm:"una",
+    flowers:"dei", statue:"una", boulder:"un", scoglio:"uno", boa:"una",
+    cabin:"una", lifeguard:"una", shower:"una", kiosk:"un", volleyball:"una", cooler:"una",
+    scannetto:"uno", tamburello:"un", apecar:"un'", trattore:"un",
+    pumo:"un", cassapanca:"una", madia:"una", cascetta:"una",
+    murosecco:"un", malota:"una", scrace:"delle", ulivo:"un", muscia:"una",
+    faro:"un", pajaro:"un", luminarie:"delle", taccaro:"un", santoronzo:"un",
+  };
   function withArticle(kind) {
     const art = OBJ_ART[kind] || "un";
     return art + (art === "un'" ? "" : " ") + objLabel(kind);
@@ -2470,8 +2531,15 @@ const CLUE_EXPLANATIONS = {
 };
 
 /* --------- emoji per oggetti ed entità --------- */
-// Gli emoji di fallback vengono caricati dinamicamente da GitHub (assets/objects.md).
-const OBJ_EMOJI = {};
+const OBJ_EMOJI = {
+  chair:"🪑", bed:"🛏️", boat:"⛵", car:"🚗",
+  bookcase:"📚", shelf:"🗄️", tv:"📺", plant:"🪴", tree:"🌳",
+  flowers:"🌷", statue:"🗿", boulder:"🪨",
+  scannetto:"🪑", tamburello:"🪘", apecar:"🛺", trattore:"🚜",
+  pumo:"🏺", cassapanca:"🧰", madia:"🪵", cascetta:"📦",
+  murosecco:"🧱", malota:"🪲", scrace:"🌿", ulivo:"🫒", muscia:"🐱",
+  faro:"🗼", pajaro:"🛖", luminarie:"✨", taccaro:"🪵",
+};
 
 /* AVATAR PERSONAGGI
    ===================================================================== */
@@ -3154,16 +3222,53 @@ function resetAreaFloor(){
   }
 }
 
-/* codici brevi degli oggetti per la mappa testuale (minuscolo=calpestabile, MAIUSC=ostacolo)
-   Popolato dinamicamente da loadRemoteObjects() tramite il campo "symbol" nel JSON. */
-const MD_CODE = {};
+/* codici brevi degli oggetti per la mappa testuale (minuscolo=calpestabile, MAIUSC=ostacolo) */
+const MD_CODE = {
+  chair:'ch', rug:'rg', bed:'bd', boat:'bt', car:'cr', mattress:'mt', towel:'tw', umbrella:'om', sunbed:'lt',
+  surfboard:'sb', walkway:'ps', pedalo:'pd', dock:'pt',
+  table:'TB', bookcase:'BK', shelf:'SF', tv:'TV', plant:'PL', tree:'TR', palm:'PM', flowers:'FL', statue:'ST',
+  boulder:'BL', scoglio:'SG', boa:'BO', cabin:'CB', lifeguard:'LG', shower:'DC', kiosk:'KS', volleyball:'VL', cooler:'BF',
+  scannetto:'sc', tamburello:'tm', apecar:'ap', trattore:'tr',
+  pumo:'PU', cassapanca:'CP', madia:'MD', cascetta:'CS', murosecco:'MS', malota:'ML', scrace:'SR', ulivo:'UL', muscia:'MC',
+  faro:'FR', pajaro:'PJ', luminarie:'LM', taccaro:'TC', santoronzo:'SO'
+};
 function areaLetter(id){ return id<0?'#':String.fromCharCode(65+(id%26)); }
 
-/* Categorie tematiche per il filtro oggetti.
-   La struttura (key → label) viene costruita dinamicamente da loadRemoteObjects().
-   Le liste di oggetti per categoria vengono popolate man mano che gli oggetti vengono caricati. */
+/* Categorie tematiche per il filtro oggetti */
 const OBJ_CATEGORIES = {
-  all: { label: "Tutti gli oggetti" }
+  all: { label: "Tutti gli oggetti" },
+  house: {
+    label: "🏠 Casa & Interni",
+    list: ["chair", "rug", "bed", "table", "bookcase", "shelf", "tv", "plant", "shower", "pumo", "cassapanca", "madia"]
+  },
+  animals: {
+    label: "🐾 Animali",
+    list: ["muscia"]
+  },
+  urban: {
+    label: "🏙️ Esterno urbano",
+    list: ["statue", "boulder", "tree", "flowers", "plant", "car", "palm", "faro", "luminarie", "santoronzo"]
+  },
+  transport: {
+    label: "🚗 Trasporti",
+    list: ["car", "apecar", "trattore", "boat", "pedalo"]
+  },
+  countryside: {
+    label: "🌾 Campagna",
+    list: ["tree", "flowers", "boulder", "ulivo", "murosecco", "malota", "scrace", "pajaro", "taccaro", "cascetta", "trattore"]
+  },
+  sea: {
+    label: "🌊 Mare",
+    list: ["umbrella", "sunbed", "towel", "mattress", "surfboard", "walkway", "pedalo", "dock", "boat", "cabin", "lifeguard", "palm", "shower", "kiosk", "volleyball", "cooler", "scoglio", "boa", "faro"]
+  },
+  commercial: {
+    label: "🏬 Commerciale",
+    list: ["kiosk", "luminarie", "bookcase", "shelf"]
+  },
+  salento: {
+    label: "☀️ Salento",
+    list: ["scannetto", "tamburello", "pumo", "cassapanca", "madia", "cascetta", "murosecco", "malota", "scrace", "ulivo", "muscia", "apecar", "trattore", "faro", "pajaro", "luminarie", "taccaro", "santoronzo"]
+  }
 };
 
 /* --------- stato e undo --------- */
@@ -3225,9 +3330,14 @@ const $ = s => document.querySelector(s);
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1900); }
 function rngNow(){ return E.makeRng((Math.random()*1e9)|0); }
 
-/* palette oggetti: popolato dinamicamente da loadRemoteObjects() nell'ordine in cui
-   gli oggetti appaiono nel file assets/objects.md su GitHub. */
-const OBJ_ORDER = [];
+/* palette oggetti: bottoni con la stessa icona della mappa */
+const OBJ_ORDER = [
+  "scannetto","tamburello","apecar","trattore",
+  "pumo","cassapanca","madia","cascetta","murosecco","malota","scrace","ulivo","muscia","faro","pajaro","luminarie","taccaro",
+  "umbrella","sunbed","towel","mattress","surfboard","walkway","pedalo","dock","boat",
+  "cabin","lifeguard","palm","shower","kiosk","volleyball","cooler","scoglio","boa",
+  "chair","rug","bed","table","bookcase","shelf","tv","plant","tree","flowers","statue","boulder","car"
+];
 
 /* glifo di un personaggio per la palette (sospetto con la sua lettera, o vittima) */
 function charGlyph(ch, cx, cy, CS){
@@ -6313,18 +6423,6 @@ function updatePlayerHoverHighlight() {
 
 window.DYNAMIC_SVGS = {};
 
-/* Mappa nomi categoria (come appaiono nel JSON) → chiave usata in OBJ_CATEGORIES */
-const CATEGORY_NAME_MAP = {
-  "Casa & Interni":   { key: "house",       label: "🏠 Casa & Interni" },
-  "Animali":          { key: "animals",     label: "🐾 Animali" },
-  "Esterno urbano":   { key: "urban",       label: "🏙️ Esterno urbano" },
-  "Trasporti":        { key: "transport",   label: "🚗 Trasporti" },
-  "Campagna":         { key: "countryside", label: "🌾 Campagna" },
-  "Mare":             { key: "sea",         label: "🌊 Mare" },
-  "Commerciale":      { key: "commercial",  label: "🏬 Commerciale" },
-  "Salento":          { key: "salento",     label: "☀️ Salento" },
-};
-
 async function loadRemoteObjects() {
   try {
     let text = "";
@@ -6363,28 +6461,13 @@ async function loadRemoteObjects() {
     }
 
     if (arr && Array.isArray(arr)) {
-      // Reset completo di tutte le strutture dati (rimpiazzo totale con dati remoti)
-      OBJ_ORDER.length = 0;
-      for (const key of Object.keys(OBJ_CATEGORIES)) {
-        if (key !== 'all') delete OBJ_CATEGORIES[key];
-      }
-
       for (const o of arr) {
-        // Registra nell'ordine del file
-        OBJ_ORDER.push(o.id);
-
-        // Popola OBJECT_LIB (engine)
+        if (!E.OBJECT_LIB[o.id]) OBJ_ORDER.push(o.id);
+        
         E.OBJECT_LIB[o.id] = { label: o.label, walkable: !!o.walkable };
-
-        // Popola OBJ_ART (articolo italiano)
         if (o.article) E.OBJ_ART[o.id] = o.article;
+        // if (o.symbol) ... non serve all'engine di render
 
-        // Popola MD_CODE (codice breve mappa testuale)
-        if (o.symbol) {
-          MD_CODE[o.id] = o.walkable ? o.symbol.toLowerCase() : o.symbol.toUpperCase();
-        }
-
-        // Popola render (SVG inline, webp, testo/emoji)
         if (o.render) {
           if (o.render.type === 'text') {
             OBJ_EMOJI[o.id] = o.render.svgCode;
@@ -6394,40 +6477,26 @@ async function loadRemoteObjects() {
             window.DYNAMIC_SVGS[o.id] = { type: 'webp', scale: o.render.scale };
           }
         }
-
-        // Popola OBJ_CATEGORIES dinamicamente
+        
         if (o.categories && Array.isArray(o.categories)) {
-          for (const catName of o.categories) {
-            const mapping = CATEGORY_NAME_MAP[catName];
-            if (!mapping) continue;
-            const catKey = mapping.key;
-            if (!OBJ_CATEGORIES[catKey]) {
-              OBJ_CATEGORIES[catKey] = { label: mapping.label, list: [] };
+          for (const cat of o.categories) {
+            let targetCatKey = cat;
+            if (!OBJ_CATEGORIES[targetCatKey]) {
+              // Cerca per nome (es: "Casa & Interni" in "🏠 Casa & Interni")
+              targetCatKey = Object.keys(OBJ_CATEGORIES).find(k => 
+                OBJ_CATEGORIES[k].label && OBJ_CATEGORIES[k].label.includes(cat)
+              );
             }
-            if (!OBJ_CATEGORIES[catKey].list.includes(o.id)) {
-              OBJ_CATEGORIES[catKey].list.push(o.id);
+            if (targetCatKey && OBJ_CATEGORIES[targetCatKey]) {
+              if (!OBJ_CATEGORIES[targetCatKey].list) OBJ_CATEGORIES[targetCatKey].list = [];
+              if (!OBJ_CATEGORIES[targetCatKey].list.includes(o.id)) {
+                OBJ_CATEGORIES[targetCatKey].list.push(o.id);
+              }
             }
           }
         }
       }
       
-      // Aggiorna il <select> delle categorie con le categorie caricate
-      const catSelect = document.getElementById('objCategory');
-      if (catSelect) {
-        const currentVal = catSelect.value;
-        catSelect.innerHTML = '';
-        for (const [key, cat] of Object.entries(OBJ_CATEGORIES)) {
-          const opt = document.createElement('option');
-          opt.value = key;
-          opt.textContent = cat.label;
-          catSelect.appendChild(opt);
-        }
-        // Ripristina selezione se ancora valida
-        if ([...catSelect.options].some(o => o.value === currentVal)) {
-          catSelect.value = currentVal;
-        }
-      }
-
       console.log(`Caricati dinamicamente ${arr.length} oggetti remoti.`);
       toast(`Caricati ${arr.length} oggetti da GitHub!`);
       
