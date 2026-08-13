@@ -4183,8 +4183,6 @@ function serialize(){
 }
 
 function deserialize(d){
-  // Migra gli ID oggetto da vecchio formato (pre-v3.0) al nuovo
-  d = migrateObjectIds(d);
   const m=E.emptyMap(d.size);
   for(const c of d.cells){ const cell=E.cellAt(m,c.row,c.col); cell.walkable=c.walkable!==false; if(c.object) cell.object=c.object; }
   m.walls=new Set(d.walls||[]); m.windows=new Set(d.windows||[]); m.doors=new Set(d.doors||[]); m.areaNames=d.areaNames||{};
@@ -6327,91 +6325,6 @@ const CATEGORY_NAME_MAP = {
   "Salento":          { key: "salento",     label: "☀️ Salento" },
 };
 
-/* Tabella di compatibilità retroattiva: vecchi ID inglesi → nuovi ID italiani.
-   Permette di caricare mappe create prima della v3.0 senza perdere gli oggetti. */
-const LEGACY_ALIAS = {
-  // Casa & Interni
-  "chair":      "sedia",
-  "table":      "tavolo",
-  "shelf":      "scaffale",
-  "bookcase":   "libreria",
-  "tv":         "tv",
-  "plant":      "vaso_di_piante",
-  "rug":        "tappeto",
-  "carpet":     "tappeto",
-  "bed":        "letto",
-  // Esterno urbano / Trasporti
-  "car":        "auto",
-  "tree":       "albero",
-  "palm":       "palma",
-  "flowers":    "fiori",
-  "statue":     "statua",
-  "boulder":    "scoglio",
-  // Mare
-  "umbrella":   "ombrellone",
-  "sunbed":     "lettino",
-  "towel":      "telo_da_mare",
-  "mattress":   "materassino",
-  "surfboard":  "tavola_da_surf",
-  "walkway":    "pedalo",
-  "pedalo":     "pedalo",
-  "dock":       "pontile",
-  "boat":       "barca_a_vela",
-  "cabin":      "cabina",
-  "lifeguard":  "torretta_bagnino",
-  "shower":     "doccia",
-  "kiosk":      "chiringuito",
-  "volleyball": "sdraio",
-  "cooler":     "secchiello",
-  "scoglio":    "scoglio",
-  "boa":        "boa",
-  // Salento
-  "scannetto":  "sgabello",
-  "tamburello": "tamburello",
-  "apecar":     "ape_car",
-  "trattore":   "trattore",
-  "pumo":       "pumo",
-  "cassapanca": "armadio",
-  "madia":      "comodino",
-  "cascetta":   "cassetta_di_legno",
-  "murosecco":  "muro_a_secco",
-  "malota":     "rovi",
-  "scrace":     "rovi",
-  "ulivo":      "albero_ulivo",
-  "muscia":     "gatto",
-  "faro":       "faro",
-  "pajaro":     "pajaro",
-  "luminarie":  "luminarie",
-  "taccaro":    "pezzo_di_legno",
-  "santoronzo": "sant_oronzo",
-};
-
-/** Risolve un ID oggetto applicando la tabella di alias legacy se necessario. */
-function resolveObjId(id) {
-  if (!id) return id;
-  if (E.OBJECT_LIB[id]) return id;          // già valido nel sistema attuale
-  return LEGACY_ALIAS[id] || id;            // prova l'alias, altrimenti restituisce l'id originale
-}
-
-/** Migra tutti gli ID oggetto di una mappa dal vecchio formato al nuovo. */
-function migrateObjectIds(mapData) {
-  if (!mapData) return mapData;
-  // Celle
-  if (mapData.cells) {
-    for (const cell of mapData.cells) {
-      if (cell.object) cell.object = resolveObjId(cell.object);
-    }
-  }
-  // Indizi (fact.objectKind)
-  if (mapData.clues) {
-    for (const clue of mapData.clues) {
-      if (clue.fact && clue.fact.objectKind) {
-        clue.fact.objectKind = resolveObjId(clue.fact.objectKind);
-      }
-    }
-  }
-  return mapData;
-}
 
 async function loadRemoteObjects() {
   try {
