@@ -9,7 +9,7 @@
       "Casa & Interni"
     ],
     "render": {
-      "type": "svg",
+      "type": "webp",
       "scale": 0.8,
       "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='20' y='25' width='24' height='16' rx='3' fill='#b97a45' stroke='#5b3420' stroke-width='2'/><rect x='21' y='12' width='22' height='15' rx='3' fill='#d39a60' stroke='#5b3420' stroke-width='2'/><path d='M23 41v13M41 41v13M24 27v-7M40 27v-7' stroke='#5b3420' stroke-width='3' stroke-linecap='round'/></svg>"
     }
@@ -24,7 +24,7 @@
       "Casa & Interni"
     ],
     "render": {
-      "type": "svg",
+      "type": "webp",
       "scale": 0.8,
       "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='12' y='25' width='40' height='19' rx='7' fill='#4f8fcf' stroke='#1f4f80' stroke-width='2'/><rect x='15' y='17' width='34' height='16' rx='6' fill='#79afe0' stroke='#1f4f80' stroke-width='2'/><rect x='8' y='28' width='10' height='17' rx='5' fill='#3f7fbd'/><rect x='46' y='28' width='10' height='17' rx='5' fill='#3f7fbd'/><path d='M19 34h26M18 45v5M46 45v5' stroke='#1f4f80' stroke-width='2'/></svg>"
     }
@@ -54,7 +54,7 @@
       "Casa & Interni"
     ],
     "render": {
-      "type": "svg",
+      "type": "webp",
       "scale": 0.8,
       "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><ellipse cx='32' cy='25' rx='22' ry='13' fill='#c58b50' stroke='#5d371c' stroke-width='2'/><path d='M18 32v16M46 32v16M27 35v17M37 35v17' stroke='#5d371c' stroke-width='4' stroke-linecap='round'/></svg>"
     }
@@ -69,7 +69,7 @@
       "Casa & Interni"
     ],
     "render": {
-      "type": "svg",
+      "type": "webp",
       "scale": 0.8,
       "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><path d='M23 24h18l-4-13H27z' fill='#ffd166' stroke='#795548' stroke-width='2'/><path d='M32 24v24M22 52h20' stroke='#795548' stroke-width='4' stroke-linecap='round'/><circle cx='32' cy='20' r='5' fill='#fff3b0' opacity='.8'/></svg>"
     }
