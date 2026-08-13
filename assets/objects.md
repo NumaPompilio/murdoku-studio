@@ -40,7 +40,8 @@
     ],
     "render": {
       "type": "webp",
-      "scale": 0.8
+      "scale": 0.8,
+      "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><rect x='19' y='22' width='26' height='25' rx='8' fill='#9b6ad6' stroke='#4d2c7a' stroke-width='2'/><rect x='21' y='15' width='22' height='17' rx='7' fill='#b58ce4' stroke='#4d2c7a' stroke-width='2'/><rect x='13' y='28' width='11' height='18' rx='6' fill='#8256be'/><rect x='40' y='28' width='11' height='18' rx='6' fill='#8256be'/></svg>"
     }
   },
   {
