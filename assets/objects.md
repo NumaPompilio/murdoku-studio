@@ -1738,5 +1738,50 @@
       "scale": 0.8,
       "svgCode": "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='4' y='4' width='56' height='56' rx='8' fill='none'/><circle cx='32' cy='32' r='22' fill='#d6a354' stroke='#6d4c41' stroke-width='4'/><circle cx='32' cy='32' r='15' fill='#f5e6c8' stroke='#6d4c41' stroke-width='2'/><g fill='#f9c74f' stroke='#6d4c41'><circle cx='32' cy='9' r='4'/><circle cx='53' cy='32' r='4'/><circle cx='32' cy='55' r='4'/><circle cx='11' cy='32' r='4'/></g></svg>"
     }
+  },
+  {
+    "id": "passerella",
+    "label": "Passerella",
+    "article": "una",
+    "symbol": "ps",
+    "walkable": true,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1.0,
+      "svgCode": ""
+    }
+  },
+  {
+    "id": "pontile",
+    "label": "Pontile",
+    "article": "un",
+    "symbol": "po",
+    "walkable": true,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1.0,
+      "svgCode": ""
+    }
+  },
+  {
+    "id": "rete_da_volley",
+    "label": "Rete da Volley",
+    "article": "una",
+    "symbol": "rv",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1.0,
+      "svgCode": ""
+    }
   }
 ]
