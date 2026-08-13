@@ -367,7 +367,7 @@
             <option value="urban">🏙️ Esterno urbano</option>
             <option value="transport">🚗 Trasporti</option>
             <option value="countryside">🌾 Campagna</option>
-            <option value="sea" selected>🌊 Mare</option>
+            <option value="sea">🌊 Mare</option>
             <option value="commercial">🏬 Commerciale</option>
             <option value="salento">☀️ Salento</option>
             </select>
@@ -6421,15 +6421,16 @@ async function loadRemoteObjects() {
       // Ordina OBJ_ORDER e le liste di categoria alfabeticamente per label
       const byLabel = (a, b) => (E.OBJECT_LIB[a]?.label || a).localeCompare(E.OBJECT_LIB[b]?.label || b, 'it');
       OBJ_ORDER.sort(byLabel);
-      for (const cat of Object.values(OBJ_CATEGORIES)) {
-        if (cat.list) cat.list.sort(byLabel);
+      // Aggiorna anche OBJ_CATEGORIES.all.list con l'ordine alfabetico
+      OBJ_CATEGORIES.all.list = [...OBJ_ORDER];
+      for (const [key, cat] of Object.entries(OBJ_CATEGORIES)) {
+        if (key !== 'all' && cat.list) cat.list.sort(byLabel);
       }
 
       // Aggiorna il <select> delle categorie con le categorie caricate
 
       const catSelect = document.getElementById('objCategory');
       if (catSelect) {
-        const currentVal = catSelect.value;
         catSelect.innerHTML = '';
         for (const [key, cat] of Object.entries(OBJ_CATEGORIES)) {
           const opt = document.createElement('option');
@@ -6437,10 +6438,8 @@ async function loadRemoteObjects() {
           opt.textContent = cat.label;
           catSelect.appendChild(opt);
         }
-        // Ripristina selezione se ancora valida
-        if ([...catSelect.options].some(o => o.value === currentVal)) {
-          catSelect.value = currentVal;
-        }
+        // Imposta sempre "Tutti gli oggetti" come selezione di default
+        catSelect.value = 'all';
       }
 
       console.log(`Caricati dinamicamente ${arr.length} oggetti remoti.`);
