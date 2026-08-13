@@ -880,14 +880,14 @@
         [[5,6],[6,6]], [[6,7],[7,7]]
       ],
       objects: {
-        "1,1": "pedalo", "1,5": "surfboard", "2,3": "scoglio", "2,4": "scoglio", 
-        "2,8": "umbrella", "3,1": "pedalo", "3,5": "boa", "3,6": "surfboard", 
-        "3,9": "palm", "4,2": "mattress", "4,4": "mattress", "4,7": "towel", 
-        "5,9": "umbrella", "6,1": "towel", "6,2": "lifeguard", "6,5": "sunbed", 
-        "6,7": "towel", "7,1": "umbrella", "7,2": "umbrella", "7,3": "umbrella", 
-        "7,5": "towel", "7,9": "palm", "8,2": "umbrella", "8,3": "umbrella", 
-        "8,4": "sunbed", "8,6": "cooler", "8,7": "towel", "9,2": "kiosk", 
-        "9,3": "cabin", "9,4": "palm", "9,6": "sunbed", "9,8": "palm"
+        "1,1": "pedalo", "1,5": "tavola_da_surf", "2,3": "scoglio", "2,4": "scoglio", 
+        "2,8": "ombrellone", "3,1": "pedalo", "3,5": "boa", "3,6": "tavola_da_surf", 
+        "3,9": "palma", "4,2": "materassino", "4,4": "materassino", "4,7": "telo_da_mare", 
+        "5,9": "ombrellone", "6,1": "telo_da_mare", "6,2": "torretta_bagnino", "6,5": "lettino", 
+        "6,7": "telo_da_mare", "7,1": "ombrellone", "7,2": "ombrellone", "7,3": "ombrellone", 
+        "7,5": "telo_da_mare", "7,9": "palma", "8,2": "ombrellone", "8,3": "ombrellone", 
+        "8,4": "lettino", "8,6": "secchiello", "8,7": "telo_da_mare", "9,2": "chiringuito", 
+        "9,3": "cabina", "9,4": "palma", "9,6": "lettino", "9,8": "palma"
       }
     },
     {
@@ -909,15 +909,15 @@
         [[2,1],[3,1]], [[2,2],[3,2]], [[2,3],[3,3]], [[2,4],[3,4]], [[2,5],[3,5]], [[2,6],[3,6]], [[2,7],[3,7]], [[2,8],[3,8]], [[2,9],[3,9]], [[4,7],[5,7]], [[4,8],[5,8]], [[4,9],[5,9]], [[6,1],[7,1]], [[6,2],[7,2]], [[6,3],[7,3]], [[6,4],[7,4]]
       ],
       objects: {
-        "1,3": "table", "1,4": "table", "1,5": "table", "1,8": "chair", "1,9": "chair",
-        "2,1": "plant", "2,3": "chair", "2,4": "chair", "2,9": "plant",
-        "3,1": "shelf", "3,2": "shelf", "3,3": "shelf", "3,4": "shelf", "3,6": "plant", "3,7": "chair", "3,9": "chair",
-        "4,9": "shelf",
-        "5,1": "chair", "5,2": "table", "5,3": "table",
-        "6,1": "chair", "6,2": "table", "6,3": "table", "6,4": "chair", "6,6": "bookcase", "6,8": "bed", "6,9": "bed",
-        "7,1": "plant", "7,3": "chair", "7,6": "bookcase", "7,8": "bed", "7,9": "bed",
-        "8,1": "tv", "8,3": "chair",
-        "9,1": "plant", "9,3": "chair", "9,5": "plant", "9,6": "plant", "9,7": "shelf", "9,8": "shelf", "9,9": "shelf"
+        "1,3": "tavolo", "1,4": "tavolo", "1,5": "tavolo", "1,8": "sedia", "1,9": "sedia",
+        "2,1": "vaso_di_piante", "2,3": "sedia", "2,4": "sedia", "2,9": "vaso_di_piante",
+        "3,1": "scaffale", "3,2": "scaffale", "3,3": "scaffale", "3,4": "scaffale", "3,6": "vaso_di_piante", "3,7": "sedia", "3,9": "sedia",
+        "4,9": "scaffale",
+        "5,1": "sedia", "5,2": "tavolo", "5,3": "tavolo",
+        "6,1": "sedia", "6,2": "tavolo", "6,3": "tavolo", "6,4": "sedia", "6,6": "libreria", "6,8": "letto", "6,9": "letto",
+        "7,1": "vaso_di_piante", "7,3": "sedia", "7,6": "libreria", "7,8": "letto", "7,9": "letto",
+        "8,1": "tv", "8,3": "sedia",
+        "9,1": "vaso_di_piante", "9,3": "sedia", "9,5": "vaso_di_piante", "9,6": "vaso_di_piante", "9,7": "scaffale", "9,8": "scaffale", "9,9": "scaffale"
       }
     }
   ];
@@ -1381,8 +1381,8 @@
         const onObj = sus.filter(s => cellAt(ctx.map, s.row, s.col).object === k);
         if (onObj.length === 1) {
           let testo = "";
-          if (k === "chair") testo = `${e.name} è l'unica persona seduta su una sedia.`;
-          else if (k === "sunbed") testo = `${e.name} è l'unica persona sdraiata su un lettino.`;
+          if (k === "sedia") testo = `${e.name} è l'unica persona seduta su una sedia.`;
+          else if (k === "lettino") testo = `${e.name} è l'unica persona sdraiata su un lettino.`;
           else testo = `${e.name} è l'unica persona su ${withArticle(k)}.`;
           out.push(clue("ONLY_ON_OBJECT", e, { objectKind: k }, "oggetto", 2,
             () => testo,
@@ -2541,7 +2541,7 @@ function charAvatarSVG(s) {
 function objectGlyph(kind, cx, cy, CS){
   const op = E.objWalkable(kind) ? 0.72 : 0.95;
   const s = CS;
-  if(kind==="table"){
+  if(kind==="tavolo"){
     const w=s*0.60, topH=s*0.11, legH=s*0.28, topY=cy-s*0.17, col="#8a6a3e";
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${cx-w/2}" y="${topY}" width="${w}" height="${topH}" rx="2" fill="${col}"/>`+
@@ -2549,7 +2549,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<rect x="${cx+w/2-w*0.21}" y="${topY+topH}" width="${w*0.11}" height="${legH}" fill="${col}"/>`+
       `</g>`;
   }
-  if(kind==="bookcase"){
+  if(kind==="libreria"){
     const size = s * 0.75;
     const x = cx - size/2;
     const y = cy - size/2;
@@ -2558,7 +2558,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path style="fill:#434A54;" d="M362.65,511.992c-5.89,0-10.655-4.781-10.655-10.656v-21.344c0-5.891,4.766-10.656,10.655-10.656 c5.891,0,10.672,4.766,10.672,10.656v21.344C373.322,507.211,368.541,511.992,362.65,511.992z"></path> <path style="fill:#434A54;" d="M501.32,511.992c-5.891,0-10.672-4.781-10.672-10.656v-21.344c0-5.891,4.781-10.656,10.672-10.656 s10.671,4.766,10.671,10.656v21.344C511.991,507.211,507.211,511.992,501.32,511.992z"></path> </g> <g> <path style="fill:#7F4545;" d="M490.648,426.65H373.322c-5.891,0-10.672-4.766-10.672-10.656s4.781-10.656,10.672-10.656h117.326 c5.891,0,10.672,4.766,10.672,10.656S496.539,426.65,490.648,426.65z"></path> <path style="fill:#7F4545;" d="M490.648,341.34H373.322c-5.891,0-10.672-4.781-10.672-10.688c0-5.875,4.781-10.656,10.672-10.656 h117.326c5.891,0,10.672,4.781,10.672,10.656C501.32,336.558,496.539,341.34,490.648,341.34z"></path> <path style="fill:#7F4545;" d="M490.648,255.996H373.322c-5.891,0-10.672-4.773-10.672-10.664s4.781-10.672,10.672-10.672h117.326 c5.891,0,10.672,4.781,10.672,10.672S496.539,255.996,490.648,255.996z"></path> <path style="fill:#7F4545;" d="M490.648,170.662H373.322c-5.891,0-10.672-4.773-10.672-10.664s4.781-10.664,10.672-10.664h117.326 c5.891,0,10.672,4.773,10.672,10.664S496.539,170.662,490.648,170.662z"></path> <path style="fill:#7F4545;" d="M490.648,85.335H373.322c-5.891,0-10.672-4.781-10.672-10.672s4.781-10.664,10.672-10.664h117.326 c5.891,0,10.672,4.773,10.672,10.664S496.539,85.335,490.648,85.335z"></path> <path style="fill:#7F4545;" d="M32,511.992c-5.891,0-10.672-4.781-10.672-10.656v-21.344c0-5.891,4.781-10.656,10.672-10.656 s10.656,4.766,10.656,10.656v21.344C42.656,507.211,37.891,511.992,32,511.992z"></path> <path style="fill:#7F4545;" d="M309.324,511.992c-5.891,0-10.672-4.781-10.672-10.656v-21.344c0-5.891,4.781-10.656,10.672-10.656 s10.672,4.765,10.672,10.656v21.344C319.996,507.211,315.215,511.992,309.324,511.992z"></path> <rect x="12.657" y="10.664" style="fill:#7F4545;" width="319.99" height="469.33"></rect> </g> <rect x="127.996" y="266.656" style="fill:#48CFAD;" width="85.33" height="42.68"></rect> <rect x="127.996" y="31.996" style="fill:#FFCE54;" width="42.655" height="85.33"></rect> <path style="fill:#965353;" d="M330.651,0H10.657C4.766,0,0.001,4.773,0.001,10.664v469.328c0,5.891,4.766,10.656,10.656,10.656 h319.994c5.891,0,10.672-4.766,10.672-10.656V10.664C341.323,4.774,336.542,0,330.651,0z M21.328,138.662h298.668v95.999H21.328 V138.662z M21.328,255.996h298.668v95.998H21.328V255.996z M319.996,21.336v95.998H21.328V21.336H319.996z M21.328,469.336v-95.998 h298.668v95.998L21.328,469.336L21.328,469.336z"></path> <rect x="255.996" y="266.656" style="fill:#48CFAD;" width="42.656" height="85.33"></rect> <g> <rect x="213.326" y="266.656" style="fill:#ED5564;" width="42.671" height="85.33"></rect> <rect x="85.326" y="149.336" style="fill:#ED5564;" width="42.671" height="85.33"></rect> </g> <rect x="127.996" y="149.336" style="fill:#5D9CEC;" width="42.655" height="85.33"></rect> <rect x="170.656" y="149.336" style="fill:#A0D468;" width="42.671" height="85.33"></rect> <rect x="255.996" y="31.996" style="fill:#AC92EB;" width="42.656" height="85.33"></rect> <rect x="42.656" y="74.666" style="fill:#A0D468;" width="85.34" height="42.671"></rect> <rect x="42.656" y="32.735" style="fill:#ED5564;" width="85.34" height="42.663"></rect> <g> <rect x="94.656" y="149.336" style="fill:#E6E9ED;" width="24" height="85.33"></rect> <rect x="265.326" y="31.996" style="fill:#E6E9ED;" width="24" height="85.33"></rect> <rect x="137.326" y="31.996" style="fill:#E6E9ED;" width="24" height="85.33"></rect> </g> <rect x="42.656" y="426.646" style="fill:#ED5564;" width="85.34" height="42.686"></rect> <g> <rect x="42.656" y="435.996" style="fill:#E6E9ED;" width="85.34" height="23.998"></rect> <rect x="127.996" y="275.996" style="fill:#E6E9ED;" width="85.33" height="24"></rect> <rect x="42.656" y="83.996" style="fill:#E6E9ED;" width="85.34" height="24"></rect> </g> <rect x="213.326" y="31.996" style="fill:#5D9CEC;" width="42.671" height="85.33"></rect> <rect x="170.656" y="31.996" style="fill:#ED5564;" width="42.671" height="85.33"></rect> <rect x="42.656" y="149.336" style="fill:#48CFAD;" width="42.672" height="85.33"></rect> <rect x="213.326" y="191.996" style="fill:#FFCE54;" width="85.33" height="42.663"></rect> <rect x="213.326" y="149.336" style="fill:#ED5564;" width="85.33" height="42.664"></rect> <rect x="42.656" y="266.656" style="fill:#FFCE54;" width="42.672" height="85.33"></rect> <rect x="85.326" y="266.656" style="fill:#AC92EB;" width="42.671" height="85.33"></rect> <rect x="127.996" y="309.336" style="fill:#A0D468;" width="85.33" height="42.654"></rect> <rect x="255.996" y="383.996" style="fill:#FFCE54;" width="42.656" height="85.34"></rect> <rect x="127.996" y="383.996" style="fill:#5D9CEC;" width="42.655" height="85.34"></rect> <rect x="170.656" y="383.996" style="fill:#AC92EB;" width="42.671" height="85.34"></rect> <rect x="213.326" y="383.996" style="fill:#48CFAD;" width="42.671" height="85.34"></rect> <rect x="42.656" y="383.996" style="fill:#A0D468;" width="85.34" height="42.656"></rect> <g> <path style="fill:#965353;" d="M373.322,511.992c-5.891,0-10.672-4.781-10.672-10.656V10.664C362.65,4.773,367.431,0,373.322,0 c5.89,0,10.671,4.773,10.671,10.664v490.672C383.993,507.211,379.212,511.992,373.322,511.992z"></path> <path style="fill:#965353;" d="M490.648,511.992c-5.891,0-10.656-4.781-10.656-10.656V10.664C479.992,4.773,484.758,0,490.648,0 s10.672,4.773,10.672,10.664v490.672C501.32,507.211,496.539,511.992,490.648,511.992z"></path> </g> <g> <rect x="213.326" y="158.666" style="fill:#E6E9ED;" width="85.33" height="24"></rect> <rect x="127.996" y="318.656" style="fill:#E6E9ED;" width="85.33" height="23.998"></rect> <rect x="51.996" y="266.656" style="fill:#E6E9ED;" width="24" height="85.33"></rect> <rect x="179.996" y="383.996" style="fill:#E6E9ED;" width="23.999" height="85.34"></rect> <rect x="222.656" y="383.996" style="fill:#E6E9ED;" width="23.999" height="85.34"></rect> <rect x="265.326" y="383.996" style="fill:#E6E9ED;" width="24" height="85.34"></rect> </g> </g>`+
       `</svg></g>`;
   }
-  if(kind==="santoronzo"){
+  if(kind==="sant_oronzo"){
     const size = s * 0.9;
     const x = cx - size/2;
     const y = cy - size/2;
@@ -2610,7 +2610,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<path d="M230 203 L246 199"/><path d="M278 217 L292 212"/><path d="M219 292 L236 287"/><path d="M276 306 L296 301"/><path d="M237 371 L251 367"/><path d="M288 386 L306 381"/><path d="M161 266 L177 259"/><path d="M335 286 L351 278"/>`+
       `</g></g></svg></g>`;
   }
-  if(kind==="rug"||kind==="carpet"){                 // tappeto (vista dall'alto, con frange)
+  if(kind==="tappeto"||kind==="carpet"){                 // tappeto (vista dall'alto, con frange)
     const w=s*0.64, h=s*0.46, x=cx-w/2, y=cy-h/2, base="#c25b3a", line="#f4efe4";
     let fr="";
     for(let i=0;i<4;i++){ const fy=y+h*(0.16+0.68*i/3);
@@ -2642,7 +2642,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#a5271f" stroke-width="1"/>`+
       `<circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="#a5271f" stroke-width="1"/></g>`;
   }
-  if(kind==="mattress"){                             // materassino da mare (gonfiabile, camere orizzontali)
+  if(kind==="materassino"){                             // materassino da mare (gonfiabile, camere orizzontali)
     const w=s*0.62, h=s*0.40, x=cx-w/2, y=cy-h/2, col="#1fb6c9";
     let ln="";
     for(let i=1;i<4;i++){ const ly=y+h*i/4; ln+=`<line x1="${x+4}" y1="${ly}" x2="${x+w-4}" y2="${ly}"/>`; }
@@ -2650,14 +2650,14 @@ function objectGlyph(kind, cx, cy, CS){
       `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h*0.48}" fill="${col}"/>`+
       `<g stroke="#e6fbff" stroke-width="1.5" stroke-linecap="round">${ln}</g></g>`;
   }
-  if(kind==="towel"){                                // telo da mare (strisce verticali colorate)
+  if(kind==="telo_da_mare"){                                // telo da mare (strisce verticali colorate)
     const w=s*0.50, h=s*0.60, x=cx-w/2, y=cy-h/2, cols=["#f4a71d","#e4483d","#f4efe4","#2bb3c0"], ns=4, sw=w/ns;
     let st="";
     for(let i=0;i<ns;i++) st+=`<rect x="${x+i*sw}" y="${y}" width="${sw+0.5}" height="${h}" fill="${cols[i%cols.length]}"/>`;
     return `<g opacity="${op}" pointer-events="none">${st}`+
       `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5" fill="none" stroke="#b9ad92" stroke-width="1"/></g>`;
   }
-  if(kind==="umbrella"){                             // ombrellone da spiaggia (vista laterale)
+  if(kind==="ombrellone"){                             // ombrellone da spiaggia (vista laterale)
     const R=s*0.38, h=s*0.60;
     return `<g opacity="${op}" pointer-events="none">`+
       `<ellipse cx="${cx+2}" cy="${cy+h/2}" rx="${R*0.8}" ry="${R*0.25}" fill="#000" opacity="0.15"/>`+
@@ -2667,7 +2667,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${cy-h*0.1-R}" r="2" fill="#c0392b"/>`+
       `</g>`;
   }
-  if(kind==="sunbed"){                               // lettino da spiaggia (tela azzurra, telaio e cuscino)
+  if(kind==="lettino"){                               // lettino da spiaggia (tela azzurra, telaio e cuscino)
     const w=s*0.44, h=s*0.68, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x+1.5}" y="${y+1.5}" width="${w}" height="${h}" rx="3.5" fill="#000" opacity="0.15"/>`+
@@ -2681,7 +2681,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<rect x="${x+w-0.5}" y="${y+5}" width="2" height="${h-10}" rx="1" fill="#94a3b8"/>`+
       `</g>`;
   }
-  if(kind==="surfboard"){                            // tavola da surf / SUP (sagoma affusolata con striscia)
+  if(kind==="tavola_da_surf"){                            // tavola da surf / SUP (sagoma affusolata con striscia)
     return `<g opacity="${op}" pointer-events="none">`+
       `<ellipse cx="${cx+1}" cy="${cy+1}" rx="${s*0.14}" ry="${s*0.35}" fill="#000" opacity="0.15"/>`+
       `<path d="M ${cx} ${cy-s*0.36} C ${cx+s*0.16} ${cy-s*0.15} ${cx+s*0.16} ${cy+s*0.20} ${cx} ${cy+s*0.36} C ${cx-s*0.16} ${cy+s*0.20} ${cx-s*0.16} ${cy-s*0.15} ${cx} ${cy-s*0.36} Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.2"/>`+
@@ -2689,7 +2689,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${cy-s*0.08}" r="${s*0.05}" fill="#38bdf8"/>`+
       `</g>`;
   }
-  if(kind==="walkway"){                              // passerella in legno a doghe
+  if(kind==="passerella"){                              // passerella in legno a doghe
     const w=s*0.62, h=s*0.48, x=cx-w/2, y=cy-h/2;
     let sl="";
     for(let i=1;i<4;i++){ const lx=x+w*i/4; sl+=`<line x1="${lx}" y1="${y+1}" x2="${lx}" y2="${y+h-1}"/>`; }
@@ -2710,7 +2710,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<rect x="${cx-s*0.08}" y="${cy+h*0.12}" width="${s*0.16}" height="${h*0.14}" rx="1" fill="#f472b6"/>`+
       `</g>`;
   }
-  if(kind==="dock"){                                 // pontile / molo in legno con bitte
+  if(kind==="pontile"){                                 // pontile / molo in legno con bitte
     const w=s*0.52, h=s*0.68, x=cx-w/2, y=cy-h/2;
     let ln="";
     for(let i=1;i<5;i++){ const ly=y+h*i/5; ln+=`<line x1="${x+2}" y1="${ly}" x2="${x+w-2}" y2="${ly}"/>`; }
@@ -2721,7 +2721,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${x+w*0.80}" cy="${y+4}" r="${s*0.04}" fill="#1e293b"/>`+
       `</g>`;
   }
-  if(kind==="cabin"){                                // cabina da spiaggia (righe bicolori e tetto a capanna)
+  if(kind==="cabina"){                                // cabina da spiaggia (righe bicolori e tetto a capanna)
     const w=s*0.56, h=s*0.64, x=cx-w/2, y=cy-h/2, topH=h*0.28;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x}" y="${y+topH}" width="${w}" height="${h-topH}" rx="1" fill="#2563eb"/>`+
@@ -2732,7 +2732,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${y+topH+h*0.22}" r="2" fill="#1e3a8a"/>`+
       `</g>`;
   }
-  if(kind==="lifeguard"){                            // torretta del bagnino
+  if(kind==="torretta_bagnino"){                            // torretta del bagnino
     const w=s*0.54, h=s*0.64, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<line x1="${x+3}" y1="${y+h}" x2="${x+w*0.25}" y2="${y+h*0.35}" stroke="#78350f" stroke-width="1.8"/>`+
@@ -2743,7 +2743,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${y+h*0.62}" r="${s*0.08}" fill="none" stroke="#ef4444" stroke-width="2"/>`+
       `</g>`;
   }
-  if(kind==="palm"){                                 // palma tropicale
+  if(kind==="palma"){                                 // palma tropicale
     return `<g opacity="${op}" pointer-events="none">`+
       `<path d="M ${cx} ${cy} q -${s*0.25} -${s*0.28} -${s*0.32} -${s*0.14} q ${s*0.18} ${s*0.20} ${s*0.32} ${s*0.14}" fill="#15803d" stroke="#166534" stroke-width="0.8"/>`+
       `<path d="M ${cx} ${cy} q ${s*0.25} -${s*0.28} ${s*0.32} -${s*0.14} q -${s*0.18} ${s*0.20} -${s*0.32} ${s*0.14}" fill="#15803d" stroke="#166534" stroke-width="0.8"/>`+
@@ -2755,7 +2755,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx+1.5}" cy="${cy+1.5}" r="1.8" fill="#451a03"/>`+
       `</g>`;
   }
-  if(kind==="shower"){                               // doccia da spiaggia
+  if(kind==="doccia"){                               // doccia da spiaggia
     const w=s*0.50, h=s*0.64, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x}" y="${y+h*0.75}" width="${w}" height="${h*0.25}" rx="2" fill="#d4a373" stroke="#8c5836" stroke-width="1"/>`+
@@ -2766,7 +2766,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx+w*0.32}" cy="${y+h*0.42}" r="1" fill="#38bdf8"/>`+
       `</g>`;
   }
-  if(kind==="kiosk"){                                // chiringuito / bar
+  if(kind==="chiringuito"){                                // chiringuito / bar
     const w=s*0.62, h=s*0.62, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x+2}" y="${y+h*0.38}" width="${w-4}" height="${h*0.62}" rx="2" fill="#92400e" stroke="#78350f" stroke-width="1"/>`+
@@ -2776,7 +2776,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<rect x="${cx+w*0.22}" y="${y+h*0.24}" width="2.5" height="5" fill="#f43f5e"/>`+
       `</g>`;
   }
-  if(kind==="volleyball"){                           // rete da beach volley
+  if(kind==="rete_da_volley"){                           // rete da beach volley
     const w=s*0.66, h=s*0.54, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<line x1="${x+1}" y1="${y}" x2="${x+1}" y2="${y+h}" stroke="#334155" stroke-width="2.5"/>`+
@@ -2786,7 +2786,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${y-2}" r="${s*0.09}" fill="#fde047" stroke="#0284c7" stroke-width="1"/>`+
       `</g>`;
   }
-  if(kind==="cooler"){                               // borsa frigo portatile
+  if(kind==="secchiello"){                               // borsa frigo portatile
     const w=s*0.50, h=s*0.44, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x}" y="${y+h*0.24}" width="${w}" height="${h*0.76}" rx="3" fill="#0284c7" stroke="#0369a1" stroke-width="1"/>`+
@@ -2795,7 +2795,7 @@ function objectGlyph(kind, cx, cy, CS){
       `</g>`;
   }
   // Oggetti Salento & Tradizione
-  if(kind==="scannetto"){                            // sgabello basso rustico in legno e paglia
+  if(kind==="sgabello"){                            // sgabello basso rustico in legno e paglia
     const w=s*0.48, h=s*0.42, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x}" y="${y}" width="${w}" height="${h*0.38}" rx="2" fill="#eab308" stroke="#a16207" stroke-width="1"/>`+
@@ -2829,7 +2829,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${cy-h*0.42}" r="${s*0.04}" fill="#f59e0b"/>`+
       `</g>`;
   }
-  if(kind==="cassapanca"){                           // cassapanca / baule antico in legno d'ulivo
+  if(kind==="armadio"){                           // cassapanca / baule antico in legno d'ulivo
     const w=s*0.62, h=s*0.44, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x}" y="${y+h*0.20}" width="${w}" height="${h*0.80}" rx="2" fill="#78350f" stroke="#451a03" stroke-width="1.2"/>`+
@@ -2839,7 +2839,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${y+h*0.20+4}" r="1" fill="#000"/>`+
       `</g>`;
   }
-  if(kind==="madia"){                                // madia per il pane (cassa trapezoidale su piedi)
+  if(kind==="comodino"){                                // madia per il pane (cassa trapezoidale su piedi)
     const w=s*0.60, h=s*0.50, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<polygon points="${x-2},${y} ${x+w+2},${y} ${x+w-4},${y+h*0.65} ${x+4},${y+h*0.65}" fill="#b45309" stroke="#78350f" stroke-width="1.2"/>`+
@@ -2850,7 +2850,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx+8}" cy="${y+h*0.35}" r="1.5" fill="#fde68a"/>`+
       `</g>`;
   }
-  if(kind==="cascetta"){                             // cassetta da frutta in legno a listelli
+  if(kind==="cassetta_di_legno"){                             // cassetta da frutta in legno a listelli
     const w=s*0.56, h=s*0.42, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="1.5" fill="#d4a373" stroke="#8c5836" stroke-width="1.2"/>`+
@@ -2859,7 +2859,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<rect x="${cx-6}" y="${y+h*0.12}" width="12" height="4" rx="2" fill="#5c3820"/>`+
       `</g>`;
   }
-  if(kind==="murosecco"){                            // muro a secco salentino a conci di pietra
+  if(kind==="muro_a_secco"){                            // muro a secco salentino a conci di pietra
     const w=s*0.66, h=s*0.48, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="2" fill="#d6d3d1" stroke="#57534e" stroke-width="1.2"/>`+
@@ -2870,7 +2870,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<rect x="${x+w*0.72}" y="${y+h*0.48}" width="${w*0.24}" height="${h*0.45}" rx="1" fill="#d6d3d1" stroke="#78716c" stroke-width="0.8"/>`+
       `</g>`;
   }
-  if(kind==="malota"){                               // malota (scarafaggio/blatta)
+  if(kind==="rovi"){                               // rovi/malota (scarafaggio/blatta)
     return `<g opacity="${op}" pointer-events="none">`+
       `<ellipse cx="${cx}" cy="${cy}" rx="${s*0.14}" ry="${s*0.24}" fill="#292524" stroke="#1c1917" stroke-width="1"/>`+
       `<line x1="${cx}" y1="${cy-s*0.14}" x2="${cx}" y2="${cy+s*0.22}" stroke="#78716c" stroke-width="0.8"/>`+
@@ -2883,7 +2883,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<line x1="${cx+s*0.14}" y1="${cy+s*0.04}" x2="${cx+s*0.30}" y2="${cy+s*0.06}" stroke="#1c1917" stroke-width="1.2"/>`+
       `</g>`;
   }
-  if(kind==="scrace"){                               // scrace (cespuglio di rovi spinosi)
+  if(kind==="scrace_legacy"||kind==="scrace_unused"){                               // scrace (cespuglio di rovi spinosi - deprecato)
     return `<g opacity="${op}" pointer-events="none">`+
       `<path d="M ${cx-s*0.30} ${cy+s*0.20} Q ${cx-s*0.10} ${cy-s*0.25} ${cx+s*0.28} ${cy-s*0.15}" fill="none" stroke="#3f3f46" stroke-width="1.8"/>`+
       `<path d="M ${cx+s*0.25} ${cy+s*0.22} Q ${cx+s*0.05} ${cy-s*0.20} ${cx-s*0.26} ${cy-s*0.12}" fill="none" stroke="#27272a" stroke-width="1.8"/>`+
@@ -2894,7 +2894,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx+s*0.14}" cy="${cy+s*0.08}" r="2" fill="#701a75"/>`+
       `</g>`;
   }
-  if(kind==="ulivo"){                                // albero di ulivo secolare
+  if(kind==="albero_ulivo"){                                // albero di ulivo secolare
     return `<g opacity="${op}" pointer-events="none">`+
       `<path d="M ${cx-s*0.14} ${cy+s*0.34} C ${cx-s*0.22} ${cy+s*0.08}, ${cx-s*0.05} ${cy}, ${cx-s*0.18} ${cy-s*0.12} C ${cx-s*0.02} ${cy-s*0.08}, ${cx+s*0.08} ${cy-s*0.08}, ${cx+s*0.22} ${cy-s*0.10} C ${cx+s*0.08} ${cy}, ${cx+s*0.20} ${cy+s*0.10}, ${cx+s*0.14} ${cy+s*0.34} Z" fill="#78716c" stroke="#44403c" stroke-width="1.2"/>`+
       `<ellipse cx="${cx-s*0.16}" cy="${cy-s*0.18}" rx="${s*0.18}" ry="${s*0.14}" fill="#65a30d" stroke="#4d7c0f" stroke-width="1"/>`+
@@ -2904,7 +2904,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx+s*0.08}" cy="${cy-s*0.22}" r="1.5" fill="#365314"/>`+
       `</g>`;
   }
-  if(kind==="muscia"){                               // muscia (gatta salentina accovacciata)
+  if(kind==="gatto"){                               // gatto/muscia salentina accovacciata
     return `<g opacity="${op}" pointer-events="none">`+
       `<ellipse cx="${cx}" cy="${cy+s*0.08}" rx="${s*0.22}" ry="${s*0.16}" fill="#475569" stroke="#1e293b" stroke-width="1"/>`+
       `<circle cx="${cx-s*0.14}" cy="${cy-s*0.06}" r="${s*0.12}" fill="#475569" stroke="#1e293b" stroke-width="1"/>`+
@@ -2915,7 +2915,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<path d="M ${cx+s*0.18} ${cy+s*0.12} Q ${cx+s*0.34} ${cy+s*0.05} ${cx+s*0.30} ${cy-s*0.12}" fill="none" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>`+
       `</g>`;
   }
-  if(kind==="apecar"){                               // Ape Car Piaggio (tre ruote, cabina e cassone)
+  if(kind==="ape_car"){                               // Ape Car Piaggio (tre ruote, cabina e cassone)
     const w=s*0.68, h=s*0.48, x=cx-w/2, y=cy-h/2;
     return `<g opacity="${op}" pointer-events="none">`+
       `<rect x="${x+w*0.35}" y="${y}" width="${w*0.65}" height="${h*0.75}" rx="2" fill="#0284c7" stroke="#0369a1" stroke-width="1.2"/>`+
@@ -2965,7 +2965,7 @@ function objectGlyph(kind, cx, cy, CS){
       `<circle cx="${cx}" cy="${y+h*0.28}" r="2" fill="#a855f7"/>`+
       `</g>`;
   }
-  if(kind==="taccaro"){                              // taccaro (ceppo di legno tondo)
+  if(kind==="pezzo_di_legno"){                              // taccaro (ceppo di legno tondo)
     return `<g opacity="${op}" pointer-events="none">`+
       `<ellipse cx="${cx}" cy="${cy+s*0.12}" rx="${s*0.35}" ry="${s*0.1}" fill="rgba(0,0,0,0.2)"/>`+
       `<rect x="${cx-s*0.25}" y="${cy-s*0.15}" width="${s*0.5}" height="${s*0.3}" fill="#78350f" />`+
@@ -3210,7 +3210,7 @@ let state = {
   clueObjs: [],         // oggetti indizio con closure (per spilla/rigenera)
   preserved: new Set(), // id spillati
   tool: "select",
-  selectedObj: "umbrella",
+  selectedObj: "ombrellone",
   selectedChar: "A",
   showSol: true,
   lastAreaClicked: null,
@@ -4878,9 +4878,9 @@ function buildLevelDesignerMapPrompt() {
   L.push(JSON.stringify({
     "review": "Recensione del flow della mappa. Cosa funziona e cosa si può migliorare spostando arredi.",
     "actions": [
-      { "type": "move_object", "kind": "table", "from": [0,1], "to": [2,2] },
+      { "type": "move_object", "kind": "tavolo", "from": [0,1], "to": [2,2] },
       { "type": "remove_object", "row": 1, "col": 1 },
-      { "type": "add_object", "kind": "chair", "row": 4, "col": 4 }
+      { "type": "add_object", "kind": "sedia", "row": 4, "col": 4 }
     ]
   }, null, 2));
   L.push("```");
@@ -4914,7 +4914,7 @@ function buildLevelDesignerPlaytestPrompt() {
   L.push(JSON.stringify({
     "review": "Descrizione del perché le modifiche aumentano il divertimento logico e il risultato del tuo playtest.",
     "actions": [
-      { "type": "move_object", "kind": "umbrella", "from": [3,3], "to": [4,4] },
+      { "type": "move_object", "kind": "ombrellone", "from": [3,3], "to": [4,4] },
       { "type": "replace_clue", "id": "c1", "new_type": "ONLY_ON_OBJECT" }
     ]
   }, null, 2));
