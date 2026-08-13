@@ -480,3 +480,8 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Etichette Testuali**: Le icone grafiche di Porte e Finestre sulla mappa ora presentano una piccola dicitura testuale di identificazione ("Porta" o "Finestra" rispettivamente) per rendere immediato il loro significato.
 - **Supporto Omnipresente**: Le etichette sono visualizzate e regolate dinamicamente sia nell'Editor, sia nel Player, sia nella stampa PDF (nella quale il testo adotta una dimensione proporzionata per una resa pulita).
 - **Rotazione SVG**: Se il muro contenente la porta o la finestra è verticale, il testo viene ruotato automaticamente di -90 gradi per rimanere centrato e contenuto all'interno dell'elemento di delimitazione.
+
+### 53. Supporto nativo per icone Oggetti in formato WebP (v2.26)
+- **Caricamento Esterno Immagini Raster**: L'editor è ora in grado di caricare dinamicamente immagini in formato raster ottimizzato (`.webp`) per la rappresentazione grafica degli oggetti (invece del solo SVG inline).
+- **Definizione JSON**: Nei file di definizione degli oggetti (come `objects.md`), è possibile specificare nel blocco `render` la chiave `type: "webp"`. L'editor estrarrà automaticamente l'id dell'oggetto e proverà a recuperare il file d'immagine al path relativo `assets/objects_webp/{id}.webp`.
+- **Risoluzione Errori e Fallback (Graceful degradation)**: Il motore di rendering SVG dell'editor (funzione `objectGlyph`) utilizza il tag `<image>` nativo accoppiato a una stringa `<text>?</text>` nascosta. In caso di errore nel caricamento dell'immagine (file mancante o errore 404), viene attivato un gestore `onerror` che nasconde il box rotto dell'immagine ed espone un punto interrogativo di fallback elegante sulla griglia e sulla palette.

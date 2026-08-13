@@ -271,7 +271,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.25</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v2.26</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -3054,6 +3054,12 @@ function objectGlyph(kind, cx, cy, CS){
       });
       if(kind === "automobile2") console.log("automobile2 RAW AFTER:", raw);
       return raw;
+    } else if(dyn.type === "webp") {
+      let sc = dyn.scale || 1;
+      let actualS = s * sc;
+      let imageX = cx - actualS/2;
+      let imageY = cy - actualS/2;
+      return `<g><image href="assets/objects_webp/${kind}.webp" x="${imageX}" y="${imageY}" width="${actualS}" height="${actualS}" opacity="${op}" pointer-events="none" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" /><text x="${cx}" y="${cy+CS*0.18}" font-size="${CS*0.5}" text-anchor="middle" opacity="${op}" pointer-events="none" style="display:none;">?</text></g>`;
     }
   }
 
@@ -6467,6 +6473,8 @@ async function loadRemoteObjects() {
             OBJ_EMOJI[o.id] = o.render.svgCode;
           } else if (o.render.type === 'svg') {
             window.DYNAMIC_SVGS[o.id] = { type: 'svg', scale: o.render.scale, code: o.render.svgCode };
+          } else if (o.render.type === 'webp') {
+            window.DYNAMIC_SVGS[o.id] = { type: 'webp', scale: o.render.scale };
           }
         }
         
