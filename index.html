@@ -263,10 +263,74 @@
     body.pure-player-mode header { display: none !important; }
   }
 
+  /* ===== PLAYER LOADING OVERLAY ===== */
+  #player-loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1030 50%, #0a1628 100%);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+  }
+  #player-loading-overlay.active { display: flex; }
+  .plo-logo {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #fff;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .plo-logo span {
+    color: #e8b86d;
+  }
+  .plo-spinner {
+    width: 56px;
+    height: 56px;
+    border: 4px solid rgba(232,184,109,0.15);
+    border-top-color: #e8b86d;
+    border-radius: 50%;
+    animation: plo-spin 0.9s linear infinite;
+  }
+  @keyframes plo-spin {
+    to { transform: rotate(360deg); }
+  }
+  .plo-bar-wrap {
+    width: 220px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .plo-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #e8b86d, #f0d4a0);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .plo-msg {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px;
+  }
+
   @media (max-width:1000px){ main{grid-template-columns:1fr} .left,.right{border:none} }
 </style>
 </head>
 <body>
+
+<!-- PLAYER LOADING OVERLAY -->
+<div id="player-loading-overlay">
+  <div class="plo-logo">MURDO<span>KU</span></div>
+  <div class="plo-spinner"></div>
+  <div class="plo-bar-wrap"><div class="plo-bar" id="ploBar"></div></div>
+  <div class="plo-msg" id="ploMsg">Caricamento oggetti...</div>
+</div>
+
 <header>
   <div class="brand">
     <span class="tab">MURDOKU</span>
@@ -6460,19 +6524,32 @@ async function loadRemoteObjects() {
 
 // Controllo URL per avvio diretto in modalità PLAYER e caricamento automatico mappa
 window.addEventListener('DOMContentLoaded', async () => {
-  // Carica objects.md PRIMA di qualsiasi altra operazione di rendering
-  await loadRemoteObjects();
-
   const urlParams = new URLSearchParams(window.location.search);
-  if (window.location.hash === '#player' || urlParams.get('mode') === 'player') {
+  const isPlayerMode = window.location.hash === '#player' || urlParams.get('mode') === 'player';
+
+  // Mostra overlay loading subito se siamo in player mode
+  const overlay = document.getElementById('player-loading-overlay');
+  const ploBar  = document.getElementById('ploBar');
+  const ploMsg  = document.getElementById('ploMsg');
+  if (isPlayerMode && overlay) overlay.classList.add('active');
+
+  // Fase 1: carica objects.md (50%)
+  if (ploMsg) ploMsg.textContent = 'Caricamento oggetti...';
+  if (ploBar)  ploBar.style.width = '0%';
+  await loadRemoteObjects();
+  if (ploBar)  ploBar.style.width = '50%';
+
+  if (isPlayerMode) {
     document.body.classList.add('pure-player-mode');
     const playerBtn = document.getElementById('modePlayerBtn');
     if (playerBtn) {
       playerBtn.click();
       const mapToLoad = urlParams.get('map');
       if (mapToLoad) {
-        // DYNAMIC_SVGS è ora popolato → gli oggetti saranno renderizzati correttamente
+        // Fase 2: carica la mappa (50% → 100%)
+        if (ploMsg) ploMsg.textContent = 'Caricamento mappa...';
         await loadMapFromGithub(mapToLoad);
+        if (ploBar) ploBar.style.width = '100%';
         const modeSwitch = document.querySelector('.mode-switch');
         if(modeSwitch) modeSwitch.style.display = 'none';
       } else {
@@ -6483,6 +6560,16 @@ window.addEventListener('DOMContentLoaded', async () => {
         const impBtn = document.getElementById('playerOpenImportBtn');
         if(impBtn) impBtn.style.display = 'none';
       }
+    }
+    // Tutto pronto: nascondi overlay con dissolvenza
+    if (overlay) {
+      ploBar && (ploBar.style.width = '100%');
+      ploMsg && (ploMsg.textContent = 'Pronto!');
+      setTimeout(() => {
+        overlay.style.transition = 'opacity 0.5s ease';
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.classList.remove('active'), 500);
+      }, 300);
     }
   }
 });
