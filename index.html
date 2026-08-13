@@ -6417,8 +6417,16 @@ async function loadRemoteObjects() {
           }
         }
       }
-      
+
+      // Ordina OBJ_ORDER e le liste di categoria alfabeticamente per label
+      const byLabel = (a, b) => (E.OBJECT_LIB[a]?.label || a).localeCompare(E.OBJECT_LIB[b]?.label || b, 'it');
+      OBJ_ORDER.sort(byLabel);
+      for (const cat of Object.values(OBJ_CATEGORIES)) {
+        if (cat.list) cat.list.sort(byLabel);
+      }
+
       // Aggiorna il <select> delle categorie con le categorie caricate
+
       const catSelect = document.getElementById('objCategory');
       if (catSelect) {
         const currentVal = catSelect.value;
