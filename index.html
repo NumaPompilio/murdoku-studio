@@ -439,6 +439,11 @@
     <button class="btn primary" id="catalogNewBtn" title="Crea un nuovo catalogo vuoto">➕ Nuovo Catalogo</button>
     <button class="btn" id="catalogExportBtn" disabled>Esporta Catalogo</button>
     <button class="btn" id="catalogManageCategoriesBtn">Gestisci Categorie</button>
+    <select id="catalogWalkableFilter" class="sel" style="min-width:140px;">
+      <option value="all">Tutti</option>
+      <option value="walkable">Calpestabili</option>
+      <option value="non_walkable">Non calpestabili</option>
+    </select>
   </div>
 
   <div style="flex: 1; display: flex; justify-content: flex-end;">
@@ -7281,6 +7286,9 @@ let catObjDeleteTarget = null;
 })();
 
   // Event Listeners for UI
+  const walkFilter = $("#catalogWalkableFilter");
+  if (walkFilter) walkFilter.addEventListener("change", renderObjectCards);
+
   $("#catalogSelector").addEventListener("change", (e) => {
     currentCatalog = e.target.value;
     if(currentCatalog) {
@@ -7679,6 +7687,8 @@ function renderObjectCards() {
   const grid = $("#catalogGrid");
   grid.innerHTML = "";
   
+  const filterVal = $("#catalogWalkableFilter") ? $("#catalogWalkableFilter").value : "all";
+  
   // New Card
   const newCard = document.createElement("div");
   newCard.className = "catalog-card add-new";
@@ -7688,9 +7698,13 @@ function renderObjectCards() {
   
   // Object Cards
   catalogObjects.forEach(obj => {
+    if (filterVal === "walkable" && !obj.walkable) return;
+    if (filterVal === "non_walkable" && obj.walkable) return;
+    
     const card = document.createElement("div");
     card.className = "catalog-card";
     card.style.cursor = "pointer";
+    card.style.borderColor = obj.walkable ? "#4caf50" : "#ff4444";
     card.onclick = (e) => {
       if(e.target.closest('.cc-footer')) return;
       openObjectDetails(obj);
