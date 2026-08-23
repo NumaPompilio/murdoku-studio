@@ -1,728 +1,19 @@
 [
   {
-    "id": "sedia",
-    "label": "Sedia",
-    "article": "una",
-    "symbol": "SE",
-    "walkable": true,
-    "description": "Sedia semplice con seduta, schienale e quattro gambe.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
-    }
-  },
-  {
-    "id": "divano",
-    "label": "Divano",
+    "id": "acquascooter",
+    "label": "Acquascooter",
     "article": "un",
-    "symbol": "DI",
-    "walkable": true,
-    "description": "Divano imbottito con braccioli, schienale morbido e cuscini.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛋️</text></svg>"
-    }
-  },
-  {
-    "id": "poltrona",
-    "label": "Poltrona",
-    "article": "una",
-    "symbol": "PO",
-    "walkable": true,
-    "description": "Poltrona singola imbottita con braccioli ampi e seduta accogliente.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💺</text></svg>"
-    }
-  },
-  {
-    "id": "tavolo",
-    "label": "Tavolo",
-    "article": "un",
-    "symbol": "TA",
+    "symbol": "AC",
     "walkable": false,
-    "description": "Tavolo rettangolare o rotondo con piano stabile e gambe robuste.",
+    "description": "Moto d’acqua compatta con sella e manubrio.",
     "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪚</text></svg>"
-    }
-  },
-  {
-    "id": "lampada",
-    "label": "Lampada",
-    "article": "una",
-    "symbol": "LA",
-    "walkable": false,
-    "description": "Lampada da interno con base, stelo sottile e paralume luminoso.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💡</text></svg>"
-    }
-  },
-  {
-    "id": "pouf",
-    "label": "Pouf",
-    "article": "un",
-    "symbol": "PO",
-    "walkable": true,
-    "description": "Pouf basso e morbido, compatto, senza schienale.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧎</text></svg>"
-    }
-  },
-  {
-    "id": "fornello",
-    "label": "Fornello",
-    "article": "un",
-    "symbol": "FO",
-    "walkable": false,
-    "description": "Piano cottura con fuochi o piastre visibili.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍳</text></svg>"
-    }
-  },
-  {
-    "id": "frigorifero",
-    "label": "Frigorifero",
-    "article": "un",
-    "symbol": "FR",
-    "walkable": false,
-    "description": "Frigorifero verticale con sportello grande e maniglia laterale.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧊</text></svg>"
-    }
-  },
-  {
-    "id": "forno",
-    "label": "Forno",
-    "article": "un",
-    "symbol": "FO",
-    "walkable": false,
-    "description": "Forno da cucina con sportello frontale in vetro e manopole.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍞</text></svg>"
-    }
-  },
-  {
-    "id": "microonde",
-    "label": "Microonde",
-    "article": "un",
-    "symbol": "MI",
-    "walkable": false,
-    "description": "Microonde compatto con sportello trasparente e pannello comandi.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍱</text></svg>"
-    }
-  },
-  {
-    "id": "cestino",
-    "label": "Cestino",
-    "article": "un",
-    "symbol": "CE",
-    "walkable": false,
-    "description": "Piccolo contenitore per rifiuti, aperto o con coperchio.",
-    "categories": [
-      "Casa & Interni",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗑️</text></svg>"
-    }
-  },
-  {
-    "id": "bucciadibanana",
-    "label": "Buccia di banana",
-    "article": "una",
-    "symbol": "BU",
-    "walkable": false,
-    "description": "Buccia di banana gialla aperta e scivolosa sul pavimento.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍌</text></svg>"
-    }
-  },
-  {
-    "id": "water",
-    "label": "Water",
-    "article": "un",
-    "symbol": "WA",
-    "walkable": true,
-    "description": "WC bianco con tazza, sedile e cassetta posteriore.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚽</text></svg>"
-    }
-  },
-  {
-    "id": "doccia",
-    "label": "Doccia",
-    "article": "una",
-    "symbol": "DO",
-    "walkable": true,
-    "description": "Doccia con piatto o base, soffione e struttura essenziale.",
-    "categories": [
-      "Casa & Interni",
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚿</text></svg>"
-    }
-  },
-  {
-    "id": "lavandino",
-    "label": "Lavandino",
-    "article": "un",
-    "symbol": "LA",
-    "walkable": false,
-    "description": "Lavandino bianco con rubinetto e piccolo mobile o colonna.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚰</text></svg>"
-    }
-  },
-  {
-    "id": "lavatrice",
-    "label": "Lavatrice",
-    "article": "un",
-    "symbol": "LA",
-    "walkable": false,
-    "description": "Lavatrice frontale con oblò rotondo e pulsanti superiori.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">👕</text></svg>"
-    }
-  },
-  {
-    "id": "armadio",
-    "label": "Armadio",
-    "article": "un",
-    "symbol": "AR",
-    "walkable": false,
-    "description": "Armadio alto con ante chiuse e maniglie verticali.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚪</text></svg>"
-    }
-  },
-  {
-    "id": "comodino",
-    "label": "Comodino",
-    "article": "un",
-    "symbol": "CO",
-    "walkable": false,
-    "description": "Piccolo mobile da letto con cassetto e piano superiore.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗄️</text></svg>"
-    }
-  },
-  {
-    "id": "letto",
-    "label": "Letto",
-    "article": "un",
-    "symbol": "LE",
-    "walkable": true,
-    "description": "Letto con materasso, cuscino e coperta ben visibili.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛏️</text></svg>"
-    }
-  },
-  {
-    "id": "cassettiera",
-    "label": "Cassettiera",
-    "article": "una",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Mobile basso con più cassetti sovrapposti e maniglie.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗃️</text></svg>"
-    }
-  },
-  {
-    "id": "tappeto",
-    "label": "Tappeto",
-    "article": "un",
-    "symbol": "TA",
-    "walkable": true,
-    "description": "Tappeto piatto decorativo steso sul pavimento.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧶</text></svg>"
-    }
-  },
-  {
-    "id": "libreria",
-    "label": "Libreria",
-    "article": "una",
-    "symbol": "LI",
-    "walkable": false,
-    "description": "Libreria verticale piena di libri e ripiani ordinati.",
-    "categories": [
-      "Casa & Interni",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">📚</text></svg>"
-    }
-  },
-  {
-    "id": "vasodipiante",
-    "label": "Vaso di piante",
-    "article": "un",
-    "symbol": "VA",
-    "walkable": false,
-    "description": "Vaso con pianta verde e foglie decorative.",
-    "categories": [
-      "Casa & Interni",
-      "Campagna",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪴</text></svg>"
-    }
-  },
-  {
-    "id": "tv",
-    "label": "TV",
-    "article": "un",
-    "symbol": "TV",
-    "walkable": false,
-    "description": "Televisore moderno con schermo nero e base sottile.",
-    "categories": [
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">📺</text></svg>"
-    }
-  },
-  {
-    "id": "pc",
-    "label": "PC",
-    "article": "un",
-    "symbol": "PC",
-    "walkable": false,
-    "description": "Computer con monitor, tastiera e mouse su piccola postazione.",
-    "categories": [
-      "Casa & Interni",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💻</text></svg>"
-    }
-  },
-  {
-    "id": "sgabello",
-    "label": "Sgabello",
-    "article": "un",
-    "symbol": "SG",
-    "walkable": true,
-    "description": "Sgabello alto o basso con seduta semplice e gambe snelle.",
-    "categories": [
-      "Casa & Interni",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
-    }
-  },
-  {
-    "id": "gatto",
-    "label": "Gatto",
-    "article": "un",
-    "symbol": "GA",
-    "walkable": false,
-    "description": "Gatto domestico seduto, con coda curva e orecchie appuntite.",
-    "categories": [
-      "Animali"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐈</text></svg>"
-    }
-  },
-  {
-    "id": "cane",
-    "label": "Cane",
-    "article": "un",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Cane domestico in piedi o seduto, con muso amichevole e coda.",
-    "categories": [
-      "Animali"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐕</text></svg>"
-    }
-  },
-  {
-    "id": "coniglio",
-    "label": "Coniglio",
-    "article": "un",
-    "symbol": "CO",
-    "walkable": false,
-    "description": "Coniglio piccolo con lunghe orecchie e corpo morbido.",
-    "categories": [
-      "Animali",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐇</text></svg>"
-    }
-  },
-  {
-    "id": "criceto",
-    "label": "Criceto",
-    "article": "un",
-    "symbol": "CR",
-    "walkable": false,
-    "description": "Piccolo criceto tondeggiante con guance piene e zampette corte.",
-    "categories": [
-      "Animali"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐹</text></svg>"
-    }
-  },
-  {
-    "id": "cavallo",
-    "label": "Cavallo",
-    "article": "un",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Cavallo in piedi con criniera, coda lunga e corpo elegante.",
-    "categories": [
-      "Animali",
-      "Campagna",
+      "Mare",
       "Trasporti"
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐎</text></svg>"
-    }
-  },
-  {
-    "id": "mucca",
-    "label": "Mucca",
-    "article": "una",
-    "symbol": "MU",
-    "walkable": false,
-    "description": "Mucca pezzata con corna piccole, muso largo e mammelle.",
-    "categories": [
-      "Animali",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐄</text></svg>"
-    }
-  },
-  {
-    "id": "asino",
-    "label": "Asino",
-    "article": "un",
-    "symbol": "AS",
-    "walkable": false,
-    "description": "Asino grigio con orecchie lunghe, coda sottile e postura calma.",
-    "categories": [
-      "Animali",
-      "Campagna",
-      "Trasporti"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🫏</text></svg>"
-    }
-  },
-  {
-    "id": "toro",
-    "label": "Toro",
-    "article": "un",
-    "symbol": "TO",
-    "walkable": false,
-    "description": "Toro robusto con corna evidenti e corpo muscoloso.",
-    "categories": [
-      "Animali",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐂</text></svg>"
-    }
-  },
-  {
-    "id": "pesce",
-    "label": "Pesce",
-    "article": "un",
-    "symbol": "PE",
-    "walkable": false,
-    "description": "Pesce con corpo affusolato, pinne e coda ben visibili.",
-    "categories": [
-      "Animali",
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐟</text></svg>"
-    }
-  },
-  {
-    "id": "polipo",
-    "label": "Polipo",
-    "article": "un",
-    "symbol": "PO",
-    "walkable": false,
-    "description": "Polipo con testa arrotondata e tentacoli sinuosi.",
-    "categories": [
-      "Animali",
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐙</text></svg>"
-    }
-  },
-  {
-    "id": "cozza",
-    "label": "Cozza",
-    "article": "una",
-    "symbol": "CO",
-    "walkable": false,
-    "description": "Cozza scura con guscio ovale e superficie rigata.",
-    "categories": [
-      "Animali",
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦪</text></svg>"
-    }
-  },
-  {
-    "id": "ricciodimare",
-    "label": "Riccio di mare",
-    "article": "un",
-    "symbol": "RI",
-    "walkable": false,
-    "description": "Riccio di mare tondo con aculei fitti e scuri.",
-    "categories": [
-      "Animali",
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦔</text></svg>"
-    }
-  },
-  {
-    "id": "scarafaggio",
-    "label": "Scarafaggio",
-    "article": "uno",
-    "symbol": "SC",
-    "walkable": false,
-    "description": "Scarafaggio marrone con antenne lunghe e corpo ovale.",
-    "categories": [
-      "Animali",
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪳</text></svg>"
-    }
-  },
-  {
-    "id": "geco",
-    "label": "Geco",
-    "article": "un",
-    "symbol": "GE",
-    "walkable": false,
-    "description": "Piccolo geco con corpo sottile, zampe aperte e lunga coda.",
-    "categories": [
-      "Animali",
-      "Casa & Interni",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦎</text></svg>"
-    }
-  },
-  {
-    "id": "serpente",
-    "label": "Serpente",
-    "article": "un",
-    "symbol": "SE",
-    "walkable": false,
-    "description": "Serpente sinuoso arrotolato o strisciante, senza zampe.",
-    "categories": [
-      "Animali",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐍</text></svg>"
-    }
-  },
-  {
-    "id": "lampione",
-    "label": "Lampione",
-    "article": "un",
-    "symbol": "LA",
-    "walkable": false,
-    "description": "Lampione stradale alto con palo sottile e luce superiore.",
-    "categories": [
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏮</text></svg>"
-    }
-  },
-  {
-    "id": "cassonetto",
-    "label": "Cassonetto",
-    "article": "un",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Grande contenitore urbano per rifiuti con coperchio e ruote.",
-    "categories": [
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗑️</text></svg>"
-    }
-  },
-  {
-    "id": "panchina",
-    "label": "Panchina",
-    "article": "una",
-    "symbol": "PA",
-    "walkable": true,
-    "description": "Panchina da parco con seduta a doghe e schienale.",
-    "categories": [
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚤</text></svg>"
     }
   },
   {
@@ -738,25 +29,8 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌷</text></svg>"
-    }
-  },
-  {
-    "id": "fontana",
-    "label": "Fontana",
-    "article": "una",
-    "symbol": "FO",
-    "walkable": false,
-    "description": "Fontana decorativa con vasca, colonna centrale e acqua.",
-    "categories": [
-      "Esterno urbano",
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛲</text></svg>"
     }
   },
   {
@@ -772,125 +46,25 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌳</text></svg>"
     }
   },
   {
-    "id": "buca",
-    "label": "Buca",
-    "article": "una",
-    "symbol": "BU",
-    "walkable": true,
-    "description": "Buca nel terreno o nell’asfalto con bordo irregolare.",
-    "categories": [
-      "Esterno urbano",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🕳️</text></svg>"
-    }
-  },
-  {
-    "id": "statua",
-    "label": "Statua",
-    "article": "una",
-    "symbol": "ST",
+    "id": "alberoulivo",
+    "label": "Albero ulivo",
+    "article": "un",
+    "symbol": "AL",
     "walkable": false,
-    "description": "Statua su piedistallo raffigurante una figura umana o simbolica.",
+    "description": "Ulivo con tronco nodoso, chioma argentata e rami contorti.",
     "categories": [
-      "Esterno urbano",
+      "Campagna",
       "Salento"
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗽</text></svg>"
-    }
-  },
-  {
-    "id": "segnalestradale",
-    "label": "Segnale stradale",
-    "article": "un",
-    "symbol": "SE",
-    "walkable": false,
-    "description": "Cartello stradale su palo con forma e simbolo ben riconoscibili.",
-    "categories": [
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛑</text></svg>"
-    }
-  },
-  {
-    "id": "semaforo",
-    "label": "Semaforo",
-    "article": "un",
-    "symbol": "SE",
-    "walkable": false,
-    "description": "Semaforo verticale con tre luci colorate sovrapposte.",
-    "categories": [
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚦</text></svg>"
-    }
-  },
-  {
-    "id": "atm",
-    "label": "ATM",
-    "article": "un",
-    "symbol": "AT",
-    "walkable": false,
-    "description": "Sportello bancomat con schermo, tastierino e fessura per carta.",
-    "categories": [
-      "Esterno urbano",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏧</text></svg>"
-    }
-  },
-  {
-    "id": "auto",
-    "label": "Auto",
-    "article": "un",
-    "symbol": "AU",
-    "walkable": false,
-    "description": "Automobile compatta vista di lato o tre quarti, con quattro ruote.",
-    "categories": [
-      "Trasporti",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚗</text></svg>"
-    }
-  },
-  {
-    "id": "camion",
-    "label": "Camion",
-    "article": "un",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Camion grande con cabina frontale e cassone posteriore.",
-    "categories": [
-      "Trasporti",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚚</text></svg>"
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌿</text></svg>"
     }
   },
   {
@@ -908,775 +82,76 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛺</text></svg>"
     }
   },
   {
-    "id": "bicicletta",
-    "label": "Bicicletta",
-    "article": "una",
-    "symbol": "BI",
-    "walkable": false,
-    "description": "Bicicletta con due ruote sottili, telaio, manubrio e sella.",
-    "categories": [
-      "Trasporti",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚲</text></svg>"
-    }
-  },
-  {
-    "id": "moto",
-    "label": "Moto",
+    "id": "armadio",
+    "label": "Armadio",
     "article": "un",
-    "symbol": "MO",
+    "symbol": "AR",
     "walkable": false,
-    "description": "Motocicletta con due ruote, manubrio, sella e corpo compatto.",
     "categories": [
-      "Trasporti",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏍️</text></svg>"
-    }
-  },
-  {
-    "id": "triciclo",
-    "label": "Triciclo",
-    "article": "un",
-    "symbol": "TR",
-    "walkable": false,
-    "description": "Piccolo triciclo con una ruota davanti e due dietro.",
-    "categories": [
-      "Trasporti",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛺</text></svg>"
-    }
-  },
-  {
-    "id": "motozappa",
-    "label": "Motozappa",
-    "article": "una",
-    "symbol": "MO",
-    "walkable": false,
-    "description": "Motozappa agricola con manubrio, motore e lame inferiori.",
-    "categories": [
-      "Trasporti",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚜</text></svg>"
-    }
-  },
-  {
-    "id": "trattore",
-    "label": "Trattore",
-    "article": "un",
-    "symbol": "TR",
-    "walkable": false,
-    "description": "Trattore agricolo con grandi ruote posteriori e cabina o sedile.",
-    "categories": [
-      "Trasporti",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚜</text></svg>"
-    }
-  },
-  {
-    "id": "alberoulivo",
-    "label": "Albero ulivo",
-    "article": "un",
-    "symbol": "AL",
-    "walkable": false,
-    "description": "Ulivo con tronco nodoso, chioma argentata e rami contorti.",
-    "categories": [
-      "Campagna",
-      "Salento"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌿</text></svg>"
-    }
-  },
-  {
-    "id": "rovi",
-    "label": "Rovi",
-    "article": "un",
-    "symbol": "RO",
-    "walkable": false,
-    "description": "Intrico di rami spinosi e cespugli selvatici.",
-    "categories": [
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🕸️</text></svg>"
-    }
-  },
-  {
-    "id": "ficodindia",
-    "label": "Fico d’India",
-    "article": "una",
-    "symbol": "FI",
-    "walkable": false,
-    "description": "Cactus a pale verdi con spine e piccoli frutti colorati.",
-    "categories": [
-      "Campagna",
-      "Salento"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌵</text></svg>"
-    }
-  },
-  {
-    "id": "pino",
-    "label": "Pino",
-    "article": "un",
-    "symbol": "PI",
-    "walkable": false,
-    "description": "Pino alto con tronco sottile e chioma a ombrello.",
-    "categories": [
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌲</text></svg>"
-    }
-  },
-  {
-    "id": "pezzodilegno",
-    "label": "Pezzo di legno",
-    "article": "un",
-    "symbol": "PE",
-    "walkable": false,
-    "description": "Tronco o asse di legno grezzo appoggiato a terra.",
-    "categories": [
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪵</text></svg>"
-    }
-  },
-  {
-    "id": "fiori",
-    "label": "Fiori",
-    "article": "un",
-    "symbol": "FI",
-    "walkable": false,
-    "description": "Gruppo di piccoli fiori colorati con steli e foglie.",
-    "categories": [
-      "Campagna",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💐</text></svg>"
-    }
-  },
-  {
-    "id": "palma",
-    "label": "Palma",
-    "article": "una",
-    "symbol": "PA",
-    "walkable": false,
-    "description": "Palma con tronco verticale e grandi foglie aperte a ventaglio.",
-    "categories": [
-      "Campagna",
-      "Mare",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌴</text></svg>"
-    }
-  },
-  {
-    "id": "pajaro",
-    "label": "Pajaro",
-    "article": "un",
-    "symbol": "PA",
-    "walkable": false,
-    "description": "Piccola costruzione rurale in pietra, con forma conica o troncoconica.",
-    "categories": [
-      "Campagna",
-      "Salento"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛖</text></svg>"
-    }
-  },
-  {
-    "id": "muroasecco",
-    "label": "Muro a secco",
-    "article": "un",
-    "symbol": "MU",
-    "walkable": false,
-    "description": "Muretto basso di pietre irregolari sovrapposte senza malta.",
-    "categories": [
-      "Campagna",
-      "Salento"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧱</text></svg>"
-    }
-  },
-  {
-    "id": "cassettadilegno",
-    "label": "Cassetta di legno",
-    "article": "un",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Cassetta rustica in legno con assi visibili.",
-    "categories": [
-      "Campagna",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">📦</text></svg>"
-    }
-  },
-  {
-    "id": "zappa",
-    "label": "Zappa",
-    "article": "una",
-    "symbol": "ZA",
-    "walkable": false,
-    "description": "Attrezzo agricolo con manico lungo e lama metallica.",
-    "categories": [
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛏️</text></svg>"
-    }
-  },
-  {
-    "id": "cernitrice",
-    "label": "Cernitrice",
-    "article": "un",
-    "symbol": "CE",
-    "walkable": false,
-    "description": "Macchina agricola per selezionare olive o frutti, con tramoggia e struttura metallica.",
-    "categories": [
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⚙️</text></svg>"
-    }
-  },
-  {
-    "id": "cespuglio",
-    "label": "Cespuglio",
-    "article": "un",
-    "symbol": "CE",
-    "walkable": false,
-    "description": "Cespuglio verde fitto, basso e tondeggiante.",
-    "categories": [
-      "Campagna",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌳</text></svg>"
-    }
-  },
-  {
-    "id": "scoglio",
-    "label": "Scoglio",
-    "article": "uno",
-    "symbol": "SC",
-    "walkable": false,
-    "description": "Roccia marina irregolare, grigia e compatta.",
-    "categories": [
-      "Mare",
-      "Campagna"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪨</text></svg>"
-    }
-  },
-  {
-    "id": "ombrellone",
-    "label": "Ombrellone",
-    "article": "un",
-    "symbol": "OM",
-    "walkable": false,
-    "description": "Ombrellone da spiaggia aperto con palo centrale e telo colorato.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛱️</text></svg>"
-    }
-  },
-  {
-    "id": "lettino",
-    "label": "Lettino",
-    "article": "un",
-    "symbol": "LE",
-    "walkable": true,
-    "description": "Lettino da spiaggia lungo con struttura bassa e schienale inclinabile.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛏️</text></svg>"
-    }
-  },
-  {
-    "id": "secchiello",
-    "label": "Secchiello",
-    "article": "un",
-    "symbol": "SE",
-    "walkable": false,
-    "description": "Secchiello da spiaggia con manico e paletta vicina.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪣</text></svg>"
-    }
-  },
-  {
-    "id": "acquascooter",
-    "label": "Acquascooter",
-    "article": "un",
-    "symbol": "AC",
-    "walkable": false,
-    "description": "Moto d’acqua compatta con sella e manubrio.",
-    "categories": [
-      "Mare",
-      "Trasporti"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚤</text></svg>"
-    }
-  },
-  {
-    "id": "telodamare",
-    "label": "Telo da mare",
-    "article": "un",
-    "symbol": "TE",
-    "walkable": true,
-    "description": "Telo colorato steso sulla sabbia, piatto e rettangolare.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏖️</text></svg>"
-    }
-  },
-  {
-    "id": "materassino",
-    "label": "Materassino",
-    "article": "un",
-    "symbol": "MA",
-    "walkable": true,
-    "description": "Materassino gonfiabile lungo, morbido e colorato.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
-    }
-  },
-  {
-    "id": "sup",
-    "label": "SUP",
-    "article": "un",
-    "symbol": "SU",
-    "walkable": true,
-    "description": "Tavola da stand up paddle lunga con pagaia.",
-    "categories": [
-      "Mare",
-      "Trasporti"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏄</text></svg>"
-    }
-  },
-  {
-    "id": "pedal",
-    "label": "Pedalò",
-    "article": "un",
-    "symbol": "PE",
-    "walkable": false,
-    "description": "Piccola imbarcazione da spiaggia con sedili e pedali.",
-    "categories": [
-      "Mare",
-      "Trasporti"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦢</text></svg>"
-    }
-  },
-  {
-    "id": "tavoladasurf",
-    "label": "Tavola da surf",
-    "article": "un",
-    "symbol": "TA",
-    "walkable": true,
-    "description": "Tavola da surf lunga e affusolata con punta arrotondata.",
-    "categories": [
-      "Mare",
-      "Trasporti"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏄</text></svg>"
-    }
-  },
-  {
-    "id": "cabina",
-    "label": "Cabina",
-    "article": "una",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Cabina da spiaggia verticale con porta e tetto leggero.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚪</text></svg>"
-    }
-  },
-  {
-    "id": "boa",
-    "label": "Boa",
-    "article": "una",
-    "symbol": "BO",
-    "walkable": false,
-    "description": "Boa galleggiante rotonda o conica, ancorata in mare.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
-    }
-  },
-  {
-    "id": "gommone",
-    "label": "Gommone",
-    "article": "un",
-    "symbol": "GO",
-    "walkable": false,
-    "description": "Gommone gonfiabile con bordo spesso e piccolo motore.",
-    "categories": [
-      "Mare",
-      "Trasporti"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚤</text></svg>"
-    }
-  },
-  {
-    "id": "barcaavela",
-    "label": "Barca a vela",
-    "article": "una",
-    "symbol": "BA",
-    "walkable": false,
-    "description": "Barca con scafo e vela triangolare ben visibile.",
-    "categories": [
-      "Mare",
-      "Trasporti"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛵</text></svg>"
-    }
-  },
-  {
-    "id": "torrettabagnino",
-    "label": "Torretta bagnino",
-    "article": "un",
-    "symbol": "TO",
-    "walkable": false,
-    "description": "Torretta rialzata con seduta e scaletta per il bagnino.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
-    }
-  },
-  {
-    "id": "salvagente",
-    "label": "Salvagente",
-    "article": "un",
-    "symbol": "SA",
-    "walkable": false,
-    "description": "Salvagente circolare con foro centrale e bande colorate.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
-    }
-  },
-  {
-    "id": "chiringuito",
-    "label": "Chiringuito",
-    "article": "un",
-    "symbol": "CH",
-    "walkable": false,
-    "description": "Piccolo chiosco da spiaggia con bancone e tetto leggero.",
-    "categories": [
-      "Mare",
-      "Commerciale",
-      "Salento"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍹</text></svg>"
-    }
-  },
-  {
-    "id": "faro",
-    "label": "Faro",
-    "article": "un",
-    "symbol": "FA",
-    "walkable": false,
-    "description": "Torre costiera alta con luce sulla sommità.",
-    "categories": [
-      "Mare",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗼</text></svg>"
-    }
-  },
-  {
-    "id": "castellodisabbia",
-    "label": "Castello di sabbia",
-    "article": "una",
-    "symbol": "CA",
-    "walkable": false,
-    "description": "Piccolo castello di sabbia con torri e merli.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏰</text></svg>"
-    }
-  },
-  {
-    "id": "sdraio",
-    "label": "Sdraio",
-    "article": "un",
-    "symbol": "SD",
-    "walkable": true,
-    "description": "Sedia sdraio pieghevole con telo inclinato.",
-    "categories": [
-      "Mare"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
-    }
-  },
-  {
-    "id": "scaffale",
-    "label": "Scaffale",
-    "article": "uno",
-    "symbol": "SC",
-    "walkable": false,
-    "description": "Scaffale da negozio con ripiani pieni di prodotti ordinati.",
-    "categories": [
-      "Commerciale",
       "Casa & Interni"
     ],
+    "description": "Armadio alto con ante chiuse e maniglie verticali.",
     "render": {
       "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏪</text></svg>"
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://w3.org\" viewBox=\"0 0 200 250\" width=\"100%\" height=\"100%\">\n  <!-- Base / Piedini -->\n  <rect x=\"35\" y=\"235\" width=\"20\" height=\"10\" fill=\"#5c4033\" rx=\"2\" />\n  <rect x=\"145\" y=\"235\" width=\"20\" height=\"10\" fill=\"#5c4033\" rx=\"2\" />\n  \n  <!-- Corpo principale dell'armadio -->\n  <rect x=\"20\" y=\"20\" width=\"160\" height=\"215\" fill=\"#8b5a2b\" stroke=\"#4a2e18\" stroke-width=\"4\" rx=\"4\" />\n  \n  <!-- Cornice superiore -->\n  <rect x=\"15\" y=\"10\" width=\"170\" height=\"15\" fill=\"#a0652d\" stroke=\"#4a2e18\" stroke-width=\"3\" rx=\"2\" />\n  \n  <!-- Divisione centrale delle ante -->\n  <line x1=\"100\" y1=\"25\" x2=\"100\" y2=\"235\" stroke=\"#4a2e18\" stroke-width=\"3\" />\n  \n  <!-- Anta Sinistra -->\n  <rect x=\"24\" y=\"27\" width=\"73\" height=\"205\" fill=\"none\" stroke=\"#5c3a21\" stroke-width=\"1.5\" />\n  <!-- Anta Destra -->\n  <rect x=\"103\" y=\"27\" width=\"73\" height=\"205\" fill=\"none\" stroke=\"#5c3a21\" stroke-width=\"1.5\" />\n  \n  <!-- Maniglia Sinistra -->\n  <circle cx=\"85\" cy=\"130\" r=\"4\" fill=\"#d4af37\" stroke=\"#997a15\" stroke-width=\"1\" />\n  <!-- Maniglia Destra -->\n  <circle cx=\"115\" cy=\"130\" r=\"4\" fill=\"#d4af37\" stroke=\"#997a15\" stroke-width=\"1\" />\n</svg>"
     }
   },
   {
-    "id": "registratoredicassa",
-    "label": "Registratore di cassa",
-    "article": "una",
-    "symbol": "RE",
+    "id": "asino",
+    "label": "Asino",
+    "article": "un",
+    "symbol": "AS",
     "walkable": false,
-    "description": "Cassa da negozio con display, tastiera e cassetto portamonete.",
+    "description": "Asino grigio con orecchie lunghe, coda sottile e postura calma.",
     "categories": [
+      "Animali",
+      "Campagna",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🫏</text></svg>"
+    }
+  },
+  {
+    "id": "atm",
+    "label": "ATM",
+    "article": "un",
+    "symbol": "AT",
+    "walkable": false,
+    "description": "Sportello bancomat con schermo, tastierino e fessura per carta.",
+    "categories": [
+      "Esterno urbano",
       "Commerciale"
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧾</text></svg>"
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏧</text></svg>"
     }
   },
   {
-    "id": "pumo",
-    "label": "Pumo",
+    "id": "auto",
+    "label": "Auto",
     "article": "un",
-    "symbol": "PU",
+    "symbol": "AU",
     "walkable": false,
-    "description": "Pumo salentino decorativo in ceramica, a forma di bocciolo.",
+    "description": "Automobile compatta vista di lato o tre quarti, con quattro ruote.",
     "categories": [
-      "Salento",
-      "Casa & Interni"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏺</text></svg>"
-    }
-  },
-  {
-    "id": "luminarie",
-    "label": "Luminarie",
-    "article": "un",
-    "symbol": "LU",
-    "walkable": false,
-    "description": "Struttura decorativa con archi e piccole luci da festa patronale.",
-    "categories": [
-      "Salento",
+      "Trasporti",
       "Esterno urbano"
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">✨</text></svg>"
-    }
-  },
-  {
-    "id": "santoronzo",
-    "label": "Sant’Oronzo",
-    "article": "un",
-    "symbol": "SA",
-    "walkable": false,
-    "description": "Statua di Sant’Oronzo su colonna o piedistallo, in posa solenne.",
-    "categories": [
-      "Salento",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗿</text></svg>"
-    }
-  },
-  {
-    "id": "pasticciotto",
-    "label": "Pasticciotto",
-    "article": "un",
-    "symbol": "PA",
-    "walkable": false,
-    "description": "Dolce ovale di pasta frolla dorata con ripieno di crema.",
-    "categories": [
-      "Salento",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥟</text></svg>"
-    }
-  },
-  {
-    "id": "rustico",
-    "label": "Rustico",
-    "article": "un",
-    "symbol": "RU",
-    "walkable": false,
-    "description": "Rustico leccese rotondo di pasta sfoglia dorata e friabile.",
-    "categories": [
-      "Salento",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥧</text></svg>"
-    }
-  },
-  {
-    "id": "puccia",
-    "label": "Puccia",
-    "article": "una",
-    "symbol": "PU",
-    "walkable": false,
-    "description": "Panino salentino rotondo e rustico, con crosta chiara.",
-    "categories": [
-      "Salento",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥪</text></svg>"
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚗</text></svg>"
     }
   },
   {
@@ -1693,25 +168,107 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🎪</text></svg>"
     }
   },
   {
-    "id": "fico",
-    "label": "Fico",
-    "article": "un",
-    "symbol": "FI",
+    "id": "barcaavela",
+    "label": "Barca a vela",
+    "article": "una",
+    "symbol": "BA",
     "walkable": false,
-    "description": "Albero di fico basso con grandi foglie e frutti tondeggianti.",
+    "description": "Barca con scafo e vela triangolare ben visibile.",
     "categories": [
-      "Salento",
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛵</text></svg>"
+    }
+  },
+  {
+    "id": "bicicletta",
+    "label": "Bicicletta",
+    "article": "una",
+    "symbol": "BI",
+    "walkable": false,
+    "description": "Bicicletta con due ruote sottili, telaio, manubrio e sella.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚲</text></svg>"
+    }
+  },
+  {
+    "id": "boa",
+    "label": "Boa",
+    "article": "una",
+    "symbol": "BO",
+    "walkable": false,
+    "description": "Boa galleggiante rotonda o conica, ancorata in mare.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
+    }
+  },
+  {
+    "id": "buca",
+    "label": "Buca",
+    "article": "una",
+    "symbol": "BU",
+    "walkable": true,
+    "description": "Buca nel terreno o nell’asfalto con bordo irregolare.",
+    "categories": [
+      "Esterno urbano",
       "Campagna"
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌿</text></svg>"
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🕳️</text></svg>"
+    }
+  },
+  {
+    "id": "bucciadibanana",
+    "label": "Buccia di banana",
+    "article": "una",
+    "symbol": "BU",
+    "walkable": false,
+    "description": "Buccia di banana gialla aperta e scivolosa sul pavimento.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍌</text></svg>"
+    }
+  },
+  {
+    "id": "cabina",
+    "label": "Cabina",
+    "article": "una",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Cabina da spiaggia verticale con porta e tetto leggero.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚪</text></svg>"
     }
   },
   {
@@ -1727,7 +284,440 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧊</text></svg>"
+    }
+  },
+  {
+    "id": "camion",
+    "label": "Camion",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Camion grande con cabina frontale e cassone posteriore.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚚</text></svg>"
+    }
+  },
+  {
+    "id": "cane",
+    "label": "Cane",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Cane domestico in piedi o seduto, con muso amichevole e coda.",
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐕</text></svg>"
+    }
+  },
+  {
+    "id": "cassettadilegno",
+    "label": "Cassetta di legno",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Cassetta rustica in legno con assi visibili.",
+    "categories": [
+      "Campagna",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">📦</text></svg>"
+    }
+  },
+  {
+    "id": "cassettiera",
+    "label": "Cassettiera",
+    "article": "una",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Mobile basso con più cassetti sovrapposti e maniglie.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗃️</text></svg>"
+    }
+  },
+  {
+    "id": "cassonetto",
+    "label": "Cassonetto",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Grande contenitore urbano per rifiuti con coperchio e ruote.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗑️</text></svg>"
+    }
+  },
+  {
+    "id": "castellodisabbia",
+    "label": "Castello di sabbia",
+    "article": "una",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Piccolo castello di sabbia con torri e merli.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏰</text></svg>"
+    }
+  },
+  {
+    "id": "cavallo",
+    "label": "Cavallo",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Cavallo in piedi con criniera, coda lunga e corpo elegante.",
+    "categories": [
+      "Animali",
+      "Campagna",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐎</text></svg>"
+    }
+  },
+  {
+    "id": "cernitrice",
+    "label": "Cernitrice",
+    "article": "un",
+    "symbol": "CE",
+    "walkable": false,
+    "description": "Macchina agricola per selezionare olive o frutti, con tramoggia e struttura metallica.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⚙️</text></svg>"
+    }
+  },
+  {
+    "id": "cespuglio",
+    "label": "Cespuglio",
+    "article": "un",
+    "symbol": "CE",
+    "walkable": false,
+    "description": "Cespuglio verde fitto, basso e tondeggiante.",
+    "categories": [
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌳</text></svg>"
+    }
+  },
+  {
+    "id": "cestino",
+    "label": "Cestino",
+    "article": "un",
+    "symbol": "CE",
+    "walkable": false,
+    "description": "Piccolo contenitore per rifiuti, aperto o con coperchio.",
+    "categories": [
+      "Casa & Interni",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗑️</text></svg>"
+    }
+  },
+  {
+    "id": "chiringuito",
+    "label": "Chiringuito",
+    "article": "un",
+    "symbol": "CH",
+    "walkable": false,
+    "description": "Piccolo chiosco da spiaggia con bancone e tetto leggero.",
+    "categories": [
+      "Mare",
+      "Commerciale",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍹</text></svg>"
+    }
+  },
+  {
+    "id": "comodino",
+    "label": "Comodino",
+    "article": "un",
+    "symbol": "CO",
+    "walkable": false,
+    "description": "Piccolo mobile da letto con cassetto e piano superiore.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗄️</text></svg>"
+    }
+  },
+  {
+    "id": "coniglio",
+    "label": "Coniglio",
+    "article": "un",
+    "symbol": "CO",
+    "walkable": false,
+    "description": "Coniglio piccolo con lunghe orecchie e corpo morbido.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐇</text></svg>"
+    }
+  },
+  {
+    "id": "cozza",
+    "label": "Cozza",
+    "article": "una",
+    "symbol": "CO",
+    "walkable": false,
+    "description": "Cozza scura con guscio ovale e superficie rigata.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦪</text></svg>"
+    }
+  },
+  {
+    "id": "criceto",
+    "label": "Criceto",
+    "article": "un",
+    "symbol": "CR",
+    "walkable": false,
+    "description": "Piccolo criceto tondeggiante con guance piene e zampette corte.",
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐹</text></svg>"
+    }
+  },
+  {
+    "id": "cupeta",
+    "label": "Cupeta",
+    "article": "una",
+    "symbol": "CU",
+    "walkable": false,
+    "description": "Torrone salentino croccante con mandorle caramellate.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍫</text></svg>"
+    }
+  },
+  {
+    "id": "divano",
+    "label": "Divano",
+    "article": "un",
+    "symbol": "DI",
+    "walkable": true,
+    "description": "Divano imbottito con braccioli, schienale morbido e cuscini.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛋️</text></svg>"
+    }
+  },
+  {
+    "id": "doccia",
+    "label": "Doccia",
+    "article": "una",
+    "symbol": "DO",
+    "walkable": true,
+    "description": "Doccia con piatto o base, soffione e struttura essenziale.",
+    "categories": [
+      "Casa & Interni",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚿</text></svg>"
+    }
+  },
+  {
+    "id": "faro",
+    "label": "Faro",
+    "article": "un",
+    "symbol": "FA",
+    "walkable": false,
+    "description": "Torre costiera alta con luce sulla sommità.",
+    "categories": [
+      "Mare",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗼</text></svg>"
+    }
+  },
+  {
+    "id": "fico",
+    "label": "Fico",
+    "article": "un",
+    "symbol": "FI",
+    "walkable": false,
+    "description": "Albero di fico basso con grandi foglie e frutti tondeggianti.",
+    "categories": [
+      "Salento",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌿</text></svg>"
+    }
+  },
+  {
+    "id": "ficodindia",
+    "label": "Fico d’India",
+    "article": "una",
+    "symbol": "FI",
+    "walkable": false,
+    "description": "Cactus a pale verdi con spine e piccoli frutti colorati.",
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌵</text></svg>"
+    }
+  },
+  {
+    "id": "fiori",
+    "label": "Fiori",
+    "article": "un",
+    "symbol": "FI",
+    "walkable": false,
+    "description": "Gruppo di piccoli fiori colorati con steli e foglie.",
+    "categories": [
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💐</text></svg>"
+    }
+  },
+  {
+    "id": "fontana",
+    "label": "Fontana",
+    "article": "una",
+    "symbol": "FO",
+    "walkable": false,
+    "description": "Fontana decorativa con vasca, colonna centrale e acqua.",
+    "categories": [
+      "Esterno urbano",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛲</text></svg>"
+    }
+  },
+  {
+    "id": "fornello",
+    "label": "Fornello",
+    "article": "un",
+    "symbol": "FO",
+    "walkable": false,
+    "description": "Piano cottura con fuochi o piastre visibili.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍳</text></svg>"
+    }
+  },
+  {
+    "id": "forno",
+    "label": "Forno",
+    "article": "un",
+    "symbol": "FO",
+    "walkable": false,
+    "description": "Forno da cucina con sportello frontale in vetro e manopole.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍞</text></svg>"
+    }
+  },
+  {
+    "id": "frigorifero",
+    "label": "Frigorifero",
+    "article": "un",
+    "symbol": "FR",
+    "walkable": false,
+    "description": "Frigorifero verticale con sportello grande e maniglia laterale.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧊</text></svg>"
     }
   },
@@ -1744,59 +734,8 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥯</text></svg>"
-    }
-  },
-  {
-    "id": "cupeta",
-    "label": "Cupeta",
-    "article": "una",
-    "symbol": "CU",
-    "walkable": false,
-    "description": "Torrone salentino croccante con mandorle caramellate.",
-    "categories": [
-      "Salento",
-      "Commerciale"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍫</text></svg>"
-    }
-  },
-  {
-    "id": "tagat",
-    "label": "Tagatà",
-    "article": "un",
-    "symbol": "TA",
-    "walkable": true,
-    "description": "Giostra Tagadà circolare con seduta continua e piattaforma inclinabile.",
-    "categories": [
-      "Salento",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🎡</text></svg>"
-    }
-  },
-  {
-    "id": "giostra",
-    "label": "Giostra",
-    "article": "una",
-    "symbol": "GI",
-    "walkable": true,
-    "description": "Giostra colorata da luna park con piattaforma e sedute decorative.",
-    "categories": [
-      "Salento",
-      "Esterno urbano"
-    ],
-    "render": {
-      "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🎠</text></svg>"
     }
   },
   {
@@ -1813,8 +752,853 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🔥</text></svg>"
+    }
+  },
+  {
+    "id": "gatto",
+    "label": "Gatto",
+    "article": "un",
+    "symbol": "GA",
+    "walkable": false,
+    "description": "Gatto domestico seduto, con coda curva e orecchie appuntite.",
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐈</text></svg>"
+    }
+  },
+  {
+    "id": "geco",
+    "label": "Geco",
+    "article": "un",
+    "symbol": "GE",
+    "walkable": false,
+    "description": "Piccolo geco con corpo sottile, zampe aperte e lunga coda.",
+    "categories": [
+      "Animali",
+      "Casa & Interni",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦎</text></svg>"
+    }
+  },
+  {
+    "id": "giostra",
+    "label": "Giostra",
+    "article": "una",
+    "symbol": "GI",
+    "walkable": true,
+    "description": "Giostra colorata da luna park con piattaforma e sedute decorative.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🎠</text></svg>"
+    }
+  },
+  {
+    "id": "gommone",
+    "label": "Gommone",
+    "article": "un",
+    "symbol": "GO",
+    "walkable": false,
+    "description": "Gommone gonfiabile con bordo spesso e piccolo motore.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚤</text></svg>"
+    }
+  },
+  {
+    "id": "lampada",
+    "label": "Lampada",
+    "article": "una",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lampada da interno con base, stelo sottile e paralume luminoso.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💡</text></svg>"
+    }
+  },
+  {
+    "id": "lampione",
+    "label": "Lampione",
+    "article": "un",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lampione stradale alto con palo sottile e luce superiore.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏮</text></svg>"
+    }
+  },
+  {
+    "id": "lavandino",
+    "label": "Lavandino",
+    "article": "un",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lavandino bianco con rubinetto e piccolo mobile o colonna.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚰</text></svg>"
+    }
+  },
+  {
+    "id": "lavatrice",
+    "label": "Lavatrice",
+    "article": "un",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lavatrice frontale con oblò rotondo e pulsanti superiori.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">👕</text></svg>"
+    }
+  },
+  {
+    "id": "lettino",
+    "label": "Lettino",
+    "article": "un",
+    "symbol": "LE",
+    "walkable": true,
+    "description": "Lettino da spiaggia lungo con struttura bassa e schienale inclinabile.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛏️</text></svg>"
+    }
+  },
+  {
+    "id": "letto",
+    "label": "Letto",
+    "article": "un",
+    "symbol": "LE",
+    "walkable": true,
+    "description": "Letto con materasso, cuscino e coperta ben visibili.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛏️</text></svg>"
+    }
+  },
+  {
+    "id": "libreria",
+    "label": "Libreria",
+    "article": "una",
+    "symbol": "LI",
+    "walkable": false,
+    "description": "Libreria verticale piena di libri e ripiani ordinati.",
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">📚</text></svg>"
+    }
+  },
+  {
+    "id": "luminarie",
+    "label": "Luminarie",
+    "article": "un",
+    "symbol": "LU",
+    "walkable": false,
+    "description": "Struttura decorativa con archi e piccole luci da festa patronale.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">✨</text></svg>"
+    }
+  },
+  {
+    "id": "materassino",
+    "label": "Materassino",
+    "article": "un",
+    "symbol": "MA",
+    "walkable": true,
+    "description": "Materassino gonfiabile lungo, morbido e colorato.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
+    }
+  },
+  {
+    "id": "microonde",
+    "label": "Microonde",
+    "article": "un",
+    "symbol": "MI",
+    "walkable": false,
+    "description": "Microonde compatto con sportello trasparente e pannello comandi.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍱</text></svg>"
+    }
+  },
+  {
+    "id": "moto",
+    "label": "Moto",
+    "article": "un",
+    "symbol": "MO",
+    "walkable": false,
+    "description": "Motocicletta con due ruote, manubrio, sella e corpo compatto.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏍️</text></svg>"
+    }
+  },
+  {
+    "id": "motozappa",
+    "label": "Motozappa",
+    "article": "una",
+    "symbol": "MO",
+    "walkable": false,
+    "description": "Motozappa agricola con manubrio, motore e lame inferiori.",
+    "categories": [
+      "Trasporti",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚜</text></svg>"
+    }
+  },
+  {
+    "id": "mucca",
+    "label": "Mucca",
+    "article": "una",
+    "symbol": "MU",
+    "walkable": false,
+    "description": "Mucca pezzata con corna piccole, muso largo e mammelle.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐄</text></svg>"
+    }
+  },
+  {
+    "id": "muroasecco",
+    "label": "Muro a secco",
+    "article": "un",
+    "symbol": "MU",
+    "walkable": false,
+    "description": "Muretto basso di pietre irregolari sovrapposte senza malta.",
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧱</text></svg>"
+    }
+  },
+  {
+    "id": "ombrellone",
+    "label": "Ombrellone",
+    "article": "un",
+    "symbol": "OM",
+    "walkable": false,
+    "description": "Ombrellone da spiaggia aperto con palo centrale e telo colorato.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛱️</text></svg>"
+    }
+  },
+  {
+    "id": "pajaro",
+    "label": "Pajaro",
+    "article": "un",
+    "symbol": "PA",
+    "walkable": false,
+    "description": "Piccola costruzione rurale in pietra, con forma conica o troncoconica.",
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛖</text></svg>"
+    }
+  },
+  {
+    "id": "palma",
+    "label": "Palma",
+    "article": "una",
+    "symbol": "PA",
+    "walkable": false,
+    "description": "Palma con tronco verticale e grandi foglie aperte a ventaglio.",
+    "categories": [
+      "Campagna",
+      "Mare",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌴</text></svg>"
+    }
+  },
+  {
+    "id": "panchina",
+    "label": "Panchina",
+    "article": "una",
+    "symbol": "PA",
+    "walkable": true,
+    "description": "Panchina da parco con seduta a doghe e schienale.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
+    }
+  },
+  {
+    "id": "passerella",
+    "label": "Passerella",
+    "article": "una",
+    "symbol": "PA",
+    "walkable": true,
+    "description": "Camminamento modulare o arrotolabile posizionato sugli stabilimenti balneari o sulle spiagge libere per facilitare il transito a piedi, con passeggini e carrozzine verso la battigia.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><line x1=\"22\" y1=\"5\" x2=\"22\" y2=\"95\" stroke=\"#795548\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-dasharray=\"3,3\"/><line x1=\"78\" y1=\"5\" x2=\"78\" y2=\"95\" stroke=\"#795548\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-dasharray=\"3,3\"/><rect x=\"14\" y=\"8\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"14.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"14.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"26\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#CCA056\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"32.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"32.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"44\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"50.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"50.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"62\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#CCA056\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"68.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"68.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"80\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"86.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"86.5\" r=\"1.5\" fill=\"#5D3A1A\"/></svg>"
+    }
+  },
+  {
+    "id": "pasticciotto",
+    "label": "Pasticciotto",
+    "article": "un",
+    "symbol": "PA",
+    "walkable": false,
+    "description": "Dolce ovale di pasta frolla dorata con ripieno di crema.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥟</text></svg>"
+    }
+  },
+  {
+    "id": "pc",
+    "label": "PC",
+    "article": "un",
+    "symbol": "PC",
+    "walkable": false,
+    "description": "Computer con monitor, tastiera e mouse su piccola postazione.",
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💻</text></svg>"
+    }
+  },
+  {
+    "id": "pedal",
+    "label": "Pedalò",
+    "article": "un",
+    "symbol": "PE",
+    "walkable": false,
+    "description": "Piccola imbarcazione da spiaggia con sedili e pedali.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦢</text></svg>"
+    }
+  },
+  {
+    "id": "pesce",
+    "label": "Pesce",
+    "article": "un",
+    "symbol": "PE",
+    "walkable": false,
+    "description": "Pesce con corpo affusolato, pinne e coda ben visibili.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐟</text></svg>"
+    }
+  },
+  {
+    "id": "pezzodilegno",
+    "label": "Pezzo di legno",
+    "article": "un",
+    "symbol": "PE",
+    "walkable": false,
+    "description": "Tronco o asse di legno grezzo appoggiato a terra.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪵</text></svg>"
+    }
+  },
+  {
+    "id": "pino",
+    "label": "Pino",
+    "article": "un",
+    "symbol": "PI",
+    "walkable": false,
+    "description": "Pino alto con tronco sottile e chioma a ombrello.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🌲</text></svg>"
+    }
+  },
+  {
+    "id": "polipo",
+    "label": "Polipo",
+    "article": "un",
+    "symbol": "PO",
+    "walkable": false,
+    "description": "Polipo con testa arrotondata e tentacoli sinuosi.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐙</text></svg>"
+    }
+  },
+  {
+    "id": "poltrona",
+    "label": "Poltrona",
+    "article": "una",
+    "symbol": "PO",
+    "walkable": true,
+    "description": "Poltrona singola imbottita con braccioli ampi e seduta accogliente.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">💺</text></svg>"
+    }
+  },
+  {
+    "id": "pouf",
+    "label": "Pouf",
+    "article": "un",
+    "symbol": "PO",
+    "walkable": true,
+    "description": "Pouf basso e morbido, compatto, senza schienale.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧎</text></svg>"
+    }
+  },
+  {
+    "id": "puccia",
+    "label": "Puccia",
+    "article": "una",
+    "symbol": "PU",
+    "walkable": false,
+    "description": "Panino salentino rotondo e rustico, con crosta chiara.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥪</text></svg>"
+    }
+  },
+  {
+    "id": "pumo",
+    "label": "Pumo",
+    "article": "un",
+    "symbol": "PU",
+    "walkable": false,
+    "description": "Pumo salentino decorativo in ceramica, a forma di bocciolo.",
+    "categories": [
+      "Salento",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏺</text></svg>"
+    }
+  },
+  {
+    "id": "registratoredicassa",
+    "label": "Registratore di cassa",
+    "article": "una",
+    "symbol": "RE",
+    "walkable": false,
+    "description": "Cassa da negozio con display, tastiera e cassetto portamonete.",
+    "categories": [
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧾</text></svg>"
+    }
+  },
+  {
+    "id": "ricciodimare",
+    "label": "Riccio di mare",
+    "article": "un",
+    "symbol": "RI",
+    "walkable": false,
+    "description": "Riccio di mare tondo con aculei fitti e scuri.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🦔</text></svg>"
+    }
+  },
+  {
+    "id": "rovi",
+    "label": "Rovi",
+    "article": "un",
+    "symbol": "RO",
+    "walkable": false,
+    "description": "Intrico di rami spinosi e cespugli selvatici.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🕸️</text></svg>"
+    }
+  },
+  {
+    "id": "rustico",
+    "label": "Rustico",
+    "article": "un",
+    "symbol": "RU",
+    "walkable": false,
+    "description": "Rustico leccese rotondo di pasta sfoglia dorata e friabile.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥧</text></svg>"
+    }
+  },
+  {
+    "id": "salvagente",
+    "label": "Salvagente",
+    "article": "un",
+    "symbol": "SA",
+    "walkable": false,
+    "description": "Salvagente circolare con foro centrale e bande colorate.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
+    }
+  },
+  {
+    "id": "santoronzo",
+    "label": "Sant’Oronzo",
+    "article": "un",
+    "symbol": "SA",
+    "walkable": false,
+    "description": "Statua di Sant’Oronzo su colonna o piedistallo, in posa solenne.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗿</text></svg>"
+    }
+  },
+  {
+    "id": "scaffale",
+    "label": "Scaffale",
+    "article": "uno",
+    "symbol": "SC",
+    "walkable": false,
+    "description": "Scaffale da negozio con ripiani pieni di prodotti ordinati.",
+    "categories": [
+      "Commerciale",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏪</text></svg>"
+    }
+  },
+  {
+    "id": "scarafaggio",
+    "label": "Scarafaggio",
+    "article": "uno",
+    "symbol": "SC",
+    "walkable": false,
+    "description": "Scarafaggio marrone con antenne lunghe e corpo ovale.",
+    "categories": [
+      "Animali",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪳</text></svg>"
+    }
+  },
+  {
+    "id": "scoglio",
+    "label": "Scoglio",
+    "article": "uno",
+    "symbol": "SC",
+    "walkable": false,
+    "description": "Roccia marina irregolare, grigia e compatta.",
+    "categories": [
+      "Mare",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪨</text></svg>"
+    }
+  },
+  {
+    "id": "sdraio",
+    "label": "Sdraio",
+    "article": "un",
+    "symbol": "SD",
+    "walkable": true,
+    "description": "Sedia sdraio pieghevole con telo inclinato.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
+    }
+  },
+  {
+    "id": "secchiello",
+    "label": "Secchiello",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Secchiello da spiaggia con manico e paletta vicina.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪣</text></svg>"
+    }
+  },
+  {
+    "id": "sedia",
+    "label": "Sedia",
+    "article": "una",
+    "symbol": "SE",
+    "walkable": true,
+    "description": "Sedia semplice con seduta, schienale e quattro gambe.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
+    }
+  },
+  {
+    "id": "segnalestradale",
+    "label": "Segnale stradale",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Cartello stradale su palo con forma e simbolo ben riconoscibili.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛑</text></svg>"
+    }
+  },
+  {
+    "id": "semaforo",
+    "label": "Semaforo",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Semaforo verticale con tre luci colorate sovrapposte.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚦</text></svg>"
+    }
+  },
+  {
+    "id": "serpente",
+    "label": "Serpente",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Serpente sinuoso arrotolato o strisciante, senza zampe.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐍</text></svg>"
+    }
+  },
+  {
+    "id": "sgabello",
+    "label": "Sgabello",
+    "article": "un",
+    "symbol": "SG",
+    "walkable": true,
+    "description": "Sgabello alto o basso con seduta semplice e gambe snelle.",
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪑</text></svg>"
+    }
+  },
+  {
+    "id": "statua",
+    "label": "Statua",
+    "article": "una",
+    "symbol": "ST",
+    "walkable": false,
+    "description": "Statua su piedistallo raffigurante una figura umana o simbolica.",
+    "categories": [
+      "Esterno urbano",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🗽</text></svg>"
     }
   },
   {
@@ -1830,8 +1614,42 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛪</text></svg>"
+    }
+  },
+  {
+    "id": "sup",
+    "label": "SUP",
+    "article": "un",
+    "symbol": "SU",
+    "walkable": true,
+    "description": "Tavola da stand up paddle lunga con pagaia.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏄</text></svg>"
+    }
+  },
+  {
+    "id": "tagat",
+    "label": "Tagatà",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": true,
+    "description": "Giostra Tagadà circolare con seduta continua e piattaforma inclinabile.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🎡</text></svg>"
     }
   },
   {
@@ -1846,24 +1664,206 @@
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
+      "scale": 1,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥁</text></svg>"
     }
   },
   {
-    "id": "passerella",
-    "label": "Passerella",
-    "article": "una",
-    "symbol": "PA",
+    "id": "tappeto",
+    "label": "Tappeto",
+    "article": "un",
+    "symbol": "TA",
     "walkable": true,
-    "description": "Camminamento modulare o arrotolabile posizionato sugli stabilimenti balneari o sulle spiagge libere per facilitare il transito a piedi, con passeggini e carrozzine verso la battigia.",
+    "description": "Tappeto piatto decorativo steso sul pavimento.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🧶</text></svg>"
+    }
+  },
+  {
+    "id": "tavoladasurf",
+    "label": "Tavola da surf",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": true,
+    "description": "Tavola da surf lunga e affusolata con punta arrotondata.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏄</text></svg>"
+    }
+  },
+  {
+    "id": "tavolo",
+    "label": "Tavolo",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": false,
+    "description": "Tavolo rettangolare o rotondo con piano stabile e gambe robuste.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪚</text></svg>"
+    }
+  },
+  {
+    "id": "telodamare",
+    "label": "Telo da mare",
+    "article": "un",
+    "symbol": "TE",
+    "walkable": true,
+    "description": "Telo colorato steso sulla sabbia, piatto e rettangolare.",
     "categories": [
       "Mare"
     ],
     "render": {
       "type": "svg",
-      "scale": 1.0,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><line x1=\"22\" y1=\"5\" x2=\"22\" y2=\"95\" stroke=\"#795548\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-dasharray=\"3,3\"/><line x1=\"78\" y1=\"5\" x2=\"78\" y2=\"95\" stroke=\"#795548\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-dasharray=\"3,3\"/><rect x=\"14\" y=\"8\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"14.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"14.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"26\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#CCA056\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"32.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"32.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"44\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"50.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"50.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"62\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#CCA056\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"68.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"68.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"80\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"86.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"86.5\" r=\"1.5\" fill=\"#5D3A1A\"/></svg>"
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🏖️</text></svg>"
+    }
+  },
+  {
+    "id": "toro",
+    "label": "Toro",
+    "article": "un",
+    "symbol": "TO",
+    "walkable": false,
+    "description": "Toro robusto con corna evidenti e corpo muscoloso.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🐂</text></svg>"
+    }
+  },
+  {
+    "id": "torrettabagnino",
+    "label": "Torretta bagnino",
+    "article": "un",
+    "symbol": "TO",
+    "walkable": false,
+    "description": "Torretta rialzata con seduta e scaletta per il bagnino.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
+    }
+  },
+  {
+    "id": "trattore",
+    "label": "Trattore",
+    "article": "un",
+    "symbol": "TR",
+    "walkable": false,
+    "description": "Trattore agricolo con grandi ruote posteriori e cabina o sedile.",
+    "categories": [
+      "Trasporti",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚜</text></svg>"
+    }
+  },
+  {
+    "id": "triciclo",
+    "label": "Triciclo",
+    "article": "un",
+    "symbol": "TR",
+    "walkable": false,
+    "description": "Piccolo triciclo con una ruota davanti e due dietro.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛺</text></svg>"
+    }
+  },
+  {
+    "id": "tv",
+    "label": "TV",
+    "article": "un",
+    "symbol": "TV",
+    "walkable": false,
+    "description": "Televisore moderno con schermo nero e base sottile.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">📺</text></svg>"
+    }
+  },
+  {
+    "id": "vasodipiante",
+    "label": "Vaso di piante",
+    "article": "un",
+    "symbol": "VA",
+    "walkable": false,
+    "description": "Vaso con pianta verde e foglie decorative.",
+    "categories": [
+      "Casa & Interni",
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🪴</text></svg>"
+    }
+  },
+  {
+    "id": "water",
+    "label": "Water",
+    "article": "un",
+    "symbol": "WA",
+    "walkable": true,
+    "description": "WC bianco con tazza, sedile e cassetta posteriore.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🚽</text></svg>"
+    }
+  },
+  {
+    "id": "zappa",
+    "label": "Zappa",
+    "article": "una",
+    "symbol": "ZA",
+    "walkable": false,
+    "description": "Attrezzo agricolo con manico lungo e lama metallica.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">⛏️</text></svg>"
     }
   }
 ]
