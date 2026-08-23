@@ -4547,6 +4547,9 @@ if(objCatEl){
   objCatEl.addEventListener("change", async () => {
     const dir = objCatEl.value;
     if (dir) {
+      objCatEl.disabled = true;
+      const box = $("#objPalette");
+      if(box) box.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-dim);">⏳ Caricamento in corso...</div>';
       try {
         const objRes = await ghFetch(`catalogs/${dir}/object.json`);
         if (objRes.ok) {
@@ -4573,6 +4576,8 @@ if(objCatEl){
         }
       } catch (e) {
         console.warn(`Errore ricaricamento catalogo ${dir}`, e);
+      } finally {
+        objCatEl.disabled = false;
       }
     }
     renderPalette();
