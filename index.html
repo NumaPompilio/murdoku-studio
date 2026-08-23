@@ -7689,6 +7689,40 @@ function renderObjectCards() {
   
   const filterVal = $("#catalogWalkableFilter") ? $("#catalogWalkableFilter").value : "all";
   
+  // Calculate Stats
+  const total = catalogObjects.length;
+  const walkableCount = catalogObjects.filter(o => o.walkable).length;
+  const nonWalkableCount = total - walkableCount;
+  const walkPct = total > 0 ? Math.round((walkableCount / total) * 100) : 0;
+  const nonWalkPct = total > 0 ? Math.round((nonWalkableCount / total) * 100) : 0;
+  
+  // Stats Card
+  const statsCard = document.createElement("div");
+  statsCard.className = "catalog-card";
+  statsCard.style.cursor = "default";
+  statsCard.style.backgroundColor = "rgba(0,0,0,0.2)";
+  statsCard.style.display = "flex";
+  statsCard.style.flexDirection = "column";
+  statsCard.style.justifyContent = "center";
+  statsCard.style.alignItems = "center";
+  statsCard.style.textAlign = "center";
+  statsCard.innerHTML = `
+    <div style="font-size:42px; margin-bottom:12px">📊</div>
+    <div style="font-size:14px; font-weight:bold; margin-bottom:10px; color:var(--text)">Statistiche</div>
+    <div style="font-size:12px; color:var(--text-dim); line-height:1.6; width:100%">
+      <div style="display:flex; justify-content:space-between; margin-bottom:4px; padding:0 10px;">
+        <span>Totali:</span> <b style="color:var(--text)">${total}</b>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-bottom:4px; padding:0 10px;">
+        <span>Calpestabili:</span> <div><b style="color:#4caf50">${walkableCount}</b> <span style="font-size:10px">(${walkPct}%)</span></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; padding:0 10px;">
+        <span>Non calpest.:</span> <div><b style="color:#ff4444">${nonWalkableCount}</b> <span style="font-size:10px">(${nonWalkPct}%)</span></div>
+      </div>
+    </div>
+  `;
+  grid.appendChild(statsCard);
+
   // New Card
   const newCard = document.createElement("div");
   newCard.className = "catalog-card add-new";
