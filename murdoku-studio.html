@@ -420,21 +420,19 @@
     <button class="btn secondary" id="playerCopyLinkBtn" style="display:none; margin-left:10px;" title="Copia link per giocare questa mappa"><span class="k">🔗</span> Copia Link</button>
   </div>
   <div class="spacer"></div>
-  <div class="toprow">
     <button class="btn ghost" id="settingsBtn" title="Impostazioni dell'applicazione">⚙️</button>
     <button class="btn primary" id="genMap" title="Genera una nuova mappa casuale (stanze e arredi), cancellando la precedente"><span class="k">🎲</span> Genera mappa</button>
     <button class="btn primary" id="genClues" title="Genera un nuovo set di indizi logici univoci basati sulla mappa attuale"><span class="k">🔍</span> Genera indizi</button>
     <button class="btn" id="autoFill" title="Sulla mappa attuale (muri e oggetti) posiziona i personaggi e genera gli indizi per una soluzione unica"><span class="k">🧩</span> Completa mappa</button>
     <button class="btn" id="genBest" title="Genera più set di indizi e tiene il più elegante (soluzione unica)"><span class="k">✨</span> Più eleganti</button>
     <button class="btn" id="verify" title="Verifica matematicamente se il set di indizi attuale garantisce una soluzione unica per la mappa"><span class="k">✔</span> Verifica</button>
-    <button class="btn" id="savedMapsBtn" title="Apri il catalogo delle mappe salvate"><span class="k">📂</span> Mappe (<span id="savedCountBadge">0</span>)</button>
     <button class="btn ghost" id="doPrintMap" title="Stampa un PDF di 1 pagina contenente solo la mappa da risolvere (senza soluzione) e le regole"><span class="k">🖨</span> PDF Mappa</button>
     <button class="btn ghost" id="doPrintFull" title="Stampa un PDF completo (mappa da risolvere + soluzione e ragionamento)"><span class="k">🖨</span> PDF Mappa + Soluzione</button>
 
     <button class="btn ghost" id="copyCfg" title="Copia negli appunti lo stato attuale del puzzle in formato testuale"><span class="k">🗺️</span> Esporta Mappa + Indizi</button>
-    <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">☁️</span> Carica dal Cloud</button>
-    <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">☁️</span> Salva sul Cloud</button>
     <button class="btn ghost" id="impMarkdown" title="Incolla il testo (Markdown/JSON) di una mappa per caricarla"><span class="k">📂</span> Importa Mappa</button>
+    <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">📤</span> Salva sul Cloud</button>
+    <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">📥</span> Carica dal Cloud</button>
     <input type="file" id="fileInput" accept="application/json" style="display:none">
   </div>
 </header>
@@ -575,6 +573,9 @@
         </div>
       </div>
       <button class="btn ghost" id="resetAreaFloor" style="width:100%; font-size:11px; margin-top:4px">↺ Colore predefinito dell'area</button>
+      <div style="margin-top:16px;"></div>
+      <button class="btn ghost" id="clearElems" style="width:100%; margin-bottom:6px">🧹 Cancella elementi (tieni muri)</button>
+      <button class="btn ghost" id="clearAll" style="width:100%; margin-bottom:8px">🗑️ Cancella tutto (con muri)</button>
     </div>
 
     <div class="card">
@@ -623,33 +624,6 @@
         </div>
       </div>
       <div class="hint">Totale celle mappa: <span id="statTotal">81</span></div>
-    </div>
-
-    <div class="card">
-      <h2>Salvataggio & Progetto</h2>
-      <div class="toprow" style="margin-bottom:8px">
-        <button class="btn primary" id="saveCurrentMap" style="flex:1"><span class="k">💾</span> Salva mappa</button>
-        <button class="btn" id="savedMapsCardBtn" style="flex:1"><span class="k">📂</span> Catalogo (<span id="savedCount">0</span>)</button>
-      </div>
-      <button class="btn" id="saveMapToFolderBtn" style="width:100%; margin-bottom:6px"><span class="k">📁</span> Salva su Cartella "Mappe"</button>
-      <button class="btn ghost" id="clearElems" style="width:100%; margin-bottom:6px">🧹 Cancella elementi (tieni muri)</button>
-      <button class="btn ghost" id="clearAll" style="width:100%; margin-bottom:8px">🗑️ Cancella tutto (con muri)</button>
-      <div class="hint">Salvataggio automatico nel browser + archivio mappe salvate.</div>
-    </div>
-    <div class="card">
-      <h2>Mappe Predefinite</h2>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px">
-        <button class="btn predef-map-btn" data-id="sorelle" style="padding:6px 10px; font-size:12px; background:var(--panel2); border:1px solid var(--line2); color:var(--text); border-radius:6px; cursor:pointer"><span class="k" style="margin-right:6px">🗺️</span>Le due sorelle (9x9)</button>
-        <button class="btn predef-map-btn" data-id="nonna" style="padding:6px 10px; font-size:12px; background:var(--panel2); border:1px solid var(--line2); color:var(--text); border-radius:6px; cursor:pointer"><span class="k" style="margin-right:6px">🏡</span>Casa della Nonna (9x9)</button>
-      </div>
-      <div id="predefConfirmBox" style="display:none; margin-top:10px; padding:10px; background:var(--panel); border-radius:6px; border:1px solid var(--warn)">
-        <div style="font-size:12px; margin-bottom:8px">⚠️ <b>Attenzione:</b> caricando questa mappa perderai quella attuale e tutti gli indizi.</div>
-        <div style="display:flex; gap:8px;">
-          <button class="btn ghost" id="predefCancelBtn" style="flex:1">Annulla</button>
-          <button class="btn primary" id="predefConfirmBtn" style="flex:1; background:var(--warn); border-color:var(--warn); color:#fff">Sì, Carica</button>
-        </div>
-      </div>
-      <div class="hint" style="margin-top:8px">Carica una mappa già impostata con muri e oggetti. Spetta a te posizionare i personaggi.</div>
     </div>
 
   </section>
@@ -806,33 +780,7 @@
     <button class="btn primary" id="importConfirm">Importa Mappa</button>
   </div>
 </div></div>
-<div id="savedMapsModal" class="modal"><div class="box">
-  <div class="mh">
-    <h3>📂 Catalogo Mappe Salvate</h3>
-    <span class="sp" style="flex:1"></span>
-    <button class="btn ghost" id="savedMapsClose">Chiudi</button>
-  </div>
-  <div class="mb" id="savedMapsList">
-    <div class="empty">Nessuna mappa salvata. Salva la mappa corrente per ritrovarla qui in seguito.</div>
-  </div>
-  <div class="mf" style="display:flex; justify-content:space-between; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
-    <span class="hint" id="savedMapsSummary">0 mappe archiviate in locale</span>
-    <button class="btn primary" id="savedMapsSaveNew"><span class="k">💾</span> Salva come nuova mappa</button>
-  </div>
-</div></div>
 
-<!-- Modale Salva su Cartella -->
-<div id="folderSaveModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(460px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
-  <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);"><h3>Salva Mappa in Cartella</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="folderSaveClose">Chiudi</button></div>
-  <div style="padding:20px 16px; flex:1">
-    <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Nome del file (sarà salvato come .md)</label>
-    <input type="text" id="folderSaveFilename" placeholder="Es. Mappa1" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
-    <div style="margin-top:12px; font-size:11px; color:var(--warn); line-height:1.4">💡 <b>Nota:</b> La prima volta che salvi, il browser ti chiederà di selezionare una cartella (es. "Mappe Salvate"). <b>Seleziona la cartella intera, non i singoli file.</b></div>
-  </div>
-  <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
-    <button class="btn primary" id="folderSaveConfirm">Salva Mappa</button>
-  </div>
-</div></div>
 
 <!-- Modale Seleziona da Cartella -->
 <div id="folderLoadModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(460px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
@@ -4190,41 +4138,6 @@ $("#tools").addEventListener("click",e=>{
   const t=e.target.closest(".tool"); if(!t) return;
   setTool(t.dataset.tool);
 });
-  let pendingPredefMapId = null;
-  document.querySelectorAll(".predef-map-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      pendingPredefMapId = btn.dataset.id;
-      $("#predefConfirmBox").style.display = "block";
-    });
-  });
-
-  $("#predefCancelBtn").addEventListener("click", () => {
-    pendingPredefMapId = null;
-    $("#predefConfirmBox").style.display = "none";
-  });
-
-  $("#predefConfirmBtn").addEventListener("click", () => {
-    if (!pendingPredefMapId) return;
-    const id = pendingPredefMapId;
-    $("#predefConfirmBox").style.display = "none";
-    pendingPredefMapId = null;
-    
-    const map = E.loadPredefinedMap(id);
-    if (map) {
-      state.map = map;
-      state.clueObjs = [];
-      state.clueResult = null;
-      state.preserved.clear();
-      state.steps = [];
-      setBoardStatus("ok", `Mappa "${map.mapTitle}" caricata.`);
-      setVerdict("ok", "Mappa caricata. Puoi modificare i dettagli o generare indizi.");
-      invalidateClues();
-      render();
-      autosave();
-    } else {
-      alert("Errore nel caricamento della mappa.");
-    }
-  });
 
 $("#undoBtn").addEventListener("click", popUndo);
 $("#size").addEventListener("input",e=>{ $("#sizeVal").textContent=e.target.value; });
@@ -4359,184 +4272,6 @@ function deserialize(d){
 /* =====================================================================
    LIBRERIA MAPPE SALVATE (LOCAL STORAGE)
    ===================================================================== */
-function getSavedMaps(){
-  try {
-    const raw = localStorage.getItem("murdoku:saved_maps");
-    return raw ? JSON.parse(raw) : [];
-  } catch(e) { return []; }
-}
-
-function setSavedMaps(list){
-  try {
-    localStorage.setItem("murdoku:saved_maps", JSON.stringify(list));
-  } catch(e) {}
-  updateSavedCount();
-}
-
-function updateSavedCount(){
-  const list = getSavedMaps();
-  const cnt = list.length;
-  const b1 = $("#savedCountBadge"), b2 = $("#savedCount"), s = $("#savedMapsSummary");
-  if(b1) b1.textContent = cnt;
-  if(b2) b2.textContent = cnt;
-  if(s) s.textContent = `${cnt} ${cnt===1 ? "mappa archiviata" : "mappe archiviate"} in locale`;
-}
-
-function saveCurrentMap(forceNew){
-  const m = state.map;
-  if(!m){ toast("Nessuna mappa da salvare"); return; }
-  recomputeEntities();
-  const serialized = serialize();
-  if(!serialized){ toast("Nessun dato da salvare"); return; }
-  
-  let list = getSavedMaps();
-  const defaultName = `Mappa ${m.size}×${m.size} (${new Date().toLocaleDateString('it-IT')})`;
-  const title = (state.mapTitle || "").trim() || defaultName;
-  state.mapTitle = title;
-  $("#mapTitle").value = title;
-  
-  const now = new Date().toISOString();
-  if (!forceNew && state.currentMapId) {
-    const idx = list.findIndex(item => item.id === state.currentMapId);
-    if (idx !== -1) {
-      list[idx] = {
-        id: state.currentMapId,
-        title,
-        savedAt: now,
-        size: m.size,
-        suspects: (m.entities || []).filter(e => e.kind === "suspect").length,
-        cluesCount: (state.clueObjs || []).length,
-        elegance: state.lastElegance ? state.lastElegance.score : null,
-        data: serialized
-      };
-      setSavedMaps(list);
-      toast(`Mappa «${title}» aggiornata`);
-      renderSavedMapsList();
-      return;
-    }
-  }
-  
-  const newId = "map_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6);
-  state.currentMapId = newId;
-  list.unshift({
-    id: newId,
-    title,
-    savedAt: now,
-    size: m.size,
-    suspects: (m.entities || []).filter(e => e.kind === "suspect").length,
-    cluesCount: (state.clueObjs || []).length,
-    elegance: state.lastElegance ? state.lastElegance.score : null,
-    data: serialized
-  });
-  setSavedMaps(list);
-  toast(`Mappa «${title}» salvata`);
-  renderSavedMapsList();
-}
-
-function loadSavedMap(id){
-  const list = getSavedMaps();
-  const item = list.find(x => x.id === id);
-  if(!item || !item.data){ toast("Mappa non trovata"); return; }
-  deserialize(item.data);
-  state.currentMapId = item.id;
-  state.mapTitle = item.title || item.data.title || "";
-  $("#mapTitle").value = state.mapTitle;
-  $("#size").value = state.map.size;
-  $("#sizeVal").textContent = state.map.size;
-  autosave();
-  $("#savedMapsModal").style.display = "none";
-  toast(`Mappa «${item.title}» caricata`);
-}
-
-function deleteSavedMap(id){
-  let list = getSavedMaps();
-  list = list.filter(x => x.id !== id);
-  setSavedMaps(list);
-  if (state.currentMapId === id) state.currentMapId = null;
-  renderSavedMapsList();
-  toast("Mappa rimossa dal catalogo");
-}
-
-function renderSavedMapsList(){
-  const box = $("#savedMapsList");
-  if(!box) return;
-  const list = getSavedMaps();
-  updateSavedCount();
-  if(!list.length){
-    box.innerHTML = `<div class="empty">Nessuna mappa salvata. Clicca su «Salva mappa» per archiviare la configurazione corrente.</div>`;
-    return;
-  }
-  
-  box.innerHTML = list.map(item => {
-    const d = new Date(item.savedAt);
-    const dateStr = !isNaN(d.getTime()) ? d.toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-    const isCurrent = state.currentMapId === item.id;
-    const elegBadge = item.elegance != null ? `<span class="saved-map-badge ok">✨ ${item.elegance}/100</span>` : "";
-    const cluesBadge = item.cluesCount > 0 ? `<span class="saved-map-badge">🔍 ${item.cluesCount} indizi</span>` : `<span class="saved-map-badge">Nessun indizio</span>`;
-    
-    return `<div class="saved-map-item">
-      <div class="saved-map-info">
-        <div class="saved-map-title">
-          ${escapeHtml(item.title)}
-          ${isCurrent ? '<span class="badge" style="background:var(--violet); font-size:9px; width:auto; padding:2px 6px; border-radius:4px">IN USO</span>' : ''}
-        </div>
-        <div class="saved-map-meta">
-          <span class="saved-map-badge">📐 ${item.size}×${item.size}</span>
-          <span class="saved-map-badge">🧑 ${item.suspects || (item.size - 1)} sospetti</span>
-          ${cluesBadge}
-          ${elegBadge}
-          <span>🕒 ${dateStr}</span>
-        </div>
-      </div>
-      <div class="saved-map-actions">
-        <button class="btn primary load-map-btn" data-id="${item.id}" style="padding:6px 11px; font-size:12px">📂 Carica</button>
-        <button class="btn ghost update-map-btn" data-id="${item.id}" title="Sovrascrivi con la mappa corrente" style="padding:6px 9px; font-size:12px">💾</button>
-        <button class="btn ghost del-map-btn" data-id="${item.id}" title="Elimina mappa (doppio clic)" style="padding:6px 9px; font-size:12px">🗑️</button>
-      </div>
-    </div>`;
-  }).join("");
-  
-  box.querySelectorAll(".load-map-btn").forEach(btn => {
-    btn.addEventListener("click", () => loadSavedMap(btn.dataset.id));
-  });
-  
-  box.querySelectorAll(".update-map-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      state.currentMapId = btn.dataset.id;
-      saveCurrentMap(false);
-    });
-  });
-  
-  box.querySelectorAll(".del-map-btn").forEach(btn => {
-    let armed = false, timer = null;
-    btn.addEventListener("click", () => {
-      if(!armed){
-        armed = true;
-        btn.textContent = "⚠️ Confermi?";
-        btn.style.borderColor = "var(--evidence)";
-        timer = setTimeout(() => { armed = false; btn.textContent = "🗑️"; btn.style.borderColor = ""; }, 3000);
-        return;
-      }
-      clearTimeout(timer);
-      deleteSavedMap(btn.dataset.id);
-    });
-  });
-}
-
-function openSavedMapsModal(){
-  renderSavedMapsList();
-  $("#savedMapsModal").style.display = "flex";
-}
-
-$("#savedMapsBtn").addEventListener("click", openSavedMapsModal);
-if($("#savedMapsCardBtn")) $("#savedMapsCardBtn").addEventListener("click", openSavedMapsModal);
-$("#savedMapsClose").addEventListener("click", () => $("#savedMapsModal").style.display = "none");
-$("#savedMapsModal").addEventListener("click", e => { if(e.target.id === "savedMapsModal") $("#savedMapsModal").style.display = "none"; });
-$("#saveCurrentMap").addEventListener("click", () => saveCurrentMap(false));
-$("#savedMapsSaveNew").addEventListener("click", () => {
-  saveCurrentMap(true);
-});
-
 $("#mapTitle").addEventListener("input", e => {
   state.mapTitle = e.target.value;
   autosave();
@@ -4685,60 +4420,6 @@ $("#addObjConfirm").addEventListener("click", async () => {
     if(err.name !== 'AbortError') toast("Errore durante il salvataggio in assets.");
   }
 });
-
-/* ---------- Accesso Cartella Locale (File System Access API) ---------- */
-window.savedMapsDirHandle = null;
-async function requireDirectoryHandle() {
-  if (window.savedMapsDirHandle) {
-    const permission = await window.savedMapsDirHandle.queryPermission({mode: 'readwrite'});
-    if (permission === 'granted') return window.savedMapsDirHandle;
-    const request = await window.savedMapsDirHandle.requestPermission({mode: 'readwrite'});
-    if (request === 'granted') return window.savedMapsDirHandle;
-  }
-  if (!window.showDirectoryPicker) {
-    toast("API File System non supportata su questo browser. Prova con Chrome o Edge.");
-    throw new Error("File System Access API not supported");
-  }
-  window.savedMapsDirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-  return window.savedMapsDirHandle;
-}
-
-$("#saveMapToFolderBtn").addEventListener("click", () => {
-  const m = state.map;
-  if(!m){ toast("Nessuna mappa da salvare"); return; }
-  $("#folderSaveFilename").value = (state.mapTitle || "").trim() || `Mappa_${m.size}x${m.size}`;
-  $("#folderSaveModal").style.display = "flex";
-  $("#folderSaveFilename").focus();
-});
-$("#folderSaveClose").addEventListener("click", () => $("#folderSaveModal").style.display="none");
-$("#folderSaveModal").addEventListener("click", e => { if(e.target.id==="folderSaveModal") $("#folderSaveModal").style.display="none"; });
-
-$("#folderSaveConfirm").addEventListener("click", async () => {
-  let filename = $("#folderSaveFilename").value.trim();
-  if(!filename){ toast("Il nome del file è obbligatorio"); return; }
-  if(!filename.toLowerCase().endsWith(".md")) filename += ".md";
-  try {
-    const dirHandle = await requireDirectoryHandle();
-    const fileHandle = await dirHandle.getFileHandle(filename, { create: true });
-    const writable = await fileHandle.createWritable();
-    const content = buildMapConfigMarkdown();
-    await writable.write(content);
-    await writable.close();
-    toast(`Mappa salvata come ${filename}`);
-    $("#folderSaveModal").style.display = "none";
-  } catch (err) {
-    console.error(err);
-    if(err.name !== 'AbortError') toast("Errore durante il salvataggio.");
-  }
-});
-
-$("#playerOpenFolderLoadBtn").addEventListener("click", () => {
-  $("#folderLoadFilename").value = "";
-  $("#folderLoadModal").style.display = "flex";
-  $("#folderLoadFilename").focus();
-});
-$("#folderLoadClose").addEventListener("click", () => $("#folderLoadModal").style.display="none");
-$("#folderLoadModal").addEventListener("click", e => { if(e.target.id==="folderLoadModal") $("#folderLoadModal").style.display="none"; });
 
 async function loadMapFromGithub(filename) {
   if(!filename.toLowerCase().endsWith(".md")) filename += ".md";
