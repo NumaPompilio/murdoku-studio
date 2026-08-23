@@ -6981,7 +6981,7 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     height: 60px;
     background: rgba(255,255,255,0.03);
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--line2);
     padding: 6px;
@@ -7016,14 +7016,7 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
   .cc-desc { color: var(--text-faint); font-size: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
   .cc-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
   .cc-tag { background: rgba(255,255,255,0.1); padding: 1px 4px; border-radius: 3px; font-size: 9px; }
-  .cc-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 6px;
-    padding: 6px 8px;
-    border-top: 1px solid var(--line2);
-    background: rgba(0,0,0,0.1);
-  }
+
   .cc-btn {
     background: none;
     border: none;
@@ -7741,20 +7734,49 @@ function renderObjectCards() {
     card.style.borderColor = obj.walkable ? "#4caf50" : "#ff4444";
     card.style.backgroundColor = obj.walkable ? "rgba(76, 175, 80, 0.15)" : "rgba(255, 68, 68, 0.15)";
     card.onclick = (e) => {
-      if(e.target.closest('.cc-footer')) return;
+      if(e.target.closest('.cc-btn')) return;
       openObjectDetails(obj);
     };
     
-    // Header (SVG or Fallback)
+    // Header with SVG and Buttons
     const header = document.createElement("div");
     header.className = "cc-icon-container";
+    
+    const editBtn = document.createElement("button");
+    editBtn.className = "cc-btn";
+    editBtn.innerHTML = "✏️";
+    editBtn.onclick = (e) => { e.stopPropagation(); openObjectModal(obj); };
+    
+    const delBtn = document.createElement("button");
+    delBtn.className = "cc-btn delete";
+    delBtn.innerHTML = "🗑️";
+    delBtn.onclick = (e) => {
+      e.stopPropagation();
+      catObjDeleteTarget = obj.id;
+      $("#catDeleteObjName").textContent = obj.label || obj.id;
+      $("#catalogDeleteModal").style.display = "flex";
+    };
+    
     const svgC = (obj.render && obj.render.svgCode) ? obj.render.svgCode : obj.svgCode;
+    let iconHtml = "";
     if(svgC && svgC.trim()) {
-      header.innerHTML = svgC;
+      iconHtml = svgC;
     } else {
       const symbol = (obj.symbol || "??").substring(0,2);
-      header.innerHTML = `<div class="cc-fallback">${symbol}</div>`;
+      iconHtml = `<div class="cc-fallback">${symbol}</div>`;
     }
+    
+    const svgWrapper = document.createElement("div");
+    svgWrapper.style.flex = "1";
+    svgWrapper.style.display = "flex";
+    svgWrapper.style.justifyContent = "center";
+    svgWrapper.style.alignItems = "center";
+    svgWrapper.style.height = "100%";
+    svgWrapper.innerHTML = iconHtml;
+
+    header.appendChild(editBtn);
+    header.appendChild(svgWrapper);
+    header.appendChild(delBtn);
     card.appendChild(header);
     
     // Body
@@ -7770,28 +7792,6 @@ function renderObjectCards() {
       <div class="cc-tags">${tagsHtml}</div>
     `;
     card.appendChild(body);
-    
-    // Footer
-    const footer = document.createElement("div");
-    footer.className = "cc-footer";
-    
-    const editBtn = document.createElement("button");
-    editBtn.className = "cc-btn";
-    editBtn.innerHTML = "✏️";
-    editBtn.onclick = () => openObjectModal(obj);
-    
-    const delBtn = document.createElement("button");
-    delBtn.className = "cc-btn delete";
-    delBtn.innerHTML = "🗑️";
-    delBtn.onclick = () => {
-      catObjDeleteTarget = obj.id;
-      $("#catDeleteObjName").textContent = obj.label || obj.id;
-      $("#catalogDeleteModal").style.display = "flex";
-    };
-    
-    footer.appendChild(editBtn);
-    footer.appendChild(delBtn);
-    card.appendChild(footer);
     
     grid.appendChild(card);
   });
