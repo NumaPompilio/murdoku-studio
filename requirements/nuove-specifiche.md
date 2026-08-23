@@ -557,3 +557,9 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Rendering Vettoriale Dinamico (`objectGlyph`)**: Totalmente eliminata la logica di fallback ad icone/emoji di testo e gli SVG disegnati in modo procedurale "hardcoded" nel codice.
   - La funzione usa in modo esclusivo il codice SVG fornito dal campo `svgCode` dei file `object.json`.
   - Ripulito il file eliminando ~400 righe di SVG fissi inseriti manualmente, snellendo enormemente la base di codice e permettendo all"editor di supportare nativamente qualsiasi asset definito dai cataloghi.
+
+
+## Rimozione Modalità Gioca (Player Mode) (v8.0)
+- **Rimozione dell'intera sezione PLAYER**: Tutte le interfacce, modali, logiche di gioco e controlli relativi alla modalità Player (Gioca) sono stati rimossi dall'applicazione.
+- **Ottimizzazione del codice**: Il codice Javascript, HTML e CSS specifico del Player (inclusi overlay, stati e parser) è stato completamente rimosso. Questo riduce significativamente la dimensione del file `murdoku-studio.html` e snellisce la complessità dell'applicazione.
+- **Spostamento Pulsante Catalog**: Nello switch-mode in alto a destra, il pulsante **Catalog** è stato spostato alla sinistra del pulsante **Editor**, diventando più accessibile. Il pulsante **Player** è stato rimosso.

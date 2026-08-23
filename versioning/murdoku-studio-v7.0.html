@@ -223,17 +223,195 @@
   .mode-switch .btn{border:none; background:transparent; padding:6px 14px; border-radius:6px; color:var(--text-dim); font-size:13px; cursor:pointer;}
   .mode-switch .btn:hover{color:var(--text);}
   .mode-switch .btn.active{background:linear-gradient(180deg,var(--violet),var(--violet-dim)); color:#fff;}
+  
+  /* Player View */
+  #player-view{display:flex; flex-direction:column; flex:1; min-height:0; overflow-y:auto; padding:20px; align-items:center;}
+  .player-top-bar{display:flex; gap:10px; margin-bottom:20px;}
+  .player-grid-wrap{position:relative; margin-bottom:20px; display:inline-block;}
+  .player-left-col{flex:0 0 auto; display:flex; flex-direction:column; align-items:center;}
+  .player-palette{display:flex; gap:10px; flex-wrap:wrap; background:var(--panel); padding:10px; border-radius:8px; border:1px solid var(--line); margin-bottom:20px; max-width:800px; justify-content:center;}
+  .player-char{width:40px; height:40px; border-radius:50%; border:2px solid var(--line2); display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-size:20px; color:#fff; cursor:pointer; background:var(--panel2); user-select:none;}
+  .player-char.victim{border-color:var(--evidence); color:var(--evidence);}
+  .player-char.active{border-color:var(--violet-bright); background:var(--violet-dim); box-shadow:0 0 10px rgba(138,107,255,0.5);}
+  .player-char.placed{opacity:0.3; cursor:not-allowed;}
+  .player-blocker-btn{margin-left:30px;}
+  .player-x-cross{position:absolute; background:linear-gradient(45deg, transparent 45%, rgba(228,72,61,0.5) 48%, rgba(228,72,61,0.5) 52%, transparent 55%), linear-gradient(-45deg, transparent 45%, rgba(228,72,61,0.5) 48%, rgba(228,72,61,0.5) 52%, transparent 55%); pointer-events:none; z-index:5;}
+  .player-char-on-grid{position:absolute; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:var(--serif); font-weight:bold; cursor:pointer; z-index:10; background:var(--desk); border:2px solid var(--violet-bright); color:var(--violet-bright);}
+  .player-char-on-grid.victim{border-color:var(--evidence); color:var(--evidence); border-style:dashed;}
+  #playerLegend{max-width:800px; width:100%; margin-bottom:20px; background:var(--paper); padding:20px; border-radius:8px; color:var(--ink);}
+  #playerLegend h3{font-family:var(--serif); margin-top:0; color:var(--ink); border-bottom:1px solid var(--paper-line); padding-bottom:10px; margin-bottom:15px;}
+  .player-legend-grid{display:flex; flex-wrap:wrap; gap:24px; align-items:center; font-size:14px;}
+  .player-clue-item{margin-bottom:12px; font-size:14px; display:flex; gap:10px; align-items:baseline;}
+  .player-clue-num{font-weight:bold; color:var(--evidence);}
+
+  @media (max-width: 1024px) {
+    #playerLegend { display: none !important; }
+    #player-view { padding: 10px; }
+    .player-palette { order: 2; flex-direction: row; width: 100%; justify-content: center; gap: 6px; padding: 10px; position: static; z-index: 30; margin-bottom: 0; box-sizing: border-box; }
+    .player-blocker-btn { margin-left: 10px; margin-top: 0; }
+    .player-char { width: auto; height: auto; flex: 1 1 0; aspect-ratio: 1; max-width: 45px; font-size: clamp(12px, 3.5vw, 18px); }
+    .player-grid-wrap { display: flex !important; flex-direction: column !important; gap: 15px; flex-wrap: nowrap !important; margin-bottom: 0; width: 100%; align-items: center; }
+    .player-left-col { flex: 0 0 auto; display: flex; flex-direction: column; gap: 5px; align-items: center; justify-content: center; width: 100%; max-width: 100vw; position: sticky; top: 0; z-index: 20; background: var(--ink); padding-bottom: 10px; border-bottom: 1px solid var(--line); box-shadow: 0 8px 15px rgba(0,0,0,0.5); }
+    #playerBoardContainer { touch-action: manipulation; width: 100%; max-width: 500px; display: flex; justify-content: center; position: relative; }
+    #playerBoard, #playerHoverOverlay, #playerOverlay { width: 100% !important; height: auto !important; max-width: 100vw; }
+    .player-right-col { flex: 0 0 auto; width: 100%; margin-left: 0; padding-left: 0; padding-bottom: 20px; overflow: visible !important; }
+    .player-rules-link-container { text-align: center !important; }
+    #playerClues { display: flex !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 15px; width: 100% !important; padding-right: 0; }
+    .player-clue-col { display: contents !important; }
+    .grp { width: auto !important; flex: 1 1 280px; margin-bottom: 0 !important; padding: 10px 12px !important; }
+    #player-view .clue { padding: 2px 0 !important; }
+    .clue-icon { display: none !important; }
+    .clue-name-wrap { flex-direction: row !important; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .clue-traits { margin-top: 0 !important; font-size: 11.5px !important; }
+    body.pure-player-mode header { display: none !important; }
+  }
+
+  /* ===== PLAYER LOADING OVERLAY ===== */
+  #player-loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1030 50%, #0a1628 100%);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+  }
+  #player-loading-overlay.active { display: flex; }
+  .plo-logo {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #fff;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+  .plo-logo span {
+    color: #e8b86d;
+  }
+  .plo-spinner {
+    width: 56px;
+    height: 56px;
+    border: 4px solid rgba(232,184,109,0.15);
+    border-top-color: #e8b86d;
+    border-radius: 50%;
+    animation: plo-spin 0.9s linear infinite;
+  }
+  @keyframes plo-spin {
+    to { transform: rotate(360deg); }
+  }
+  .plo-bar-wrap {
+    width: 220px;
+    height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .plo-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #e8b86d, #f0d4a0);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .plo-msg {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== MAINTENANCE OVERLAY ===== */
+  #maintenance-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a0f2e 50%, #0a1628 100%);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    text-align: center;
+    padding: 32px;
+  }
+  #maintenance-overlay.active { display: flex; }
+  .maint-icon {
+    font-size: 64px;
+    animation: maint-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes maint-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.08); opacity: 0.75; }
+  }
+  .maint-logo {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+  .maint-logo span { color: #e8b86d; }
+  .maint-title {
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+  .maint-subtitle {
+    font-size: clamp(14px, 3vw, 17px);
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+    max-width: 420px;
+  }
+  .maint-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #e8b86d, #f0d4a0);
+    border-radius: 3px;
+    opacity: 0.7;
+  }
+  .maint-badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #e8b86d;
+    border: 1px solid rgba(232,184,109,0.3);
+    padding: 6px 18px;
+    border-radius: 99px;
+    background: rgba(232,184,109,0.06);
+  }
 
   @media (max-width:1000px){ main{grid-template-columns:1fr} .left,.right{border:none} }
 </style>
 </head>
 <body>
 
+<!-- PLAYER LOADING OVERLAY -->
+<div id="player-loading-overlay">
+  <div class="plo-logo">MURDO<span>KU</span></div>
+  <div class="plo-spinner"></div>
+  <div class="plo-bar-wrap"><div class="plo-bar" id="ploBar"></div></div>
+  <div class="plo-msg" id="ploMsg">Caricamento oggetti...</div>
+</div>
+
+<!-- MAINTENANCE OVERLAY -->
+<div id="maintenance-overlay">
+  <div class="maint-logo">MURDO<span>KU</span></div>
+  <div class="maint-icon">🔧</div>
+  <div class="maint-divider"></div>
+  <div class="maint-title">Servizio in manutenzione</div>
+  <div class="maint-subtitle">Stiamo lavorando per migliorare l'esperienza di gioco.<br>Torna a trovarci tra poco!</div>
+  <div class="maint-badge">Manutenzione in corso</div>
+</div>
+
 <header>
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v8.0</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v7.0</span></h1>
     </div>
   </div>
 
@@ -265,8 +443,12 @@
 
   <div style="flex: 1; display: flex; justify-content: flex-end;">
     <div class="mode-switch">
-      <button class="btn" id="modeCatalogBtn">🗂️ Catalog</button>
       <button class="btn active" id="modeEditorBtn">✏️ Editor</button>
+      <button class="btn" id="modePlayerBtn">🎮 Player</button>
+      <button class="btn" id="modeCatalogBtn">🗂️ Catalog</button>
+      <button class="btn primary" id="playerOpenImportBtn" style="display:none; margin-left:10px;"><span class="k">📂</span> Incolla Mappa</button>
+      <button class="btn primary" id="playerOpenFolderLoadBtn" style="display:none; margin-left:10px;"><span class="k">📁</span> Seleziona Mappa</button>
+      <button class="btn secondary" id="playerCopyLinkBtn" style="display:none; margin-left:10px;" title="Copia link per giocare questa mappa"><span class="k">🔗</span> Copia Link</button>
     </div>
   </div>
 </header>
@@ -480,6 +662,43 @@
     </div>
   </section>
 </main>
+<div id="player-view" style="display:none;">
+
+  <div id="playerImportSection" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(600px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+    <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);"><h3>Incolla Mappa</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="playerCancelImportBtn">Chiudi</button></div>
+    <div style="padding:20px 16px; flex:1">
+      <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Testo della mappa (contenente &lt;!-- MURDOKU_STATE_B64: ... --&gt;)</label>
+      <textarea id="playerImportText" style="width:100%; height:120px; font-family:var(--mono); font-size:12px; background:var(--ink); color:var(--text); border:1px solid var(--line2); padding:10px; border-radius:7px;" placeholder="Incolla qui il testo contenente la mappa..."></textarea>
+    </div>
+    <div class="mf" style="display:flex; justify-content:space-between; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
+      <button class="btn" id="playerDoPasteBtn"><span class="k">📋</span> Incolla dagli appunti</button>
+      <button class="btn primary" id="playerConfirmImportBtn">Conferma e Gioca</button>
+    </div>
+  </div></div>
+
+  <div class="player-grid-wrap" id="playerGridWrap" style="display:none; gap:30px; align-items:stretch; flex-wrap:wrap; width:100%; max-width:100%;">
+    <div class="player-left-col" style="flex:0 0 auto;">
+      <div class="player-palette" id="playerPalette" style="display:none;"></div>
+      <div id="playerBoardContainer" style="position:relative; display:inline-block;">
+        <svg id="playerBoard" xmlns="http://www.w3.org/2000/svg" style="display:block;"></svg>
+        <svg id="playerOverlay" class="player-overlay" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; pointer-events:none; z-index:10;"></svg>
+        <svg id="playerHoverOverlay" xmlns="http://www.w3.org/2000/svg" style="position:absolute; top:0; left:0; pointer-events:none;"></svg>
+        <div id="playerClickLayer" style="position:absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;"></div>
+      </div>
+    </div>
+    <div class="player-right-col" style="flex:1; min-width:300px; overflow-x:auto; display:flex; flex-direction:column; justify-content:center;">
+      <div id="playerResult" style="display:none; text-align:center; padding:15px; margin-bottom:20px; font-weight:bold; font-size:20px; border-radius:8px; width:100%;"></div>
+      <div class="player-rules-link-container" style="text-align:right; width:100%; margin-bottom:12px;">
+        <a href="#" id="playerRulesLink" class="player-rules-link" style="color:var(--violet-bright); text-decoration:underline; font-size:14px; cursor:pointer;">Regole del gioco</a>
+      </div>
+      <div id="playerClues" class="player-clues-box" style="margin-top:0; display:flex; gap:20px; align-items:start; padding:0 0 10px 0; width:100%;"></div>
+    </div>
+  </div>
+  <div id="playerLegend" class="player-legend" style="margin-top:20px; width:100%; max-width:100%; background:var(--paper); padding:20px; border-radius:8px; color:var(--ink);"></div>
+</div>
+
+
+
 <div id="printArea"></div>
 <div id="mdModal"><div class="box">
   <div class="mh"><h3 id="mdTitle">Prompt per LLM</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="mdClose">Chiudi</button></div>
@@ -2368,6 +2587,7 @@ const appLogs = [];
    ============================================================ */
 let APP_CONFIG = {
   // Valori di default (fallback se settings.md non è raggiungibile)
+  maintenanceMode: false
 };
 
 const E = window.MurdokuEngine;
@@ -3589,6 +3809,14 @@ $("#mapTitle").addEventListener("input", e => {
   autosave();
 });
 
+$("#playerRulesLink")?.addEventListener("click", (e) => {
+  e.preventDefault();
+  $("#rulesModal").style.display = "flex";
+});
+$("#rulesClose")?.addEventListener("click", () => $("#rulesModal").style.display = "none");
+$("#rulesModal")?.addEventListener("click", (e) => {
+  if(e.target.id === "rulesModal") $("#rulesModal").style.display = "none";
+});
 
 
 $("#impMarkdown").addEventListener("click",()=>{
@@ -3645,8 +3873,18 @@ async function loadMapFromGithub(filename) {
     m.areaFloors=data.areaFloors ? Object.assign({}, data.areaFloors) : {};
     m.entities=(data.entities||[]).map(e=>({...e})); m.suspectCount=data.suspectCount||0;
 
+    playerState.map = m;
+    playerState.clues = data.clues || [];
+    playerState.entities = m.entities || [];
+    playerState.placed = {};
+    playerState.notes = {};
+    playerState.activeChar = null;
+    playerState.mapId = filename.replace(/\.md$/i, "");
+
     toast(`Mappa ${filename} caricata con successo`);
     $("#folderLoadModal").style.display = "none";
+    $("#playerCopyLinkBtn").style.display = "inline-flex";
+    renderPlayerUI();
   } catch (err) {
     console.error(err);
     if(err.name !== 'AbortError') toast("Errore durante il caricamento del file.");
@@ -3658,6 +3896,16 @@ $("#folderLoadConfirm").addEventListener("click", async () => {
   if(!filename){ toast("Il nome del file è obbligatorio"); return; }
   await loadMapFromGithub(filename);
 });
+
+$("#playerCopyLinkBtn").addEventListener("click", () => {
+  if (playerState && playerState.mapId) {
+    const link = `https://numapompilio.github.io/murdoku-studio/?mode=player&map=${encodeURIComponent(playerState.mapId)}`;
+    copyText(link).then(ok => {
+      if (ok) toast("Link della mappa copiato negli appunti!");
+    });
+  }
+});
+
 let currentMdFilename = null;
 function openMdModal(title, text, filename){
   currentMdFilename = filename || getExportFilename("documento", "md");
@@ -4473,6 +4721,869 @@ if(objCatEl){
   });
 }
 
+/* =====================================================================
+   AUTOSAVE
+   ===================================================================== */
+function autosave(){ try{ const d=serialize(); if(d) localStorage.setItem("murdoku:autosave",JSON.stringify(d)); }catch(e){} }
+function restore(){ try{ const raw=localStorage.getItem("murdoku:autosave"); if(raw){ deserialize(JSON.parse(raw)); return true; } }catch(e){} return false; }
+
+/* =====================================================================
+   AVVIO
+   ===================================================================== */
+document.body.insertAdjacentHTML("afterbegin", `<svg id="global-svg-defs" width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;">${svgDefs("")}</svg>`);
+
+if(!restore()){
+  // mappa iniziale di esempio
+  const rng=E.makeRng(42); let m=null;
+  for(let t=0;t<40;t++){ m=E.generateMap({size:9,rng}); if(E.placeSolution(m,{rng})) break; m=null; }
+  if(m){ state.map=m; setBoardStatus("ok","Mappa di esempio 9×9. Premi «Genera indizi», oppure modifica con gli strumenti."); }
+  else { state.map=E.emptyMap(9); state.map.areaNames={0:"Stanza"}; }
+}
+$("#objPickWrap").style.opacity=1;
+renderPalette();
+render(); renderClues(); renderSteps();
+
+/* =====================================================================
+   PLAYER MODE LOGIC
+   ===================================================================== */
+let playerState = {
+  map: null,
+  clues: null,
+  entities: [],
+  placed: {}, // r_c => char object { id, initial, kind }
+  notes: {}, // r_c => [charObj...]
+  activeChar: null, // char object
+  cellSize: 0,
+  padding: 26
+};
+
+$("#modeEditorBtn").addEventListener("click", () => {
+  $("#modeEditorBtn").classList.add("active");
+  $("#modePlayerBtn").classList.remove("active");
+  $("#editor-view").style.display = "grid"; // because original main is grid
+  $("#player-view").style.display = "none";
+  $(".toprow").style.display = "flex"; // show toprow buttons
+  $("#playerOpenImportBtn").style.display = "none";
+  $("#playerOpenFolderLoadBtn").style.display = "none";
+  $("#playerCopyLinkBtn").style.display = "none";
+});
+
+$("#modePlayerBtn").addEventListener("click", () => {
+  try {
+    $("#modePlayerBtn").classList.add("active");
+    $("#modeEditorBtn").classList.remove("active");
+    $("#editor-view").style.display = "none";
+    $("#player-view").style.display = "block";
+    $(".toprow").style.display = "none"; // hide editor toprow buttons
+    $("#playerOpenImportBtn").style.display = "inline-flex";
+    $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
+    if (playerState && playerState.mapId) {
+      $("#playerCopyLinkBtn").style.display = "inline-flex";
+    } else {
+      $("#playerCopyLinkBtn").style.display = "none";
+    }
+    
+    // Sincronizzazione automatica della mappa dall'Editor al Player
+    if (state.map && state.clueObjs && state.clueObjs.length > 0) {
+      const d = serialize();
+      if (d) {
+        playerState.map = state.map;
+        playerState.clues = d.clues;
+        playerState.entities = state.map.entities;
+        playerState.placed = {};
+        playerState.notes = {};
+        playerState.activeChar = null;
+        playerState.mapId = null;
+        $("#playerCopyLinkBtn").style.display = "none";
+        renderPlayerUI();
+      }
+    }
+  } catch (err) {
+    console.error("Player Error:", err);
+    // Mostra l'errore direttamente nella UI invece che con alert() (che potrebbe essere bloccato)
+    const errHtml = `<div style="padding:20px; color:#ff4444; background:#2a1111; border:2px solid red; margin:20px; font-family:monospace;">
+      <h3>CRITICAL PLAYER ERROR</h3>
+      <p>${err.message}</p>
+      <pre style="white-space:pre-wrap; font-size:12px;">${err.stack}</pre>
+    </div>`;
+    $("#player-view").innerHTML = errHtml;
+    $("#player-view").style.display = "block";
+    $("#editor-view").style.display = "none";
+  }
+});
+
+$("#playerOpenImportBtn").addEventListener("click", () => {
+  $("#playerImportSection").style.display = "flex";
+  $("#playerOpenImportBtn").style.display = "none";
+  $("#playerOpenFolderLoadBtn").style.display = "none";
+  $("#playerCopyLinkBtn").style.display = "none";
+});
+
+$("#playerCancelImportBtn").addEventListener("click", () => {
+  $("#playerImportSection").style.display = "none";
+  $("#playerOpenImportBtn").style.display = "inline-flex";
+  $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
+  if (playerState && playerState.mapId) {
+    $("#playerCopyLinkBtn").style.display = "inline-flex";
+  }
+});
+
+$("#playerDoPasteBtn").addEventListener("click", async () => {
+  try {
+    const text = await navigator.clipboard.readText();
+    $("#playerImportText").value = text;
+  } catch(err) {
+    alert("Errore nella lettura degli appunti: " + err.message);
+  }
+});
+
+$("#playerConfirmImportBtn").addEventListener("click", () => {
+  const text = $("#playerImportText").value;
+  if(!text.trim()) { alert("Il testo è vuoto"); return; }
+  
+  let jsonStr = "";
+  const match = text.match(/<!-- MURDOKU_STATE_B64: (.*?) -->/);
+  if(match && match[1]) {
+    try {
+      jsonStr = decodeURIComponent(escape(atob(match[1])));
+    } catch(e) {
+      alert("Errore nella decodifica del Base64");
+      return;
+    }
+  } else {
+    jsonStr = text; // fallback: try parsing as raw JSON
+  }
+  
+  try {
+    const data = JSON.parse(jsonStr);
+    if(!data.size || !data.cells) throw new Error("Dati mappa non validi");
+    playerState.placed = {};
+    playerState.notes = {};
+    playerState.activeChar = null;
+    playerState.mapId = null;
+
+    $("#playerImportSection").style.display = "none";
+    $("#playerOpenImportBtn").style.display = "inline-flex";
+    $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
+    $("#playerCopyLinkBtn").style.display = "none";
+    renderPlayerUI();
+    const m = E.emptyMap(data.size);
+    for(const c of data.cells){ const cell=E.cellAt(m,c.row,c.col); cell.walkable=c.walkable!==false; if(c.object) cell.object=c.object; }
+    m.walls=new Set(data.walls||[]); m.windows=new Set(data.windows||[]); m.areaNames=data.areaNames||{};
+    m.areaFloors=data.areaFloors ? Object.assign({}, data.areaFloors) : {};
+    m.entities=(data.entities||[]).map(e=>({...e})); m.suspectCount=data.suspectCount||0;
+
+    playerState.map = m;
+    playerState.clues = data.clues || [];
+    playerState.entities = m.entities || [];
+    playerState.placed = {};
+    playerState.notes = {};
+    playerState.activeChar = null;
+    
+    $("#playerImportSection").style.display = "none";
+    $("#playerOpenImportBtn").style.display = "inline-flex";
+    $("#playerOpenFolderLoadBtn").style.display = "inline-flex";
+    $("#playerImportText").value = "";
+    
+    renderPlayerUI();
+  } catch(err) {
+    alert("Errore nella lettura o nel parsing del testo incollato: " + err.message);
+  }
+});
+
+function renderPlayerUI() {
+  const m = playerState.map;
+  if(!m) return;
+  
+  $("#playerPalette").style.display = "flex";
+  $("#playerGridWrap").style.display = "flex";
+  
+  // Prepare characters from entities
+  const chars = playerState.entities.map(e => ({
+    id: e.id,
+    initial: e.initial || (e.kind==="victim" ? "✖" : e.name.charAt(0)),
+    kind: e.kind,
+    name: e.name,
+    gender: e.gender,
+    hasHat: e.hasHat,
+    hasGlasses: e.hasGlasses
+  }));
+  
+  // Add the generic X blocker to the palette
+  chars.push({ id: "_blocker", initial: "X", kind: "blocker", name: "Cella Bloccata" });
+  
+  playerState.charsList = chars;
+  
+  updatePlayerPalette();
+  drawPlayerGrid();
+  updatePlayerOverlay();
+  renderPlayerLegend();
+  renderPlayerClues();
+}
+
+function updatePlayerPalette() {
+  const pal = $("#playerPalette");
+  pal.innerHTML = "";
+  playerState.charsList.forEach(char => {
+    // check if already placed
+    let isPlaced = false;
+    if (char.id !== "_blocker") {
+      for(let k in playerState.placed) {
+        if(playerState.placed[k].id === char.id) isPlaced = true;
+      }
+    }
+    
+    const div = document.createElement("div");
+    div.className = "player-char" + (char.kind==="victim" || char.kind==="blocker" ? " victim" : "");
+    if(char.id === "_blocker") {
+      div.classList.add("player-blocker-btn");
+    }
+    if(isPlaced) div.classList.add("placed");
+    if(playerState.activeChar && playerState.activeChar.id === char.id) div.classList.add("active");
+    
+    div.innerText = char.initial;
+    let tooltip = char.name;
+    if(char.kind === "suspect"){
+      tooltip += ` (${char.gender==='M'?'Uomo':'Donna'}${char.hasHat?', cappello':''}${char.hasGlasses?', occhiali':''})`;
+    }
+    div.title = tooltip;
+    
+    div.addEventListener("click", () => {
+      if(isPlaced) return;
+      playerState.activeChar = (playerState.activeChar === char) ? null : char;
+      updatePlayerPalette();
+    });
+    
+    pal.appendChild(div);
+  });
+}
+
+function drawPlayerGrid() {
+  const m = playerState.map;
+  const svg = $("#playerBoard");
+  const N = m.size;
+  const CS = Math.max(38, Math.min(60, Math.floor(560/N)));
+  playerState.cellSize = CS;
+  const P = playerState.padding;
+  const W = P + N*CS + 8, H = P + N*CS + 8;
+  const analysis = E.computeAreas(m);
+  
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  
+  let s = `<rect x="${P-4}" y="${P-4}" width="${N*CS+8}" height="${N*CS+8}" rx="6" fill="var(--paper)"/>`;
+  
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+    const x=P+c*CS, y=P+r*CS;
+    const cell = E.cellAt(m,r,c);
+    let fill;
+    if(!cell.walkable && !cell.object) fill="#2c2534";
+    else {
+      const aid = analysis.visualArea[r*N+c];
+      fill = getAreaFill(m, aid, "");
+    }
+    s += `<rect class="cell" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="${fill}" stroke="var(--paper-line)" stroke-width="1"/>`;
+    if(cell.object) {
+      if(!E.objWalkable(cell.object)) {
+        s += `<rect x="${x}" y="${y}" width="${CS}" height="${CS}" fill="rgba(0,0,0,0.08)" pointer-events="none"/>`;
+      }
+      s += objectGlyph(cell.object, x+CS/2, y+CS/2, CS);
+      const label = E.objLabel(cell.object);
+      const textLenAttr = label.length > 8 ? ` textLength="${CS-4}" lengthAdjust="spacingAndGlyphs"` : "";
+      s += `<text x="${x+CS/2}" y="${y+CS-3}" font-size="8" fill="#000" font-weight="bold" font-family="var(--sans)" text-anchor="middle" pointer-events="none"${textLenAttr}>${escapeXml(label)}</text>`;
+    }
+  }
+  
+  const centroid={};
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){ const a=analysis.areaOf[r*N+c]; if(a<0)continue; (centroid[a]=centroid[a]||{sx:0,sy:0,n:0}); centroid[a].sx+=c; centroid[a].sy+=r; centroid[a].n++; }
+  for(const a in centroid){ const g=centroid[a]; const cx=P+(g.sx/g.n+0.5)*CS, cy=P+(g.sy/g.n+0.5)*CS;
+    const nm=(m.areaNames&&m.areaNames[a])||("Area "+(+a+1));
+    s += `<text x="${cx}" y="${cy}" font-size="16" fill="#6a5f4a" text-anchor="middle" opacity="0.6" pointer-events="none" font-family="var(--mono)" style="text-transform:uppercase; letter-spacing:1px; font-weight:700">${escapeXml(nm)}</text>`;
+  }
+  
+  // muri (spessi) + bordo esterno
+  s += `<g stroke="#2a2130" stroke-width="4" stroke-linecap="round" pointer-events="none">`;
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+    const x=P+c*CS, y=P+r*CS;
+    if(c+1<N && E.hasWall(m,r,c,r,c+1)) s+=`<line x1="${x+CS}" y1="${y}" x2="${x+CS}" y2="${y+CS}"/>`;
+    if(r+1<N && E.hasWall(m,r,c,r+1,c)) s+=`<line x1="${x}" y1="${y+CS}" x2="${x+CS}" y2="${y+CS}"/>`;
+  }
+  s += `</g><rect x="${P}" y="${P}" width="${N*CS}" height="${N*CS}" fill="none" stroke="#2a2130" stroke-width="4" rx="4" pointer-events="none"/>`;
+
+  // finestre (glifo stilizzato sovrapposto al muro)
+  if(m.windows && m.windows.size > 0){
+    s += `<g pointer-events="none">`;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      const x=P+c*CS, y=P+r*CS;
+      // Right window (inner and outer)
+      if(E.isWindow(m,r,c,r,c+1)){
+         s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Finestra</text>`;
+      }
+      // Left window (outer only)
+      if(c===0 && E.isWindow(m,r,c,r,c-1)){
+         s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x}" y="${y+CS/2}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Finestra</text>`;
+      }
+      // Bottom window (inner and outer)
+      if(E.isWindow(m,r,c,r+1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Finestra</text>`;
+      }
+      // Top window (outer only)
+      if(r===0 && E.isWindow(m,r,c,r-1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#a3d1f0" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Finestra</text>`;
+      }
+    }
+    s += `</g>`;
+  }
+
+  // porte (glifo stilizzato sovrapposto al muro)
+  if(m.doors && m.doors.size > 0){
+    s += `<g pointer-events="none">`;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      const x=P+c*CS, y=P+r*CS;
+      // Right door
+      if(E.isDoor(m,r,c,r,c+1)){
+         s+=`<rect x="${x+CS-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS}" y1="${y+CS*0.15}" x2="${x+CS}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS}" y="${y+CS/2}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x+CS}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Porta</text>`;
+      }
+      // Left door (outer only)
+      if(c===0 && E.isDoor(m,r,c,r,c-1)){
+         s+=`<rect x="${x-5}" y="${y+CS*0.15}" width="10" height="${CS*0.7}" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x}" y1="${y+CS*0.15}" x2="${x}" y2="${y+CS*0.85}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x}" y="${y+CS/2}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" transform="rotate(-90, ${x}, ${y+CS/2})" dominant-baseline="central" pointer-events="none">Porta</text>`;
+      }
+      // Bottom door
+      if(E.isDoor(m,r,c,r+1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y+CS-5}" width="${CS*0.7}" height="10" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y+CS}" x2="${x+CS*0.85}" y2="${y+CS}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y+CS}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Porta</text>`;
+      }
+      // Top door (outer only)
+      if(r===0 && E.isDoor(m,r,c,r-1,c)){
+         s+=`<rect x="${x+CS*0.15}" y="${y-5}" width="${CS*0.7}" height="10" fill="#d97706" stroke="#fff" stroke-width="2" rx="2" />`;
+         s+=`<line x1="${x+CS*0.15}" y1="${y}" x2="${x+CS*0.85}" y2="${y}" stroke="#fff" stroke-width="2" />`;
+         s+=`<text x="${x+CS/2}" y="${y}" font-size="9" fill="#000" font-family="var(--sans)" font-weight="bold" text-anchor="middle" dominant-baseline="central" pointer-events="none">Porta</text>`;
+      }
+    }
+    s += `</g>`;
+  }
+  
+  // numeri coordinate
+  for(let i=0;i<N;i++){
+    s += `<text x="${P/2}" y="${P+i*CS+CS/2+4}" font-family="var(--mono)" font-size="12" fill="var(--text-faint)" text-anchor="middle">${i+1}</text>`;
+    s += `<text x="${P+i*CS+CS/2}" y="${P/2+4}" font-family="var(--mono)" font-size="12" fill="var(--text-faint)" text-anchor="middle">${i+1}</text>`;
+  }
+  
+  svg.innerHTML = s;
+}
+
+function handlePlayerSingleClick(e) {
+  const m = playerState.map;
+  if(!m) return;
+  const svg = $("#playerBoard");
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+  
+  const P = playerState.padding;
+  const CS = playerState.cellSize;
+  const c = Math.floor((svgPt.x - P) / CS);
+  const r = Math.floor((svgPt.y - P) / CS);
+  if(r < 0 || r >= m.size || c < 0 || c >= m.size) return;
+  
+  const k = r+"_"+c;
+  if(playerState.placed[k]) return; // clicking on placed char handled by itself
+  if(!E.isOccupiable(m, r, c)) return;
+  
+  if(playerState.activeChar) {
+    if(playerState.activeChar.id === "_blocker") {
+      playerState.placed[k] = playerState.activeChar;
+      updatePlayerPalette();
+      updatePlayerOverlay();
+      renderPlayerClues();
+    } else {
+      if(!playerState.notes[k]) playerState.notes[k] = [];
+      const idx = playerState.notes[k].findIndex(ch => ch.id === playerState.activeChar.id);
+      if(idx !== -1) {
+        playerState.notes[k].splice(idx, 1);
+      } else if(playerState.notes[k].length < 4) {
+        playerState.notes[k].push(playerState.activeChar);
+      }
+      updatePlayerOverlay();
+    }
+  }
+}
+
+function handlePlayerDoubleClick(e) {
+  const m = playerState.map;
+  if(!m) return;
+  const svg = $("#playerBoard");
+  const pt = svg.createSVGPoint();
+  pt.x = e.clientX; pt.y = e.clientY;
+  const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+  
+  const P = playerState.padding;
+  const CS = playerState.cellSize;
+  const c = Math.floor((svgPt.x - P) / CS);
+  const r = Math.floor((svgPt.y - P) / CS);
+  if(r < 0 || r >= m.size || c < 0 || c >= m.size) return;
+  
+  const k = r+"_"+c;
+  if(playerState.placed[k]) return;
+  if(!E.isOccupiable(m, r, c)) return;
+  
+  if(playerState.activeChar) {
+    playerState.placed[k] = playerState.activeChar;
+    // Remove all notes for this character globally
+    for(let key in playerState.notes) {
+      playerState.notes[key] = playerState.notes[key].filter(ch => ch.id !== playerState.activeChar.id);
+    }
+    if(playerState.activeChar.id !== "_blocker") {
+      playerState.activeChar = null; // deselect after placing
+    }
+    updatePlayerPalette();
+    updatePlayerOverlay();
+    renderPlayerClues();
+  }
+}
+
+$("#playerClickLayer").addEventListener("click", handlePlayerSingleClick);
+$("#playerClickLayer").addEventListener("dblclick", handlePlayerDoubleClick);
+
+let lastPlayerTouchTime = 0;
+$("#playerClickLayer").addEventListener("touchend", e => {
+  if (e.changedTouches.length !== 1) return;
+  e.preventDefault(); // Prevents simulated mouse events
+  
+  const now = Date.now();
+  const touch = e.changedTouches[0];
+  const fakeEvent = { clientX: touch.clientX, clientY: touch.clientY };
+
+  if (now - lastPlayerTouchTime < 300) {
+    lastPlayerTouchTime = 0;
+    handlePlayerDoubleClick(fakeEvent);
+  } else {
+    lastPlayerTouchTime = now;
+    handlePlayerSingleClick(fakeEvent);
+  }
+});
+
+function updatePlayerOverlay() {
+  const ov = $("#playerOverlay");
+  ov.innerHTML = "";
+  const m = playerState.map;
+  if(!m) return;
+  const N = m.size;
+  const P = playerState.padding;
+  const CS = playerState.cellSize;
+  const W = P + N*CS + 8, H = P + N*CS + 8;
+  
+  ov.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  ov.setAttribute("width", W);
+  ov.setAttribute("height", H);
+  
+  const markedR = new Set();
+  const markedC = new Set();
+  
+  for(let k in playerState.placed) {
+    if(playerState.placed[k].id === "_blocker") continue; // Xs do not generate row/col crosses
+    const [rs, cs] = k.split("_");
+    markedR.add(+rs);
+    markedC.add(+cs);
+  }
+  
+  // Draw crosses
+  for(let r=0;r<N;r++) {
+    for(let c=0;c<N;c++) {
+      const cell = E.cellAt(m, r, c);
+      if((markedR.has(r) || markedC.has(c)) && !playerState.placed[r+"_"+c] && (cell.walkable || cell.object)) {
+        const x = P + c*CS;
+        const y = P + r*CS;
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", `M ${x} ${y} L ${x+CS} ${y+CS} M ${x+CS} ${y} L ${x} ${y+CS}`);
+        p.setAttribute("stroke", "rgba(228,72,61,0.5)");
+        p.setAttribute("stroke-width", CS * 0.08);
+        ov.appendChild(p);
+      }
+    }
+  }
+  
+  // Draw placed characters
+  for(let k in playerState.placed) {
+    const [rs, cs] = k.split("_");
+    const r = +rs, c = +cs;
+    const char = playerState.placed[k];
+    const x = P + c*CS;
+    const y = P + r*CS;
+    
+    const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    g.style.pointerEvents = "auto";
+    g.style.cursor = "pointer";
+    const handler = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      delete playerState.placed[k];
+      updatePlayerPalette();
+      updatePlayerOverlay();
+      renderPlayerClues();
+    };
+    g.addEventListener("click", handler);
+    g.addEventListener("touchend", handler);
+    
+    if (char.id === "_blocker") {
+      g.innerHTML = `<path d="M ${x} ${y} L ${x+CS} ${y+CS} M ${x+CS} ${y} L ${x} ${y+CS}" stroke="rgba(228,72,61,0.5)" stroke-width="${CS * 0.08}" />`;
+    } else {
+      const cx = x + CS/2;
+      const cy = y + CS/2;
+      const r_circ = CS * 0.4;
+      let strokeCol = char.kind === "victim" ? "var(--evidence)" : "var(--violet-bright)";
+      let strokeDash = char.kind === "victim" ? `stroke-dasharray="4"` : "";
+      g.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r_circ}" fill="var(--desk)" stroke="${strokeCol}" stroke-width="2" ${strokeDash} />
+                     <text x="${cx}" y="${cy}" font-family="var(--serif)" font-weight="bold" font-size="${CS*0.5}" fill="${strokeCol}" dominant-baseline="central" text-anchor="middle">${char.initial}</text>`;
+    }
+    ov.appendChild(g);
+  }
+  
+  // Draw notes
+  for(let k in playerState.notes) {
+    if(playerState.placed[k]) continue; 
+    const notesArr = playerState.notes[k];
+    if(!notesArr || notesArr.length === 0) continue;
+    
+    const [rs, cs] = k.split("_");
+    const r = +rs, c = +cs;
+    const x = P + c*CS;
+    const y = P + r*CS;
+    
+    const noteSize = CS * 0.28;
+    const margin = 2;
+    const positions = [
+      { top: margin, left: margin }, // top-left
+      { top: margin, left: CS - noteSize - margin }, // top-right
+      { top: CS - noteSize - margin, left: CS - noteSize - margin }, // bottom-right
+      { top: CS - noteSize - margin, left: margin } // bottom-left
+    ];
+    
+    notesArr.forEach((char, idx) => {
+      if(idx > 3) return;
+      const pos = positions[idx];
+      const cx = x + pos.left + noteSize/2;
+      const cy = y + pos.top + noteSize/2;
+      const r_circ = noteSize/2;
+      let strokeCol = char.kind === "victim" ? "var(--evidence)" : "var(--violet-bright)";
+      
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.style.pointerEvents = "auto";
+      g.style.cursor = "pointer";
+      g.style.opacity = "0.65";
+      g.style.filter = "grayscale(40%)";
+      g.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r_circ}" fill="var(--desk)" stroke="${strokeCol}" stroke-width="1.5" />
+                     <text x="${cx}" y="${cy}" font-family="var(--serif)" font-weight="bold" font-size="${noteSize*0.65}" fill="${strokeCol}" dominant-baseline="central" text-anchor="middle">${char.initial}</text>`;
+      const handler = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        playerState.notes[k] = playerState.notes[k].filter(ch => ch.id !== char.id);
+        updatePlayerOverlay();
+      };
+      g.addEventListener("click", handler);
+      g.addEventListener("touchend", handler);
+      ov.appendChild(g);
+    });
+  }
+  
+  checkPlayerWinCondition();
+}
+
+function checkPlayerWinCondition() {
+  const resultDiv = document.getElementById("playerResult");
+  if(!resultDiv) return;
+  
+  if(!playerState.entities || playerState.entities.length === 0) {
+    resultDiv.style.display = "none";
+    return;
+  }
+  
+  let placedCount = 0;
+  let correctCount = 0;
+  
+  for(let k in playerState.placed) {
+    const char = playerState.placed[k];
+    if(char.id === "_blocker") continue;
+    
+    placedCount++;
+    const [r, c] = k.split("_").map(Number);
+    const origEntity = playerState.entities.find(e => e.id === char.id);
+    if(origEntity && origEntity.row === r && origEntity.col === c) {
+      correctCount++;
+    }
+  }
+  
+  if(placedCount < playerState.entities.length) {
+    resultDiv.style.display = "none";
+  } else {
+    resultDiv.style.display = "block";
+    if(correctCount === playerState.entities.length) {
+      resultDiv.innerHTML = "BRAVO! HAI TROVATO L'ASSASSINO";
+      resultDiv.style.backgroundColor = "rgba(40,167,69,0.15)";
+      resultDiv.style.color = "#28a745";
+      resultDiv.style.border = "1px solid #28a745";
+    } else {
+      resultDiv.innerHTML = "NON HAI TROVATO L'ASSASSINO";
+      resultDiv.style.backgroundColor = "rgba(228,72,61,0.15)";
+      resultDiv.style.color = "var(--evidence)";
+      resultDiv.style.border = "1px solid var(--evidence)";
+    }
+  }
+}
+
+function renderPlayerLegend() {
+  const leg = $("#playerLegend");
+  const m = playerState.map;
+  leg.innerHTML = "";
+  const used = [...new Set(m.cells.filter(c=>c.object).map(c=>c.object))];
+  
+  if(used.length === 0) {
+    leg.innerHTML += "<p>Nessun oggetto in scena.</p>";
+    return;
+  }
+  
+  const grid = document.createElement("div");
+  grid.className = "player-legend-grid";
+  
+  let s = "";
+  for(const k of used.sort()){
+    const walk = E.objWalkable(k);
+    s += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+      <svg width="22" height="22" viewBox="0 0 22 22" style="background:#f5f3ee; border-radius:4px; border:1px solid #ccc; flex-shrink:0;">${objectGlyph(k, 11, 11, 20)}</svg>
+      <span><b>${escapeHtml(E.objLabel(k))}</b> <small>(${walk ? "calpestabile" : "ostacolo"})</small></span>
+    </div>`;
+  }
+  
+  grid.innerHTML = s;
+  leg.appendChild(grid);
+}
+
+window.selectPlayerChar = function(id) {
+  if (!playerState || !playerState.charsList) return;
+  const char = playerState.charsList.find(c => c.id === id);
+  if(!char) return;
+  let isPlaced = false;
+  for(let k in playerState.placed) {
+    if(playerState.placed[k].id === char.id) isPlaced = true;
+  }
+  if(isPlaced) return;
+  
+  playerState.activeChar = (playerState.activeChar && playerState.activeChar.id === char.id) ? null : char;
+  updatePlayerPalette();
+};
+
+function renderPlayerClues() {
+  const box = $("#playerClues");
+  const clues = playerState.clues;
+  
+  if(!clues || clues.length === 0) {
+    box.innerHTML = "<div class='empty'>Nessun indizio disponibile.</div>";
+    return;
+  }
+  
+  const m = playerState.map;
+  const sus = m.entities.filter(e=>e.kind==="suspect").sort((a,b)=>a.initial.localeCompare(b.initial));
+  let html = ""; 
+  let n = 0;
+  
+  const bySubj = {}; const globals = [];
+  for(const c of clues) { 
+    if(c.scope==="global" || !c.scope) globals.push(c); 
+    else (bySubj[c.subjectId] = bySubj[c.subjectId] || []).push(c); 
+  }
+  
+  const placedIds = new Set(Object.values(playerState.placed).map(p => p.id));
+  
+  const boxesHtml = [];
+  
+  for(const s of sus){
+    const list = bySubj[s.id] || [];
+    if(!list.length) continue;
+    const color = "#5b48a8";
+    const traitsText = `(${s.gender==='M'?'Uomo':'Donna'}${s.hasHat?', con cappello':''}${s.hasGlasses?', con occhiali':''})`;
+    const av = charAvatarSVG(s);
+    
+    const isPlaced = placedIds.has(s.id);
+    const opStyle = isPlaced ? "opacity:0.4; filter:grayscale(80%);" : "opacity:1;";
+    
+    let boxStr = `<div class="grp" style="transition:all 0.3s ease; ${opStyle} break-inside:avoid; background:#fff; color:var(--ink); border:1px solid var(--line2); padding:16px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+      <div class="gh" style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="selectPlayerChar('${s.id}')">
+        <div class="clue-icon" style="width:40px; height:40px; flex-shrink:0;">${av}</div>
+        <div class="clue-name-wrap" style="display:flex; flex-direction:column; line-height:1.2;">
+          <div><span class="badge" style="background:${color}">${s.initial}</span> <span style="font-weight:700; font-size:14px; color:${color};">${escapeHtml(s.name)}</span></div>
+          <div class="clue-traits" style="font-size:10.5px; opacity:0.8; font-weight:normal; text-transform:none; margin-top:2px;">${traitsText}</div>
+        </div>
+      </div>`;
+    if(list.length > 0){ 
+      n++; 
+      let parts = list.map(c => {
+         let text = c.text.trim();
+         if (text.startsWith(s.name + " ")) {
+            text = text.substring(s.name.length + 1).trim();
+         } else if (text.startsWith(s.name)) {
+            text = text.substring(s.name.length).trim();
+         }
+         if (text.endsWith(".")) text = text.substring(0, text.length - 1);
+         return text;
+      });
+      parts = parts.map((p, idx) => {
+         if (p.length > 0) {
+           if (idx === 0) {
+             return p.charAt(0).toUpperCase() + p.slice(1);
+           } else {
+             return p.charAt(0).toLowerCase() + p.slice(1);
+           }
+         }
+         return p;
+      });
+      let combinedText = parts.join(" e ") + ".";
+      boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
+        <div class="txt">${escapeHtml(combinedText)}</div>
+      </div>`;
+    }
+    boxStr += `</div>`;
+    boxesHtml.push(boxStr);
+  }
+  
+  if(globals.length){
+    let boxStr = `<div class="grp" style="transition:all 0.3s ease; break-inside:avoid; background:#fff; color:var(--ink); border:1px solid var(--line2); padding:16px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);"><div class="gh"><span class="badge" style="background:#d8b25a;color:#000">★</span> Vincoli globali</div>`;
+    for(const c of globals){ 
+      n++; 
+      boxStr += `<div class="clue" style="background:transparent; border:none; padding:6px 0; font-size:14.5px; color:var(--ink); align-items:center;">
+        <div class="txt">${escapeHtml(c.text)}</div>
+      </div>`;
+    }
+    boxStr += `</div>`;
+    boxesHtml.push(boxStr);
+  }
+  
+  // Chunking in groups of 3
+  const columns = [];
+  for (let i = 0; i < boxesHtml.length; i += 3) {
+    columns.push(boxesHtml.slice(i, i + 3));
+  }
+  
+  let finalHtml = "";
+  for (const col of columns) {
+    finalHtml += `<div class="player-clue-col" style="display:flex; flex-direction:column; gap:20px; flex:1; min-width:240px; max-width:340px;">${col.join("")}</div>`;
+  }
+  
+  box.innerHTML = finalHtml;
+}
+
+// Interazioni Hover per il Player
+$("#playerClickLayer").addEventListener("mousemove", (evt) => {
+  const m = playerState.map;
+  if (!m) return;
+  const svg = $("#playerBoard");
+  const pt = svg.createSVGPoint();
+  pt.x = evt.clientX; pt.y = evt.clientY;
+  const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+  
+  const CS = playerState.cellSize;
+  const P = playerState.padding;
+  
+  const c = Math.floor((svgPt.x - P) / CS);
+  const r = Math.floor((svgPt.y - P) / CS);
+  const N = m.size;
+  
+  if (r < 0 || r >= N || c < 0 || c >= N) {
+    if (playerState.hoverR !== -1) { playerState.hoverR = -1; playerState.hoverC = -1; updatePlayerHoverHighlight(); }
+    return;
+  }
+  if (r !== playerState.hoverR || c !== playerState.hoverC) {
+    playerState.hoverR = r; playerState.hoverC = c;
+    updatePlayerHoverHighlight();
+  }
+});
+
+$("#playerClickLayer").addEventListener("mouseleave", () => {
+  if (playerState.hoverR !== -1) { playerState.hoverR = -1; playerState.hoverC = -1; updatePlayerHoverHighlight(); }
+});
+
+function updatePlayerHoverHighlight() {
+  const overlay = document.getElementById("playerHoverOverlay");
+  if (!overlay) return;
+  const m = playerState.map;
+  const r = playerState.hoverR, c = playerState.hoverC;
+  if (!m || r < 0 || c < 0) { overlay.innerHTML = ""; return; }
+
+  const N = m.size, CS = playerState.cellSize, P = playerState.padding;
+  const analysis = E.computeAreas(m);
+  
+  // Set dimensions for the SVG overlay
+  const W = P + N*CS + 8, H = P + N*CS + 8;
+  overlay.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  overlay.setAttribute("width", W);
+  overlay.setAttribute("height", H);
+  
+  let s = "";
+  // 1) Bordo blu grassetto per l'intera area
+  const hoveredArea = analysis.visualArea[r * N + c];
+  if (hoveredArea >= 0) {
+    for (let ar = 0; ar < N; ar++) for (let ac = 0; ac < N; ac++) {
+      if (analysis.visualArea[ar * N + ac] !== hoveredArea) continue;
+      const x = P + ac * CS, y = P + ar * CS;
+      if (ar === 0 || analysis.visualArea[(ar - 1) * N + ac] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y}" x2="${x + CS}" y2="${y}" stroke="#2196F3" stroke-width="3.5"/>`;
+      if (ar === N - 1 || analysis.visualArea[(ar + 1) * N + ac] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y + CS}" x2="${x + CS}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+      if (ac === 0 || analysis.visualArea[ar * N + (ac - 1)] !== hoveredArea)
+        s += `<line x1="${x}" y1="${y}" x2="${x}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+      if (ac === N - 1 || analysis.visualArea[ar * N + (ac + 1)] !== hoveredArea)
+        s += `<line x1="${x + CS}" y1="${y}" x2="${x + CS}" y2="${y + CS}" stroke="#2196F3" stroke-width="3.5"/>`;
+    }
+  }
+  // 2) Bordo bianco sulle celle della stessa riga e colonna
+  for (let i = 0; i < N; i++) {
+    // Riga
+    let cxR = P + i * CS, cyR = P + r * CS;
+    let isCenterR = (i === c);
+    s += `<rect x="${cxR}" y="${cyR}" width="${CS}" height="${CS}" fill="${isCenterR ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.06)'}" stroke="#fff" stroke-width="${isCenterR ? 3 : 1}" pointer-events="none" />`;
+    // Colonna
+    if (i !== r) {
+      let cxC = P + c * CS, cyC = P + i * CS;
+      s += `<rect x="${cxC}" y="${cyC}" width="${CS}" height="${CS}" fill="rgba(255,255,255,0.06)" stroke="#fff" stroke-width="1" pointer-events="none" />`;
+    }
+  }
+  
+  overlay.innerHTML = s;
+}
+
+window.DYNAMIC_SVGS = {};
+
+/* Mappa nomi categoria (come appaiono nel JSON) → chiave usata in OBJ_CATEGORIES */
+const CATEGORY_NAME_MAP = {
+  "Casa & Interni":   { key: "house",       label: "🏠 Casa & Interni" },
+  "Animali":          { key: "animals",     label: "🐾 Animali" },
+  "Esterno urbano":   { key: "urban",       label: "🏙️ Esterno urbano" },
+  "Trasporti":        { key: "transport",   label: "🚗 Trasporti" },
+  "Campagna":         { key: "countryside", label: "🌾 Campagna" },
+  "Mare":             { key: "sea",         label: "🌊 Mare" },
+  "Commerciale":      { key: "commercial",  label: "🏬 Commerciale" },
+  "Salento":          { key: "salento",     label: "☀️ Salento" },
+};
+
+
+/* -----------------------------------------------------------------------
+   computeAreaLabelPositions(m, an)
+   Restituisce un oggetto con le coordinate {r, c} dove piazzare il nome
+   della stanza. Cerca celle contigue non occupate.
+   ----------------------------------------------------------------------- */
 function computeAreaLabelPositions(m, an) {
   const N = m.size;
   const positions = {};
@@ -4678,41 +5789,69 @@ async function loadRemoteObjects() {
 }
 
 
-
-// Avvio asincrono: carica impostazioni e oggetti da GitHub
+// Controllo URL per avvio diretto in modalità PLAYER e caricamento automatico mappa
 window.addEventListener('DOMContentLoaded', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const isPlayerMode = window.location.hash === '#player' || urlParams.get('mode') === 'player';
+
+  // Mostra overlay loading subito se siamo in player mode
+  const overlay = document.getElementById('player-loading-overlay');
+  const ploBar  = document.getElementById('ploBar');
+  const ploMsg  = document.getElementById('ploMsg');
+  if (isPlayerMode && overlay) overlay.classList.add('active');
+
+  // Fase 0: carica settings.md da GitHub (configurazione globale app)
+  if (ploMsg) ploMsg.textContent = 'Caricamento impostazioni...';
   await loadRemoteSettings();
+
+  // Controllo manutenzione: blocca tutto se siamo in PLAYER MODE e maintenanceMode è attivo
+  if (isPlayerMode && APP_CONFIG.maintenanceMode) {
+    if (overlay) overlay.classList.remove('active');
+    const maintOverlay = document.getElementById('maintenance-overlay');
+    if (maintOverlay) maintOverlay.classList.add('active');
+    return; // blocca il resto del caricamento
+  }
+
+  // Fase 1: carica objects.md (50%)
+  if (ploMsg) ploMsg.textContent = 'Caricamento oggetti...';
+  if (ploBar)  ploBar.style.width = '0%';
   await loadRemoteObjects();
+  if (ploBar)  ploBar.style.width = '50%';
+
+  if (isPlayerMode) {
+    document.body.classList.add('pure-player-mode');
+    const playerBtn = document.getElementById('modePlayerBtn');
+    if (playerBtn) {
+      playerBtn.click();
+      const mapToLoad = urlParams.get('map');
+      if (mapToLoad) {
+        // Fase 2: carica la mappa (50% → 100%)
+        if (ploMsg) ploMsg.textContent = 'Caricamento mappa...';
+        await loadMapFromGithub(mapToLoad);
+        if (ploBar) ploBar.style.width = '100%';
+        const modeSwitch = document.querySelector('.mode-switch');
+        if(modeSwitch) modeSwitch.style.display = 'none';
+      } else {
+        const edBtn = document.getElementById('modeEditorBtn');
+        if(edBtn) edBtn.style.display = 'none';
+        const plBtn = document.getElementById('modePlayerBtn');
+        if(plBtn) plBtn.style.display = 'none';
+        const impBtn = document.getElementById('playerOpenImportBtn');
+        if(impBtn) impBtn.style.display = 'none';
+      }
+    }
+    // Tutto pronto: nascondi overlay con dissolvenza
+    if (overlay) {
+      ploBar && (ploBar.style.width = '100%');
+      ploMsg && (ploMsg.textContent = 'Pronto!');
+      setTimeout(() => {
+        overlay.style.transition = 'opacity 0.5s ease';
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.classList.remove('active'), 500);
+      }, 300);
+    }
+  }
 });
-
-
-
-// --- GITHUB CLOUD LOGIC ---
-
-// Helper per ottenere la configurazione
-
-/* =====================================================================
-   AUTOSAVE
-   ===================================================================== */
-function autosave(){ try{ const d=serialize(); if(d) localStorage.setItem("murdoku:autosave",JSON.stringify(d)); }catch(e){} }
-function restore(){ try{ const raw=localStorage.getItem("murdoku:autosave"); if(raw){ deserialize(JSON.parse(raw)); return true; } }catch(e){} return false; }
-
-/* =====================================================================
-   AVVIO
-   ===================================================================== */
-document.body.insertAdjacentHTML("afterbegin", `<svg id="global-svg-defs" width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;">${svgDefs("")}</svg>`);
-
-if(!restore()){
-  // mappa iniziale di esempio
-  const rng=E.makeRng(42); let m=null;
-  for(let t=0;t<40;t++){ m=E.generateMap({size:9,rng}); if(E.placeSolution(m,{rng})) break; m=null; }
-  if(m){ state.map=m; setBoardStatus("ok","Mappa di esempio 9×9. Premi «Genera indizi», oppure modifica con gli strumenti."); }
-  else { state.map=E.emptyMap(9); state.map.areaNames={0:"Stanza"}; }
-}
-$("#objPickWrap").style.opacity=1;
-renderPalette();
-render(); renderClues(); renderSteps();
-
 
 // --- GITHUB CLOUD LOGIC ---
 
@@ -5355,10 +6494,11 @@ let catObjDeleteTarget = null;
   if(catalogBtn) {
     catalogBtn.addEventListener("click", () => {
       document.getElementById("modeEditorBtn").classList.remove("active");
-      
+      document.getElementById("modePlayerBtn").classList.remove("active");
       catalogBtn.classList.add("active");
       
       document.getElementById("editor-view").style.display = "none";
+      document.getElementById("player-view").style.display = "none";
       document.getElementById("catalog-view").style.display = "flex";
       document.querySelector(".toprow").style.display = "none";
       document.getElementById("catalogTopbar").style.display = "flex";
@@ -5372,16 +6512,14 @@ let catObjDeleteTarget = null;
       if(btn) {
         btn.addEventListener("click", () => {
           document.getElementById("modeCatalogBtn").classList.remove("active");
-          btn.classList.add("active");
           document.getElementById("catalog-view").style.display = "none";
           document.getElementById("catalogTopbar").style.display = "none";
-          document.getElementById("editor-view").style.display = "grid";
-          document.querySelector(".toprow").style.display = "flex";
-          window.location.hash = "#editor";
+          window.location.hash = btnId === "modeEditorBtn" ? "#editor" : "#player";
         });
       }
     };
     patchMode("modeEditorBtn");
+    patchMode("modePlayerBtn");
   }
   
   const showLogsBtn = document.getElementById("showLogsBtn");
