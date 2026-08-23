@@ -3251,7 +3251,37 @@ function areaColor(id){
 
 /* Pattern grafici SVG standard per i pavimenti */
 function svgDefs(prefix=""){
-  return `<defs></defs>`;
+  return `<defs>
+    <!-- Prato -->
+    <pattern id="${prefix}pattern-prato" patternUnits="userSpaceOnUse" width="20" height="20">
+      <rect width="20" height="20" fill="#84b06d"/>
+      <path d="M 5,15 Q 10,5 15,15" stroke="#689454" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </pattern>
+    <!-- Terra -->
+    <pattern id="${prefix}pattern-terra" patternUnits="userSpaceOnUse" width="16" height="16">
+      <rect width="16" height="16" fill="#a67c52"/>
+      <circle cx="4" cy="4" r="1" fill="#7a5533"/>
+      <circle cx="12" cy="10" r="1" fill="#7a5533"/>
+      <circle cx="8" cy="14" r="1.5" fill="#7a5533"/>
+    </pattern>
+    <!-- Pavimento -->
+    <pattern id="${prefix}pattern-pavimento" patternUnits="userSpaceOnUse" width="20" height="20">
+      <rect width="20" height="20" fill="#dcdcdc"/>
+      <path d="M 20,0 L 20,20 L 0,20" stroke="#b0b0b0" stroke-width="2" fill="none"/>
+    </pattern>
+    <!-- Mare -->
+    <pattern id="${prefix}pattern-mare" patternUnits="userSpaceOnUse" width="20" height="20">
+      <rect width="20" height="20" fill="#5ab4d4"/>
+      <path d="M 0,10 Q 5,15 10,10 T 20,10" stroke="#3d8fb0" stroke-width="1.5" fill="none"/>
+    </pattern>
+    <!-- Spiaggia -->
+    <pattern id="${prefix}pattern-spiaggia" patternUnits="userSpaceOnUse" width="16" height="16">
+      <rect width="16" height="16" fill="#e8d8a5"/>
+      <circle cx="3" cy="3" r="0.8" fill="#c4b078"/>
+      <circle cx="11" cy="7" r="0.8" fill="#c4b078"/>
+      <circle cx="7" cy="13" r="1.2" fill="#c4b078"/>
+    </pattern>
+  </defs>`;
 }
 
 /* Risolve il riempimento di un'area: pattern, colore personalizzato o colore di default */
