@@ -6470,6 +6470,22 @@ async function loadRemoteObjects() {
           opt.textContent = cat.label;
           catSelect.appendChild(opt);
         }
+        
+        const sep = document.createElement('option');
+        sep.disabled = true;
+        sep.textContent = '──────────';
+        catSelect.appendChild(sep);
+        
+        const optWalk = document.createElement('option');
+        optWalk.value = 'walkable';
+        optWalk.textContent = '✅ Calpestabili';
+        catSelect.appendChild(optWalk);
+        
+        const optObs = document.createElement('option');
+        optObs.value = 'obstacle';
+        optObs.textContent = '❌ Non calpestabili';
+        catSelect.appendChild(optObs);
+
         // Imposta sempre "Tutti gli oggetti" come selezione di default
         catSelect.value = 'all';
       }
