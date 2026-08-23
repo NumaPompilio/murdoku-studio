@@ -7229,6 +7229,7 @@ let catObjDeleteTarget = null;
       document.getElementById("catalog-view").style.display = "flex";
       document.querySelector(".toprow").style.display = "none";
       document.getElementById("catalogTopbar").style.display = "flex";
+      window.location.hash = "#catalog";
       
       if(catalogList.length === 0) loadCatalogs();
     });
@@ -7240,6 +7241,7 @@ let catObjDeleteTarget = null;
           document.getElementById("modeCatalogBtn").classList.remove("active");
           document.getElementById("catalog-view").style.display = "none";
           document.getElementById("catalogTopbar").style.display = "none";
+          window.location.hash = btnId === "modeEditorBtn" ? "#editor" : "#player";
         });
       }
     };
@@ -7258,6 +7260,14 @@ let catObjDeleteTarget = null;
   if(logCloseBtn) logCloseBtn.addEventListener("click", () => document.getElementById("logModal").style.display = "none");
   const logModalEl = document.getElementById("logModal");
   if(logModalEl) logModalEl.addEventListener("click", (e) => { if(e.target.id === "logModal") logModalEl.style.display = "none"; });
+
+  window.addEventListener("DOMContentLoaded", () => {
+    if (window.location.hash === "#catalog" || new URLSearchParams(window.location.search).get("mode") === "catalog") {
+      setTimeout(() => {
+        if(catalogBtn) catalogBtn.click();
+      }, 100);
+    }
+  });
 
 })();
 

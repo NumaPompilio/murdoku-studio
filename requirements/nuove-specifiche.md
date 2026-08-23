@@ -541,3 +541,5 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - Bugfix: ripristinato il pulsante di chiusura (X) nella modale Log di Sistema e corretto il nome del pulsante in 'Mostra Log'.
 
 - Aggiunta visualizzazione in dettaglio per gli oggetti del catalogo: cliccando su una card si apre un popup contenente tutti i dettagli, l'immagine/simbolo ingrandita, e i pulsanti Elimina e Modifica.
+
+- Persistenza stato Catalogo: se la pagina viene ricaricata mentre si è nel Catalogo (tramite hash #catalog nell URL), la vista Catalogo viene automaticamente ripristinata.
