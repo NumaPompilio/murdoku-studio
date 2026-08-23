@@ -634,7 +634,7 @@
       <div class="hint">Totale celle mappa: <span id="statTotal">81</span></div>
     </div>
 
-    <button class="btn ghost" id="showLogsBtn" style="width:100%; margin-top:10px; opacity:0.7; font-size:11px">📜 Mostra Log di Sistema</button>
+    <button class="btn ghost" id="showLogsBtn" style="width:100%; margin-top:10px; opacity:0.7; font-size:11px">📜 Mostra Log</button>
 
   </section>
 
@@ -7157,17 +7157,9 @@ let catObjEditMode = false;
 let catObjDeleteTarget = null;
 
 // Initialization
-document.addEventListener("DOMContentLoaded", () => {
-  // Add Switcher Button manually since we use multi_replace
-  const modeSwitch = document.querySelector(".mode-switch");
-  if(modeSwitch && !document.getElementById("modeCatalogBtn")) {
-    const catalogBtn = document.createElement("button");
-    catalogBtn.className = "btn";
-    catalogBtn.id = "modeCatalogBtn";
-    catalogBtn.innerHTML = "🗂️ Catalog";
-    modeSwitch.appendChild(catalogBtn);
-    
-    // Switcher Logic
+(function initCatalog() {
+  const catalogBtn = document.getElementById("modeCatalogBtn");
+  if(catalogBtn) {
     catalogBtn.addEventListener("click", () => {
       document.getElementById("modeEditorBtn").classList.remove("active");
       document.getElementById("modePlayerBtn").classList.remove("active");
@@ -7177,11 +7169,9 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("player-view").style.display = "none";
       document.getElementById("catalog-view").style.display = "flex";
       
-      // Load catalogs if not loaded
       if(catalogList.length === 0) loadCatalogs();
     });
     
-    // Patch existing buttons
     const patchMode = (btnId) => {
       const btn = document.getElementById(btnId);
       if(btn) {
@@ -7195,6 +7185,14 @@ document.addEventListener("DOMContentLoaded", () => {
     patchMode("modePlayerBtn");
   }
   
+  const showLogsBtn = document.getElementById("showLogsBtn");
+  if(showLogsBtn) {
+    showLogsBtn.addEventListener("click", () => {
+      document.getElementById("logModal").style.display = "flex";
+    });
+  }
+})();
+
   // Event Listeners for UI
   $("#catalogSelector").addEventListener("change", (e) => {
     currentCatalog = e.target.value;
@@ -7274,7 +7272,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   // Delete confirm
   $("#catDeleteConfirm").addEventListener("click", confirmDeleteObject);
-});
 
 // Github Helper
 async function ghFetch(path, options = {}) {
