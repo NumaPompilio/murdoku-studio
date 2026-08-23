@@ -939,6 +939,82 @@
     const visualArea = region.slice();
     return { areaOf, visualArea, areas, count: id, region };
   }
+  // Posizione etichette aree (necessario per render)
+  function computeAreaLabelPositions(m, an) {
+    const N = m.size;
+    const positions = {};
+    // Raggruppa le celle per area
+    const areaCells = {};
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        const a = an.areaOf[r * N + c];
+        if (a < 0) continue;
+        if (!areaCells[a]) areaCells[a] = [];
+        areaCells[a].push({ r, c });
+      }
+    }
+    for (const a in areaCells) {
+      const cells = areaCells[a];
+      // Trova le celle vuote (senza oggetti) della stanza
+      const emptyCells = cells.filter(cell => !E.cellAt(m, cell.r, cell.c).object);
+      // Costruiamo una griglia NxN per le celle vuote
+      const emptyGrid = Array(N).fill(0).map(() => Array(N).fill(false));
+      emptyCells.forEach(cell => { emptyGrid[cell.r][cell.c] = true; });
+      let candidates3 = [];
+      let candidates2 = [];
+      let candidates1 = emptyCells.map(c => ({ r: c.r, c: c.c }));
+      for (let r = 0; r < N; r++) {
+        for (let c = 0; c < N; c++) {
+          if (emptyGrid[r][c]) {
+            if (c + 1 < N && emptyGrid[r][c + 1]) {
+              candidates2.push({ r, c1: c, c2: c + 1 });
+              if (c + 2 < N && emptyGrid[r][c + 2]) {
+                candidates3.push({ r, c1: c, c2: c + 1, c3: c + 2 });
+              }
+            }
+          }
+        }
+      }
+      // Calcolo centroide geometrico originario dell'area (fallback)
+      let sumR = 0, sumC = 0;
+      cells.forEach(c => { sumR += c.r; sumC += c.c; });
+      const centerR = sumR / cells.length;
+      const centerC = sumC / cells.length;
+      let targetR, targetC;
+      if (candidates3.length > 0) {
+        const best = candidates3.reduce((best, curr) => {
+          const distCurr = Math.pow(curr.r - centerR, 2) + Math.pow(curr.c2 - centerC, 2);
+          const distBest = Math.pow(best.r - centerR, 2) + Math.pow(best.c2 - centerC, 2);
+          return distCurr < distBest ? curr : best;
+        }, candidates3[0]);
+        targetR = best.r + 0.5;
+        targetC = best.c2 + 0.5;
+      } else if (candidates2.length > 0) {
+        const best = candidates2.reduce((best, curr) => {
+          const midC = (curr.c1 + curr.c2) / 2;
+          const distCurr = Math.pow(curr.r - centerR, 2) + Math.pow(midC - centerC, 2);
+          const midCBest = (best.c1 + best.c2) / 2;
+          const distBest = Math.pow(best.r - centerR, 2) + Math.pow(midCBest - centerC, 2);
+          return distCurr < distBest ? curr : best;
+        }, candidates2[0]);
+        targetR = best.r + 0.5;
+        targetC = (best.c1 + best.c2) / 2 + 0.5;
+      } else if (candidates1.length > 0) {
+        const best = candidates1.reduce((best, curr) => {
+          const distCurr = Math.pow(curr.r - centerR, 2) + Math.pow(curr.c - centerC, 2);
+          const distBest = Math.pow(best.r - centerR, 2) + Math.pow(best.c - centerC, 2);
+          return distCurr < distBest ? curr : best;
+        }, candidates1[0]);
+        targetR = best.r + 0.5;
+        targetC = best.c + 0.5;
+      } else {
+        targetR = centerR + 0.5;
+        targetC = centerC + 0.5;
+      }
+      positions[a] = { r: targetR, c: targetC };
+    }
+    return positions;
+  }
 
   // area id (visiva) di una cella qualsiasi
   function areaIdAt(analysis, m, r, c) { return analysis.visualArea[r * m.size + c]; }
