@@ -2392,7 +2392,7 @@
   const API = {
     makeRng, ri, pick, shuffle,
     OBJECT_LIB, OBJ_ART, objLabel, objWalkable, ALPHABET, NAMES, nameFor,
-    emptyMap, cellAt, isOccupiable, hasWall, isWindow, isDoor, isFrontWindow, wallKey, key, computeAreas, areaIdAt, isAreaCorner,
+    emptyMap, cellAt, isOccupiable, hasWall, isWindow, isDoor, isFrontWindow, wallKey, key, computeAreas, computeAreaLabelPositions, areaIdAt, isAreaCorner,
     generateMap, placeSolution, buildContext, catalogFor, clueText,
     solve, generateClues, generateBestClues, eleganceScore, reasonedSolution, suspects, entArea, areaName, getGender,
     loadPredefinedMap, PREDEFINED_MAPS
@@ -2861,7 +2861,7 @@ function render(){
   }
 
   // etichette aree
-  const labelPositions = computeAreaLabelPositions(m, analysis);
+  const labelPositions = (E.computeAreaLabelPositions || computeAreaLabelPositions)(m, analysis);
   for(const a in labelPositions){
     const pos = labelPositions[a];
     const cx = P + pos.c * CS, cy = P + pos.r * CS;
@@ -4470,7 +4470,7 @@ function boardSVGForPrint(withSolution){
     if(cell.object){ s+=objectGlyph(cell.object, x+CS/2, y+CS/2, CS); }
   }
   // etichette aree
-  const labelPositions = computeAreaLabelPositions(m, an);
+  const labelPositions = (E.computeAreaLabelPositions || computeAreaLabelPositions)(m, an);
   for(const a in labelPositions){
     const pos = labelPositions[a];
     const cx = P + pos.c * CS, cy = P + pos.r * CS;
