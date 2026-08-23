@@ -6640,7 +6640,7 @@ $("#cloudLoadBtn").addEventListener("click", async () => {
   
   try {
     const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved?t=${Date.now()}`, {
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Cache-Control": "no-cache" }
+      headers: { "Authorization": `Bearer ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
     });
     
     if(!res.ok) {
@@ -6697,7 +6697,7 @@ async function loadCloudMap(url, name) {
     toast("Scaricamento in corso...");
     const res = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), {
       headers: { 
-        "Authorization": `token ${cfg.token}`,
+        "Authorization": `Bearer ${cfg.token}`,
         "Accept": "application/vnd.github.v3+json"
       }
     });
@@ -6747,7 +6747,7 @@ async function deleteCloudMap(file) {
     
     // 1. Get file content (base64) and sha
     const resGet = await fetch(file.url, {
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
+      headers: { "Authorization": `Bearer ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
     });
     if (!resGet.ok) throw new Error("Impossibile recuperare il file originale");
     const fileData = await resGet.json();
@@ -6755,7 +6755,7 @@ async function deleteCloudMap(file) {
     // 2. Put file in trash
     const resPut = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/trash/${file.name}`, {
       method: "PUT",
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json" },
+      headers: { "Authorization": `Bearer ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json" },
       body: JSON.stringify({
         message: `Sposto ${file.name} nel cestino`,
         content: fileData.content
@@ -6766,7 +6766,7 @@ async function deleteCloudMap(file) {
     // 3. Delete file from saved
     const resDel = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved/${file.name}`, {
       method: "DELETE",
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json" },
+      headers: { "Authorization": `Bearer ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json" },
       body: JSON.stringify({
         message: `Rimosso ${file.name} da saved`,
         sha: fileData.sha
@@ -6800,7 +6800,7 @@ $("#cloudSaveBtn").addEventListener("click", async () => {
   
   try {
     const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved?t=${Date.now()}`, {
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Cache-Control": "no-cache" }
+      headers: { "Authorization": `Bearer ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
     });
     
     if(res.ok) {
@@ -6858,7 +6858,7 @@ $("#cloudSaveConfirm").addEventListener("click", async () => {
   if(!sha) {
     try {
       const chkRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved/${filename}`, {
-        headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
+        headers: { "Authorization": `Bearer ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
       });
       if(chkRes.ok) {
         const chkData = await chkRes.json();
@@ -6890,7 +6890,7 @@ $("#cloudSaveConfirm").addEventListener("click", async () => {
     const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved/${filename}`, {
       method: "PUT",
       headers: { 
-        "Authorization": `token ${cfg.token}`, 
+        "Authorization": `Bearer ${cfg.token}`, 
         "Accept": "application/vnd.github.v3+json",
         "Content-Type": "application/json"
       },
@@ -7472,7 +7472,7 @@ async function ghFetch(path, options = {}) {
   if(!cfg.token || !cfg.owner || !cfg.repo) throw new Error("Configurazione GitHub mancante. Vai in Impostazioni.");
   
   const headers = {
-    "Authorization": `token ${cfg.token}`,
+    "Authorization": `Bearer ${cfg.token}`,
     "Accept": "application/vnd.github.v3+json",
     ...options.headers
   };
