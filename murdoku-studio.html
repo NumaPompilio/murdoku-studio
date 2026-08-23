@@ -411,7 +411,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.2</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.3</span></h1>
     </div>
   </div>
 
@@ -7689,6 +7689,15 @@ function renderObjectCards() {
   const walkPct = total > 0 ? Math.round((walkableCount / total) * 100) : 0;
   const nonWalkPct = total > 0 ? Math.round((nonWalkableCount / total) * 100) : 0;
   
+  // Extract Categories for filter
+  const allCategories = new Set();
+  catalogObjects.forEach(obj => {
+    (obj.categories || []).forEach(c => allCategories.add(c));
+  });
+  const catOptionsHtml = Array.from(allCategories).sort().map(c => 
+    `<option value="cat_${c}" ${filterVal===("cat_"+c) ? "selected" : ""}>${c}</option>`
+  ).join("");
+  
   // Stats Card
   const statsCard = document.createElement("div");
   statsCard.className = "catalog-card";
@@ -7714,8 +7723,11 @@ function renderObjectCards() {
         <div style="margin-bottom:6px; font-weight:bold; font-size:11px;">Filtra per:</div>
         <select id="catalogWalkableFilter" class="sel" style="width:100%; padding:4px;">
           <option value="all" ${filterVal==="all" ? "selected" : ""}>Tutti</option>
-          <option value="walkable" ${filterVal==="walkable" ? "selected" : ""}>Calpestabili</option>
-          <option value="non_walkable" ${filterVal==="non_walkable" ? "selected" : ""}>Non calpestabili</option>
+          ${catOptionsHtml ? `<optgroup label="Categorie">${catOptionsHtml}</optgroup>` : ""}
+          <optgroup label="Stato">
+            <option value="walkable" ${filterVal==="walkable" ? "selected" : ""}>Calpestabili</option>
+            <option value="non_walkable" ${filterVal==="non_walkable" ? "selected" : ""}>Non calpestabili</option>
+          </optgroup>
         </select>
       </div>
     </div>
@@ -7734,6 +7746,10 @@ function renderObjectCards() {
   catalogObjects.forEach(obj => {
     if (filterVal === "walkable" && !obj.walkable) return;
     if (filterVal === "non_walkable" && obj.walkable) return;
+    if (filterVal.startsWith("cat_")) {
+      const catName = filterVal.substring(4);
+      if (!(obj.categories || []).includes(catName)) return;
+    }
     
     const card = document.createElement("div");
     card.className = "catalog-card";
