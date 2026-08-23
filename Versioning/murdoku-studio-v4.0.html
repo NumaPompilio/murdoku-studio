@@ -408,7 +408,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.0</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v4.0</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -524,7 +524,12 @@
       <div class="field">
         <label>Area selezionata: <b id="activeAreaLabel" style="color:var(--violet-bright)">clicca una cella…</b></label>
       </div>
-
+      <div class="field">
+        <label>Pattern di superficie</label>
+        <div class="floor-grid" id="patternGrid">
+          <!-- Popolato dinamicamente da GitHub -->
+        </div>
+      </div>
       <div class="field">
         <label>Tinte interni & colore personalizzato</label>
         <div class="color-row" id="colorPresets">
@@ -2551,6 +2556,7 @@ let APP_CONFIG = {
   // Valori di default (fallback se settings.md non è raggiungibile)
   maintenanceMode: false
 };
+window.APP_TILES = [];
 
 const E = window.MurdokuEngine;
 const OBJ = E.OBJECT_LIB;
@@ -3132,7 +3138,35 @@ function areaColor(id){
 
 /* Pattern grafici SVG standard per i pavimenti */
 function svgDefs(prefix=""){
-  return `<defs></defs>`;
+  let s = `<defs>`;
+  // Generazione dinamica pattern caricati da github
+  if (window.APP_TILES && window.APP_TILES.length > 0) {
+    window.APP_TILES.forEach(t => {
+      s += `
+      <pattern id="${prefix}pattern-${t.name}" width="1" height="1" patternUnits="objectBoundingBox" patternContentUnits="objectBoundingBox">
+        <image href="${t.url}" x="0" y="0" width="1" height="1" preserveAspectRatio="none" />
+      </pattern>`;
+    });
+  } else {
+    // Fallback di default se GitHub non risponde (pattern pavimento originale)
+    s += `
+    <pattern id="${prefix}pattern-pavimento" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#e3caa5"/>
+      <rect x="0" y="0" width="16" height="8" fill="#dfc39a" opacity="0.4"/>
+      <rect x="0" y="16" width="20" height="8" fill="#ebd6b6" opacity="0.35"/>
+      <rect x="8" y="24" width="24" height="8" fill="#dcbfa0" opacity="0.3"/>
+      <line x1="0" y1="8" x2="32" y2="8" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="0" y1="16" x2="32" y2="16" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="0" y1="24" x2="32" y2="24" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="16" y1="0" x2="16" y2="8" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="0" y1="8" x2="0" y2="16" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="32" y1="8" x2="32" y2="16" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="20" y1="16" x2="20" y2="24" stroke="#b39268" stroke-width="0.8"/>
+      <line x1="8" y1="24" x2="8" y2="32" stroke="#b39268" stroke-width="0.8"/>
+    </pattern>`;
+  }
+  s += `</defs>`;
+  return s;
 }
 
 /* Risolve il riempimento di un'area: pattern, colore personalizzato o colore di default */
@@ -3158,6 +3192,7 @@ function updateFloorUI(){
   if(!lbl) return;
   if(aid == null || aid < 0 || !m){
     lbl.textContent = "clicca una cella…";
+    document.querySelectorAll("#patternGrid .floor-btn").forEach(btn => btn.classList.remove("active"));
     document.querySelectorAll("#colorPresets .color-swatch").forEach(sw => sw.classList.remove("active"));
     return;
   }
@@ -3165,6 +3200,9 @@ function updateFloorUI(){
   lbl.textContent = `${name} (${areaLetter(aid)})`;
   
   const curFloor = (m.areaFloors && m.areaFloors[aid]);
+  document.querySelectorAll("#patternGrid .floor-btn").forEach(btn => {
+    btn.classList.toggle("active", !!(curFloor && curFloor.type === "pattern" && curFloor.value === btn.dataset.pattern));
+  });
   document.querySelectorAll("#colorPresets .color-swatch").forEach(sw => {
     sw.classList.toggle("active", !!(curFloor && curFloor.type === "color" && curFloor.value.toLowerCase() === sw.dataset.color.toLowerCase()));
   });
@@ -4748,8 +4786,11 @@ function buildMapConfigMarkdown(){
         const sw = document.querySelector(`.color-swatch[data-color="${f.value}"]`);
         if (sw) styleName = sw.title;
         else styleName = `Tinta ${f.value}`;
-        floorInfo = ` [Pavimento: ${styleName}]`;
+      } else {
+        const pbtn = document.querySelector(`.floor-btn[data-pattern="${f.value}"]`);
+        if (pbtn) styleName = pbtn.title;
       }
+      floorInfo = ` [Pavimento: ${styleName}]`;
     }
     L.push(`- **${areaLetter(a)} = ${m.areaNames[a]||("Area "+(a+1))}**${floorInfo} — celle occupabili: ${cells.join(", ")||"nessuna"}`);
   });
@@ -5509,6 +5550,10 @@ $("#tries").addEventListener("input",e=>{ $("#triesVal").textContent=e.target.va
 /* =====================================================================
    GESTIONE EVENTI PAVIMENTI E PATTERN
    ===================================================================== */
+document.querySelectorAll("#patternGrid .floor-btn").forEach(btn => {
+  btn.addEventListener("click", () => setAreaFloor("pattern", btn.dataset.pattern));
+});
+
 document.querySelectorAll("#colorPresets .color-swatch").forEach(sw => {
   sw.addEventListener("click", () => setAreaFloor("color", sw.dataset.color));
 });
@@ -6483,6 +6528,54 @@ function computeAreaLabelPositions(m, an) {
 }
 
 /* -----------------------------------------------------------------------
+   loadTilesFromGithub()
+   Legge dinamicamente le immagini nella cartella assets/tiles
+   ----------------------------------------------------------------------- */
+async function loadTilesFromGithub() {
+  try {
+    const apiUrl = `https://api.github.com/repos/NumaPompilio/murdoku-studio/contents/assets/tiles?ref=main&t=${new Date().getTime()}`;
+    const res = await fetch(apiUrl);
+    if (res.ok) {
+      const files = await res.json();
+      window.APP_TILES = [];
+      files.forEach(f => {
+        if (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.webp')) {
+          let label = f.name.replace(/^tile_/, '').replace(/\.[^/.]+$/, '').replace(/_/g, ' ');
+          label = label.charAt(0).toUpperCase() + label.slice(1);
+          window.APP_TILES.push({
+            name: f.name.replace(/\.[^/.]+$/, ''),
+            label: label,
+            url: f.download_url
+          });
+        }
+      });
+      console.log(`[Tiles] Caricati ${window.APP_TILES.length} pavimenti da GitHub.`);
+      
+      const defsSvg = document.getElementById("global-svg-defs");
+      if (defsSvg) defsSvg.innerHTML = svgDefs("");
+
+      const grid = document.getElementById('patternGrid');
+      if (grid) {
+        grid.innerHTML = '';
+        window.APP_TILES.forEach(t => {
+          const btn = document.createElement('div');
+          btn.className = 'floor-btn';
+          btn.dataset.pattern = t.name;
+          btn.title = t.label;
+          btn.innerHTML = `<svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-${t.name})"/></svg><span>${t.label}</span>`;
+          btn.addEventListener("click", () => setAreaFloor("pattern", btn.dataset.pattern));
+          grid.appendChild(btn);
+        });
+      }
+    } else {
+      console.warn('Impossibile caricare i tiles da GitHub (HTTP ' + res.status + ')');
+    }
+  } catch (e) {
+    console.error('[Tiles] Errore nel caricamento dei tiles:', e);
+  }
+}
+
+/* -----------------------------------------------------------------------
    loadRemoteSettings()
    Legge settings.md da GitHub e popola APP_CONFIG.
    Stesso pattern API→raw di loadRemoteObjects().
@@ -6674,10 +6767,10 @@ window.addEventListener('DOMContentLoaded', async () => {
     return; // blocca il resto del caricamento
   }
 
-  // Fase 1: carica objects.md (50%)
-  if (ploMsg) ploMsg.textContent = 'Caricamento oggetti...';
+  // Fase 1: carica objects.md e tiles (50%)
+  if (ploMsg) ploMsg.textContent = 'Caricamento oggetti e pavimenti...';
   if (ploBar)  ploBar.style.width = '0%';
-  await loadRemoteObjects();
+  await Promise.all([loadRemoteObjects(), loadTilesFromGithub()]);
   if (ploBar)  ploBar.style.width = '50%';
 
   if (isPlayerMode) {
