@@ -233,7 +233,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v8.1</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v8.2</span></h1>
     </div>
   </div>
 
@@ -4548,8 +4548,8 @@ if(objCatEl){
     const dir = objCatEl.value;
     if (dir) {
       objCatEl.disabled = true;
-      const box = $("#objPalette");
-      if(box) box.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-dim);">⏳ Caricamento in corso...</div>';
+      const gSpinner = $("#globalSpinner");
+      if (gSpinner) gSpinner.style.display = "flex";
       try {
         const objRes = await ghFetch(`catalogs/${dir}/object.json`);
         if (objRes.ok) {
@@ -4578,6 +4578,8 @@ if(objCatEl){
         console.warn(`Errore ricaricamento catalogo ${dir}`, e);
       } finally {
         objCatEl.disabled = false;
+        const gSpinner = $("#globalSpinner");
+        if (gSpinner) gSpinner.style.display = "none";
       }
     }
     renderPalette();
@@ -5166,6 +5168,9 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
 });
 </script>
 <style id="catalog-styles">
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
   #catalog-view {
     padding: 20px;
     display: none;
@@ -6169,6 +6174,11 @@ async function confirmDeleteObject() {
 }
 </script>
 
+<!-- Global Spinner -->
+<div id="globalSpinner" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:9999; flex-direction:column; gap:16px">
+  <div style="width:40px; height:40px; border:4px solid var(--panel2); border-top-color:var(--violet-bright); border-radius:50%; animation:spin 1s linear infinite"></div>
+  <div style="color:var(--text); font-family:var(--sans); font-weight:600">Caricamento in corso...</div>
+</div>
 </body>
 </html>
 
