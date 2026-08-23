@@ -2,8 +2,8 @@
 
 ## Aggiornamento Continuo delle Specifiche
 Ogni volta che viene implementata una nuova funzionalità, una modifica logica o architetturale, una variazione nell'interfaccia o nei test:
-- Aggiornare **sempre** il file [`Specifiche/nuove-specifiche.md`](../Specifiche/nuove-specifiche.md).
-- Riportare con precisione **solo le differenze e le estensioni** rispetto alle specifiche di partenza in [`Specifiche/specifiche-murdoku-dettagliate.md`](../Specifiche/specifiche-murdoku-dettagliate.md).
+- Aggiornare **sempre** il file [`requirements/nuove-specifiche.md`](../requirements/nuove-specifiche.md).
+- Riportare con precisione **solo le differenze e le estensioni** rispetto alle specifiche di partenza in [`requirements/specifiche-murdoku-dettagliate.md`](../requirements/specifiche-murdoku-dettagliate.md).
 - Mantenere il contenuto di `nuove-specifiche.md` sempre coerente e allineato con quanto effettivamente sviluppato.
 
 ## Riferimento a Mappe, Puzzle e Soluzioni di Esempio
@@ -16,7 +16,7 @@ Ogni volta che viene effettuata una modifica al codice di `murdoku-studio.html`,
 - **Nuove funzionalità o modifiche rilevanti**: aumentare la versione principale (es. da 1.2 a 2.0).
 - **Bugfixing**: NON comporta un avanzamento di versione.
 
-**ATTENZIONE - Backup di versione**: PRIMA di applicare qualsiasi modifica che comporti l'avanzamento della versione, devi copiare la *vecchia* versione del file `murdoku-studio.html` all'interno della cartella `Versioning/`, rinominandola in base alla versione uscente (es. `murdoku-studio-v1.0.html`). Se la cartella `Versioning` non esiste, creala.
+**ATTENZIONE - Backup di versione**: PRIMA di applicare qualsiasi modifica che comporti l'avanzamento della versione, devi copiare la *vecchia* versione del file `murdoku-studio.html` all'interno della cartella `versioning/`, rinominandola in base alla versione uscente (es. `murdoku-studio-v1.0.html`). Se la cartella `versioning` non esiste, creala.
 
 ## Pubblicazione Online
 Quando l'utente chiede di pubblicare l'editor online (o aggiornare il repo), devi:
