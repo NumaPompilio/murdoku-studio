@@ -6895,7 +6895,7 @@ $("#cloudLoadBtn").addEventListener("click", async () => {
           <button class="btn primary" style="padding:4px 10px; font-size:11px;">Carica</button>
         </div>
       `;
-      div.addEventListener("click", () => loadCloudMap(file.download_url, file.name));
+      div.addEventListener("click", () => loadCloudMap(file.url, file.name));
       $("#cloudLoadList").appendChild(div);
     });
     
@@ -6911,8 +6911,12 @@ async function loadCloudMap(url, name) {
   const cfg = getGithubConfig();
   try {
     toast("Scaricamento in corso...");
+    // url contiene https://api.github.com/.../contents/...
     const res = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), {
-      headers: { "Authorization": `token ${cfg.token}` }
+      headers: { 
+        "Authorization": `token ${cfg.token}`,
+        "Accept": "application/vnd.github.v3.raw"
+      }
     });
     if(!res.ok) { toast(`Errore durante il download: HTTP ${res.status}`); return; }
     
