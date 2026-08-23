@@ -407,7 +407,7 @@
 </div>
 
 <header>
-  <div class="brand">
+  <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
       <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.2</span></h1>
@@ -430,13 +430,14 @@
     <input type="file" id="fileInput" accept="application/json" style="display:none">
   </div>
 
-  <div class="spacer"></div>
-  <div class="mode-switch">
-    <button class="btn active" id="modeEditorBtn">✏️ Editor</button>
-    <button class="btn" id="modePlayerBtn">🎮 Player</button>
-    <button class="btn primary" id="playerOpenImportBtn" style="display:none; margin-left:10px;"><span class="k">📂</span> Incolla Mappa</button>
-    <button class="btn primary" id="playerOpenFolderLoadBtn" style="display:none; margin-left:10px;"><span class="k">📁</span> Seleziona Mappa</button>
-    <button class="btn secondary" id="playerCopyLinkBtn" style="display:none; margin-left:10px;" title="Copia link per giocare questa mappa"><span class="k">🔗</span> Copia Link</button>
+  <div style="flex: 1; display: flex; justify-content: flex-end;">
+    <div class="mode-switch">
+      <button class="btn active" id="modeEditorBtn">✏️ Editor</button>
+      <button class="btn" id="modePlayerBtn">🎮 Player</button>
+      <button class="btn primary" id="playerOpenImportBtn" style="display:none; margin-left:10px;"><span class="k">📂</span> Incolla Mappa</button>
+      <button class="btn primary" id="playerOpenFolderLoadBtn" style="display:none; margin-left:10px;"><span class="k">📁</span> Seleziona Mappa</button>
+      <button class="btn secondary" id="playerCopyLinkBtn" style="display:none; margin-left:10px;" title="Copia link per giocare questa mappa"><span class="k">🔗</span> Copia Link</button>
+    </div>
   </div>
 </header>
 
