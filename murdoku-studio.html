@@ -6627,8 +6627,8 @@ $("#cloudLoadBtn").addEventListener("click", async () => {
   }
   
   try {
-    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved`, {
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
+    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved?t=${Date.now()}`, {
+      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Cache-Control": "no-cache" }
     });
     
     if(!res.ok) {
@@ -6787,8 +6787,8 @@ $("#cloudSaveBtn").addEventListener("click", async () => {
   }
   
   try {
-    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved`, {
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
+    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved?t=${Date.now()}`, {
+      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Cache-Control": "no-cache" }
     });
     
     if(res.ok) {
