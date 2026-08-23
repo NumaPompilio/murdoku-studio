@@ -5734,7 +5734,14 @@ async function loadRemoteObjects() {
         try {
           const objRes = await ghFetch(`catalogs/${dir}/object.json`);
           if (objRes.ok) {
-            const arr = await objRes.json();
+            const data = await objRes.json();
+            let textContent = data.content;
+            if (!textContent) {
+                // Se non c è content ma c è download_url (fallback per url)
+                const rawRes = await fetch(data.download_url);
+                textContent = btoa(unescape(encodeURIComponent(await rawRes.text())));
+            }
+            const arr = JSON.parse(decodeURIComponent(escape(atob(textContent.replace(/\n/g, "")))));
             for (const o of arr) {
               if(!OBJ_ORDER.includes(o.id)) OBJ_ORDER.push(o.id);
               E.OBJECT_LIB[o.id] = { label: o.label, walkable: !!o.walkable, catalog: dir };
@@ -6733,15 +6740,24 @@ $("#catDetEdit").addEventListener("click", () => {
 // Github Helper
 async function ghFetch(path, options = {}) {
   const cfg = getGithubConfig();
-  if(!cfg.token || !cfg.owner || !cfg.repo) throw new Error("Configurazione GitHub mancante. Vai in Impostazioni.");
+  
+  const owner = cfg.owner || "NumaPompilio";
+  const repo = cfg.repo || "murdoku-studio";
+
+  if ((options.method && options.method !== "GET") && !cfg.token) {
+    throw new Error("Configurazione GitHub mancante (Token richiesto per scrittura). Vai in Impostazioni.");
+  }
   
   const headers = {
-    "Authorization": `Bearer ${cfg.token}`,
     "Accept": "application/vnd.github.v3+json",
     ...options.headers
   };
   
-  const url = `${CATALOG_API_BASE}/${cfg.owner}/${cfg.repo}/contents/${path}?t=${Date.now()}`;
+  if (cfg.token) {
+    headers["Authorization"] = `Bearer ${cfg.token}`;
+  }
+  
+  const url = `${CATALOG_API_BASE}/${owner}/${repo}/contents/${path}?t=${Date.now()}`;
   return fetch(url, { ...options, headers });
 }
 
