@@ -1849,5 +1849,21 @@
       "scale": 1.0,
       "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🥁</text></svg>"
     }
+  },
+  {
+    "id": "passerella",
+    "label": "Passerella",
+    "article": "una",
+    "symbol": "PA",
+    "walkable": true,
+    "description": "Camminamento modulare o arrotolabile posizionato sugli stabilimenti balneari o sulle spiagge libere per facilitare il transito a piedi, con passeggini e carrozzine verso la battigia.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1.0,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><line x1=\"22\" y1=\"5\" x2=\"22\" y2=\"95\" stroke=\"#795548\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-dasharray=\"3,3\"/><line x1=\"78\" y1=\"5\" x2=\"78\" y2=\"95\" stroke=\"#795548\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-dasharray=\"3,3\"/><rect x=\"14\" y=\"8\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"14.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"14.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"26\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#CCA056\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"32.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"32.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"44\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"50.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"50.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"62\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#CCA056\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"68.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"68.5\" r=\"1.5\" fill=\"#5D3A1A\"/><rect x=\"14\" y=\"80\" width=\"72\" height=\"13\" rx=\"2\" fill=\"#D7A15C\" stroke=\"#8D5B28\" stroke-width=\"2\"/><circle cx=\"22\" cy=\"86.5\" r=\"1.5\" fill=\"#5D3A1A\"/><circle cx=\"78\" cy=\"86.5\" r=\"1.5\" fill=\"#5D3A1A\"/></svg>"
+    }
   }
 ]

@@ -563,3 +563,8 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Rimozione dell'intera sezione PLAYER**: Tutte le interfacce, modali, logiche di gioco e controlli relativi alla modalità Player (Gioca) sono stati rimossi dall'applicazione.
 - **Ottimizzazione del codice**: Il codice Javascript, HTML e CSS specifico del Player (inclusi overlay, stati e parser) è stato completamente rimosso. Questo riduce significativamente la dimensione del file `murdoku-studio.html` e snellisce la complessità dell'applicazione.
 - **Spostamento Pulsante Catalog**: Nello switch-mode in alto a destra, il pulsante **Catalog** è stato spostato alla sinistra del pulsante **Editor**, diventando più accessibile. Il pulsante **Player** è stato rimosso.
+
+## Standardizzazione Oggetti Mappe e Aggiunta Passerella a Catalogo 1
+- **Inclusione Oggetto Passerella**: Aggiunto l'oggetto `passerella` al `Catalogo 1` (`catalogs/Catalogo 1/object.json`), con ID univoco `passerella`, simbolo `PA`, etichetta "Passerella", categoria "Mare", calpestabile (`walkable: true`), rendering SVG modulare e descrizione estesa.
+- **Normalizzazione Naming ID Mappe Salvate (`maps/saved/`)**: Tutte le mappe salvate sono state normalizzate per allineare gli identificativi degli oggetti (in precedenza serializzati in formato `snake_case`, es. `barca_a_vela`, `pedalo`, `vaso_di_piante`, `albero_ulivo`, ecc.) agli ID compatti univoci definiti nel catalogo (`barcaavela`, `pedal`, `vasodipiante`, `alberoulivo`, ecc.), garantendo il corretto caricamento e rendering SVG vettoriale all'interno dell'editor senza fallback a simboli non riconosciuti.
+
