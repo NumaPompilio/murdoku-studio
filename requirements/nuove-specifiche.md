@@ -522,3 +522,13 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Modale Impostazioni**: Aggiunto un nuovo popup Impostazioni accessibile dall'editor (⚙️) per salvare localmente (`localStorage`) le credenziali GitHub: `Personal Access Token (PAT)`, `Owner` e `Repository Name`. Questi dati sono essenziali per interfacciarsi con le API REST di GitHub senza dipendere da alcun backend.
 - **Caricamento dal Cloud (☁️ Carica dal Cloud)**: Aggiunto un pulsante nell'header dell'editor. Apre un modale che si connette alle API di GitHub (`GET /repos/{owner}/{repo}/contents/maps/saved`), recupera l'elenco dei file `.md` e ne popola la lista. Cliccando su un file, viene scaricato direttamente e deserializzato nell'editor.
 - **Salvataggio sul Cloud (☁️ Salva sul Cloud)**: Aggiunto un pulsante nell'header dell'editor. Apre un modale che mostra l'elenco delle mappe esistenti (permettendo la selezione rapida per la sovrascrittura) e offre un campo testuale per inserire il nome del file. Al salvataggio, il file viene codificato in Base64 (supportando i caratteri UTF-8 tramite `TextEncoder`) e inviato via `PUT` all'API di GitHub. Se il file esiste già, l'API richiede lo `sha` precedente, il quale viene automaticamente recuperato in background.
+
+
+## Estensione: Object Catalog (v6.0)
+- Aggiunta una nuova sezione "Object Catalog" accessibile dallo Switcher principale (accanto a Editor e Player).
+- La sezione permette di gestire i cataloghi di oggetti, letti e scritti dinamicamente su GitHub (cartella `catalogs/`).
+- Ogni catalogo contiene un file `object.json` con la lista degli oggetti. Gli oggetti hanno i campi: id, label, article, symbol, walkable, categories, svgCode, description.
+- Gestione delle Categorie: le categorie degli oggetti sono configurabili e salvate su GitHub in `catalogs/categories.json`.
+- Interfaccia a griglia con Card per ogni oggetto, con possibilità di modifica, eliminazione e creazione di nuovi oggetti.
+- Esportazione del catalogo selezionato (JSON) tramite popup dedicato con funzioni Copia e Scarica.
+- Le modali rispettano la struttura e le classi standard del progetto (`.modal` e `.box`).

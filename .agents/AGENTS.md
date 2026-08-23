@@ -31,3 +31,31 @@ Quando l'utente chiede di pubblicare l'editor online (o aggiornare il repo), dev
 - **SELETTORE DEI PERSONAGGI**: si riferisce al componente del Player (la palette orizzontale) contenente le icone/avatar di tutti i sospettati e della vittima, da cui il giocatore seleziona un personaggio per poterlo poi piazzare sulla mappa.
 - **Editor**: si riferisce alla modalità "Editor", ovvero la parte dell'applicazione che si apre cliccando sul pulsante "Editor".
 - **MOBILE**: si riferisce solo ed esclusivamente alla visualizzazione da dispositivi mobili (layout responsive, media query), differenziandola dalla modalità desktop.
+
+## Stile e Implementazione dei Popup (Modali)
+Ogni volta che viene richiesto di implementare un popup o finestra modale, questo deve seguire fedelmente lo stile e la struttura dei modali già presenti nel progetto (`murdoku-studio.html`):
+1. **Struttura HTML**: Deve essere utilizzato un container principale con classe `.modal` (o stili in linea equivalenti) e un sotto-container `.box`:
+   ```html
+   <div id="myModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px">
+     <div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(500px,96vw); max-height:80vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+       <!-- Header (.mh) -->
+       <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line)">
+         <h3 style="margin:0; font-family:var(--serif); font-size:17px">Titolo Modale</h3>
+       </div>
+       <!-- Body (.mb) -->
+       <div class="mb" style="padding:14px 16px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:8px">
+         ...
+       </div>
+       <!-- Footer (.mf) -->
+       <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center; justify-content:flex-end">
+         <button class="btn" id="myModalClose">Annulla</button>
+         <button class="btn btn-primary" id="myModalConfirm">Conferma</button>
+       </div>
+     </div>
+   </div>
+   ```
+2. **Comportamento JavaScript**:
+   - Apertura impostando `.style.display = "flex"`.
+   - Chiusura impostando `.style.display = "none"`.
+   - Gestione della chiusura cliccando sull'overlay (lo sfondo esterno al `.box`).
+   - Gestione del pulsante di chiusura.
