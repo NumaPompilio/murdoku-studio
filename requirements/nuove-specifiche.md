@@ -543,3 +543,5 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - Aggiunta visualizzazione in dettaglio per gli oggetti del catalogo: cliccando su una card si apre un popup contenente tutti i dettagli, l'immagine/simbolo ingrandita, e i pulsanti Elimina e Modifica.
 
 - Persistenza stato Catalogo: se la pagina viene ricaricata mentre si è nel Catalogo (tramite hash #catalog nell URL), la vista Catalogo viene automaticamente ripristinata.
+
+- Creazione catalogo predefinito "Catalogo 1" popolato con 111 oggetti base (ciascuno con grafica SVG auto-generata basata su emoji, categorie e caratteristiche dettagliate).
