@@ -7705,6 +7705,7 @@ function renderObjectCards() {
     card.className = "catalog-card";
     card.style.cursor = "pointer";
     card.style.borderColor = obj.walkable ? "#4caf50" : "#ff4444";
+    card.style.backgroundColor = obj.walkable ? "#51844d" : "#9a1d1d";
     card.onclick = (e) => {
       if(e.target.closest('.cc-footer')) return;
       openObjectDetails(obj);
