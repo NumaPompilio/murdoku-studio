@@ -7,10 +7,8 @@ Ogni volta che viene implementata una nuova funzionalità, una modifica logica o
 - Mantenere il contenuto di `nuove-specifiche.md` sempre coerente e allineato con quanto effettivamente sviluppato.
 
 ## Riferimento a Mappe, Puzzle e Soluzioni di Esempio
-La cartella `Murdoku_Risolti` (o `Murkodu_Risolti`) contiene mappe e puzzle originali di esempio in formato PDF, spesso corredati delle relative soluzioni (riconoscibili dai nomi dei file, es. `-solution.pdf` o simili). 
-Ogni volta che si fa riferimento ad esempi di puzzle, logiche di gioco ufficiali, layout di mappe o soluzioni per confermare delle regole, **è tassativo** fare riferimento al contenuto di questa cartella come "fonte della verità".
-
-In aggiunta, la cartella `Murdoku_NON_Risolti` contiene altre mappe ufficiali (non risolte) suddivise per livello di complessità, che possono essere usate come ulteriore reference per studiare la struttura e il level design originale.
+I file di esempio (PDF delle mappe originali, soluzioni, ecc.) si trovano all'interno della cartella `reference/`.
+**REGOLA TASSATIVA**: La cartella `reference/` e tutto il suo contenuto NON fanno parte del progetto attivo e devono essere **COMPLETAMENTE IGNORATI** durante lo scanning del codice, le ricerche (grep) o qualsiasi altra operazione di analisi, a meno che l'utente non ti chieda esplicitamente e specificamente di leggerli o farvi riferimento. Non includere mai file presenti in `reference/` nelle modifiche di progetto a meno che non ti venga esplicitamente richiesto.
 
 ## Versioning dell'Applicazione
 Ogni volta che viene effettuata una modifica al codice di `murdoku-studio.html`, è obbligatorio aggiornare il numero di versione mostrato nell'interfaccia (header, accanto a "Studio"):
