@@ -411,7 +411,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.1</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.2</span></h1>
     </div>
   </div>
 
@@ -7385,7 +7385,6 @@ function openObjectDetails(obj) {
   }
   
   let tagsHtml = (obj.categories || []).map(t => `<span class="cc-tag">${t}</span>`).join("");
-  if(obj.walkable) tagsHtml += `<span class="cc-tag" style="background:rgba(0,255,100,0.2); color:#4f4">Walkable</span>`;
   $("#catDetTags").innerHTML = tagsHtml || "-";
   
   $("#catalogObjectDetailsModal").style.display = "flex";
@@ -7792,7 +7791,6 @@ function renderObjectCards() {
     body.className = "cc-body";
     
     let tagsHtml = (obj.categories || []).map(t => `<span class="cc-tag">${t}</span>`).join("");
-    if(obj.walkable) tagsHtml += `<span class="cc-tag" style="background:rgba(0,255,100,0.2); color:#4f4">Walkable</span>`;
     
     body.innerHTML = `
       <div class="cc-label">${obj.label || ""} <span style="color:var(--text-faint); font-weight:normal; font-size:11px">(${obj.article || ""})</span></div>
