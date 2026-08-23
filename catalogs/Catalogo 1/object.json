@@ -160,16 +160,16 @@
     "article": "una",
     "symbol": "BA",
     "walkable": false,
-    "description": "Bancarella da festa o mercato con banco, tenda e prodotti esposti.",
     "categories": [
-      "Salento",
+      "Esterno urbano",
       "Commerciale",
-      "Esterno urbano"
+      "Salento"
     ],
+    "description": "Bancarella da festa o mercato con banco, tenda e prodotti esposti.",
     "render": {
       "type": "svg",
       "scale": 1,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🎪</text></svg>"
+      "svgCode": "<svg xmlns=\"http://w3.org\" viewBox=\"0 0 200 200\" width=\"100%\" height=\"100%\">\n  <!-- Supporti e Gambe della bancarella -->\n  <rect x=\"35\" y=\"110\" width=\"8\" height=\"80\" fill=\"#d7ccc8\" />\n  <rect x=\"157\" y=\"110\" width=\"8\" height=\"80\" fill=\"#d7ccc8\" />\n  <rect x=\"40\" y=\"40\" width=\"6\" height=\"80\" fill=\"#b0bec5\" />\n  <rect x=\"154\" y=\"40\" width=\"6\" height=\"80\" fill=\"#b0bec5\" />\n\n  <!-- Tavolo / Ripiano principale -->\n  <rect x=\"25\" y=\"110\" width=\"150\" height=\"15\" fill=\"#8d6e63\" rx=\"2\" />\n  <rect x=\"25\" y=\"125\" width=\"150\" height=\"25\" fill=\"#a1887f\" />\n\n  <!-- Cassette della frutta sul ripiano -->\n  <!-- Cassetta 1 (Sinistra) -->\n  <rect x=\"35\" y=\"95\" width=\"35\" height=\"15\" fill=\"#d7ccc8\" stroke=\"#8d6e63\" stroke-width=\"1\" />\n  <circle cx=\"43\" cy=\"102\" r=\"3\" fill=\"#ff5722\" />\n  <circle cx=\"52\" cy=\"102\" r=\"3\" fill=\"#ff5722\" />\n  <circle cx=\"61\" cy=\"102\" r=\"3\" fill=\"#ff5722\" />\n  \n  <!-- Cassetta 2 (Centro) -->\n  <rect x=\"82\" y=\"95\" width=\"35\" height=\"15\" fill=\"#d7ccc8\" stroke=\"#8d6e63\" stroke-width=\"1\" />\n  <circle cx=\"90\" cy=\"102\" r=\"3\" fill=\"#ffeb3b\" />\n  <circle cx=\"99\" cy=\"102\" r=\"3\" fill=\"#ffeb3b\" />\n  <circle cx=\"108\" cy=\"102\" r=\"3\" fill=\"#ffeb3b\" />\n\n  <!-- Cassetta 3 (Destra) -->\n  <rect x=\"130\" y=\"95\" width=\"35\" height=\"15\" fill=\"#d7ccc8\" stroke=\"#8d6e63\" stroke-width=\"1\" />\n  <circle cx=\"138\" cy=\"102\" r=\"3\" fill=\"#4caf50\" />\n  <circle cx=\"147\" cy=\"102\" r=\"3\" fill=\"#4caf50\" />\n  <circle cx=\"156\" cy=\"102\" r=\"3\" fill=\"#4caf50\" />\n\n  <!-- Tendone superiore (Strisce verticali) -->\n  <!-- Base del tendone -->\n  <path d=\"M 15 65 L 15 40 L 185 40 L 185 65 Z\" fill=\"#e0e0e0\" />\n  \n  <!-- Strisce Rosse -->\n  <path d=\"M 15 40 L 40 40 L 40 65 L 15 65 Z\" fill=\"#e53935\" />\n  <path d=\"M 65 40 L 90 40 L 90 65 L 65 65 Z\" fill=\"#e53935\" />\n  <path d=\"M 115 40 L 140 40 L 140 65 L 115 65 Z\" fill=\"#e53935\" />\n  <path d=\"M 165 40 L 185 40 L 185 65 L 165 65 Z\" fill=\"#e53935\" />\n\n  <!-- Onde decorative inferiori del tendone (Scolop) -->\n  <path d=\"M 15 65 Q 27.5 75 40 65 Q 52.5 75 65 65 Q 77.5 75 90 65 Q 102.5 75 115 65 Q 127.5 75 140 65 Q 152.5 75 165 65 Q 175 75 185 65\" fill=\"none\" stroke=\"#e53935\" stroke-width=\"4\" />\n  <path d=\"M 15 65 Q 27.5 75 40 65\" fill=\"#e53935\" />\n  <path d=\"M 40 65 Q 52.5 75 65 65\" fill=\"#e0e0e0\" />\n  <path d=\"M 65 65 Q 77.5 75 90 65\" fill=\"#e53935\" />\n  <path d=\"M 90 65 Q 102.5 75 115 65\" fill=\"#e0e0e0\" />\n  <path d=\"M 115 65 Q 127.5 75 140 65\" fill=\"#e53935\" />\n  <path d=\"M 140 65 Q 152.5 75 165 65\" fill=\"#e0e0e0\" />\n  <path d=\"M 165 65 Q 175 75 185 65\" fill=\"#e53935\" />\n</svg>"
     }
   },
   {
