@@ -7178,6 +7178,33 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
   </div>
 </div>
 
+
+<!-- Modale Dettaglio Oggetto -->
+<div id="catalogObjectDetailsModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:80; padding:20px">
+  <div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(500px,96vw); max-height:85vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+    <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line)">
+      <h3 style="margin:0; font-family:var(--serif); font-size:17px" id="catDetTitle">Dettagli Oggetto</h3>
+    </div>
+    <div class="mb" style="padding:16px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:16px">
+      <div id="catDetIcon" style="height:200px; display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.03); border-radius:8px; border:1px solid var(--line2);">
+      </div>
+      
+      <div style="display:flex; flex-direction:column; gap:8px">
+        <div><span style="color:var(--text-dim); font-size:11px">ID:</span> <span id="catDetId" style="font-family:monospace; color:var(--text)"></span></div>
+        <div><span style="color:var(--text-dim); font-size:11px">Nome:</span> <span id="catDetLabel" style="font-weight:bold; color:var(--text)"></span> <span id="catDetArticle" style="color:var(--text-faint)"></span></div>
+        <div><span style="color:var(--text-dim); font-size:11px">Descrizione:</span> <div id="catDetDesc" style="color:var(--text); font-size:13px; line-height:1.4"></div></div>
+        <div><span style="color:var(--text-dim); font-size:11px">Caratteristiche:</span> <div id="catDetTags" style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px"></div></div>
+      </div>
+    </div>
+    <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center; justify-content:flex-end">
+      <button class="btn ghost" id="catDetClose">Chiudi</button>
+      <span style="flex:1"></span>
+      <button class="btn" id="catDetDel" style="color:#ff4444; border-color:transparent">🗑️ Elimina</button>
+      <button class="btn primary" id="catDetEdit">✏️ Modifica</button>
+    </div>
+  </div>
+</div>
+
 <script id="catalog-script">
 // --- CATALOG LOGIC ---
 const CATALOG_API_BASE = "https://api.github.com/repos";
@@ -7314,12 +7341,60 @@ let catObjDeleteTarget = null;
     }
   });
 
+  
+let currentViewedObject = null;
+
+function openObjectDetails(obj) {
+  currentViewedObject = obj;
+  $("#catDetTitle").textContent = obj.label || obj.id;
+  $("#catDetId").textContent = obj.id || "-";
+  $("#catDetLabel").textContent = obj.label || "-";
+  $("#catDetArticle").textContent = obj.article ? `(${obj.article})` : "";
+  $("#catDetDesc").textContent = obj.description || "-";
+  
+  if(obj.svgCode && obj.svgCode.trim()) {
+    $("#catDetIcon").innerHTML = obj.svgCode;
+    const svg = $("#catDetIcon").querySelector("svg");
+    if(svg) {
+      svg.style.width = "160px";
+      svg.style.height = "160px";
+    }
+  } else {
+    const symbol = (obj.symbol || "??").substring(0,2);
+    $("#catDetIcon").innerHTML = `<div class="cc-fallback" style="width:120px; height:120px; font-size:48px">${symbol}</div>`;
+  }
+  
+  let tagsHtml = (obj.categories || []).map(t => `<span class="cc-tag">${t}</span>`).join("");
+  if(obj.walkable) tagsHtml += `<span class="cc-tag" style="background:rgba(0,255,100,0.2); color:#4f4">Walkable</span>`;
+  $("#catDetTags").innerHTML = tagsHtml || "-";
+  
+  $("#catalogObjectDetailsModal").style.display = "flex";
+}
+
+$("#catDetClose").addEventListener("click", () => $("#catalogObjectDetailsModal").style.display = "none");
+$("#catalogObjectDetailsModal").addEventListener("click", e => { if(e.target.id === "catalogObjectDetailsModal") $("#catalogObjectDetailsModal").style.display = "none"; });
+
+$("#catDetDel").addEventListener("click", () => {
+  if(!currentViewedObject) return;
+  $("#catalogObjectDetailsModal").style.display = "none";
+  catObjDeleteTarget = currentViewedObject.id;
+  $("#catDeleteObjName").textContent = currentViewedObject.label || currentViewedObject.id;
+  $("#catalogDeleteModal").style.display = "flex";
+});
+
+$("#catDetEdit").addEventListener("click", () => {
+  if(!currentViewedObject) return;
+  $("#catalogObjectDetailsModal").style.display = "none";
+  openObjectModal(currentViewedObject);
+});
+
   // Modal Closers
   const closeModals = () => {
     $("#catalogObjectModal").style.display = "none";
     $("#catalogExportModal").style.display = "none";
     $("#catalogCategoriesModal").style.display = "none";
     $("#catalogDeleteModal").style.display = "none";
+    $("#catalogObjectDetailsModal").style.display = "none";
   };
   $("#catObjCancel").addEventListener("click", closeModals);
   $("#catExportClose").addEventListener("click", closeModals);
@@ -7595,6 +7670,11 @@ function renderObjectCards() {
   catalogObjects.forEach(obj => {
     const card = document.createElement("div");
     card.className = "catalog-card";
+    card.style.cursor = "pointer";
+    card.onclick = (e) => {
+      if(e.target.closest('.cc-footer')) return;
+      openObjectDetails(obj);
+    };
     
     // Header (SVG or Fallback)
     const header = document.createElement("div");
@@ -7730,6 +7810,7 @@ async function confirmDeleteObject() {
       toast("Eliminazione su GitHub in corso...");
       await saveObjects();
       $("#catalogDeleteModal").style.display = "none";
+    $("#catalogObjectDetailsModal").style.display = "none";
     } catch(e) {
     } finally {
       $("#catDeleteConfirm").disabled = false;

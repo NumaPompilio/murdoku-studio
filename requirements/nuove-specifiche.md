@@ -539,3 +539,5 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - Aggiunta funzione di Eliminazione intero Catalogo: accessibile quando un catalogo è selezionato. Elimina ricorsivamente tutti i file dal repository GitHub dopo doppia conferma digitata (`delete`).
 - Ottimizzato lo spazio delle card degli oggetti nella griglia per renderle più compatte.
 - Bugfix: ripristinato il pulsante di chiusura (X) nella modale Log di Sistema e corretto il nome del pulsante in 'Mostra Log'.
+
+- Aggiunta visualizzazione in dettaglio per gli oggetti del catalogo: cliccando su una card si apre un popup contenente tutti i dettagli, l'immagine/simbolo ingrandita, e i pulsanti Elimina e Modifica.
