@@ -564,7 +564,9 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Ottimizzazione del codice**: Il codice Javascript, HTML e CSS specifico del Player (inclusi overlay, stati e parser) è stato completamente rimosso. Questo riduce significativamente la dimensione del file `murdoku-studio.html` e snellisce la complessità dell'applicazione.
 - **Spostamento Pulsante Catalog**: Nello switch-mode in alto a destra, il pulsante **Catalog** è stato spostato alla sinistra del pulsante **Editor**, diventando più accessibile. Il pulsante **Player** è stato rimosso.
 
-## Standardizzazione Oggetti Mappe e Aggiunta Passerella a Catalogo 1
-- **Inclusione Oggetto Passerella**: Aggiunto l'oggetto `passerella` al `Catalogo 1` (`catalogs/Catalogo 1/object.json`), con ID univoco `passerella`, simbolo `PA`, etichetta "Passerella", categoria "Mare", calpestabile (`walkable: true`), rendering SVG modulare e descrizione estesa.
-- **Normalizzazione Naming ID Mappe Salvate (`maps/saved/`)**: Tutte le mappe salvate sono state normalizzate per allineare gli identificativi degli oggetti (in precedenza serializzati in formato `snake_case`, es. `barca_a_vela`, `pedalo`, `vaso_di_piante`, `albero_ulivo`, ecc.) agli ID compatti univoci definiti nel catalogo (`barcaavela`, `pedal`, `vasodipiante`, `alberoulivo`, ecc.), garantendo il corretto caricamento e rendering SVG vettoriale all'interno dell'editor senza fallback a simboli non riconosciuti.
+## Ottimizzazioni Catalogo e Posizionamento Impostazioni (v8.1 - v8.3)
+- **Ricaricamento Dinamico Catalogo & Oggetti (v8.1)**: Alla selezione di un catalogo dalla sezione "Strumenti Mappa", le definizioni e gli SVG vettoriali vengono riscaricati in tempo reale da GitHub e applicati immediatamente alla palette e alla mappa.
+- **Spinner Modale a Tutto Schermo (v8.2)**: Inserito un overlay modale globale bloccante (`#globalSpinner`) con animazione di caricamento ("Caricamento in corso..."), impedendo interazioni durante il download asincrono dei dati del catalogo da GitHub.
+- **Spostamento Pulsante Impostazioni (v8.3)**: Il pulsante delle Impostazioni (`#settingsBtn`, ⚙️) è stato spostato alla destra dello switcher di modalità in testata (`.mode-switch`), rimanendo costantemente visibile e accessibile sia nella vista **Editor** che nella vista **Catalog**.
+
 
