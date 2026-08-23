@@ -1,1 +1,1869 @@
-[]
+[
+  {
+    "id": "acquascooter",
+    "label": "Acquascooter",
+    "article": "un",
+    "symbol": "AC",
+    "walkable": false,
+    "description": "Moto d’acqua compatta con sella e manubrio.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M17 67 Q34 76 78 70 L88 61 L61 58 L51 49 L32 50 L25 59 Z\" fill=\"#4EA8DE\"/>\n    <path d=\"M50 49 L58 36 L71 35 L72 40 L60 42 L57 52\" fill=\"#263238\"/>\n    <rect x=\"40\" y=\"43\" width=\"18\" height=\"8\" rx=\"4\" fill=\"#222222\"/>\n    <path d=\"M73 35 L79 30\" fill=\"none\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <path d=\"M13 79 Q28 73 43 79 Q58 85 74 79 Q87 75 94 79\" fill=\"none\" stroke=\"#90E0EF\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "aiuola",
+    "label": "Aiuola",
+    "article": "un'",
+    "symbol": "AI",
+    "walkable": false,
+    "description": "Piccola area verde con terra, fiori e bordo definito.",
+    "categories": [
+      "Esterno urbano",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"68\" rx=\"37\" ry=\"16\" fill=\"#7A5135\"/>\n    <ellipse cx=\"50\" cy=\"64\" rx=\"32\" ry=\"12\" fill=\"#83B271\"/>\n    <path d=\"M18 67 Q50 83 82 67\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"6\"/>\n    <path d=\"M36 61 V43 M50 61 V37 M65 61 V45\" stroke=\"#4F8A5B\" fill=\"none\"/>\n    <circle cx=\"36\" cy=\"39\" r=\"7\" fill=\"#E6A0C4\"/><circle cx=\"50\" cy=\"33\" r=\"7\" fill=\"#F6D365\"/><circle cx=\"65\" cy=\"41\" r=\"7\" fill=\"#E85D5D\"/>\n    <circle cx=\"36\" cy=\"39\" r=\"2\" fill=\"#F4A261\" stroke=\"none\"/><circle cx=\"50\" cy=\"33\" r=\"2\" fill=\"#F4A261\" stroke=\"none\"/><circle cx=\"65\" cy=\"41\" r=\"2\" fill=\"#F6D365\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "albero",
+    "label": "Albero",
+    "article": "un",
+    "symbol": "AL",
+    "walkable": false,
+    "description": "Albero con tronco marrone e chioma verde arrotondata.",
+    "categories": [
+      "Esterno urbano",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M45 55 L41 88 H60 L56 55\" fill=\"#7A5135\"/>\n    <circle cx=\"50\" cy=\"39\" r=\"24\" fill=\"#4F8A5B\"/><circle cx=\"32\" cy=\"48\" r=\"17\" fill=\"#83B271\"/><circle cx=\"68\" cy=\"48\" r=\"17\" fill=\"#83B271\"/>\n    <path d=\"M47 64 L35 51 M53 62 L66 48\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "alberoulivo",
+    "label": "Albero ulivo",
+    "article": "un",
+    "symbol": "AL",
+    "walkable": false,
+    "description": "Ulivo con tronco nodoso, chioma argentata e rami contorti.",
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M49 50 Q38 65 43 89 L56 89 Q60 70 54 54 Q62 64 69 65\" fill=\"#7A5135\"/>\n    <path d=\"M49 52 Q38 45 31 39 M53 51 Q63 43 70 37 M44 60 Q32 57 25 51\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n    <ellipse cx=\"30\" cy=\"37\" rx=\"17\" ry=\"10\" fill=\"#8A9A5B\"/><ellipse cx=\"50\" cy=\"32\" rx=\"20\" ry=\"11\" fill=\"#8A9A5B\"/><ellipse cx=\"69\" cy=\"37\" rx=\"17\" ry=\"10\" fill=\"#8A9A5B\"/><ellipse cx=\"28\" cy=\"52\" rx=\"15\" ry=\"9\" fill=\"#8A9A5B\"/><ellipse cx=\"68\" cy=\"52\" rx=\"16\" ry=\"9\" fill=\"#8A9A5B\"/>\n    <circle cx=\"38\" cy=\"36\" r=\"2.5\" fill=\"#263238\" stroke=\"none\"/><circle cx=\"60\" cy=\"39\" r=\"2.5\" fill=\"#263238\" stroke=\"none\"/><circle cx=\"49\" cy=\"47\" r=\"2.5\" fill=\"#263238\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "apecar",
+    "label": "Ape car",
+    "article": "un",
+    "symbol": "AP",
+    "walkable": false,
+    "description": "Piccolo veicolo a tre ruote con cabina e cassone.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano",
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M18 42 H51 V70 H18 Z\" fill=\"#F4A261\"/>\n    <path d=\"M51 48 H72 L84 60 V70 H51 Z\" fill=\"#4EA8DE\"/>\n    <polygon points=\"58,50 69,50 77,59 58,59\" fill=\"#90E0EF\"/>\n    <rect x=\"22\" y=\"48\" width=\"24\" height=\"15\" fill=\"#E9C46A\" stroke=\"none\"/>\n        <circle cx=\"30\" cy=\"74\" r=\"7\" fill=\"#263238\"/><circle cx=\"30\" cy=\"74\" r=\"3.5\" fill=\"#ECEFF1\"/>\n    <circle cx=\"68\" cy=\"74\" r=\"7\" fill=\"#263238\"/><circle cx=\"68\" cy=\"74\" r=\"3.5\" fill=\"#ECEFF1\"/>\n    <circle cx=\"82\" cy=\"74\" r=\"7\" fill=\"#263238\"/><circle cx=\"82\" cy=\"74\" r=\"3.5\" fill=\"#ECEFF1\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "armadio",
+    "label": "Armadio",
+    "article": "un",
+    "symbol": "AR",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "description": "Armadio alto con ante chiuse e maniglie verticali.",
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"24\" y=\"13\" width=\"52\" height=\"75\" rx=\"3\" fill=\"#A66A3F\"/>\n    <line x1=\"50\" y1=\"15\" x2=\"50\" y2=\"87\"/>\n    <rect x=\"29\" y=\"20\" width=\"16\" height=\"55\" rx=\"1\" fill=\"#D49A6A\" stroke=\"none\"/><rect x=\"55\" y=\"20\" width=\"16\" height=\"55\" rx=\"1\" fill=\"#D49A6A\" stroke=\"none\"/>\n    <line x1=\"45\" y1=\"48\" x2=\"45\" y2=\"63\" stroke=\"#E9C46A\" stroke-width=\"3\"/><line x1=\"55\" y1=\"48\" x2=\"55\" y2=\"63\" stroke=\"#E9C46A\" stroke-width=\"3\"/>\n    <path d=\"M29 88 V93 M71 88 V93\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "asino",
+    "label": "Asino",
+    "article": "un",
+    "symbol": "AS",
+    "walkable": false,
+    "description": "Asino grigio con orecchie lunghe, coda sottile e postura calma.",
+    "categories": [
+      "Animali",
+      "Campagna",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"56\" cy=\"55\" rx=\"27\" ry=\"16\" fill=\"#90A4AE\"/>\n    <circle cx=\"31\" cy=\"42\" r=\"13\" fill=\"#90A4AE\"/>\n    <path d=\"M25 35 Q16 16 23 13 Q31 23 31 35 Z\" fill=\"#90A4AE\"/><path d=\"M33 35 Q34 16 41 17 Q43 28 39 38 Z\" fill=\"#90A4AE\"/>\n    \n    \n    \n    <ellipse cx=\"26\" cy=\"45\" rx=\"6\" ry=\"4\" fill=\"#ECEFF1\"/>\n    <circle cx=\"29\" cy=\"39\" r=\"1.8\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M41 67 L39 85 M56 69 L55 86 M68 68 L70 85 M78 64 L81 83\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"5\"/>\n    <path d=\"M36 86 h7 M52 87 h7 M67 86 h7 M78 84 h7\" fill=\"none\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <path d=\"M78 52 Q91 55 92 68\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "atm",
+    "label": "ATM",
+    "article": "un",
+    "symbol": "AT",
+    "walkable": false,
+    "description": "Sportello bancomat con schermo, tastierino e fessura per carta.",
+    "categories": [
+      "Esterno urbano",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"25\" y=\"12\" width=\"50\" height=\"78\" rx=\"5\" fill=\"#8D99AE\"/>\n    <rect x=\"32\" y=\"20\" width=\"36\" height=\"24\" rx=\"2\" fill=\"#3D5A80\"/>\n    <rect x=\"35\" y=\"50\" width=\"30\" height=\"6\" rx=\"2\" fill=\"#263238\"/>\n    <g fill=\"#ECEFF1\" stroke=\"none\"><circle cx=\"38\" cy=\"65\" r=\"2.3\"/><circle cx=\"50\" cy=\"65\" r=\"2.3\"/><circle cx=\"62\" cy=\"65\" r=\"2.3\"/><circle cx=\"38\" cy=\"74\" r=\"2.3\"/><circle cx=\"50\" cy=\"74\" r=\"2.3\"/><circle cx=\"62\" cy=\"74\" r=\"2.3\"/><circle cx=\"38\" cy=\"83\" r=\"2.3\"/><circle cx=\"50\" cy=\"83\" r=\"2.3\"/><circle cx=\"62\" cy=\"83\" r=\"2.3\"/></g>\n    <rect x=\"38\" y=\"82\" width=\"24\" height=\"4\" rx=\"2\" fill=\"#263238\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "auto",
+    "label": "Auto",
+    "article": "un",
+    "symbol": "AU",
+    "walkable": false,
+    "description": "Automobile compatta vista di lato o tre quarti, con quattro ruote.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M13 64 L19 48 Q24 42 38 40 L52 27 Q58 23 68 27 L80 42 Q88 44 90 55 L88 67 H13 Z\" fill=\"#E85D5D\"/>\n    <polygon points=\"43,41 55,29 66,30 75,42\" fill=\"#90E0EF\"/>\n    <polygon points=\"22,48 39,43 42,43 42,48\" fill=\"#90E0EF\" stroke=\"none\"/>\n        <circle cx=\"30\" cy=\"69\" r=\"9\" fill=\"#263238\"/><circle cx=\"30\" cy=\"69\" r=\"4.5\" fill=\"#ECEFF1\"/>\n    <circle cx=\"73\" cy=\"69\" r=\"9\" fill=\"#263238\"/><circle cx=\"73\" cy=\"69\" r=\"4.5\" fill=\"#ECEFF1\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "bancarella",
+    "label": "Bancarella",
+    "article": "una",
+    "symbol": "BA",
+    "walkable": false,
+    "categories": [
+      "Esterno urbano",
+      "Commerciale",
+      "Salento"
+    ],
+    "description": "Bancarella da festa o mercato con banco, tenda e prodotti esposti.",
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M15 30 H85 L78 45 H22 Z\" fill=\"#E85D5D\"/>\n    <path d=\"M15 30 H29 L27 45 H22 Z M43 30 H57 L57 45 H43 Z M71 30 H85 L78 45 H73 Z\" fill=\"#FFFFFF\" stroke=\"none\"/>\n    <line x1=\"23\" y1=\"45\" x2=\"23\" y2=\"88\"/><line x1=\"77\" y1=\"45\" x2=\"77\" y2=\"88\"/>\n    <rect x=\"19\" y=\"59\" width=\"62\" height=\"15\" fill=\"#A66A3F\"/>\n    <rect x=\"22\" y=\"74\" width=\"56\" height=\"13\" fill=\"#D49A6A\"/>\n    <circle cx=\"31\" cy=\"56\" r=\"5\" fill=\"#F4A261\"/><circle cx=\"44\" cy=\"55\" r=\"5\" fill=\"#4F8A5B\"/><circle cx=\"58\" cy=\"56\" r=\"5\" fill=\"#F6D365\"/><circle cx=\"70\" cy=\"55\" r=\"5\" fill=\"#E85D5D\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "barcaavela",
+    "label": "Barca a vela",
+    "article": "una",
+    "symbol": "BA",
+    "walkable": false,
+    "description": "Barca con scafo e vela triangolare ben visibile.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M14 67 Q50 79 86 67 L78 81 H25 Z\" fill=\"#3D5A80\"/>\n    <line x1=\"49\" y1=\"20\" x2=\"49\" y2=\"68\" stroke-width=\"3\"/>\n    <polygon points=\"47,24 47,60 20,60\" fill=\"#FFFFFF\"/>\n    <polygon points=\"52,29 52,61 77,61\" fill=\"#E85D5D\"/>\n    <path d=\"M12 87 Q26 82 40 87 Q54 92 68 87 Q82 82 92 87\" fill=\"none\" stroke=\"#90E0EF\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "bicicletta",
+    "label": "Bicicletta",
+    "article": "una",
+    "symbol": "BI",
+    "walkable": false,
+    "description": "Bicicletta con due ruote sottili, telaio, manubrio e sella.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"27\" cy=\"68\" r=\"18\" fill=\"none\"/><circle cx=\"75\" cy=\"68\" r=\"18\" fill=\"none\"/>\n    <path d=\"M27 68 L43 44 L57 68 L27 68 L47 68 L65 39 L75 68 M41 44 H56 M64 39 H74 M48 38 H39\" fill=\"none\" stroke=\"#3D5A80\" stroke-width=\"3\"/>\n    <circle cx=\"47\" cy=\"68\" r=\"3\" fill=\"#263238\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "boa",
+    "label": "Boa",
+    "article": "una",
+    "symbol": "BO",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "description": "Boa galleggiante rotonda o conica, ancorata in mare.",
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M38 56 Q50 43 62 56 L68 75 Q50 84 32 75 Z\" fill=\"#E85D5D\"/>\n    <path d=\"M38 56 Q50 49 62 56 L60 65 Q50 70 40 65 Z\" fill=\"#FFFFFF\" stroke=\"none\"/>\n    <path d=\"M44 49 L47 29 H53 L56 49 M46 37 H54\" fill=\"none\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <circle cx=\"50\" cy=\"25\" r=\"5\" fill=\"#F6D365\"/>\n    <path d=\"M50 79 Q45 88 50 95\" fill=\"none\" stroke=\"#90A4AE\" stroke-dasharray=\"3 3\"/>\n    <path d=\"M11 84 Q25 78 39 84 Q53 90 67 84 Q81 78 91 84\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "buca",
+    "label": "Buca",
+    "article": "una",
+    "symbol": "BU",
+    "walkable": true,
+    "description": "Buca nel terreno o nell’asfalto con bordo irregolare.",
+    "categories": [
+      "Esterno urbano",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M16 59 Q25 38 43 43 Q58 28 72 44 Q90 47 84 65 Q70 83 48 77 Q29 86 17 72 Z\" fill=\"#90A4AE\"/>\n    <path d=\"M26 60 Q34 47 48 51 Q59 42 71 54 Q75 65 63 71 Q47 77 34 70 Z\" fill=\"#263238\"/>\n    <path d=\"M23 49 L14 43 M78 46 L89 38 M31 79 L23 90 M75 75 L86 84\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "bucciadibanana",
+    "label": "Buccia di banana",
+    "article": "una",
+    "symbol": "BU",
+    "walkable": false,
+    "categories": [
+      "Casa & Interni"
+    ],
+    "description": "Buccia di banana gialla aperta e scivolosa sul pavimento.",
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"50\" cy=\"47\" r=\"7\" fill=\"#7A5135\"/>\n    <path d=\"M48 51 Q30 51 18 73 Q35 69 49 59 Z\" fill=\"#F6D365\"/>\n    <path d=\"M52 51 Q70 51 82 73 Q65 69 51 59 Z\" fill=\"#F6D365\"/>\n    <path d=\"M49 54 Q50 70 45 87 Q57 78 55 56 Z\" fill=\"#F6D365\"/>\n    <path d=\"M47 51 Q40 38 42 25 Q52 33 53 50\" fill=\"#F6D365\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cabina",
+    "label": "Cabina",
+    "article": "una",
+    "symbol": "CA",
+    "walkable": false,
+    "categories": [
+      "Mare"
+    ],
+    "description": "Cabina da spiaggia verticale con porta e tetto leggero.",
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <polygon points=\"23,29 50,12 77,29\" fill=\"#E85D5D\"/>\n    <rect x=\"27\" y=\"29\" width=\"46\" height=\"59\" fill=\"#FFFFFF\"/>\n    <rect x=\"32\" y=\"29\" width=\"8\" height=\"59\" fill=\"#90E0EF\" stroke=\"none\"/><rect x=\"48\" y=\"29\" width=\"8\" height=\"59\" fill=\"#90E0EF\" stroke=\"none\"/><rect x=\"64\" y=\"29\" width=\"8\" height=\"59\" fill=\"#90E0EF\" stroke=\"none\"/>\n    <rect x=\"39\" y=\"44\" width=\"22\" height=\"44\" fill=\"#FFFFFF\"/>\n    <circle cx=\"56\" cy=\"66\" r=\"2.5\" fill=\"#E9C46A\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "caffinghiaccio",
+    "label": "Caffè in ghiaccio",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Bicchiere con caffè freddo, cubetti di ghiaccio e possibile latte di mandorla.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M30 25 H70 L64 88 H36 Z\" fill=\"#FFFFFF\"/>\n    <path d=\"M34 47 H66 L62 84 H38 Z\" fill=\"#7A5135\" stroke=\"none\"/>\n    <g fill=\"#90E0EF\" stroke=\"#4EA8DE\"><rect x=\"38\" y=\"40\" width=\"12\" height=\"12\" rx=\"2\" transform=\"rotate(9 44 46)\"/><rect x=\"51\" y=\"43\" width=\"12\" height=\"12\" rx=\"2\" transform=\"rotate(-12 57 49)\"/><rect x=\"44\" y=\"56\" width=\"12\" height=\"12\" rx=\"2\" transform=\"rotate(18 50 62)\"/></g>\n    <path d=\"M60 24 L67 9\" stroke=\"#90A4AE\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "camion",
+    "label": "Camion",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Camion grande con cabina frontale e cassone posteriore.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"12\" y=\"38\" width=\"50\" height=\"32\" rx=\"2\" fill=\"#3D5A80\"/>\n    <path d=\"M62 45 H77 L89 57 V70 H62 Z\" fill=\"#F4A261\"/>\n    <polygon points=\"66,48 75,48 83,57 66,57\" fill=\"#90E0EF\"/>\n        <circle cx=\"29\" cy=\"73\" r=\"8\" fill=\"#263238\"/><circle cx=\"29\" cy=\"73\" r=\"4.0\" fill=\"#ECEFF1\"/>\n    <circle cx=\"57\" cy=\"73\" r=\"8\" fill=\"#263238\"/><circle cx=\"57\" cy=\"73\" r=\"4.0\" fill=\"#ECEFF1\"/>\n    <circle cx=\"77\" cy=\"73\" r=\"8\" fill=\"#263238\"/><circle cx=\"77\" cy=\"73\" r=\"4.0\" fill=\"#ECEFF1\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cane",
+    "label": "Cane",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Cane domestico in piedi o seduto, con muso amichevole e coda.",
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"55\" cy=\"58\" rx=\"24\" ry=\"15\" fill=\"#C99A6B\"/>\n    <circle cx=\"32\" cy=\"44\" r=\"13\" fill=\"#C99A6B\"/>\n    <path d=\"M22 37 L17 26 Q27 27 30 38 Z M38 36 L45 27 Q46 39 41 45 Z\" fill=\"#7A5135\"/>\n    <ellipse cx=\"27\" cy=\"47\" rx=\"6\" ry=\"4\" fill=\"#ECEFF1\"/>\n    <circle cx=\"30\" cy=\"41\" r=\"2\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M42 69 L40 85 M61 70 L62 86 M73 67 L78 83\" fill=\"none\" stroke=\"#C99A6B\" stroke-width=\"5\"/>\n    <path d=\"M78 52 Q91 42 88 32\" fill=\"none\" stroke=\"#C99A6B\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cassettadilegno",
+    "label": "Cassetta di legno",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Cassetta rustica in legno con assi visibili.",
+    "categories": [
+      "Campagna",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"18\" y=\"35\" width=\"64\" height=\"43\" rx=\"2\" fill=\"#D49A6A\"/>\n    <line x1=\"18\" y1=\"46\" x2=\"82\" y2=\"46\"/><line x1=\"18\" y1=\"66\" x2=\"82\" y2=\"66\"/>\n    <line x1=\"29\" y1=\"35\" x2=\"29\" y2=\"78\"/><line x1=\"71\" y1=\"35\" x2=\"71\" y2=\"78\"/>\n    <path d=\"M33 55 H67\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cassettiera",
+    "label": "Cassettiera",
+    "article": "una",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Mobile basso con più cassetti sovrapposti e maniglie.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"25\" y=\"24\" width=\"50\" height=\"61\" rx=\"3\" fill=\"#D49A6A\"/>\n    <rect x=\"31\" y=\"31\" width=\"38\" height=\"13\" rx=\"2\" fill=\"#A66A3F\"/><rect x=\"31\" y=\"49\" width=\"38\" height=\"13\" rx=\"2\" fill=\"#A66A3F\"/><rect x=\"31\" y=\"67\" width=\"38\" height=\"13\" rx=\"2\" fill=\"#A66A3F\"/>\n    <circle cx=\"50\" cy=\"37.5\" r=\"2\" fill=\"#E9C46A\" stroke=\"none\"/><circle cx=\"50\" cy=\"55.5\" r=\"2\" fill=\"#E9C46A\" stroke=\"none\"/><circle cx=\"50\" cy=\"73.5\" r=\"2\" fill=\"#E9C46A\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cassonetto",
+    "label": "Cassonetto",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Grande contenitore urbano per rifiuti con coperchio e ruote.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M25 33 H75 L70 81 H30 Z\" fill=\"#4F8A5B\"/>\n    <rect x=\"20\" y=\"26\" width=\"60\" height=\"10\" rx=\"3\" fill=\"#83B271\"/>\n    <line x1=\"36\" y1=\"40\" x2=\"39\" y2=\"74\"/><line x1=\"50\" y1=\"40\" x2=\"50\" y2=\"75\"/><line x1=\"64\" y1=\"40\" x2=\"61\" y2=\"74\"/>\n    <circle cx=\"35\" cy=\"86\" r=\"5\" fill=\"#263238\"/><circle cx=\"66\" cy=\"86\" r=\"5\" fill=\"#263238\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "castellodisabbia",
+    "label": "Castello di sabbia",
+    "article": "una",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Piccolo castello di sabbia con torri e merli.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M22 82 V46 H32 V37 H42 V46 H58 V37 H68 V46 H78 V82 Z\" fill=\"#E9C46A\"/>\n    <path d=\"M39 82 V65 Q50 55 61 65 V82\" fill=\"#7A5135\" opacity=\".35\"/>\n    <rect x=\"28\" y=\"54\" width=\"8\" height=\"10\" fill=\"#90E0EF\"/><rect x=\"64\" y=\"54\" width=\"8\" height=\"10\" fill=\"#90E0EF\"/>\n    <line x1=\"50\" y1=\"37\" x2=\"50\" y2=\"20\"/><path d=\"M50 20 L67 25 L50 31 Z\" fill=\"#E85D5D\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cavallo",
+    "label": "Cavallo",
+    "article": "un",
+    "symbol": "CA",
+    "walkable": false,
+    "description": "Cavallo in piedi con criniera, coda lunga e corpo elegante.",
+    "categories": [
+      "Animali",
+      "Campagna",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"56\" cy=\"55\" rx=\"27\" ry=\"16\" fill=\"#7A5135\"/>\n    <circle cx=\"31\" cy=\"42\" r=\"13\" fill=\"#7A5135\"/>\n    <path d=\"M23 36 L20 24 L31 31 Z\" fill=\"#7A5135\"/><path d=\"M35 34 L42 23 L42 37 Z\" fill=\"#7A5135\"/>\n    \n    <path d=\"M35 38 Q31 44 34 61\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"6\"/>\n    \n    <ellipse cx=\"26\" cy=\"45\" rx=\"6\" ry=\"4\" fill=\"#ECEFF1\"/>\n    <circle cx=\"29\" cy=\"39\" r=\"1.8\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M41 67 L39 85 M56 69 L55 86 M68 68 L70 85 M78 64 L81 83\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"5\"/>\n    <path d=\"M36 86 h7 M52 87 h7 M67 86 h7 M78 84 h7\" fill=\"none\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <path d=\"M77 50 Q91 42 88 31\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cernitrice",
+    "label": "Cernitrice",
+    "article": "un",
+    "symbol": "CE",
+    "walkable": false,
+    "description": "Macchina agricola per selezionare olive o frutti, con tramoggia e struttura metallica.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <polygon points=\"22,25 70,25 61,50 31,50\" fill=\"#8D99AE\"/>\n    <rect x=\"31\" y=\"50\" width=\"40\" height=\"24\" fill=\"#90A4AE\"/>\n    <path d=\"M36 74 L28 88 M66 74 L74 88\" fill=\"none\" stroke=\"#263238\" stroke-width=\"4\"/>\n    <circle cx=\"42\" cy=\"61\" r=\"7\" fill=\"#4F8A5B\"/><circle cx=\"58\" cy=\"61\" r=\"7\" fill=\"#8A9A5B\"/>\n    <path d=\"M71 55 H84 V69 H71\" fill=\"#F4A261\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cespuglio",
+    "label": "Cespuglio",
+    "article": "un",
+    "symbol": "CE",
+    "walkable": false,
+    "description": "Cespuglio verde fitto, basso e tondeggiante.",
+    "categories": [
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"30\" cy=\"59\" r=\"18\" fill=\"#83B271\"/><circle cx=\"48\" cy=\"45\" r=\"23\" fill=\"#4F8A5B\"/><circle cx=\"70\" cy=\"58\" r=\"19\" fill=\"#83B271\"/>\n    <path d=\"M18 77 Q50 84 82 77\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cestino",
+    "label": "Cestino",
+    "article": "un",
+    "symbol": "CE",
+    "walkable": false,
+    "description": "Piccolo contenitore per rifiuti, aperto o con coperchio.",
+    "categories": [
+      "Casa & Interni",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M31 34 H69 L64 83 H36 Z\" fill=\"#90A4AE\"/>\n    <rect x=\"27\" y=\"27\" width=\"46\" height=\"9\" rx=\"3\" fill=\"#263238\"/>\n    <path d=\"M42 43 L44 75 M50 43 V75 M58 43 L56 75\" fill=\"none\" stroke=\"#ECEFF1\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "chiringuito",
+    "label": "Chiringuito",
+    "article": "un",
+    "symbol": "CH",
+    "walkable": false,
+    "description": "Piccolo chiosco da spiaggia con bancone e tetto leggero.",
+    "categories": [
+      "Mare",
+      "Commerciale",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <polygon points=\"14,35 50,17 86,35\" fill=\"#E9C46A\"/>\n    <line x1=\"22\" y1=\"34\" x2=\"22\" y2=\"87\"/><line x1=\"78\" y1=\"34\" x2=\"78\" y2=\"87\"/>\n    <rect x=\"18\" y=\"57\" width=\"64\" height=\"15\" fill=\"#A66A3F\"/>\n    <rect x=\"24\" y=\"72\" width=\"52\" height=\"15\" fill=\"#D49A6A\"/>\n    <path d=\"M34 54 Q34 42 42 42 Q50 42 50 54\" fill=\"#90E0EF\"/><path d=\"M58 54 Q58 43 67 43 Q73 43 74 54\" fill=\"#F4A261\"/>\n    <line x1=\"41\" y1=\"42\" x2=\"38\" y2=\"34\" stroke=\"#4F8A5B\" stroke-width=\"2\"/><line x1=\"67\" y1=\"43\" x2=\"72\" y2=\"35\" stroke=\"#4F8A5B\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "comodino",
+    "label": "Comodino",
+    "article": "un",
+    "symbol": "CO",
+    "walkable": false,
+    "description": "Piccolo mobile da letto con cassetto e piano superiore.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"30\" y=\"37\" width=\"40\" height=\"49\" rx=\"3\" fill=\"#D49A6A\"/>\n    <rect x=\"34\" y=\"45\" width=\"32\" height=\"17\" rx=\"2\" fill=\"#A66A3F\"/>\n    <circle cx=\"50\" cy=\"53\" r=\"2\" fill=\"#E9C46A\" stroke=\"none\"/>\n    <path d=\"M34 86 V92 M66 86 V92\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "coniglio",
+    "label": "Coniglio",
+    "article": "un",
+    "symbol": "CO",
+    "walkable": false,
+    "description": "Coniglio piccolo con lunghe orecchie e corpo morbido.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"55\" cy=\"63\" rx=\"23\" ry=\"18\" fill=\"#ECEFF1\"/>\n    <circle cx=\"37\" cy=\"47\" r=\"13\" fill=\"#ECEFF1\"/>\n    <ellipse cx=\"30\" cy=\"24\" rx=\"6\" ry=\"19\" fill=\"#ECEFF1\" transform=\"rotate(-12 30 24)\"/>\n    <ellipse cx=\"42\" cy=\"24\" rx=\"6\" ry=\"19\" fill=\"#ECEFF1\" transform=\"rotate(8 42 24)\"/>\n    <ellipse cx=\"30\" cy=\"24\" rx=\"2.5\" ry=\"13\" fill=\"#E6A0C4\" stroke=\"none\" transform=\"rotate(-12 30 24)\"/>\n    <ellipse cx=\"42\" cy=\"24\" rx=\"2.5\" ry=\"13\" fill=\"#E6A0C4\" stroke=\"none\" transform=\"rotate(8 42 24)\"/>\n    <circle cx=\"34\" cy=\"45\" r=\"2\" fill=\"#222222\" stroke=\"none\"/>\n    <circle cx=\"77\" cy=\"57\" r=\"8\" fill=\"#FFFFFF\"/>\n    <path d=\"M47 76 Q43 89 34 88 M64 78 Q71 88 81 86\" fill=\"none\" stroke=\"#ECEFF1\" stroke-width=\"6\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cozza",
+    "label": "Cozza",
+    "article": "una",
+    "symbol": "CO",
+    "walkable": false,
+    "description": "Cozza scura con guscio ovale e superficie rigata.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M50 17 Q80 31 72 63 Q64 88 50 88 Q36 88 28 63 Q20 31 50 17 Z\" fill=\"#263238\"/>\n    <path d=\"M50 22 Q45 50 50 84 M40 27 Q38 51 44 79 M60 27 Q62 51 56 79\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"2\"/>\n    <path d=\"M42 35 Q50 28 58 35\" fill=\"none\" stroke=\"#90E0EF\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "criceto",
+    "label": "Criceto",
+    "article": "un",
+    "symbol": "CR",
+    "walkable": false,
+    "description": "Piccolo criceto tondeggiante con guance piene e zampette corte.",
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"58\" rx=\"27\" ry=\"25\" fill=\"#C99A6B\"/>\n    <circle cx=\"30\" cy=\"37\" r=\"8\" fill=\"#C99A6B\"/><circle cx=\"70\" cy=\"37\" r=\"8\" fill=\"#C99A6B\"/>\n    <ellipse cx=\"38\" cy=\"57\" rx=\"10\" ry=\"12\" fill=\"#ECEFF1\" stroke=\"none\"/><ellipse cx=\"62\" cy=\"57\" rx=\"10\" ry=\"12\" fill=\"#ECEFF1\" stroke=\"none\"/>\n    <circle cx=\"40\" cy=\"49\" r=\"2\" fill=\"#222222\" stroke=\"none\"/><circle cx=\"60\" cy=\"49\" r=\"2\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M50 55 l-3 3 3 3 3-3z\" fill=\"#E6A0C4\" stroke=\"none\"/>\n    <path d=\"M42 71 Q50 76 58 71\" fill=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "cupeta",
+    "label": "Cupeta",
+    "article": "una",
+    "symbol": "CU",
+    "walkable": false,
+    "description": "Torrone salentino croccante con mandorle caramellate.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"20\" y=\"37\" width=\"60\" height=\"35\" rx=\"5\" fill=\"#F4A261\"/>\n    <circle cx=\"31\" cy=\"47\" r=\"6\" fill=\"#C99A6B\"/><circle cx=\"48\" cy=\"52\" r=\"6\" fill=\"#C99A6B\"/><circle cx=\"66\" cy=\"46\" r=\"6\" fill=\"#C99A6B\"/><circle cx=\"36\" cy=\"63\" r=\"5\" fill=\"#C99A6B\"/><circle cx=\"61\" cy=\"62\" r=\"5\" fill=\"#C99A6B\"/>\n    <path d=\"M24 31 Q50 23 76 31\" fill=\"none\" stroke=\"#F6D365\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "divano",
+    "label": "Divano",
+    "article": "un",
+    "symbol": "DI",
+    "walkable": true,
+    "description": "Divano imbottito con braccioli, schienale morbido e cuscini.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"22\" y=\"34\" width=\"56\" height=\"34\" rx=\"10\" fill=\"#8E6BBE\"/>\n    <rect x=\"17\" y=\"51\" width=\"15\" height=\"30\" rx=\"7\" fill=\"#8E6BBE\"/><rect x=\"68\" y=\"51\" width=\"15\" height=\"30\" rx=\"7\" fill=\"#8E6BBE\"/>\n    <rect x=\"29\" y=\"52\" width=\"20\" height=\"20\" rx=\"5\" fill=\"#E6A0C4\"/><rect x=\"51\" y=\"52\" width=\"20\" height=\"20\" rx=\"5\" fill=\"#E6A0C4\"/>\n    <rect x=\"23\" y=\"68\" width=\"54\" height=\"14\" rx=\"5\" fill=\"#8E6BBE\"/>\n    <path d=\"M27 82 V89 M73 82 V89\" fill=\"none\" stroke=\"#263238\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "doccia",
+    "label": "Doccia",
+    "article": "una",
+    "symbol": "DO",
+    "walkable": true,
+    "description": "Doccia con piatto o base, soffione e struttura essenziale.",
+    "categories": [
+      "Casa & Interni",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M32 80 V34 Q32 20 45 20 H56\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <path d=\"M55 20 Q66 20 67 30\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <path d=\"M60 31 H76 Q73 41 62 41 Z\" fill=\"#8D99AE\"/>\n    <path d=\"M64 44 L59 54 M69 44 L66 55 M74 44 L73 53\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"2\"/>\n    <path d=\"M21 80 Q50 72 79 80 L76 88 H24 Z\" fill=\"#ECEFF1\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "faro",
+    "label": "Faro",
+    "article": "un",
+    "symbol": "FA",
+    "walkable": false,
+    "description": "Torre costiera alta con luce sulla sommità.",
+    "categories": [
+      "Mare",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M38 84 L43 35 H57 L62 84 Z\" fill=\"#FFFFFF\"/>\n    <rect x=\"41\" y=\"53\" width=\"18\" height=\"10\" fill=\"#E85D5D\" stroke=\"none\"/>\n    <rect x=\"38\" y=\"25\" width=\"24\" height=\"12\" fill=\"#90E0EF\"/>\n    <path d=\"M36 25 H64 L58 18 H42 Z\" fill=\"#E85D5D\"/>\n    <path d=\"M62 31 L91 22 M62 31 L91 40\" fill=\"none\" stroke=\"#F6D365\" stroke-width=\"4\" opacity=\".8\"/>\n    <path d=\"M28 85 H72\" fill=\"none\" stroke=\"#E9C46A\" stroke-width=\"6\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "fico",
+    "label": "Fico",
+    "article": "un",
+    "symbol": "FI",
+    "walkable": false,
+    "description": "Albero di fico basso con grandi foglie e frutti tondeggianti.",
+    "categories": [
+      "Salento",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M48 53 Q41 68 43 89 H57 Q60 71 53 54\" fill=\"#7A5135\"/>\n    <circle cx=\"37\" cy=\"42\" r=\"17\" fill=\"#4F8A5B\"/><circle cx=\"56\" cy=\"34\" r=\"19\" fill=\"#83B271\"/><circle cx=\"69\" cy=\"48\" r=\"15\" fill=\"#4F8A5B\"/>\n    <path d=\"M32 38 l7-8 l5 8 l-4 11z M51 31 l6-10 l6 10 l-3 12z M61 49 l8-10 l5 10 l-5 9z\" fill=\"#4F8A5B\" stroke=\"#4F8A5B\"/>\n    <circle cx=\"42\" cy=\"48\" r=\"3\" fill=\"#8E6BBE\" stroke=\"none\"/><circle cx=\"62\" cy=\"40\" r=\"3\" fill=\"#8E6BBE\" stroke=\"none\"/><circle cx=\"68\" cy=\"55\" r=\"3\" fill=\"#8E6BBE\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "ficodindia",
+    "label": "Fico d’India",
+    "article": "una",
+    "symbol": "FI",
+    "walkable": false,
+    "description": "Cactus a pale verdi con spine e piccoli frutti colorati.",
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"49\" cy=\"62\" rx=\"11\" ry=\"25\" fill=\"#4F8A5B\"/>\n    <ellipse cx=\"34\" cy=\"57\" rx=\"9\" ry=\"19\" fill=\"#83B271\" transform=\"rotate(-25 34 57)\"/>\n    <ellipse cx=\"66\" cy=\"51\" rx=\"9\" ry=\"20\" fill=\"#83B271\" transform=\"rotate(22 66 51)\"/>\n    <ellipse cx=\"49\" cy=\"33\" rx=\"9\" ry=\"17\" fill=\"#83B271\"/>\n    <circle cx=\"34\" cy=\"39\" r=\"5\" fill=\"#E85D5D\"/><circle cx=\"67\" cy=\"31\" r=\"5\" fill=\"#F4A261\"/><circle cx=\"48\" cy=\"15\" r=\"5\" fill=\"#E6A0C4\"/>\n    <g stroke=\"#ECEFF1\" stroke-width=\"1\"> <path d=\"M46 52 l6 3 M46 67 l6 2 M30 53 l6 2 M63 48 l6 2 M46 31 l6 2\" fill=\"none\"/></g>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "fiori",
+    "label": "Fiori",
+    "article": "un",
+    "symbol": "FI",
+    "walkable": false,
+    "description": "Gruppo di piccoli fiori colorati con steli e foglie.",
+    "categories": [
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M35 78 Q37 52 37 38 M50 78 Q50 50 50 31 M64 78 Q63 55 65 42\" fill=\"none\" stroke=\"#4F8A5B\" stroke-width=\"3\"/>\n    <path d=\"M36 58 Q27 53 29 47 M51 58 Q60 52 59 46 M64 62 Q72 58 74 52\" fill=\"none\" stroke=\"#4F8A5B\" stroke-width=\"3\"/>\n    <g stroke=\"none\"><circle cx=\"37\" cy=\"34\" r=\"8\" fill=\"#E6A0C4\"/><circle cx=\"50\" cy=\"27\" r=\"8\" fill=\"#F6D365\"/><circle cx=\"65\" cy=\"38\" r=\"8\" fill=\"#E85D5D\"/><circle cx=\"37\" cy=\"34\" r=\"3\" fill=\"#F4A261\"/><circle cx=\"50\" cy=\"27\" r=\"3\" fill=\"#F4A261\"/><circle cx=\"65\" cy=\"38\" r=\"3\" fill=\"#F6D365\"/></g>\n    <path d=\"M25 79 Q50 70 75 79\" fill=\"#83B271\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "fontana",
+    "label": "Fontana",
+    "article": "una",
+    "symbol": "FO",
+    "walkable": false,
+    "description": "Fontana decorativa con vasca, colonna centrale e acqua.",
+    "categories": [
+      "Esterno urbano",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"78\" rx=\"35\" ry=\"11\" fill=\"#90E0EF\"/>\n    <path d=\"M20 76 Q50 90 80 76 L75 88 H25 Z\" fill=\"#90A4AE\"/>\n    <rect x=\"46\" y=\"40\" width=\"8\" height=\"38\" fill=\"#90A4AE\"/>\n    <ellipse cx=\"50\" cy=\"42\" rx=\"19\" ry=\"7\" fill=\"#90A4AE\"/>\n    <path d=\"M50 40 Q50 20 38 17 M50 40 Q50 18 62 16 M50 38 Q39 27 29 33 M50 38 Q61 27 71 33\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "fornello",
+    "label": "Fornello",
+    "article": "un",
+    "symbol": "FO",
+    "walkable": false,
+    "description": "Piano cottura con fuochi o piastre visibili.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"20\" y=\"30\" width=\"60\" height=\"45\" rx=\"5\" fill=\"#8D99AE\"/>\n    <circle cx=\"37\" cy=\"45\" r=\"10\" fill=\"#263238\"/><circle cx=\"63\" cy=\"45\" r=\"10\" fill=\"#263238\"/>\n    <circle cx=\"37\" cy=\"45\" r=\"5\" fill=\"#F4A261\" stroke=\"none\"/><circle cx=\"63\" cy=\"45\" r=\"5\" fill=\"#F4A261\" stroke=\"none\"/>\n    <circle cx=\"31\" cy=\"66\" r=\"3\" fill=\"#263238\"/><circle cx=\"44\" cy=\"66\" r=\"3\" fill=\"#263238\"/><circle cx=\"57\" cy=\"66\" r=\"3\" fill=\"#263238\"/><circle cx=\"70\" cy=\"66\" r=\"3\" fill=\"#263238\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "forno",
+    "label": "Forno",
+    "article": "un",
+    "symbol": "FO",
+    "walkable": false,
+    "description": "Forno da cucina con sportello frontale in vetro e manopole.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"25\" y=\"15\" width=\"50\" height=\"74\" rx=\"4\" fill=\"#8D99AE\"/>\n    <rect x=\"32\" y=\"38\" width=\"36\" height=\"38\" rx=\"3\" fill=\"#263238\"/>\n    <rect x=\"36\" y=\"44\" width=\"28\" height=\"25\" rx=\"2\" fill=\"#3D5A80\"/>\n    <line x1=\"34\" y1=\"34\" x2=\"66\" y2=\"34\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <circle cx=\"36\" cy=\"26\" r=\"4\" fill=\"#263238\"/><circle cx=\"50\" cy=\"26\" r=\"4\" fill=\"#263238\"/><circle cx=\"64\" cy=\"26\" r=\"4\" fill=\"#263238\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "frigorifero",
+    "label": "Frigorifero",
+    "article": "un",
+    "symbol": "FR",
+    "walkable": false,
+    "description": "Frigorifero verticale con sportello grande e maniglia laterale.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"30\" y=\"10\" width=\"40\" height=\"80\" rx=\"5\" fill=\"#ECEFF1\"/>\n    <line x1=\"30\" y1=\"38\" x2=\"70\" y2=\"38\"/>\n    <line x1=\"63\" y1=\"18\" x2=\"63\" y2=\"31\" stroke=\"#263238\" stroke-width=\"3\"/><line x1=\"63\" y1=\"47\" x2=\"63\" y2=\"62\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <path d=\"M35 90 V94 M65 90 V94\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "frisella",
+    "label": "Frisella",
+    "article": "una",
+    "symbol": "FR",
+    "walkable": false,
+    "description": "Frisella croccante ad anello, con pomodoro e olio sopra.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"57\" rx=\"32\" ry=\"24\" fill=\"#E9C46A\"/>\n    <ellipse cx=\"50\" cy=\"57\" rx=\"10\" ry=\"8\" fill=\"#FFFFFF\"/>\n    <g fill=\"#E85D5D\" stroke=\"none\"><circle cx=\"35\" cy=\"50\" r=\"7\"/><circle cx=\"63\" cy=\"49\" r=\"7\"/><circle cx=\"43\" cy=\"68\" r=\"7\"/><circle cx=\"65\" cy=\"67\" r=\"6\"/></g>\n    <g fill=\"#4F8A5B\" stroke=\"none\"><ellipse cx=\"47\" cy=\"44\" rx=\"4\" ry=\"2\" transform=\"rotate(-25 47 44)\"/><ellipse cx=\"55\" cy=\"70\" rx=\"4\" ry=\"2\" transform=\"rotate(20 55 70)\"/></g>\n    <path d=\"M29 43 Q49 32 70 42\" fill=\"none\" stroke=\"#F4A261\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "fuoco",
+    "label": "Fuoco",
+    "article": "un",
+    "symbol": "FU",
+    "walkable": false,
+    "description": "Fiamma viva con lingue rosse e arancioni.",
+    "categories": [
+      "Salento",
+      "Campagna",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M50 90 Q25 82 28 59 Q30 44 43 35 Q42 49 51 54 Q51 35 63 19 Q69 37 66 51 Q78 59 72 75 Q66 90 50 90 Z\" fill=\"#E85D5D\"/>\n    <path d=\"M50 82 Q38 78 40 65 Q42 57 49 52 Q49 62 55 64 Q56 53 61 46 Q65 57 63 67 Q62 79 50 82 Z\" fill=\"#F6D365\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "gatto",
+    "label": "Gatto",
+    "article": "un",
+    "symbol": "GA",
+    "walkable": false,
+    "description": "Gatto domestico seduto, con coda curva e orecchie appuntite.",
+    "categories": [
+      "Animali"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"53\" cy=\"64\" rx=\"18\" ry=\"22\" fill=\"#90A4AE\"/>\n    <circle cx=\"42\" cy=\"38\" r=\"14\" fill=\"#90A4AE\"/>\n    <path d=\"M31 30 L31 18 L39 28 Z M46 27 L55 18 L55 34 Z\" fill=\"#90A4AE\"/>\n    <circle cx=\"38\" cy=\"36\" r=\"2\" fill=\"#4F8A5B\" stroke=\"none\"/><circle cx=\"47\" cy=\"36\" r=\"2\" fill=\"#4F8A5B\" stroke=\"none\"/>\n    <path d=\"M42 40 l-2 2 2 2 2-2z\" fill=\"#E6A0C4\" stroke=\"none\"/>\n    <path d=\"M69 67 Q91 65 81 42 Q76 34 72 43\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"6\"/>\n    <path d=\"M43 83 L39 92 M60 83 L64 92\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "geco",
+    "label": "Geco",
+    "article": "un",
+    "symbol": "GE",
+    "walkable": false,
+    "description": "Piccolo geco con corpo sottile, zampe aperte e lunga coda.",
+    "categories": [
+      "Animali",
+      "Casa & Interni",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M23 53 Q35 39 50 46 Q65 52 76 43 Q69 58 80 70 Q61 63 50 69 Q35 74 23 62 Z\" fill=\"#83B271\"/>\n    <circle cx=\"24\" cy=\"56\" r=\"8\" fill=\"#83B271\"/><circle cx=\"21\" cy=\"54\" r=\"1.6\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M40 47 L31 34 M42 66 L31 78 M61 50 L70 37 M62 66 L72 79\" fill=\"none\" stroke=\"#83B271\" stroke-width=\"5\"/>\n    <path d=\"M76 56 Q91 52 93 38\" fill=\"none\" stroke=\"#83B271\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "giostra",
+    "label": "Giostra",
+    "article": "una",
+    "symbol": "GI",
+    "walkable": true,
+    "description": "Giostra colorata da luna park con piattaforma e sedute decorative.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <polygon points=\"20,40 50,17 80,40\" fill=\"#E85D5D\"/>\n    <rect x=\"23\" y=\"40\" width=\"54\" height=\"7\" fill=\"#E9C46A\"/>\n    <line x1=\"50\" y1=\"24\" x2=\"50\" y2=\"79\" stroke=\"#263238\" stroke-width=\"4\"/>\n    <line x1=\"32\" y1=\"44\" x2=\"32\" y2=\"69\"/><line x1=\"68\" y1=\"44\" x2=\"68\" y2=\"69\"/>\n    <path d=\"M25 70 Q32 63 39 70 L37 79 H27 Z M61 70 Q68 63 75 70 L73 79 H63 Z\" fill=\"#4EA8DE\"/>\n    <ellipse cx=\"50\" cy=\"82\" rx=\"35\" ry=\"8\" fill=\"#8E6BBE\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "gommone",
+    "label": "Gommone",
+    "article": "un",
+    "symbol": "GO",
+    "walkable": false,
+    "description": "Gommone gonfiabile con bordo spesso e piccolo motore.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"62\" rx=\"35\" ry=\"18\" fill=\"#E85D5D\"/>\n    <ellipse cx=\"50\" cy=\"62\" rx=\"23\" ry=\"9\" fill=\"#FFFFFF\"/>\n    <rect x=\"70\" y=\"48\" width=\"10\" height=\"22\" rx=\"2\" fill=\"#263238\"/>\n    <path d=\"M76 70 L82 82\" stroke=\"#263238\" stroke-width=\"4\"/>\n    <path d=\"M14 85 Q28 80 42 85 Q56 90 70 85 Q84 80 92 85\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "lampada",
+    "label": "Lampada",
+    "article": "una",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lampada da interno con base, stelo sottile e paralume luminoso.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"86\" rx=\"16\" ry=\"5\" fill=\"#263238\"/>\n    <line x1=\"50\" y1=\"43\" x2=\"50\" y2=\"84\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <path d=\"M32 43 L40 20 H60 L68 43 Z\" fill=\"#F6D365\"/>\n    <circle cx=\"50\" cy=\"48\" r=\"6\" fill=\"#F6D365\" opacity=\".4\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "lampione",
+    "label": "Lampione",
+    "article": "un",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lampione stradale alto con palo sottile e luce superiore.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <line x1=\"50\" y1=\"33\" x2=\"50\" y2=\"89\" stroke=\"#263238\" stroke-width=\"6\"/>\n    <path d=\"M39 31 L42 18 H58 L61 31 Z\" fill=\"#F6D365\"/>\n    <path d=\"M40 18 L45 10 H55 L60 18\" fill=\"#263238\"/>\n    <path d=\"M39 31 H61\" stroke=\"#263238\" stroke-width=\"4\"/>\n    <path d=\"M38 90 H62\" stroke=\"#263238\" stroke-width=\"6\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "lavandino",
+    "label": "Lavandino",
+    "article": "un",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lavandino bianco con rubinetto e piccolo mobile o colonna.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M25 47 Q50 63 75 47 L70 64 H30 Z\" fill=\"#FFFFFF\"/>\n    <rect x=\"42\" y=\"63\" width=\"16\" height=\"25\" fill=\"#ECEFF1\"/>\n    <path d=\"M50 45 V28 Q50 22 57 22 H66 V35\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <path d=\"M63 35 H70\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <path d=\"M66 38 V46\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "lavatrice",
+    "label": "Lavatrice",
+    "article": "un",
+    "symbol": "LA",
+    "walkable": false,
+    "description": "Lavatrice frontale con oblò rotondo e pulsanti superiori.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"25\" y=\"13\" width=\"50\" height=\"76\" rx=\"5\" fill=\"#ECEFF1\"/>\n    <circle cx=\"50\" cy=\"57\" r=\"19\" fill=\"#8D99AE\"/><circle cx=\"50\" cy=\"57\" r=\"13\" fill=\"#90E0EF\"/>\n    <rect x=\"31\" y=\"21\" width=\"20\" height=\"8\" rx=\"2\" fill=\"#90A4AE\"/>\n    <circle cx=\"64\" cy=\"25\" r=\"4\" fill=\"#263238\"/>\n    <path d=\"M40 57 Q50 48 60 57 Q50 67 40 57\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "lettino",
+    "label": "Lettino",
+    "article": "un",
+    "symbol": "LE",
+    "walkable": true,
+    "description": "Lettino da spiaggia lungo con struttura bassa e schienale inclinabile.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M22 68 L38 35 L50 40 L40 70 H77 L82 81 H27 Z\" fill=\"#90E0EF\"/>\n    <path d=\"M23 71 H78\" stroke=\"#3D5A80\" stroke-width=\"4\"/>\n    <path d=\"M31 80 L26 90 M72 80 L78 90\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <line x1=\"38\" y1=\"35\" x2=\"50\" y2=\"40\" stroke=\"#3D5A80\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "letto",
+    "label": "Letto",
+    "article": "un",
+    "symbol": "LE",
+    "walkable": true,
+    "description": "Letto con materasso, cuscino e coperta ben visibili.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"18\" y=\"45\" width=\"66\" height=\"32\" rx=\"5\" fill=\"#90E0EF\"/>\n    <rect x=\"18\" y=\"31\" width=\"12\" height=\"56\" rx=\"3\" fill=\"#A66A3F\"/>\n    <rect x=\"31\" y=\"47\" width=\"23\" height=\"12\" rx=\"5\" fill=\"#FFFFFF\"/>\n    <path d=\"M52 47 H80 V72 H52 Z\" fill=\"#8E6BBE\" stroke=\"none\"/>\n    <path d=\"M22 77 V88 M80 77 V88\" fill=\"none\" stroke=\"#A66A3F\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "libreria",
+    "label": "Libreria",
+    "article": "una",
+    "symbol": "LI",
+    "walkable": false,
+    "description": "Libreria verticale piena di libri e ripiani ordinati.",
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"22\" y=\"13\" width=\"56\" height=\"77\" fill=\"#A66A3F\"/>\n    <line x1=\"24\" y1=\"36\" x2=\"76\" y2=\"36\"/><line x1=\"24\" y1=\"59\" x2=\"76\" y2=\"59\"/>\n    <g stroke=\"none\">\n      <rect x=\"28\" y=\"20\" width=\"7\" height=\"15\" fill=\"#E85D5D\"/><rect x=\"37\" y=\"17\" width=\"8\" height=\"18\" fill=\"#4EA8DE\"/><rect x=\"47\" y=\"22\" width=\"7\" height=\"13\" fill=\"#F6D365\"/><rect x=\"56\" y=\"18\" width=\"8\" height=\"17\" fill=\"#4F8A5B\"/><rect x=\"66\" y=\"21\" width=\"6\" height=\"14\" fill=\"#8E6BBE\"/>\n      <rect x=\"28\" y=\"42\" width=\"8\" height=\"16\" fill=\"#F4A261\"/><rect x=\"38\" y=\"45\" width=\"7\" height=\"13\" fill=\"#4F8A5B\"/><rect x=\"47\" y=\"40\" width=\"8\" height=\"18\" fill=\"#E85D5D\"/><rect x=\"57\" y=\"44\" width=\"7\" height=\"14\" fill=\"#4EA8DE\"/><rect x=\"66\" y=\"41\" width=\"6\" height=\"17\" fill=\"#F6D365\"/>\n      <rect x=\"28\" y=\"65\" width=\"8\" height=\"23\" fill=\"#8E6BBE\"/><rect x=\"38\" y=\"69\" width=\"7\" height=\"19\" fill=\"#4EA8DE\"/><rect x=\"47\" y=\"63\" width=\"8\" height=\"25\" fill=\"#4F8A5B\"/><rect x=\"57\" y=\"68\" width=\"7\" height=\"20\" fill=\"#F4A261\"/><rect x=\"66\" y=\"64\" width=\"6\" height=\"24\" fill=\"#E85D5D\"/>\n    </g>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "luminarie",
+    "label": "Luminarie",
+    "article": "un",
+    "symbol": "LU",
+    "walkable": false,
+    "description": "Struttura decorativa con archi e piccole luci da festa patronale.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M16 86 V42 Q50 11 84 42 V86 M29 86 V50 Q50 29 71 50 V86\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <g fill=\"#F6D365\" stroke=\"#F4A261\" stroke-width=\"1\"><circle cx=\"20\" cy=\"42\" r=\"3\"/><circle cx=\"31\" cy=\"30\" r=\"3\"/><circle cx=\"45\" cy=\"22\" r=\"3\"/><circle cx=\"58\" cy=\"25\" r=\"3\"/><circle cx=\"72\" cy=\"34\" r=\"3\"/><circle cx=\"82\" cy=\"45\" r=\"3\"/><circle cx=\"32\" cy=\"50\" r=\"3\"/><circle cx=\"42\" cy=\"42\" r=\"3\"/><circle cx=\"52\" cy=\"39\" r=\"3\"/><circle cx=\"62\" cy=\"44\" r=\"3\"/><circle cx=\"70\" cy=\"52\" r=\"3\"/><circle cx=\"19\" cy=\"60\" r=\"3\"/><circle cx=\"82\" cy=\"62\" r=\"3\"/><circle cx=\"30\" cy=\"70\" r=\"3\"/><circle cx=\"70\" cy=\"70\" r=\"3\"/></g>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "materassino",
+    "label": "Materassino",
+    "article": "un",
+    "symbol": "MA",
+    "walkable": true,
+    "description": "Materassino gonfiabile lungo, morbido e colorato.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"24\" y=\"17\" width=\"52\" height=\"70\" rx=\"17\" fill=\"#F4A261\" transform=\"rotate(10 50 52)\"/>\n    <path d=\"M35 24 L62 78 M46 20 L73 72 M28 38 L55 85\" fill=\"none\" stroke=\"#F6D365\" stroke-width=\"3\" opacity=\".7\"/>\n    <path d=\"M14 89 Q28 84 42 89 Q56 94 70 89 Q84 84 93 89\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "microonde",
+    "label": "Microonde",
+    "article": "un",
+    "symbol": "MI",
+    "walkable": false,
+    "description": "Microonde compatto con sportello trasparente e pannello comandi.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"18\" y=\"31\" width=\"64\" height=\"43\" rx=\"5\" fill=\"#8D99AE\"/>\n    <rect x=\"25\" y=\"38\" width=\"39\" height=\"28\" rx=\"3\" fill=\"#3D5A80\"/>\n    <path d=\"M30 57 Q43 47 58 56\" fill=\"none\" stroke=\"#90E0EF\" stroke-width=\"3\"/>\n    <circle cx=\"72\" cy=\"44\" r=\"4\" fill=\"#263238\"/><circle cx=\"72\" cy=\"57\" r=\"4\" fill=\"#263238\"/>\n    <rect x=\"68\" y=\"64\" width=\"8\" height=\"3\" rx=\"1\" fill=\"#263238\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "moto",
+    "label": "Moto",
+    "article": "un",
+    "symbol": "MO",
+    "walkable": false,
+    "description": "Motocicletta con due ruote, manubrio, sella e corpo compatto.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"27\" cy=\"70\" r=\"15\" fill=\"#263238\"/><circle cx=\"27\" cy=\"70\" r=\"8\" fill=\"#ECEFF1\"/>\n    <circle cx=\"75\" cy=\"70\" r=\"15\" fill=\"#263238\"/><circle cx=\"75\" cy=\"70\" r=\"8\" fill=\"#ECEFF1\"/>\n    <path d=\"M27 70 L44 50 L60 70 H75 M44 50 H61 L68 39 H78 M47 47 L39 38\" fill=\"none\" stroke=\"#E85D5D\" stroke-width=\"6\"/>\n    <path d=\"M45 49 Q52 39 62 44 L58 55 Z\" fill=\"#222222\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "motozappa",
+    "label": "Motozappa",
+    "article": "una",
+    "symbol": "MO",
+    "walkable": false,
+    "description": "Motozappa agricola con manubrio, motore e lame inferiori.",
+    "categories": [
+      "Trasporti",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"48\" cy=\"68\" r=\"13\" fill=\"#263238\"/><circle cx=\"48\" cy=\"68\" r=\"6\" fill=\"#ECEFF1\"/>\n    <rect x=\"36\" y=\"46\" width=\"26\" height=\"16\" rx=\"4\" fill=\"#E85D5D\"/>\n    <path d=\"M57 47 L73 27 L86 22 M43 48 L34 37\" fill=\"none\" stroke=\"#263238\" stroke-width=\"4\"/>\n    <path d=\"M33 73 Q24 81 15 75 M33 73 Q28 87 38 89 M61 73 Q70 82 79 76 M61 73 Q67 88 57 91\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "mucca",
+    "label": "Mucca",
+    "article": "una",
+    "symbol": "MU",
+    "walkable": false,
+    "description": "Mucca pezzata con corna piccole, muso largo e mammelle.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"56\" cy=\"55\" rx=\"27\" ry=\"16\" fill=\"#FFFFFF\"/>\n    <circle cx=\"31\" cy=\"42\" r=\"13\" fill=\"#FFFFFF\"/>\n    <ellipse cx=\"24\" cy=\"32\" rx=\"6\" ry=\"5\" fill=\"#FFFFFF\"/><ellipse cx=\"38\" cy=\"31\" rx=\"6\" ry=\"5\" fill=\"#FFFFFF\"/>\n    <path d=\"M26 37 Q18 29 16 34 M31 34 Q34 25 40 30\" fill=\"none\" stroke=\"#E9C46A\" stroke-width=\"3\"/>\n    \n    <ellipse cx=\"48\" cy=\"52\" rx=\"8\" ry=\"5\" fill=\"#263238\" stroke=\"none\"/><ellipse cx=\"64\" cy=\"58\" rx=\"6\" ry=\"4\" fill=\"#263238\" stroke=\"none\"/>\n    <ellipse cx=\"26\" cy=\"45\" rx=\"6\" ry=\"4\" fill=\"#ECEFF1\"/>\n    <circle cx=\"29\" cy=\"39\" r=\"1.8\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M41 67 L39 85 M56 69 L55 86 M68 68 L70 85 M78 64 L81 83\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"5\"/>\n    <path d=\"M36 86 h7 M52 87 h7 M67 86 h7 M78 84 h7\" fill=\"none\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <path d=\"M78 52 Q91 55 92 68\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "muroasecco",
+    "label": "Muro a secco",
+    "article": "un",
+    "symbol": "MU",
+    "walkable": false,
+    "description": "Muretto basso di pietre irregolari sovrapposte senza malta.",
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M13 73 L19 42 L31 35 L42 40 L51 32 L64 38 L75 33 L86 45 L88 73 Z\" fill=\"#E9C46A\"/>\n    <path d=\"M19 54 H82 M16 66 H87 M31 36 L36 54 M52 33 L53 54 M72 36 L68 54 M26 54 L29 66 M47 54 L44 66 M66 54 L70 66 M82 54 L79 66\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "ombrellone",
+    "label": "Ombrellone",
+    "article": "un",
+    "symbol": "OM",
+    "walkable": false,
+    "description": "Ombrellone da spiaggia aperto con palo centrale e telo colorato.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M14 43 Q50 10 86 43 Z\" fill=\"#E85D5D\"/>\n    <path d=\"M14 43 Q26 25 38 43 Q50 20 62 43 Q74 25 86 43\" fill=\"#FFFFFF\" stroke=\"none\"/>\n    <line x1=\"50\" y1=\"42\" x2=\"50\" y2=\"88\" stroke=\"#263238\" stroke-width=\"4\"/>\n    <path d=\"M37 89 H63\" stroke=\"#E9C46A\" stroke-width=\"6\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pajaro",
+    "label": "Pajaro",
+    "article": "un",
+    "symbol": "PA",
+    "walkable": false,
+    "description": "Piccola costruzione rurale in pietra, con forma conica o troncoconica.",
+    "categories": [
+      "Campagna",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M19 81 Q25 42 50 17 Q75 42 81 81 Z\" fill=\"#E9C46A\"/>\n    <path d=\"M28 73 Q50 60 72 73 M25 61 Q50 48 75 61 M31 47 Q50 35 69 47\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"2\"/>\n    <path d=\"M42 81 V62 Q50 54 58 62 V81\" fill=\"#263238\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "palma",
+    "label": "Palma",
+    "article": "una",
+    "symbol": "PA",
+    "walkable": false,
+    "description": "Palma con tronco verticale e grandi foglie aperte a ventaglio.",
+    "categories": [
+      "Campagna",
+      "Mare",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M48 38 Q45 61 42 89 H58 Q55 63 52 38\" fill=\"#7A5135\"/>\n    <path d=\"M50 39 Q31 23 14 29 Q28 40 46 45 M50 38 Q63 17 84 20 Q73 35 54 43 M50 38 Q42 15 27 12 Q34 30 49 43 M50 38 Q62 27 91 35 Q72 44 54 45 M50 38 Q57 15 70 11 Q67 30 53 43\" fill=\"none\" stroke=\"#4F8A5B\" stroke-width=\"8\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "panchina",
+    "label": "Panchina",
+    "article": "una",
+    "symbol": "PA",
+    "walkable": true,
+    "description": "Panchina da parco con seduta a doghe e schienale.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M20 48 H80 V58 H20 Z M20 63 H80 V73 H20 Z\" fill=\"#A66A3F\"/>\n    <path d=\"M28 40 V78 M72 40 V78 M32 73 L28 90 M68 73 L72 90\" fill=\"none\" stroke=\"#263238\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "passerella",
+    "label": "Passerella",
+    "article": "una",
+    "symbol": "PA",
+    "walkable": true,
+    "description": "Camminamento modulare o arrotolabile posizionato sugli stabilimenti balneari o sulle spiagge libere per facilitare il transito a piedi, con passeggini e carrozzine verso la battigia.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M28 18 L72 18 L82 88 L18 88 Z\" fill=\"#D49A6A\"/>\n    <g stroke=\"#7A5135\" stroke-width=\"2\"><line x1=\"27.0\" y1=\"25\" x2=\"73.0\" y2=\"25\"/><line x1=\"26.3\" y1=\"33\" x2=\"73.7\" y2=\"33\"/><line x1=\"25.6\" y1=\"41\" x2=\"74.4\" y2=\"41\"/><line x1=\"24.9\" y1=\"49\" x2=\"75.1\" y2=\"49\"/><line x1=\"24.2\" y1=\"57\" x2=\"75.8\" y2=\"57\"/><line x1=\"23.5\" y1=\"65\" x2=\"76.5\" y2=\"65\"/><line x1=\"22.8\" y1=\"73\" x2=\"77.2\" y2=\"73\"/><line x1=\"22.1\" y1=\"81\" x2=\"77.9\" y2=\"81\"/></g>\n    <path d=\"M18 91 H82\" stroke=\"{SAND}\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pasticciotto",
+    "label": "Pasticciotto",
+    "article": "un",
+    "symbol": "PA",
+    "walkable": false,
+    "description": "Dolce ovale di pasta frolla dorata con ripieno di crema.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M20 58 Q22 34 50 29 Q78 34 80 58 Q78 76 50 80 Q22 76 20 58 Z\" fill=\"#E9C46A\"/>\n    <path d=\"M29 48 Q50 38 71 48 M31 66 Q50 73 69 66\" fill=\"none\" stroke=\"#F4A261\" stroke-width=\"2\"/>\n    <path d=\"M42 37 Q50 32 58 37\" fill=\"none\" stroke=\"#F6D365\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pc",
+    "label": "PC",
+    "article": "un",
+    "symbol": "PC",
+    "walkable": false,
+    "description": "Computer con monitor, tastiera e mouse su piccola postazione.",
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"18\" y=\"18\" width=\"50\" height=\"38\" rx=\"3\" fill=\"#263238\"/>\n    <rect x=\"23\" y=\"23\" width=\"40\" height=\"28\" rx=\"1\" fill=\"#90E0EF\"/>\n    <line x1=\"43\" y1=\"56\" x2=\"43\" y2=\"67\" stroke=\"#8D99AE\" stroke-width=\"4\"/><path d=\"M32 68 H54\" stroke=\"#8D99AE\" stroke-width=\"5\"/>\n    <path d=\"M20 76 H63 L69 85 H14 Z\" fill=\"#ECEFF1\"/>\n    <ellipse cx=\"79\" cy=\"79\" rx=\"8\" ry=\"12\" fill=\"#90A4AE\"/><line x1=\"79\" y1=\"70\" x2=\"79\" y2=\"77\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pedal",
+    "label": "Pedalò",
+    "article": "un",
+    "symbol": "PE",
+    "walkable": false,
+    "description": "Piccola imbarcazione da spiaggia con sedili e pedali.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M17 67 Q50 77 83 67 L76 80 H24 Z\" fill=\"#4EA8DE\"/>\n    <rect x=\"26\" y=\"47\" width=\"18\" height=\"15\" rx=\"4\" fill=\"#FFFFFF\"/><rect x=\"56\" y=\"47\" width=\"18\" height=\"15\" rx=\"4\" fill=\"#FFFFFF\"/>\n    <circle cx=\"42\" cy=\"71\" r=\"6\" fill=\"none\"/><circle cx=\"58\" cy=\"71\" r=\"6\" fill=\"none\"/>\n    <path d=\"M12 87 Q27 82 42 87 Q57 92 72 87 Q86 82 93 87\" fill=\"none\" stroke=\"#90E0EF\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pesce",
+    "label": "Pesce",
+    "article": "un",
+    "symbol": "PE",
+    "walkable": false,
+    "description": "Pesce con corpo affusolato, pinne e coda ben visibili.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"48\" cy=\"54\" rx=\"27\" ry=\"16\" fill=\"#4EA8DE\"/>\n    <polygon points=\"72,54 91,39 88,70\" fill=\"#90E0EF\"/>\n    <polygon points=\"49,39 59,26 62,43\" fill=\"#90E0EF\"/>\n    <polygon points=\"49,68 59,80 62,65\" fill=\"#90E0EF\"/>\n    <circle cx=\"32\" cy=\"50\" r=\"2.5\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M22 58 Q32 62 41 59\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pezzodilegno",
+    "label": "Pezzo di legno",
+    "article": "un",
+    "symbol": "PE",
+    "walkable": false,
+    "description": "Tronco o asse di legno grezzo appoggiato a terra.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M18 65 Q24 48 39 49 L79 55 Q87 59 80 72 L38 69 Q26 76 18 65 Z\" fill=\"#A66A3F\"/>\n    <ellipse cx=\"79\" cy=\"63\" rx=\"8\" ry=\"9\" fill=\"#D49A6A\"/>\n    <circle cx=\"79\" cy=\"63\" r=\"4\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"2\"/>\n    <path d=\"M31 53 Q28 61 33 68 M45 52 L48 70\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pino",
+    "label": "Pino",
+    "article": "un",
+    "symbol": "PI",
+    "walkable": false,
+    "description": "Pino alto con tronco sottile e chioma a ombrello.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M46 49 L43 90 H57 L54 49\" fill=\"#7A5135\"/>\n    <path d=\"M50 18 Q26 25 18 49 Q31 41 45 44 Q26 48 20 63 Q37 55 50 58 Q63 55 80 63 Q74 48 55 44 Q69 41 82 49 Q74 25 50 18 Z\" fill=\"#4F8A5B\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "polipo",
+    "label": "Polipo",
+    "article": "un",
+    "symbol": "PO",
+    "walkable": false,
+    "description": "Polipo con testa arrotondata e tentacoli sinuosi.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M32 54 Q28 25 50 22 Q72 25 68 54 Z\" fill=\"#8E6BBE\"/>\n    <circle cx=\"43\" cy=\"42\" r=\"3\" fill=\"#FFFFFF\"/><circle cx=\"57\" cy=\"42\" r=\"3\" fill=\"#FFFFFF\"/>\n    <circle cx=\"43\" cy=\"42\" r=\"1.5\" fill=\"#222222\" stroke=\"none\"/><circle cx=\"57\" cy=\"42\" r=\"1.5\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M34 53 Q22 65 31 78 Q40 86 44 70 M45 53 Q38 70 47 83 Q55 91 58 72 M56 53 Q55 70 65 80 Q76 86 74 69 M65 53 Q77 60 76 72 Q74 82 84 85\" fill=\"none\" stroke=\"#8E6BBE\" stroke-width=\"7\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "poltrona",
+    "label": "Poltrona",
+    "article": "una",
+    "symbol": "PO",
+    "walkable": true,
+    "description": "Poltrona singola imbottita con braccioli ampi e seduta accogliente.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"30\" y=\"31\" width=\"40\" height=\"37\" rx=\"12\" fill=\"#F4A261\"/>\n    <rect x=\"22\" y=\"51\" width=\"17\" height=\"30\" rx=\"8\" fill=\"#F4A261\"/><rect x=\"61\" y=\"51\" width=\"17\" height=\"30\" rx=\"8\" fill=\"#F4A261\"/>\n    <rect x=\"34\" y=\"55\" width=\"32\" height=\"25\" rx=\"8\" fill=\"#F6D365\"/>\n    <path d=\"M31 81 V89 M69 81 V89\" fill=\"none\" stroke=\"#263238\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pouf",
+    "label": "Pouf",
+    "article": "un",
+    "symbol": "PO",
+    "walkable": true,
+    "description": "Pouf basso e morbido, compatto, senza schienale.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"63\" rx=\"31\" ry=\"18\" fill=\"#8E6BBE\"/>\n    <path d=\"M21 61 Q25 41 50 40 Q75 41 79 61\" fill=\"#E6A0C4\"/>\n    <path d=\"M30 48 Q50 58 70 48 M37 43 Q50 53 63 43\" fill=\"none\" stroke=\"#8E6BBE\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "puccia",
+    "label": "Puccia",
+    "article": "una",
+    "symbol": "PU",
+    "walkable": false,
+    "description": "Panino salentino rotondo e rustico, con crosta chiara.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"58\" rx=\"32\" ry=\"23\" fill=\"#E9C46A\"/>\n    <path d=\"M24 57 Q50 49 76 57\" fill=\"none\" stroke=\"#F4A261\" stroke-width=\"3\"/>\n    <g fill=\"#FFFFFF\" stroke=\"none\"><circle cx=\"33\" cy=\"45\" r=\"1.5\"/><circle cx=\"45\" cy=\"39\" r=\"1.5\"/><circle cx=\"57\" cy=\"43\" r=\"1.5\"/><circle cx=\"67\" cy=\"48\" r=\"1.5\"/><circle cx=\"40\" cy=\"66\" r=\"1.5\"/><circle cx=\"59\" cy=\"69\" r=\"1.5\"/></g>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "pumo",
+    "label": "Pumo",
+    "article": "un",
+    "symbol": "PU",
+    "walkable": false,
+    "description": "Pumo salentino decorativo in ceramica, a forma di bocciolo.",
+    "categories": [
+      "Salento",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M50 15 Q61 25 69 38 Q76 53 65 70 Q59 81 50 90 Q41 81 35 70 Q24 53 31 38 Q39 25 50 15 Z\" fill=\"#83B271\"/>\n    <path d=\"M50 19 Q47 47 50 87 M36 36 Q50 44 64 36 M31 51 Q50 61 69 51 M35 68 Q50 73 65 68\" fill=\"none\" stroke=\"#4F8A5B\" stroke-width=\"2\"/>\n    <ellipse cx=\"50\" cy=\"90\" rx=\"18\" ry=\"5\" fill=\"#ECEFF1\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "registratoredicassa",
+    "label": "Registratore di cassa",
+    "article": "una",
+    "symbol": "RE",
+    "walkable": false,
+    "description": "Cassa da negozio con display, tastiera e cassetto portamonete.",
+    "categories": [
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M23 42 H70 L78 72 H18 Z\" fill=\"#8D99AE\"/>\n    <rect x=\"30\" y=\"24\" width=\"37\" height=\"18\" rx=\"3\" fill=\"#263238\"/>\n    <rect x=\"36\" y=\"28\" width=\"25\" height=\"9\" fill=\"#90E0EF\"/>\n    <g fill=\"#ECEFF1\" stroke=\"none\"><rect x=\"29\" y=\"50\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"39\" y=\"50\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"49\" y=\"50\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"59\" y=\"50\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"29\" y=\"59\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"39\" y=\"59\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"49\" y=\"59\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"59\" y=\"59\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"29\" y=\"68\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"39\" y=\"68\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"49\" y=\"68\" width=\"6\" height=\"5\" rx=\"1\"/><rect x=\"59\" y=\"68\" width=\"6\" height=\"5\" rx=\"1\"/></g>\n    <rect x=\"20\" y=\"73\" width=\"58\" height=\"12\" rx=\"2\" fill=\"#90A4AE\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "ricciodimare",
+    "label": "Riccio di mare",
+    "article": "un",
+    "symbol": "RI",
+    "walkable": false,
+    "description": "Riccio di mare tondo con aculei fitti e scuri.",
+    "categories": [
+      "Animali",
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <line x1=\"75.0\" y1=\"50.0\" x2=\"88.0\" y2=\"50.0\"/>\n    <line x1=\"73.5\" y1=\"58.6\" x2=\"85.7\" y2=\"63.0\"/>\n    <line x1=\"69.2\" y1=\"66.1\" x2=\"79.1\" y2=\"74.4\"/>\n    <line x1=\"62.5\" y1=\"71.7\" x2=\"69.0\" y2=\"82.9\"/>\n    <line x1=\"54.3\" y1=\"74.6\" x2=\"56.6\" y2=\"87.4\"/>\n    <line x1=\"45.7\" y1=\"74.6\" x2=\"43.4\" y2=\"87.4\"/>\n    <line x1=\"37.5\" y1=\"71.7\" x2=\"31.0\" y2=\"82.9\"/>\n    <line x1=\"30.8\" y1=\"66.1\" x2=\"20.9\" y2=\"74.4\"/>\n    <line x1=\"26.5\" y1=\"58.6\" x2=\"14.3\" y2=\"63.0\"/>\n    <line x1=\"25.0\" y1=\"50.0\" x2=\"12.0\" y2=\"50.0\"/>\n    <line x1=\"26.5\" y1=\"41.4\" x2=\"14.3\" y2=\"37.0\"/>\n    <line x1=\"30.8\" y1=\"33.9\" x2=\"20.9\" y2=\"25.6\"/>\n    <line x1=\"37.5\" y1=\"28.3\" x2=\"31.0\" y2=\"17.1\"/>\n    <line x1=\"45.7\" y1=\"25.4\" x2=\"43.4\" y2=\"12.6\"/>\n    <line x1=\"54.3\" y1=\"25.4\" x2=\"56.6\" y2=\"12.6\"/>\n    <line x1=\"62.5\" y1=\"28.3\" x2=\"69.0\" y2=\"17.1\"/>\n    <line x1=\"69.2\" y1=\"33.9\" x2=\"79.1\" y2=\"25.6\"/>\n    <line x1=\"73.5\" y1=\"41.4\" x2=\"85.7\" y2=\"37.0\"/>\n    <circle cx=\"50\" cy=\"50\" r=\"23\" fill=\"#263238\"/><circle cx=\"44\" cy=\"45\" r=\"3\" fill=\"#90A4AE\" stroke=\"none\"/><circle cx=\"56\" cy=\"55\" r=\"2.5\" fill=\"#90A4AE\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "rovi",
+    "label": "Rovi",
+    "article": "un",
+    "symbol": "RO",
+    "walkable": false,
+    "description": "Intrico di rami spinosi e cespugli selvatici.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M15 77 Q24 50 42 64 Q47 40 61 51 Q75 40 85 67 Q72 82 54 74 Q37 88 15 77 Z\" fill=\"#4F8A5B\"/>\n    <path d=\"M22 70 Q37 55 49 70 Q60 49 79 65 M28 80 Q39 64 56 79\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"3\"/>\n    <path d=\"M34 59 l-6-5 M45 61 l4-7 M62 55 l-5-7 M70 67 l7-5 M50 76 l-3 7\" fill=\"none\" stroke=\"#263238\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "rustico",
+    "label": "Rustico",
+    "article": "un",
+    "symbol": "RU",
+    "walkable": false,
+    "description": "Rustico leccese rotondo di pasta sfoglia dorata e friabile.",
+    "categories": [
+      "Salento",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"50\" cy=\"57\" r=\"28\" fill=\"#E9C46A\"/>\n    <circle cx=\"50\" cy=\"57\" r=\"22\" fill=\"#F4A261\" opacity=\".25\" stroke=\"none\"/>\n    <path d=\"M30 43 Q50 33 70 43 M28 57 Q50 47 72 57 M31 70 Q50 62 69 70\" fill=\"none\" stroke=\"#F4A261\" stroke-width=\"2\"/>\n    <circle cx=\"50\" cy=\"57\" r=\"5\" fill=\"#E85D5D\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "salvagente",
+    "label": "Salvagente",
+    "article": "un",
+    "symbol": "SA",
+    "walkable": false,
+    "description": "Salvagente circolare con foro centrale e bande colorate.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"50\" cy=\"53\" r=\"31\" fill=\"#FFFFFF\"/>\n    <circle cx=\"50\" cy=\"53\" r=\"15\" fill=\"none\" stroke=\"#2F3E46\" stroke-width=\"2.5\"/>\n    <path d=\"M30 31 A31 31 0 0 1 42 23 L46 39 A15 15 0 0 0 40 43 Z M70 31 A31 31 0 0 0 58 23 L54 39 A15 15 0 0 1 60 43 Z M30 75 A31 31 0 0 0 42 83 L46 67 A15 15 0 0 1 40 63 Z M70 75 A31 31 0 0 1 58 83 L54 67 A15 15 0 0 0 60 63 Z\" fill=\"#E85D5D\" stroke=\"none\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "santoronzo",
+    "label": "Sant’Oronzo",
+    "article": "un",
+    "symbol": "SA",
+    "walkable": false,
+    "description": "Statua di Sant’Oronzo su colonna o piedistallo, in posa solenne.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"31\" y=\"82\" width=\"38\" height=\"9\" fill=\"#90A4AE\"/>\n    <rect x=\"44\" y=\"46\" width=\"12\" height=\"36\" fill=\"#E9C46A\"/>\n    <circle cx=\"50\" cy=\"25\" r=\"8\" fill=\"#C99A6B\"/>\n    <path d=\"M40 35 Q50 28 60 35 L66 57 H34 Z\" fill=\"#8E6BBE\"/>\n    <path d=\"M38 42 L24 52 M62 42 L76 32\" fill=\"none\" stroke=\"#C99A6B\" stroke-width=\"5\"/>\n    <path d=\"M50 32 V58\" stroke=\"#E9C46A\" stroke-width=\"3\"/>\n    <circle cx=\"50\" cy=\"21\" r=\"14\" fill=\"none\" stroke=\"#F6D365\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "scaffale",
+    "label": "Scaffale",
+    "article": "uno",
+    "symbol": "SC",
+    "walkable": false,
+    "description": "Scaffale da negozio con ripiani pieni di prodotti ordinati.",
+    "categories": [
+      "Commerciale",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"20\" y=\"17\" width=\"60\" height=\"72\" fill=\"#90A4AE\"/>\n    <line x1=\"23\" y1=\"39\" x2=\"77\" y2=\"39\"/><line x1=\"23\" y1=\"61\" x2=\"77\" y2=\"61\"/>\n    <g stroke=\"none\">\n      <rect x=\"27\" y=\"27\" width=\"11\" height=\"11\" fill=\"#E85D5D\"/><rect x=\"43\" y=\"23\" width=\"12\" height=\"15\" fill=\"#4EA8DE\"/><rect x=\"60\" y=\"26\" width=\"11\" height=\"12\" fill=\"#F6D365\"/>\n      <rect x=\"26\" y=\"45\" width=\"13\" height=\"15\" fill=\"#4F8A5B\"/><rect x=\"44\" y=\"49\" width=\"11\" height=\"11\" fill=\"#F4A261\"/><rect x=\"60\" y=\"44\" width=\"12\" height=\"16\" fill=\"#8E6BBE\"/>\n      <rect x=\"27\" y=\"67\" width=\"12\" height=\"20\" fill=\"#4EA8DE\"/><rect x=\"44\" y=\"65\" width=\"11\" height=\"22\" fill=\"#E85D5D\"/><rect x=\"61\" y=\"69\" width=\"10\" height=\"18\" fill=\"#4F8A5B\"/>\n    </g>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "scarafaggio",
+    "label": "Scarafaggio",
+    "article": "uno",
+    "symbol": "SC",
+    "walkable": false,
+    "description": "Scarafaggio marrone con antenne lunghe e corpo ovale.",
+    "categories": [
+      "Animali",
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"55\" rx=\"16\" ry=\"27\" fill=\"#7A5135\"/>\n    <path d=\"M50 29 V82 M35 48 H65 M36 62 H64\" fill=\"none\" stroke=\"#263238\"/>\n    <path d=\"M43 31 Q31 18 26 11 M57 31 Q69 18 74 11 M36 45 L22 35 M36 55 L19 55 M38 67 L23 78 M64 45 L78 35 M64 55 L81 55 M62 67 L77 78\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "scoglio",
+    "label": "Scoglio",
+    "article": "uno",
+    "symbol": "SC",
+    "walkable": false,
+    "description": "Roccia marina irregolare, grigia e compatta.",
+    "categories": [
+      "Mare",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M15 79 Q20 59 35 56 Q37 37 53 35 Q61 47 74 47 Q87 57 84 78 Z\" fill=\"#90A4AE\"/>\n    <path d=\"M31 61 L42 47 M52 41 L58 57 M67 52 L74 68 M39 78 L44 65\" fill=\"none\" stroke=\"#ECEFF1\" stroke-width=\"2\"/>\n    <path d=\"M11 86 Q25 81 39 86 Q53 91 67 86 Q81 81 92 86\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "sdraio",
+    "label": "Sdraio",
+    "article": "un",
+    "symbol": "SD",
+    "walkable": true,
+    "description": "Sedia sdraio pieghevole con telo inclinato.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M30 26 L65 74 H34 Z\" fill=\"#90E0EF\"/>\n    <path d=\"M28 24 L70 78 M34 74 L73 74 M34 74 L24 89 M66 74 L75 89\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"5\"/>\n    <path d=\"M37 38 L58 66\" stroke=\"#FFFFFF\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "secchiello",
+    "label": "Secchiello",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Secchiello da spiaggia con manico e paletta vicina.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M26 43 H62 L58 78 H30 Z\" fill=\"#E85D5D\"/>\n    <path d=\"M29 42 Q44 19 59 42\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"4\"/>\n    <path d=\"M69 42 L83 72\" stroke=\"#A66A3F\" stroke-width=\"5\"/>\n    <path d=\"M77 65 L89 80 L75 84 Z\" fill=\"#4EA8DE\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "sedia",
+    "label": "Sedia",
+    "article": "una",
+    "symbol": "SE",
+    "walkable": true,
+    "description": "Sedia semplice con seduta, schienale e quattro gambe.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"31\" y=\"42\" width=\"38\" height=\"16\" rx=\"3\" fill=\"#D49A6A\"/>\n    <rect x=\"31\" y=\"18\" width=\"38\" height=\"25\" rx=\"3\" fill=\"#A66A3F\"/>\n    <path d=\"M34 58 L30 89 M66 58 L70 89 M34 43 L31 19 M66 43 L69 19\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "segnalestradale",
+    "label": "Segnale stradale",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Cartello stradale su palo con forma e simbolo ben riconoscibili.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <line x1=\"50\" y1=\"52\" x2=\"50\" y2=\"91\" stroke=\"#8D99AE\" stroke-width=\"5\"/>\n    <polygon points=\"50,14 80,52 20,52\" fill=\"#FFFFFF\"/>\n    <path d=\"M50 22 L71 48 H29 Z\" fill=\"none\" stroke=\"#E85D5D\" stroke-width=\"6\"/>\n    <path d=\"M44 42 Q50 32 56 42\" fill=\"none\" stroke=\"#263238\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "semaforo",
+    "label": "Semaforo",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Semaforo verticale con tre luci colorate sovrapposte.",
+    "categories": [
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"33\" y=\"13\" width=\"34\" height=\"56\" rx=\"8\" fill=\"#263238\"/>\n    <circle cx=\"50\" cy=\"27\" r=\"8\" fill=\"#E85D5D\"/><circle cx=\"50\" cy=\"42\" r=\"8\" fill=\"#F6D365\"/><circle cx=\"50\" cy=\"57\" r=\"8\" fill=\"#4F8A5B\"/>\n    <line x1=\"50\" y1=\"69\" x2=\"50\" y2=\"91\" stroke=\"#8D99AE\" stroke-width=\"5\"/>\n    <path d=\"M38 92 H62\" stroke=\"#8D99AE\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "serpente",
+    "label": "Serpente",
+    "article": "un",
+    "symbol": "SE",
+    "walkable": false,
+    "description": "Serpente sinuoso arrotolato o strisciante, senza zampe.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M21 70 Q24 47 46 53 Q70 59 73 39 Q75 25 60 25 Q48 25 49 35\" fill=\"none\" stroke=\"#4F8A5B\" stroke-width=\"12\"/>\n    <path d=\"M22 70 Q14 76 19 84 Q27 89 32 82\" fill=\"none\" stroke=\"#4F8A5B\" stroke-width=\"12\"/>\n    <circle cx=\"50\" cy=\"34\" r=\"8\" fill=\"#4F8A5B\"/><circle cx=\"53\" cy=\"31\" r=\"1.6\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M44 37 L38 39\" fill=\"none\" stroke=\"#E85D5D\" stroke-width=\"1.5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "sgabello",
+    "label": "Sgabello",
+    "article": "un",
+    "symbol": "SG",
+    "walkable": true,
+    "description": "Sgabello alto o basso con seduta semplice e gambe snelle.",
+    "categories": [
+      "Casa & Interni",
+      "Commerciale"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"35\" rx=\"22\" ry=\"9\" fill=\"#A66A3F\"/>\n    <path d=\"M35 42 L28 87 M65 42 L72 87 M42 43 L40 82 M58 43 L60 82\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"5\"/>\n    <line x1=\"32\" y1=\"66\" x2=\"68\" y2=\"66\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "statua",
+    "label": "Statua",
+    "article": "una",
+    "symbol": "ST",
+    "walkable": false,
+    "description": "Statua su piedistallo raffigurante una figura umana o simbolica.",
+    "categories": [
+      "Esterno urbano",
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"31\" y=\"80\" width=\"38\" height=\"10\" fill=\"#90A4AE\"/>\n    <rect x=\"38\" y=\"69\" width=\"24\" height=\"11\" fill=\"#ECEFF1\"/>\n    <circle cx=\"50\" cy=\"27\" r=\"9\" fill=\"#90A4AE\"/>\n    <path d=\"M39 38 Q50 31 61 38 L66 68 H34 Z\" fill=\"#90A4AE\"/>\n    <path d=\"M39 44 L25 58 M61 44 L75 31\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"6\"/>\n    <path d=\"M44 68 L42 77 M56 68 L58 77\" fill=\"none\" stroke=\"#90A4AE\" stroke-width=\"6\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "statuadellamadonna",
+    "label": "Statua della Madonna",
+    "article": "una",
+    "symbol": "ST",
+    "walkable": false,
+    "description": "Statua religiosa della Madonna con velo, veste lunga e posa raccolta.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"31\" y=\"82\" width=\"38\" height=\"9\" fill=\"#90A4AE\"/>\n    <circle cx=\"50\" cy=\"28\" r=\"8\" fill=\"#C99A6B\"/>\n    <path d=\"M38 30 Q50 11 62 30 L58 48 Q50 42 42 48 Z\" fill=\"#4EA8DE\"/>\n    <path d=\"M40 42 Q50 35 60 42 L69 80 H31 Z\" fill=\"#FFFFFF\"/>\n    <path d=\"M44 48 Q50 57 56 48\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"3\"/>\n    <path d=\"M44 56 Q50 61 56 56\" fill=\"none\" stroke=\"#C99A6B\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "sup",
+    "label": "SUP",
+    "article": "un",
+    "symbol": "SU",
+    "walkable": true,
+    "description": "Tavola da stand up paddle lunga con pagaia.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"45\" cy=\"56\" rx=\"15\" ry=\"38\" fill=\"#90E0EF\" transform=\"rotate(20 45 56)\"/>\n    <path d=\"M64 20 L77 82\" stroke=\"#A66A3F\" stroke-width=\"4\"/>\n    <path d=\"M60 17 Q67 9 72 15 L68 28 Z\" fill=\"#A66A3F\"/>\n    <path d=\"M72 78 Q79 87 85 81 L80 69 Z\" fill=\"#A66A3F\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "tagat",
+    "label": "Tagatà",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": true,
+    "description": "Giostra Tagadà circolare con seduta continua e piattaforma inclinabile.",
+    "categories": [
+      "Salento",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"50\" cy=\"68\" rx=\"36\" ry=\"15\" fill=\"#8E6BBE\"/>\n    <ellipse cx=\"50\" cy=\"62\" rx=\"29\" ry=\"12\" fill=\"#E85D5D\"/>\n    <path d=\"M28 58 Q50 45 72 58\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"7\"/>\n    <circle cx=\"50\" cy=\"60\" r=\"7\" fill=\"#F6D365\"/>\n    <path d=\"M24 72 L18 88 M76 72 L82 88\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "tamburello",
+    "label": "Tamburello",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": false,
+    "description": "Tamburello salentino rotondo con cornice, pelle tesa e sonagli.",
+    "categories": [
+      "Salento"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"50\" cy=\"52\" r=\"31\" fill=\"#D49A6A\"/>\n    <circle cx=\"50\" cy=\"52\" r=\"24\" fill=\"#E9C46A\"/>\n    <g fill=\"#8D99AE\" stroke=\"#263238\" stroke-width=\"1\"><circle cx=\"81.0\" cy=\"52.0\" r=\"4\"/><circle cx=\"71.9\" cy=\"73.9\" r=\"4\"/><circle cx=\"50.0\" cy=\"83.0\" r=\"4\"/><circle cx=\"28.1\" cy=\"73.9\" r=\"4\"/><circle cx=\"19.0\" cy=\"52.0\" r=\"4\"/><circle cx=\"28.1\" cy=\"30.1\" r=\"4\"/><circle cx=\"50.0\" cy=\"21.0\" r=\"4\"/><circle cx=\"71.9\" cy=\"30.1\" r=\"4\"/></g>\n    <path d=\"M36 43 Q50 34 64 43 M35 59 Q50 68 65 59\" fill=\"none\" stroke=\"{ORANGE}\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "tappeto",
+    "label": "Tappeto",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": true,
+    "description": "Tappeto piatto decorativo steso sul pavimento.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"18\" y=\"26\" width=\"64\" height=\"50\" rx=\"4\" fill=\"#E85D5D\"/>\n    <rect x=\"26\" y=\"34\" width=\"48\" height=\"34\" rx=\"3\" fill=\"#F4A261\"/>\n    <path d=\"M50 39 L62 51 L50 63 L38 51 Z\" fill=\"#F6D365\"/>\n    <path d=\"M18 31 L10 31 M18 40 L10 40 M18 49 L10 49 M18 58 L10 58 M18 67 L10 67 M82 31 L90 31 M82 40 L90 40 M82 49 L90 49 M82 58 L90 58 M82 67 L90 67\" fill=\"none\" stroke=\"#E85D5D\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "tavoladasurf",
+    "label": "Tavola da surf",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": true,
+    "description": "Tavola da surf lunga e affusolata con punta arrotondata.",
+    "categories": [
+      "Mare",
+      "Trasporti"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M50 10 Q65 25 65 53 Q65 81 50 92 Q35 81 35 53 Q35 25 50 10 Z\" fill=\"#90E0EF\"/>\n    <path d=\"M50 14 V88\" stroke=\"#FFFFFF\" stroke-width=\"4\"/>\n    <path d=\"M37 52 Q50 45 63 52\" fill=\"none\" stroke=\"#3D5A80\" stroke-width=\"3\"/>\n    <path d=\"M50 83 L44 92 H56 Z\" fill=\"#3D5A80\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "tavolo",
+    "label": "Tavolo",
+    "article": "un",
+    "symbol": "TA",
+    "walkable": false,
+    "description": "Tavolo rettangolare o rotondo con piano stabile e gambe robuste.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"18\" y=\"35\" width=\"64\" height=\"16\" rx=\"4\" fill=\"#A66A3F\"/>\n    <path d=\"M27 51 L24 89 M73 51 L76 89 M36 51 L35 82 M64 51 L65 82\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "telodamare",
+    "label": "Telo da mare",
+    "article": "un",
+    "symbol": "TE",
+    "walkable": true,
+    "description": "Telo colorato steso sulla sabbia, piatto e rettangolare.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"19\" y=\"25\" width=\"62\" height=\"53\" rx=\"4\" fill=\"#90E0EF\"/>\n    <path d=\"M19 38 H81 M19 52 H81 M19 66 H81\" stroke=\"#FFFFFF\" stroke-width=\"5\"/>\n    <path d=\"M19 29 L11 29 M19 38 L11 38 M19 47 L11 47 M19 56 L11 56 M19 65 L11 65 M19 74 L11 74 M81 29 L89 29 M81 38 L89 38 M81 47 L89 47 M81 56 L89 56 M81 65 L89 65 M81 74 L89 74\" fill=\"none\" stroke=\"#4EA8DE\" stroke-width=\"2\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "toro",
+    "label": "Toro",
+    "article": "un",
+    "symbol": "TO",
+    "walkable": false,
+    "description": "Toro robusto con corna evidenti e corpo muscoloso.",
+    "categories": [
+      "Animali",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <ellipse cx=\"56\" cy=\"55\" rx=\"27\" ry=\"16\" fill=\"#7A5135\"/>\n    <circle cx=\"31\" cy=\"42\" r=\"13\" fill=\"#7A5135\"/>\n    <ellipse cx=\"24\" cy=\"32\" rx=\"6\" ry=\"5\" fill=\"#7A5135\"/><ellipse cx=\"38\" cy=\"31\" rx=\"6\" ry=\"5\" fill=\"#7A5135\"/>\n    <path d=\"M26 37 Q18 29 16 34 M31 34 Q34 25 40 30\" fill=\"none\" stroke=\"#E9C46A\" stroke-width=\"3\"/>\n    \n    \n    <ellipse cx=\"26\" cy=\"45\" rx=\"6\" ry=\"4\" fill=\"#ECEFF1\"/>\n    <circle cx=\"29\" cy=\"39\" r=\"1.8\" fill=\"#222222\" stroke=\"none\"/>\n    <path d=\"M41 67 L39 85 M56 69 L55 86 M68 68 L70 85 M78 64 L81 83\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"5\"/>\n    <path d=\"M36 86 h7 M52 87 h7 M67 86 h7 M78 84 h7\" fill=\"none\" stroke=\"#263238\" stroke-width=\"3\"/>\n    <path d=\"M78 52 Q91 55 92 68\" fill=\"none\" stroke=\"#7A5135\" stroke-width=\"4\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "torrettabagnino",
+    "label": "Torretta bagnino",
+    "article": "un",
+    "symbol": "TO",
+    "walkable": false,
+    "description": "Torretta rialzata con seduta e scaletta per il bagnino.",
+    "categories": [
+      "Mare"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"38\" y=\"27\" width=\"28\" height=\"25\" rx=\"3\" fill=\"#E85D5D\"/>\n    <rect x=\"41\" y=\"32\" width=\"22\" height=\"10\" fill=\"#FFFFFF\"/>\n    <path d=\"M40 52 L28 89 M64 52 L75 89 M33 73 H70\" fill=\"none\" stroke=\"#A66A3F\" stroke-width=\"5\"/>\n    <path d=\"M69 56 L82 84 M73 63 H79 M75 70 H82 M78 78 H85\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"3\"/>\n    <path d=\"M30 91 H81\" stroke=\"#E9C46A\" stroke-width=\"5\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "trattore",
+    "label": "Trattore",
+    "article": "un",
+    "symbol": "TR",
+    "walkable": false,
+    "description": "Trattore agricolo con grandi ruote posteriori e cabina o sedile.",
+    "categories": [
+      "Trasporti",
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"30\" cy=\"70\" r=\"18\" fill=\"#263238\"/><circle cx=\"30\" cy=\"70\" r=\"9\" fill=\"#ECEFF1\"/>\n    <circle cx=\"75\" cy=\"73\" r=\"11\" fill=\"#263238\"/><circle cx=\"75\" cy=\"73\" r=\"5\" fill=\"#ECEFF1\"/>\n    <path d=\"M35 49 H66 L73 65 H45 Z\" fill=\"#4F8A5B\"/>\n    <rect x=\"48\" y=\"31\" width=\"18\" height=\"18\" fill=\"#90E0EF\"/>\n    <path d=\"M52 31 V23 H63 V31\" fill=\"#4F8A5B\"/>\n    <rect x=\"38\" y=\"45\" width=\"10\" height=\"15\" fill=\"#F4A261\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "triciclo",
+    "label": "Triciclo",
+    "article": "un",
+    "symbol": "TR",
+    "walkable": false,
+    "description": "Piccolo triciclo con una ruota davanti e due dietro.",
+    "categories": [
+      "Trasporti",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <circle cx=\"32\" cy=\"70\" r=\"16\" fill=\"none\"/><circle cx=\"72\" cy=\"73\" r=\"12\" fill=\"none\"/><circle cx=\"84\" cy=\"73\" r=\"9\" fill=\"none\"/>\n    <path d=\"M32 70 L47 48 L65 70 L32 70 M47 48 L44 34 M42 34 H53 M64 70 L76 50 M72 50 H83\" fill=\"none\" stroke=\"#E85D5D\" stroke-width=\"4\"/>\n    <rect x=\"53\" y=\"44\" width=\"15\" height=\"7\" rx=\"3\" fill=\"#222222\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "tv",
+    "label": "TV",
+    "article": "un",
+    "symbol": "TV",
+    "walkable": false,
+    "description": "Televisore moderno con schermo nero e base sottile.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"17\" y=\"20\" width=\"66\" height=\"48\" rx=\"5\" fill=\"#263238\"/>\n    <rect x=\"23\" y=\"26\" width=\"54\" height=\"36\" rx=\"2\" fill=\"#3D5A80\"/>\n    <path d=\"M50 68 V78 M34 82 H66\" fill=\"none\" stroke=\"#8D99AE\" stroke-width=\"5\"/>\n    <path d=\"M31 50 Q42 34 53 47 Q64 60 73 41\" fill=\"none\" stroke=\"#90E0EF\" stroke-width=\"3\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "vasodipiante",
+    "label": "Vaso di piante",
+    "article": "un",
+    "symbol": "VA",
+    "walkable": false,
+    "description": "Vaso con pianta verde e foglie decorative.",
+    "categories": [
+      "Casa & Interni",
+      "Campagna",
+      "Esterno urbano"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <path d=\"M32 57 H68 L63 88 H37 Z\" fill=\"#F4A261\"/>\n    <path d=\"M50 58 Q48 43 36 32 M50 58 Q52 39 65 28 M49 54 Q60 48 73 47 M48 51 Q38 46 26 46\" fill=\"none\" stroke=\"#4F8A5B\" stroke-width=\"4\"/>\n    <ellipse cx=\"33\" cy=\"31\" rx=\"10\" ry=\"6\" fill=\"#83B271\" transform=\"rotate(30 33 31)\"/>\n    <ellipse cx=\"66\" cy=\"27\" rx=\"11\" ry=\"6\" fill=\"#83B271\" transform=\"rotate(-30 66 27)\"/>\n    <ellipse cx=\"74\" cy=\"46\" rx=\"10\" ry=\"6\" fill=\"#83B271\"/>\n    <ellipse cx=\"25\" cy=\"45\" rx=\"10\" ry=\"6\" fill=\"#83B271\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "water",
+    "label": "Water",
+    "article": "un",
+    "symbol": "WA",
+    "walkable": true,
+    "description": "WC bianco con tazza, sedile e cassetta posteriore.",
+    "categories": [
+      "Casa & Interni"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <rect x=\"56\" y=\"17\" width=\"20\" height=\"31\" rx=\"3\" fill=\"#FFFFFF\"/>\n    <path d=\"M30 43 Q50 34 68 44 L67 56 Q62 76 50 80 Q38 76 33 57 Z\" fill=\"#FFFFFF\"/>\n    <ellipse cx=\"50\" cy=\"49\" rx=\"20\" ry=\"8\" fill=\"#ECEFF1\"/>\n    <ellipse cx=\"50\" cy=\"50\" rx=\"12\" ry=\"4\" fill=\"#90E0EF\"/>\n    <path d=\"M42 79 L39 88 H61 L58 79\" fill=\"#FFFFFF\"/>\n  </g>\n</svg>"
+    }
+  },
+  {
+    "id": "zappa",
+    "label": "Zappa",
+    "article": "una",
+    "symbol": "ZA",
+    "walkable": false,
+    "description": "Attrezzo agricolo con manico lungo e lama metallica.",
+    "categories": [
+      "Campagna"
+    ],
+    "render": {
+      "type": "svg",
+      "scale": 1,
+      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\" role=\"img\">\n  <g stroke=\"#2F3E46\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <line x1=\"67\" y1=\"17\" x2=\"32\" y2=\"82\" stroke=\"#A66A3F\" stroke-width=\"6\"/>\n    <path d=\"M23 76 Q34 75 44 83 L39 92 Q27 87 18 85 Z\" fill=\"#8D99AE\"/>\n    <path d=\"M64 18 L72 9\" stroke=\"#7A5135\" stroke-width=\"7\"/>\n  </g>\n</svg>"
+    }
+  }
+]
