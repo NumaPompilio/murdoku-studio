@@ -6935,17 +6935,17 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
   .catalog-card {
     background: var(--panel);
     border: 1px solid var(--line2);
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     position: relative;
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .catalog-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
   }
   .catalog-card.add-new {
     justify-content: center;
@@ -6955,21 +6955,21 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     background: transparent;
     color: var(--primary);
     font-weight: bold;
-    font-size: 16px;
-    min-height: 200px;
+    font-size: 14px;
+    min-height: 140px;
   }
   .catalog-card.add-new:hover {
     background: rgba(var(--primary-rgb), 0.1);
     border-color: var(--primary);
   }
   .cc-icon-container {
-    height: 80px;
+    height: 60px;
     background: rgba(255,255,255,0.03);
     display: flex;
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid var(--line2);
-    padding: 10px;
+    padding: 6px;
   }
   .cc-icon-container svg {
     max-width: 100%;
@@ -6977,36 +6977,36 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
   }
   .cc-fallback {
-    width: 48px;
-    height: 48px;
+    width: 34px;
+    height: 34px;
     background: var(--primary);
     color: #fff;
-    border-radius: 8px;
+    border-radius: 6px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
     text-transform: uppercase;
   }
   .cc-body {
-    padding: 12px;
+    padding: 8px;
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    font-size: 13px;
+    gap: 3px;
+    font-size: 12px;
   }
-  .cc-id { font-family: monospace; color: var(--text-dim); font-size: 11px; }
-  .cc-label { font-weight: bold; font-size: 14px; color: var(--text); }
-  .cc-desc { color: var(--text-faint); font-size: 11px; flex: 1; }
-  .cc-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-  .cc-tag { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+  .cc-id { font-family: monospace; color: var(--text-dim); font-size: 10px; }
+  .cc-label { font-weight: bold; font-size: 12px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cc-desc { color: var(--text-faint); font-size: 10px; flex: 1; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
+  .cc-tags { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 4px; }
+  .cc-tag { background: rgba(255,255,255,0.1); padding: 1px 4px; border-radius: 3px; font-size: 9px; }
   .cc-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 8px;
-    padding: 10px 12px;
+    gap: 6px;
+    padding: 6px 8px;
     border-top: 1px solid var(--line2);
     background: rgba(0,0,0,0.1);
   }
