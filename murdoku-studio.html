@@ -7024,15 +7024,7 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
 </style>
 
 <main id="catalog-view">
-  <div class="catalog-topbar">
-    <select id="catalogSelector" class="sel" style="width:33.33%;">
-      <option value="">Seleziona un catalogo...</option>
-    </select>
-    <button class="btn" id="catalogDeleteBtn" style="display:none; color:#ff4444; border-color:transparent;" title="Elimina l'intero catalogo">🗑️</button>
-    <button class="btn primary" id="catalogNewBtn" title="Crea un nuovo catalogo vuoto">➕ Nuovo Catalogo</button>
-    <button class="btn" id="catalogExportBtn" disabled>Esporta Catalogo</button>
-    <button class="btn" id="catalogManageCategoriesBtn">Gestisci Categorie</button>
-  </div>
+
   
   <div id="catalogLoading" style="display:none; text-align:center; padding:40px; color:var(--text-dim);">Caricamento catalogo in corso...</div>
   <div id="catalogEmpty" style="display:none; text-align:center; padding:40px; color:var(--text-dim);">Nessun catalogo selezionato.</div>
@@ -7208,6 +7200,8 @@ let catObjDeleteTarget = null;
       document.getElementById("editor-view").style.display = "none";
       document.getElementById("player-view").style.display = "none";
       document.getElementById("catalog-view").style.display = "flex";
+      document.querySelector(".toprow").style.display = "none";
+      document.getElementById("catalogTopbar").style.display = "flex";
       
       if(catalogList.length === 0) loadCatalogs();
     });
@@ -7218,6 +7212,7 @@ let catObjDeleteTarget = null;
         btn.addEventListener("click", () => {
           document.getElementById("modeCatalogBtn").classList.remove("active");
           document.getElementById("catalog-view").style.display = "none";
+          document.getElementById("catalogTopbar").style.display = "none";
         });
       }
     };
