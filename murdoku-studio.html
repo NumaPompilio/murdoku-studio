@@ -7372,8 +7372,9 @@ function openObjectDetails(obj) {
   $("#catDetArticle").textContent = obj.article ? `(${obj.article})` : "";
   $("#catDetDesc").textContent = obj.description || "-";
   
-  if(obj.svgCode && obj.svgCode.trim()) {
-    $("#catDetIcon").innerHTML = obj.svgCode;
+  const svgC = (obj.render && obj.render.svgCode) ? obj.render.svgCode : obj.svgCode;
+  if(svgC && svgC.trim()) {
+    $("#catDetIcon").innerHTML = svgC;
     const svg = $("#catDetIcon").querySelector("svg");
     if(svg) {
       svg.style.width = "160px";
@@ -7699,8 +7700,9 @@ function renderObjectCards() {
     // Header (SVG or Fallback)
     const header = document.createElement("div");
     header.className = "cc-icon-container";
-    if(obj.svgCode && obj.svgCode.trim()) {
-      header.innerHTML = obj.svgCode;
+    const svgC = (obj.render && obj.render.svgCode) ? obj.render.svgCode : obj.svgCode;
+    if(svgC && svgC.trim()) {
+      header.innerHTML = svgC;
     } else {
       const symbol = (obj.symbol || "??").substring(0,2);
       header.innerHTML = `<div class="cc-fallback">${symbol}</div>`;
@@ -7766,7 +7768,8 @@ function openObjectModal(obj) {
   $("#catObjSymbol").value = obj ? obj.symbol : "";
   $("#catObjWalkable").checked = obj ? !!obj.walkable : false;
   $("#catObjDesc").value = obj ? obj.description : "";
-  $("#catObjSvg").value = obj ? (obj.svgCode || "") : "";
+  const svgC = obj ? ((obj.render && obj.render.svgCode) ? obj.render.svgCode : (obj.svgCode || "")) : "";
+  $("#catObjSvg").value = svgC;
   
   renderCategoryOptionsForObject(obj ? (obj.categories || []) : []);
   
@@ -7787,7 +7790,11 @@ async function saveCurrentObject() {
     walkable: $("#catObjWalkable").checked,
     categories: selOpts,
     description: $("#catObjDesc").value.trim(),
-    svgCode: $("#catObjSvg").value.trim()
+    render: {
+      type: "svg",
+      scale: 1.0,
+      svgCode: $("#catObjSvg").value.trim()
+    }
   };
   
   if(!newObj.label || !newObj.article || !newObj.symbol || !newObj.description || newObj.categories.length === 0) {
