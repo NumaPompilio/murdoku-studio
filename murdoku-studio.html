@@ -79,7 +79,7 @@
   .hint{font-size:11px; color:var(--text-faint); line-height:1.5}
 
   /* Tools */
-  .tools{display:grid; grid-template-columns:1fr 1fr; gap:7px}
+  .tools{display:grid; grid-template-columns:repeat(4,1fr); gap:7px}
   .tool{
     display:flex; flex-direction:column; align-items:center; gap:3px; padding:9px 4px;
     background:var(--panel2); border:1px solid var(--line2); border-radius:9px; cursor:pointer; font-size:11px; color:var(--text-dim);
@@ -410,7 +410,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.5</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.6</span></h1>
     </div>
   </div>
 
@@ -489,13 +489,13 @@
       </div>
       <div class="tools" id="tools">
         <div class="tool active" data-tool="select" title="Clicca su una cella senza modificarla, utile per selezionare un'area"><span class="ico">👆</span>Seleziona</div>
+        <div class="tool" data-tool="erase"><span class="ico">🧽</span>Cancella</div>
+        <div class="tool" data-tool="block"><span class="ico">⬛</span>Blocca cella</div>
         <div class="tool" data-tool="wall"><span class="ico">🧱</span>Muri</div>
+        <div class="tool" data-tool="object"><span class="ico">🪑</span>Oggetto</div>
         <div class="tool" data-tool="window"><span class="ico">🖼️</span>Finestre</div>
         <div class="tool" data-tool="door"><span class="ico">🚪</span>Porte</div>
-        <div class="tool" data-tool="block"><span class="ico">⬛</span>Blocca cella</div>
-        <div class="tool" data-tool="object"><span class="ico">🪑</span>Oggetto</div>
         <div class="tool" data-tool="character"><span class="ico">🧑</span>Personaggi</div>
-        <div class="tool" data-tool="erase"><span class="ico">🧽</span>Cancella</div>
       </div>
       <div class="field" style="margin-top:11px" id="objPickWrap">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
