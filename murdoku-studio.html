@@ -410,7 +410,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.6</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.7</span></h1>
     </div>
   </div>
 
@@ -3410,7 +3410,7 @@ function rosterChars(){
 function setTool(tool){
   state.tool=tool;
   document.querySelectorAll(".tool").forEach(x=>x.classList.toggle("active",x.dataset.tool===tool));
-  $("#objPickWrap").style.opacity = (tool==="object"||tool==="character") ? 1 : 0.5;
+  $("#objPickWrap").style.opacity = 1;
   renderPalette();
   render();
 }
@@ -5384,7 +5384,7 @@ if(!restore()){
   if(m){ state.map=m; setBoardStatus("ok","Mappa di esempio 9×9. Premi «Genera indizi», oppure modifica con gli strumenti."); }
   else { state.map=E.emptyMap(9); state.map.areaNames={0:"Stanza"}; }
 }
-$("#objPickWrap").style.opacity=0.5;
+$("#objPickWrap").style.opacity=1;
 renderPalette();
 render(); renderClues(); renderSteps();
 
