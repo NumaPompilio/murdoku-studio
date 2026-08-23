@@ -30,26 +30,26 @@
 
   /* Header — scheda del caso */
   header{
-    display:flex; align-items:center; gap:18px; padding:14px 20px;
+    display:flex; align-items:center; gap:10px; padding:8px 12px;
     border-bottom:1px solid var(--line); background:linear-gradient(180deg,#241c31,#1c1626);
     position:sticky; top:0; z-index:20;
   }
-  .brand{display:flex; align-items:baseline; gap:12px}
+  .brand{display:flex; align-items:baseline; gap:8px}
   .brand .tab{
-    font-family:var(--serif); font-size:22px; letter-spacing:.5px; color:var(--paper);
-    background:var(--evidence); padding:4px 14px 6px; border-radius:3px 3px 0 0;
+    font-family:var(--serif); font-size:16px; letter-spacing:.5px; color:var(--paper);
+    background:var(--evidence); padding:3px 10px 4px; border-radius:3px 3px 0 0;
     box-shadow:0 3px 0 #a5271f; transform:rotate(-1deg);
   }
-  .brand h1{font-family:var(--serif); font-weight:600; font-size:20px; margin:0; letter-spacing:.3px}
+  .brand h1{font-family:var(--serif); font-weight:600; font-size:15px; margin:0; letter-spacing:.3px}
   .brand .sub{font-family:var(--mono); font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:2px}
   .spacer{flex:1}
-  .pulsantiera{display:flex; gap:8px; flex-wrap:wrap; justify-content:center; align-items:center; background:var(--desk); padding:10px 20px; border-bottom:1px solid var(--line); box-shadow:0 4px 15px rgba(0,0,0,0.2)}
-  .pulsantiera .separator{width:1px; height:24px; background:var(--line2); margin:0 4px}
+  .pulsantiera{display:flex; gap:6px; flex-wrap:wrap; justify-content:center; align-items:center;}
+  .pulsantiera .separator{width:1px; height:20px; background:var(--line2); margin:0 2px}
   .toprow{/* mantenuta per retrocompatibilita JS, ma stili sovrascritti da pulsantiera */}
   .btn{
     background:var(--panel2); color:var(--text); border:1px solid var(--line2);
-    padding:9px 13px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600;
-    display:inline-flex; align-items:center; gap:7px; transition:.12s;
+    padding:6px 9px; border-radius:8px; cursor:pointer; font-size:11px; font-weight:600;
+    display:inline-flex; align-items:center; gap:5px; transition:.12s;
   }
   .btn:hover{border-color:var(--violet); background:#332947}
   .btn.primary{background:linear-gradient(180deg,var(--violet),var(--violet-dim)); border-color:var(--violet); color:#fff}
@@ -408,11 +408,33 @@
 
 <header>
   <div class="brand">
-    <span class="tab">MURDOKU</span>
+    <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.2</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.2</span></h1>
     </div>
   </div>
+
+  <div class="pulsantiera toprow">
+    <button class="btn ghost" id="settingsBtn" title="Impostazioni dell'applicazione">⚙️</button>
+    <div class="separator"></div>
+    <button class="btn primary" id="genMap" title="Genera una nuova mappa casuale (stanze e arredi), cancellando la precedente"><span class="k">🎲</span> Genera mappa</button>
+    <button class="btn primary" id="genClues" title="Genera un nuovo set di indizi logici univoci basati sulla mappa attuale"><span class="k">🔍</span> Genera indizi</button>
+    <div class="separator"></div>
+    <button class="btn" id="autoFill" title="Sulla mappa attuale (muri e oggetti) posiziona i personaggi e genera gli indizi per una soluzione unica"><span class="k">🧩</span> Completa</button>
+    <button class="btn" id="genBest" title="Genera più set di indizi e tiene il più elegante (soluzione unica)"><span class="k">✨</span> Più eleganti</button>
+    <button class="btn" id="verify" title="Verifica matematicamente se il set di indizi attuale garantisce una soluzione unica per la mappa"><span class="k">✔</span> Verifica</button>
+    <div class="separator"></div>
+    <button class="btn ghost" id="doPrintMap" title="Stampa un PDF di 1 pagina contenente solo la mappa da risolvere (senza soluzione) e le regole"><span class="k">🖨</span> PDF Mappa</button>
+    <button class="btn ghost" id="doPrintFull" title="Stampa un PDF completo (mappa da risolvere + soluzione e ragionamento)"><span class="k">🖨</span> PDF Soluzione</button>
+    <div class="separator"></div>
+    <button class="btn ghost" id="copyCfg" title="Copia negli appunti lo stato attuale del puzzle in formato testuale"><span class="k">🗺️</span> Copia Txt</button>
+    <button class="btn ghost" id="impMarkdown" title="Incolla il testo (Markdown/JSON) di una mappa per caricarla"><span class="k">📂</span> Incolla</button>
+    <div class="separator"></div>
+    <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">⬇️</span> Carica dal Cloud</button>
+    <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">💾</span> Salva sul Cloud</button>
+    <input type="file" id="fileInput" accept="application/json" style="display:none">
+  </div>
+
   <div class="spacer"></div>
   <div class="mode-switch">
     <button class="btn active" id="modeEditorBtn">✏️ Editor</button>
@@ -421,29 +443,7 @@
     <button class="btn primary" id="playerOpenFolderLoadBtn" style="display:none; margin-left:10px;"><span class="k">📁</span> Seleziona Mappa</button>
     <button class="btn secondary" id="playerCopyLinkBtn" style="display:none; margin-left:10px;" title="Copia link per giocare questa mappa"><span class="k">🔗</span> Copia Link</button>
   </div>
-  </div>
 </header>
-
-<div class="pulsantiera toprow">
-  <button class="btn ghost" id="settingsBtn" title="Impostazioni dell'applicazione">⚙️</button>
-  <div class="separator"></div>
-  <button class="btn primary" id="genMap" title="Genera una nuova mappa casuale (stanze e arredi), cancellando la precedente"><span class="k">🎲</span> Genera mappa</button>
-  <button class="btn primary" id="genClues" title="Genera un nuovo set di indizi logici univoci basati sulla mappa attuale"><span class="k">🔍</span> Genera indizi</button>
-  <div class="separator"></div>
-  <button class="btn" id="autoFill" title="Sulla mappa attuale (muri e oggetti) posiziona i personaggi e genera gli indizi per una soluzione unica"><span class="k">🧩</span> Completa</button>
-  <button class="btn" id="genBest" title="Genera più set di indizi e tiene il più elegante (soluzione unica)"><span class="k">✨</span> Più eleganti</button>
-  <button class="btn" id="verify" title="Verifica matematicamente se il set di indizi attuale garantisce una soluzione unica per la mappa"><span class="k">✔</span> Verifica</button>
-  <div class="separator"></div>
-  <button class="btn ghost" id="doPrintMap" title="Stampa un PDF di 1 pagina contenente solo la mappa da risolvere (senza soluzione) e le regole"><span class="k">🖨</span> PDF Mappa</button>
-  <button class="btn ghost" id="doPrintFull" title="Stampa un PDF completo (mappa da risolvere + soluzione e ragionamento)"><span class="k">🖨</span> PDF Soluzione</button>
-  <div class="separator"></div>
-  <button class="btn ghost" id="copyCfg" title="Copia negli appunti lo stato attuale del puzzle in formato testuale"><span class="k">🗺️</span> Copia Txt</button>
-  <button class="btn ghost" id="impMarkdown" title="Incolla il testo (Markdown/JSON) di una mappa per caricarla"><span class="k">📂</span> Incolla</button>
-  <div class="separator"></div>
-  <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">📥</span> Cloud</button>
-  <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">📤</span> Cloud</button>
-  <input type="file" id="fileInput" accept="application/json" style="display:none">
-</div>
 
 <main id="editor-view">
   <section class="col left">
