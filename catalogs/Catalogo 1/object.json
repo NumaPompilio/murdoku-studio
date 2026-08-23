@@ -212,14 +212,14 @@
     "article": "una",
     "symbol": "BO",
     "walkable": false,
-    "description": "Boa galleggiante rotonda o conica, ancorata in mare.",
     "categories": [
       "Mare"
     ],
+    "description": "Boa galleggiante rotonda o conica, ancorata in mare.",
     "render": {
       "type": "svg",
       "scale": 1,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🛟</text></svg>"
+      "svgCode": "<svg xmlns=\"http://w3.org\" viewBox=\"0 0 200 200\" width=\"100%\" height=\"100%\">\n  <!-- Onde del mare sullo sfondo -->\n  <path d=\"M 10 145 Q 35 135 60 145 Q 85 155 110 145 Q 135 135 160 145 Q 185 155 200 145\" fill=\"none\" stroke=\"#29b6f6\" stroke-width=\"4\" stroke-linecap=\"round\" opacity=\"0.5\" />\n  \n  <!-- Catena di ancoraggio inferiore -->\n  <path d=\"M 100 150 C 95 165 105 175 100 190\" fill=\"none\" stroke=\"#78909c\" stroke-width=\"4\" stroke-dasharray=\"2,6\" stroke-linecap=\"round\" />\n\n  <!-- Corpo principale della boa (Parte inferiore sommersa) -->\n  <path d=\"M 60 120 C 60 160 140 160 140 120 Z\" fill=\"#e53935\" />\n  \n  <!-- Corpo principale della boa (Parte superiore emersa) -->\n  <path d=\"M 60 120 C 60 90 140 90 140 120 Z\" fill=\"#ffffff\" />\n  \n  <!-- Linea di giunzione e fascia nera centrale -->\n  <ellipse cx=\"100\" cy=\"120\" rx=\"40\" ry=\"8\" fill=\"none\" stroke=\"#37474f\" stroke-width=\"3\" />\n\n  <!-- Struttura a traliccio superiore (Metallo) -->\n  <path d=\"M 75 100 L 90 40 L 110 40 L 125 100\" fill=\"none\" stroke=\"#37474f\" stroke-width=\"3\" stroke-linejoin=\"round\" />\n  <line x1=\"82\" y1=\"70\" x2=\"118\" y2=\"70\" stroke=\"#37474f\" stroke-width=\"2\" />\n  <line x1=\"75\" y1=\"100\" x2=\"110\" y2=\"40\" stroke=\"#37474f\" stroke-width=\"1.5\" />\n  <line x1=\"125\" y1=\"100\" x2=\"90\" y2=\"40\" stroke=\"#37474f\" stroke-width=\"1.5\" />\n\n  <!-- Lanterna / Luce di segnalazione -->\n  <rect x=\"92\" y=\"28\" width=\"16\" height=\"12\" fill=\"#fff59d\" stroke=\"#37474f\" stroke-width=\"2\" rx=\"2\" />\n  <path d=\"M 90 28 L 100 18 L 110 28 Z\" fill=\"#37474f\" />\n\n  <!-- Bagliore della luce (Effetto trasparenza) -->\n  <circle cx=\"100\" cy=\"34\" r=\"18\" fill=\"#ffee58\" opacity=\"0.35\" />\n\n  <!-- Onde del mare in primo piano -->\n  <path d=\"M 0 150 Q 25 160 50 150 Q 75 140 100 150 Q 125 160 150 150 Q 175 140 200 150 L 200 200 L 0 200 Z\" fill=\"#0288d1\" opacity=\"0.8\" />\n  <path d=\"M 15 155 Q 40 145 65 155 Q 90 165 115 155 Q 140 145 165 155\" fill=\"none\" stroke=\"#01579b\" stroke-width=\"2\" opacity=\"0.3\" />\n</svg>"
     }
   },
   {
