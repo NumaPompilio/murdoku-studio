@@ -499,3 +499,21 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Aggiornamento dinamico del `<select>` categorie**: Dopo il caricamento, il selettore di categoria nella palette dell'Editor viene ricostruito dinamicamente con le categorie presenti nel file remoto.
 - **Reset completo a ogni caricamento**: `OBJ_ORDER` viene azzerato e le categorie (eccetto `all`) vengono ripulite prima di ogni ciclo di caricamento, eliminando ogni residuo di dati precedenti.
 - **Compatibilità**: Il caricamento avviene all'evento `DOMContentLoaded`, prima di qualsiasi interazione utente. I dati remoti sono la singola fonte di verità per tutti gli oggetti.
+
+---
+
+### 38. File di Configurazione Generale (`settings.md`)
+
+- **Nuovo file**: [`settings.md`](../settings.md) nella root del progetto, introdotto come **registro centralizzato dei parametri di configurazione globale** dell'applicazione Murdoku Studio.
+- **Scopo**: Ogni parametro è documentato con tipo, valore di default, scope di applicazione e descrizione del comportamento atteso. Il file funge da fonte di verità per le impostazioni lette a runtime dal codice.
+- **Primo parametro introdotto — `maintenanceMode`**:
+  - **Tipo**: `boolean`
+  - **Default**: `false`
+  - **Scope**: Esclusivamente PLAYER MODE (`?mode=player`)
+  - **Comportamento**: Se `true`, al caricamento del PLAYER in modalità PLAYER MODE viene mostrata una **pagina bloccante fullscreen di manutenzione**, non bypassabile dall'utente, che comunica l'indisponibilità temporanea del servizio. La pagina blocca completamente l'accesso all'interfaccia di gioco.
+  - **Non coinvolge**: la modalità Editor, né il Player avviato internamente all'applicazione (fuori dalla PLAYER MODE).
+- **Implementazione tecnica** (v3.2):
+  - **`APP_CONFIG`**: oggetto JavaScript costante aggiunto all'inizio del secondo `<script>` in `murdoku-studio.html`. Funge da punto unico di configurazione runtime; i valori sono modificabili direttamente nel codice senza cercare la logica.
+  - **`#maintenance-overlay`**: nuovo div HTML fullscreen (`z-index: 999999`), attivato dalla classe `.active`. Visibile prima di qualsiasi altro elemento dell'app. Design coerente con il loading overlay (palette scura `#0f0f1a → #1a0f2e`, accenti oro `#e8b86d`). Contiene: logo "MURDOKU", icona 🔧 con animazione pulse, titolo, sottotitolo e badge testuale.
+  - **Logica**: nel handler `DOMContentLoaded`, subito dopo aver rilevato `isPlayerMode`, se `APP_CONFIG.maintenanceMode === true` viene rimosso l'overlay di caricamento, attivato l'overlay di manutenzione, e la funzione ritorna immediatamente (`return`) bloccando il resto dell'inizializzazione (fetch objects, caricamento mappa, attivazione player).
+  - **Versione**: aggiornata da `v3.1` → `v3.2`.

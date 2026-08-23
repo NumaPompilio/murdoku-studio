@@ -318,69 +318,6 @@
     letter-spacing: 0.5px;
   }
 
-  /* ===== MAINTENANCE OVERLAY ===== */
-  #maintenance-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 999999;
-    background: linear-gradient(135deg, #0f0f1a 0%, #1a0f2e 50%, #0a1628 100%);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 32px;
-    text-align: center;
-    padding: 32px;
-  }
-  #maintenance-overlay.active { display: flex; }
-  .maint-icon {
-    font-size: 64px;
-    animation: maint-pulse 2.5s ease-in-out infinite;
-  }
-  @keyframes maint-pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50%       { transform: scale(1.08); opacity: 0.75; }
-  }
-  .maint-logo {
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 5px;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-  }
-  .maint-logo span { color: #e8b86d; }
-  .maint-title {
-    font-size: clamp(22px, 5vw, 32px);
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 0.5px;
-    line-height: 1.2;
-  }
-  .maint-subtitle {
-    font-size: clamp(14px, 3vw, 17px);
-    color: rgba(255,255,255,0.55);
-    line-height: 1.6;
-    max-width: 420px;
-  }
-  .maint-divider {
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, #e8b86d, #f0d4a0);
-    border-radius: 3px;
-    opacity: 0.7;
-  }
-  .maint-badge {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #e8b86d;
-    border: 1px solid rgba(232,184,109,0.3);
-    padding: 6px 18px;
-    border-radius: 99px;
-    background: rgba(232,184,109,0.06);
-  }
-
   @media (max-width:1000px){ main{grid-template-columns:1fr} .left,.right{border:none} }
 </style>
 </head>
@@ -394,21 +331,11 @@
   <div class="plo-msg" id="ploMsg">Caricamento oggetti...</div>
 </div>
 
-<!-- MAINTENANCE OVERLAY -->
-<div id="maintenance-overlay">
-  <div class="maint-logo">MURDO<span>KU</span></div>
-  <div class="maint-icon">🔧</div>
-  <div class="maint-divider"></div>
-  <div class="maint-title">Servizio in manutenzione</div>
-  <div class="maint-subtitle">Stiamo lavorando per migliorare l'esperienza di gioco.<br>Torna a trovarci tra poco!</div>
-  <div class="maint-badge">Manutenzione in corso</div>
-</div>
-
 <header>
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v4.0</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v3.1</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -527,7 +454,38 @@
       <div class="field">
         <label>Pattern di superficie</label>
         <div class="floor-grid" id="patternGrid">
-          <!-- Popolato dinamicamente da GitHub -->
+          <div class="floor-btn" data-pattern="pavimento" title="Pavimento di casa (Parquet)">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-pavimento)"/></svg>
+            <span>Pavimento</span>
+          </div>
+          <div class="floor-btn" data-pattern="prato" title="Prato erboso">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-prato)"/></svg>
+            <span>Prato</span>
+          </div>
+          <div class="floor-btn" data-pattern="terra" title="Terra battuta">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-terra)"/></svg>
+            <span>Terra</span>
+          </div>
+          <div class="floor-btn" data-pattern="mare" title="Mare / Acqua">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-mare)"/></svg>
+            <span>Mare</span>
+          </div>
+          <div class="floor-btn" data-pattern="spiaggia" title="Spiaggia sabbiosa">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-spiaggia)"/></svg>
+            <span>Spiaggia</span>
+          </div>
+          <div class="floor-btn" data-pattern="asfalto" title="Asfalto / Strada">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-asfalto)"/></svg>
+            <span>Asfalto</span>
+          </div>
+          <div class="floor-btn" data-pattern="mattonelle" title="Mattonelle a scacchi">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-mattonelle)"/></svg>
+            <span>Mattonelle</span>
+          </div>
+          <div class="floor-btn" data-pattern="ghiaccio" title="Ghiaccio">
+            <svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-ghiaccio)"/></svg>
+            <span>Ghiaccio</span>
+          </div>
         </div>
       </div>
       <div class="field">
@@ -2545,19 +2503,6 @@
 
 <script>
 "use strict";
-
-/* ============================================================
-   APP CONFIG — impostazioni globali dell'applicazione.
-   I valori di default vengono sovrascritti da loadRemoteSettings()
-   che legge settings.md pubblicato su GitHub.
-   Riferimento: settings.md nella root del progetto.
-   ============================================================ */
-let APP_CONFIG = {
-  // Valori di default (fallback se settings.md non è raggiungibile)
-  maintenanceMode: false
-};
-window.APP_TILES = [];
-
 const E = window.MurdokuEngine;
 const OBJ = E.OBJECT_LIB;
 
@@ -3138,18 +3083,7 @@ function areaColor(id){
 
 /* Pattern grafici SVG standard per i pavimenti */
 function svgDefs(prefix=""){
-  let s = `<defs>`;
-  // Generazione dinamica pattern caricati da github
-  if (window.APP_TILES && window.APP_TILES.length > 0) {
-    window.APP_TILES.forEach(t => {
-      s += `
-      <pattern id="${prefix}pattern-${t.name}" width="1" height="1" patternUnits="objectBoundingBox" patternContentUnits="objectBoundingBox">
-        <image href="${t.url}" x="0" y="0" width="1" height="1" preserveAspectRatio="none" />
-      </pattern>`;
-    });
-  } else {
-    // Fallback di default se GitHub non risponde (pattern pavimento originale)
-    s += `
+  return `<defs>
     <pattern id="${prefix}pattern-pavimento" width="32" height="32" patternUnits="userSpaceOnUse">
       <rect width="32" height="32" fill="#e3caa5"/>
       <rect x="0" y="0" width="16" height="8" fill="#dfc39a" opacity="0.4"/>
@@ -3163,10 +3097,55 @@ function svgDefs(prefix=""){
       <line x1="32" y1="8" x2="32" y2="16" stroke="#b39268" stroke-width="0.8"/>
       <line x1="20" y1="16" x2="20" y2="24" stroke="#b39268" stroke-width="0.8"/>
       <line x1="8" y1="24" x2="8" y2="32" stroke="#b39268" stroke-width="0.8"/>
-    </pattern>`;
-  }
-  s += `</defs>`;
-  return s;
+    </pattern>
+    <pattern id="${prefix}pattern-prato" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#a4d18c"/>
+      <path d="M 6 26 q -2 -9 2 -14 q 3 5 2 14 Z M 10 28 q 1 -11 6 -16 q -1 7 -2 16 Z M 22 14 q -2 -7 1 -11 q 2 4 2 11 Z M 25 15 q 2 -8 5 -12 q -1 5 -1 12 Z" fill="#6f9e52" opacity="0.65"/>
+      <circle cx="16" cy="20" r="1" fill="#88b56d"/>
+    </pattern>
+    <pattern id="${prefix}pattern-terra" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#d4b292"/>
+      <ellipse cx="8" cy="10" rx="3" ry="2" fill="#9e7b57" opacity="0.5"/>
+      <ellipse cx="24" cy="22" rx="4" ry="2.5" fill="#8f6c49" opacity="0.45"/>
+      <circle cx="18" cy="8" r="1.2" fill="#7d5937" opacity="0.5"/>
+      <circle cx="12" cy="26" r="1.5" fill="#7d5937" opacity="0.45"/>
+      <path d="M 2 18 q 6 2 10 -1 M 20 28 q 5 -2 9 1" stroke="#9e7b57" stroke-width="0.9" fill="none" opacity="0.4"/>
+    </pattern>
+    <pattern id="${prefix}pattern-mare" width="36" height="24" patternUnits="userSpaceOnUse">
+      <rect width="36" height="24" fill="#9cd0ea"/>
+      <path d="M 0 8 q 9 -4 18 0 t 18 0 M 0 20 q 9 -4 18 0 t 18 0" fill="none" stroke="#488cb8" stroke-width="1.3" opacity="0.6"/>
+      <path d="M 9 14 q 9 -3 18 0" fill="none" stroke="#ffffff" stroke-width="0.9" opacity="0.7"/>
+    </pattern>
+    <pattern id="${prefix}pattern-spiaggia" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#f2deaa"/>
+      <circle cx="6" cy="7" r="1.1" fill="#c4aa6c" opacity="0.55"/>
+      <circle cx="20" cy="12" r="1" fill="#c4aa6c" opacity="0.5"/>
+      <circle cx="12" cy="24" r="1.3" fill="#bfa361" opacity="0.6"/>
+      <circle cx="27" cy="26" r="0.9" fill="#c4aa6c" opacity="0.5"/>
+      <path d="M 0 16 q 8 3 16 0 t 16 0" fill="none" stroke="#d4be83" stroke-width="1" opacity="0.55"/>
+    </pattern>
+    <pattern id="${prefix}pattern-asfalto" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#5c5c5c"/>
+      <circle cx="5" cy="5" r="1" fill="#444" opacity="0.6"/>
+      <circle cx="25" cy="8" r="1.5" fill="#777" opacity="0.4"/>
+      <circle cx="12" cy="20" r="1" fill="#333" opacity="0.5"/>
+      <circle cx="28" cy="26" r="1" fill="#888" opacity="0.4"/>
+      <circle cx="18" cy="30" r="1.5" fill="#444" opacity="0.6"/>
+      <circle cx="8" cy="28" r="1" fill="#777" opacity="0.4"/>
+      <circle cx="20" cy="14" r="1" fill="#333" opacity="0.5"/>
+      <circle cx="2" cy="16" r="1.2" fill="#888" opacity="0.4"/>
+    </pattern>
+    <pattern id="${prefix}pattern-mattonelle" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#f0f0f0"/>
+      <rect x="16" y="0" width="16" height="16" fill="#3b3b3b"/>
+      <rect x="0" y="16" width="16" height="16" fill="#3b3b3b"/>
+    </pattern>
+    <pattern id="${prefix}pattern-ghiaccio" width="32" height="32" patternUnits="userSpaceOnUse">
+      <rect width="32" height="32" fill="#d4f1f9"/>
+      <path d="M 0 12 L 10 16 L 24 8 M 10 16 L 16 32 M 24 8 L 32 14" stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.8"/>
+      <path d="M 4 0 L 12 8 L 8 20 M 12 8 L 28 2" stroke="#b2ebf2" stroke-width="1" fill="none" opacity="0.7"/>
+    </pattern>
+  </defs>`;
 }
 
 /* Risolve il riempimento di un'area: pattern, colore personalizzato o colore di default */
@@ -3474,11 +3453,10 @@ function render(){
     if (titleStr) s += `</g>`;
   }
 
-  // etichette aree
-  const labelPositions = computeAreaLabelPositions(m, analysis);
-  for(const a in labelPositions){
-    const pos = labelPositions[a];
-    const cx = P + pos.c * CS, cy = P + pos.r * CS;
+  // etichette aree (una per area, al centroide)
+  const centroid={};
+  for(let r=0;r<N;r++) for(let c=0;c<N;c++){ const a=analysis.areaOf[r*N+c]; if(a<0)continue; (centroid[a]=centroid[a]||{sx:0,sy:0,n:0}); centroid[a].sx+=c; centroid[a].sy+=r; centroid[a].n++; }
+  for(const a in centroid){ const g=centroid[a]; const cx=P+(g.sx/g.n+0.5)*CS, cy=P+(g.sy/g.n+0.5)*CS;
     const nm=(m.areaNames&&m.areaNames[a])||("Area "+(+a+1));
     s += `<text x="${cx}" y="${cy}" font-size="16" fill="#6a5f4a" text-anchor="middle" opacity="0.6" pointer-events="none" font-family="var(--mono)" style="text-transform:uppercase; letter-spacing:1px; font-weight:700">${escapeXml(nm)}</text>`;
   }
@@ -4781,16 +4759,7 @@ function buildMapConfigMarkdown(){
     let floorInfo = "";
     if (m.areaFloors && m.areaFloors[a]) {
       const f = m.areaFloors[a];
-      let styleName = f.value;
-      if (f.type === "color") {
-        const sw = document.querySelector(`.color-swatch[data-color="${f.value}"]`);
-        if (sw) styleName = sw.title;
-        else styleName = `Tinta ${f.value}`;
-      } else {
-        const pbtn = document.querySelector(`.floor-btn[data-pattern="${f.value}"]`);
-        if (pbtn) styleName = pbtn.title;
-      }
-      floorInfo = ` [Pavimento: ${styleName}]`;
+      floorInfo = ` [Stile: ${f.type}=${f.value}]`;
     }
     L.push(`- **${areaLetter(a)} = ${m.areaNames[a]||("Area "+(a+1))}**${floorInfo} — celle occupabili: ${cells.join(", ")||"nessuna"}`);
   });
@@ -5488,12 +5457,8 @@ function boardSVGForPrint(withSolution){
     if(cell.object){ s+=objectGlyph(cell.object, x+CS/2, y+CS/2, CS); }
   }
   // etichette aree
-  const labelPositions = computeAreaLabelPositions(m, an);
-  for(const a in labelPositions){
-    const pos = labelPositions[a];
-    const cx = P + pos.c * CS, cy = P + pos.r * CS;
-    s+=`<text x="${cx}" y="${cy}" font-size="8" fill="#555" text-anchor="middle" font-weight="700">${escapeXml((m.areaNames&&m.areaNames[a])||("Area "+(+a+1)))}</text>`;
-  }
+  const cen={}; for(let r=0;r<N;r++)for(let c=0;c<N;c++){const a=an.areaOf[r*N+c];if(a<0)continue;(cen[a]=cen[a]||{sx:0,sy:0,n:0});cen[a].sx+=c;cen[a].sy+=r;cen[a].n++;}
+  for(const a in cen){const g=cen[a];s+=`<text x="${P+(g.sx/g.n+0.5)*CS}" y="${P+(g.sy/g.n+0.5)*CS}" font-size="8" fill="#555" text-anchor="middle" font-weight="700">${escapeXml((m.areaNames&&m.areaNames[a])||("Area "+(+a+1)))}</text>`;}
   if(withSolution){ for(const e of m.entities){ const x=P+e.col*CS,y=P+e.row*CS,cx=x+CS/2,cy=y+CS/2;
     if(e.kind==="victim"){ s+=`<circle cx="${cx}" cy="${cy}" r="${CS*0.33}" fill="none" stroke="#c00" stroke-width="2" stroke-dasharray="3 2"/><text x="${cx}" y="${cy+5}" font-size="16" text-anchor="middle" fill="#c00">✖</text>`; }
     else { s+=`<circle cx="${cx}" cy="${cy}" r="${CS*0.31}" fill="${e.isMurderer?'#c00':'#333'}"/><text x="${cx}" y="${cy+5}" font-size="15" text-anchor="middle" fill="#fff" font-weight="700">${e.initial}</text>`; } } }
@@ -5580,7 +5545,7 @@ function restore(){ try{ const raw=localStorage.getItem("murdoku:autosave"); if(
 /* =====================================================================
    AVVIO
    ===================================================================== */
-document.body.insertAdjacentHTML("afterbegin", `<svg id="global-svg-defs" width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;">${svgDefs("")}</svg>`);
+document.body.insertAdjacentHTML("afterbegin", `<svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;">${svgDefs("")}</svg>`);
 
 if(!restore()){
   // mappa iniziale di esempio
@@ -6430,193 +6395,6 @@ const CATEGORY_NAME_MAP = {
 };
 
 
-/* -----------------------------------------------------------------------
-   computeAreaLabelPositions(m, an)
-   Restituisce un oggetto con le coordinate {r, c} dove piazzare il nome
-   della stanza. Cerca celle contigue non occupate.
-   ----------------------------------------------------------------------- */
-function computeAreaLabelPositions(m, an) {
-  const N = m.size;
-  const positions = {};
-  
-  // Raggruppa tutte le celle per area
-  const areaCells = {};
-  for(let r=0; r<N; r++){
-    for(let c=0; c<N; c++){
-      const a = an.areaOf[r*N+c];
-      if (a < 0) continue;
-      if (!areaCells[a]) areaCells[a] = [];
-      areaCells[a].push({r, c});
-    }
-  }
-
-  for(const a in areaCells) {
-    const cells = areaCells[a];
-    
-    // Trova le celle vuote (senza oggetti) della stanza
-    const emptyCells = cells.filter(cell => !E.cellAt(m, cell.r, cell.c).object);
-    
-    // Costruiamo una griglia NxN per le celle vuote
-    const emptyGrid = Array(N).fill(0).map(() => Array(N).fill(false));
-    emptyCells.forEach(cell => { emptyGrid[cell.r][cell.c] = true; });
-
-    let candidates3 = [];
-    let candidates2 = [];
-    let candidates1 = emptyCells.map(c => ({r: c.r, c: c.c}));
-
-    for(let r=0; r<N; r++){
-      for(let c=0; c<N; c++){
-        if(emptyGrid[r][c]){
-          if(c+1 < N && emptyGrid[r][c+1]) {
-            candidates2.push({r, c1: c, c2: c+1});
-            if(c+2 < N && emptyGrid[r][c+2]) {
-              candidates3.push({r, c1: c, c2: c+1, c3: c+2});
-            }
-          }
-        }
-      }
-    }
-
-    // Calcolo centroide geometrico originario dell'area (come fallback)
-    let sumR = 0, sumC = 0;
-    cells.forEach(c => { sumR += c.r; sumC += c.c; });
-    const centerR = sumR / cells.length;
-    const centerC = sumC / cells.length;
-
-    let targetR, targetC;
-
-    if (candidates3.length > 0) {
-      // Sceglie quello più vicino al centroide
-      const best = candidates3.reduce((best, curr) => {
-        const distCurr = Math.pow(curr.r - centerR, 2) + Math.pow(curr.c2 - centerC, 2);
-        const distBest = Math.pow(best.r - centerR, 2) + Math.pow(best.c2 - centerC, 2);
-        return distCurr < distBest ? curr : best;
-      }, candidates3[0]);
-      targetR = best.r + 0.5;
-      targetC = best.c2 + 0.5; // il centro è la cella di mezzo
-    } 
-    else if (candidates2.length > 0) {
-      const best = candidates2.reduce((best, curr) => {
-        const midC = (curr.c1 + curr.c2) / 2;
-        const distCurr = Math.pow(curr.r - centerR, 2) + Math.pow(midC - centerC, 2);
-        const midCBest = (best.c1 + best.c2) / 2;
-        const distBest = Math.pow(best.r - centerR, 2) + Math.pow(midCBest - centerC, 2);
-        return distCurr < distBest ? curr : best;
-      }, candidates2[0]);
-      targetR = best.r + 0.5;
-      targetC = (best.c1 + best.c2) / 2 + 0.5;
-    }
-    else if (candidates1.length > 0) {
-      const best = candidates1.reduce((best, curr) => {
-        const distCurr = Math.pow(curr.r - centerR, 2) + Math.pow(curr.c - centerC, 2);
-        const distBest = Math.pow(best.r - centerR, 2) + Math.pow(best.c - centerC, 2);
-        return distCurr < distBest ? curr : best;
-      }, candidates1[0]);
-      targetR = best.r + 0.5;
-      targetC = best.c + 0.5;
-    } 
-    else {
-      // Fallback
-      targetR = centerR + 0.5;
-      targetC = centerC + 0.5;
-    }
-    
-    positions[a] = { r: targetR, c: targetC };
-  }
-  
-  return positions;
-}
-
-/* -----------------------------------------------------------------------
-   loadTilesFromGithub()
-   Legge dinamicamente le immagini nella cartella assets/tiles
-   ----------------------------------------------------------------------- */
-async function loadTilesFromGithub() {
-  try {
-    const apiUrl = `https://api.github.com/repos/NumaPompilio/murdoku-studio/contents/assets/tiles?ref=main&t=${new Date().getTime()}`;
-    const res = await fetch(apiUrl);
-    if (res.ok) {
-      const files = await res.json();
-      window.APP_TILES = [];
-      files.forEach(f => {
-        if (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.webp')) {
-          let label = f.name.replace(/^tile_/, '').replace(/\.[^/.]+$/, '').replace(/_/g, ' ');
-          label = label.charAt(0).toUpperCase() + label.slice(1);
-          window.APP_TILES.push({
-            name: f.name.replace(/\.[^/.]+$/, ''),
-            label: label,
-            url: f.download_url
-          });
-        }
-      });
-      console.log(`[Tiles] Caricati ${window.APP_TILES.length} pavimenti da GitHub.`);
-      
-      const defsSvg = document.getElementById("global-svg-defs");
-      if (defsSvg) defsSvg.innerHTML = svgDefs("");
-
-      const grid = document.getElementById('patternGrid');
-      if (grid) {
-        grid.innerHTML = '';
-        window.APP_TILES.forEach(t => {
-          const btn = document.createElement('div');
-          btn.className = 'floor-btn';
-          btn.dataset.pattern = t.name;
-          btn.title = t.label;
-          btn.innerHTML = `<svg class="floor-preview" viewBox="0 0 32 20"><rect width="32" height="20" fill="url(#pattern-${t.name})"/></svg><span>${t.label}</span>`;
-          btn.addEventListener("click", () => setAreaFloor("pattern", btn.dataset.pattern));
-          grid.appendChild(btn);
-        });
-      }
-    } else {
-      console.warn('Impossibile caricare i tiles da GitHub (HTTP ' + res.status + ')');
-    }
-  } catch (e) {
-    console.error('[Tiles] Errore nel caricamento dei tiles:', e);
-  }
-}
-
-/* -----------------------------------------------------------------------
-   loadRemoteSettings()
-   Legge settings.md da GitHub e popola APP_CONFIG.
-   Stesso pattern API→raw di loadRemoteObjects().
-   ----------------------------------------------------------------------- */
-async function loadRemoteSettings() {
-  try {
-    let text = '';
-    try {
-      const apiUrl = `https://api.github.com/repos/NumaPompilio/murdoku-studio/contents/settings.md?ref=main&t=${new Date().getTime()}`;
-      const res = await fetch(apiUrl);
-      if (res.ok) {
-        const jsonRes = await res.json();
-        text = decodeURIComponent(escape(atob(jsonRes.content.replace(/\s/g, ''))));
-      } else {
-        throw new Error('API limit hit or settings.md missing');
-      }
-    } catch (apiErr) {
-      console.warn('Fallback a raw GitHub per settings.md:', apiErr);
-      const rawUrl = `https://raw.githubusercontent.com/NumaPompilio/murdoku-studio/main/settings.md?t=${new Date().getTime()}`;
-      const res = await fetch(rawUrl);
-      if (!res.ok) {
-        console.warn('settings.md non raggiungibile (HTTP ' + res.status + '), uso valori default.');
-        return;
-      }
-      text = await res.text();
-    }
-
-    // --- Parsing parametri da settings.md ---
-    // maintenanceMode: cerca la riga "maintenanceMode = true/false"
-    const maintMatch = text.match(/maintenanceMode\s*=\s*(true|false)/i);
-    if (maintMatch) {
-      APP_CONFIG.maintenanceMode = maintMatch[1].toLowerCase() === 'true';
-    }
-
-    console.log('[Settings] APP_CONFIG caricato da GitHub:', APP_CONFIG);
-  } catch (e) {
-    console.error('[Settings] Errore nel caricamento di settings.md:', e);
-    // In caso di errore mantiene i valori di default
-  }
-}
-
 async function loadRemoteObjects() {
   // Restituisce una Promise risolta quando il caricamento è completato
   try {
@@ -6755,22 +6533,10 @@ window.addEventListener('DOMContentLoaded', async () => {
   const ploMsg  = document.getElementById('ploMsg');
   if (isPlayerMode && overlay) overlay.classList.add('active');
 
-  // Fase 0: carica settings.md da GitHub (configurazione globale app)
-  if (ploMsg) ploMsg.textContent = 'Caricamento impostazioni...';
-  await loadRemoteSettings();
-
-  // Controllo manutenzione: blocca tutto se siamo in PLAYER MODE e maintenanceMode è attivo
-  if (isPlayerMode && APP_CONFIG.maintenanceMode) {
-    if (overlay) overlay.classList.remove('active');
-    const maintOverlay = document.getElementById('maintenance-overlay');
-    if (maintOverlay) maintOverlay.classList.add('active');
-    return; // blocca il resto del caricamento
-  }
-
-  // Fase 1: carica objects.md e tiles (50%)
-  if (ploMsg) ploMsg.textContent = 'Caricamento oggetti e pavimenti...';
+  // Fase 1: carica objects.md (50%)
+  if (ploMsg) ploMsg.textContent = 'Caricamento oggetti...';
   if (ploBar)  ploBar.style.width = '0%';
-  await Promise.all([loadRemoteObjects(), loadTilesFromGithub()]);
+  await loadRemoteObjects();
   if (ploBar)  ploBar.style.width = '50%';
 
   if (isPlayerMode) {
