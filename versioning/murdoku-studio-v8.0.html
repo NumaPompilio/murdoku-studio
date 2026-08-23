@@ -233,7 +233,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v8.1</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v8.0</span></h1>
     </div>
   </div>
 
@@ -4544,39 +4544,8 @@ $("#resetAreaFloor").addEventListener("click", resetAreaFloor);
 
 const objCatEl = $("#objCategory");
 if(objCatEl){
-  objCatEl.addEventListener("change", async () => {
-    const dir = objCatEl.value;
-    if (dir) {
-      try {
-        const objRes = await ghFetch(`catalogs/${dir}/object.json`);
-        if (objRes.ok) {
-          const data = await objRes.json();
-          let textContent = data.content;
-          if (!textContent) {
-              const rawRes = await fetch(data.download_url);
-              textContent = btoa(unescape(encodeURIComponent(await rawRes.text())));
-          }
-          const arr = JSON.parse(decodeURIComponent(escape(atob(textContent.replace(/\\n/g, "")))));
-          window.CATALOG_OBJECTS[dir] = [];
-          for (const o of arr) {
-            if(!OBJ_ORDER.includes(o.id)) OBJ_ORDER.push(o.id);
-            E.OBJECT_LIB[o.id] = { label: o.label, walkable: !!o.walkable, catalog: dir };
-            if (o.article) E.OBJ_ART[o.id] = o.article;
-            if (o.symbol) MD_CODE[o.id] = o.walkable ? o.symbol.toLowerCase() : o.symbol.toUpperCase();
-            if (o.render && o.render.svgCode) {
-               window.DYNAMIC_SVGS[o.id] = { type: 'svg', scale: o.render.scale || 1, code: o.render.svgCode };
-            }
-            window.CATALOG_OBJECTS[dir].push(o.id);
-          }
-          const byLabel = (a, b) => (E.OBJECT_LIB[a]?.label || a).localeCompare(E.OBJECT_LIB[b]?.label || b, 'it');
-          window.CATALOG_OBJECTS[dir].sort(byLabel);
-        }
-      } catch (e) {
-        console.warn(`Errore ricaricamento catalogo ${dir}`, e);
-      }
-    }
+  objCatEl.addEventListener("change", () => {
     renderPalette();
-    render();
   });
 }
 
