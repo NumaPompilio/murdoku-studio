@@ -439,11 +439,6 @@
     <button class="btn primary" id="catalogNewBtn" title="Crea un nuovo catalogo vuoto">➕ Nuovo Catalogo</button>
     <button class="btn" id="catalogExportBtn" disabled>Esporta Catalogo</button>
     <button class="btn" id="catalogManageCategoriesBtn">Gestisci Categorie</button>
-    <select id="catalogWalkableFilter" class="sel" style="width:auto;">
-      <option value="all">Tutti</option>
-      <option value="walkable">Calpestabili</option>
-      <option value="non_walkable">Non calpestabili</option>
-    </select>
   </div>
 
   <div style="flex: 1; display: flex; justify-content: flex-end;">
@@ -7279,8 +7274,7 @@ let catObjDeleteTarget = null;
 })();
 
   // Event Listeners for UI
-  const walkFilter = $("#catalogWalkableFilter");
-  if (walkFilter) walkFilter.addEventListener("change", renderObjectCards);
+
 
   $("#catalogSelector").addEventListener("change", (e) => {
     currentCatalog = e.target.value;
@@ -7712,9 +7706,18 @@ function renderObjectCards() {
       <div style="display:flex; justify-content:space-between; padding:0 10px;">
         <span>Non calpest.:</span> <div><b style="color:#ff4444">${nonWalkableCount}</b> <span style="font-size:10px">(${nonWalkPct}%)</span></div>
       </div>
+      <div style="margin-top:12px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.05); text-align:left; padding-left:10px; padding-right:10px;">
+        <div style="margin-bottom:6px; font-weight:bold; font-size:11px;">Filtra per:</div>
+        <select id="catalogWalkableFilter" class="sel" style="width:100%; padding:4px;">
+          <option value="all" ${filterVal==="all" ? "selected" : ""}>Tutti</option>
+          <option value="walkable" ${filterVal==="walkable" ? "selected" : ""}>Calpestabili</option>
+          <option value="non_walkable" ${filterVal==="non_walkable" ? "selected" : ""}>Non calpestabili</option>
+        </select>
+      </div>
     </div>
   `;
   grid.appendChild(statsCard);
+  $("#catalogWalkableFilter").addEventListener("change", renderObjectCards);
 
   // New Card
   const newCard = document.createElement("div");
