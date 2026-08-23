@@ -6816,9 +6816,14 @@ function getGithubConfig() {
 }
 
 // Helper per mostrare errori
-function showCloudError(res, defaultMsg) {
+async function showCloudError(res, defaultMsg) {
+  try {
+    const errorText = await res.text();
+    console.error("GitHub API Error Payload:", errorText);
+  } catch(e) {}
+  
   if(res.status === 401 || res.status === 403) toast("Errore GitHub: Token non valido o permessi insufficienti.");
-  else if(res.status === 404) toast("Errore GitHub: Repository o file non trovato.");
+  else if(res.status === 404) toast("Errore GitHub (404): Controlla Owner/Repo o i log in Console.");
   else toast(defaultMsg + ` (HTTP ${res.status})`);
 }
 
