@@ -411,7 +411,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.3</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.4</span></h1>
     </div>
   </div>
 
@@ -7754,7 +7754,6 @@ function renderObjectCards() {
     const card = document.createElement("div");
     card.className = "catalog-card";
     card.style.cursor = "pointer";
-    card.style.borderColor = obj.walkable ? "#4caf50" : "#ff4444";
     card.style.backgroundColor = obj.walkable ? "rgba(76, 175, 80, 0.15)" : "rgba(255, 68, 68, 0.15)";
     card.onclick = (e) => {
       if(e.target.closest('.cc-btn')) return;
