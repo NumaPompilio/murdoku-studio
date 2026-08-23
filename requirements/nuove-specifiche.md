@@ -532,3 +532,10 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - Interfaccia a griglia con Card per ogni oggetto, con possibilità di modifica, eliminazione e creazione di nuovi oggetti.
 - Esportazione del catalogo selezionato (JSON) tramite popup dedicato con funzioni Copia e Scarica.
 - Le modali rispettano la struttura e le classi standard del progetto (`.modal` e `.box`).
+
+
+## Ottimizzazioni UI e Funzionalità Object Catalog (v6.1)
+- Modificata la creazione di un nuovo catalogo tramite popup personalizzato (invece del prompt di sistema).
+- Aggiunta funzione di Eliminazione intero Catalogo: accessibile quando un catalogo è selezionato. Elimina ricorsivamente tutti i file dal repository GitHub dopo doppia conferma digitata (`delete`).
+- Ottimizzato lo spazio delle card degli oggetti nella griglia per renderle più compatte.
+- Bugfix: ripristinato il pulsante di chiusura (X) nella modale Log di Sistema e corretto il nome del pulsante in 'Mostra Log'.

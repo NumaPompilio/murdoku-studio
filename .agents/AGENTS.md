@@ -6,9 +6,11 @@ Ogni volta che viene implementata una nuova funzionalità, una modifica logica o
 - Riportare con precisione **solo le differenze e le estensioni** rispetto alle specifiche di partenza in [`requirements/specifiche-murdoku-dettagliate.md`](../requirements/specifiche-murdoku-dettagliate.md).
 - Mantenere il contenuto di `nuove-specifiche.md` sempre coerente e allineato con quanto effettivamente sviluppato.
 
-## Riferimento a Mappe, Puzzle e Soluzioni di Esempio
-I file di esempio (PDF delle mappe originali, soluzioni, ecc.) si trovano all'interno della cartella `reference/`.
-**REGOLA TASSATIVA**: La cartella `reference/` e tutto il suo contenuto NON fanno parte del progetto attivo e devono essere **COMPLETAMENTE IGNORATI** durante lo scanning del codice, le ricerche (grep) o qualsiasi altra operazione di analisi, a meno che l'utente non ti chieda esplicitamente e specificamente di leggerli o farvi riferimento. Non includere mai file presenti in `reference/` nelle modifiche di progetto a meno che non ti venga esplicitamente richiesto.
+## Cartelle e File da Ignorare
+Le cartelle `reference/`, `output/` e `requirements/` e tutto il loro contenuto **devono essere completamente ignorati** durante lo scanning del codice, le ricerche (`grep`) o qualsiasi altra operazione di analisi del codice sorgente atta a pianificare modifiche.
+- **Eccezione**: L'utente può chiedere esplicitamente di leggerli o farvi riferimento (come nel caso del file di specifiche/requisiti).
+- **Modifiche**: Non includere mai file presenti in queste cartelle nelle modifiche di progetto a meno che non ti venga esplicitamente richiesto.
+
 
 ## Versioning dell'Applicazione
 Ogni volta che viene effettuata una modifica al codice di `murdoku-studio.html`, è obbligatorio aggiornare il numero di versione mostrato nell'interfaccia (header, accanto a "Studio"):

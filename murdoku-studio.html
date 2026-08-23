@@ -410,7 +410,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.0</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v6.1</span></h1>
     </div>
   </div>
 
@@ -4171,7 +4171,7 @@ function renderSteps(){
     else if (d === "hard") { diffColor = "#ffebee"; diffText = "#c62828"; }
     else if (d === "expert") { diffColor = "#311b92"; diffText = "#fff"; }
     
-    html += `<div style="margin-bottom: 12px; font-size: 15px; font-weight: bold; color: #555;">
+    html += `<div style="margin-bottom: 12px; font-size: 14px; font-weight: bold; color: #555;">
       Difficoltà stimata: <span style="display: inline-block; padding: 3px 10px; border-radius: 12px; background: ${diffColor}; color: ${diffText}; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">${escapeHtml(state.aiDifficulty)}</span>
     </div>`;
   }
@@ -6928,8 +6928,8 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
   }
   .catalog-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
   }
   .catalog-card {
     background: var(--panel);
@@ -6962,7 +6962,7 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     border-color: var(--primary);
   }
   .cc-icon-container {
-    height: 120px;
+    height: 80px;
     background: rgba(255,255,255,0.03);
     display: flex;
     justify-content: center;
@@ -6976,8 +6976,8 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
   }
   .cc-fallback {
-    width: 60px;
-    height: 60px;
+    width: 48px;
+    height: 48px;
     background: var(--primary);
     color: #fff;
     border-radius: 8px;
@@ -6985,7 +6985,7 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 18px;
     text-transform: uppercase;
   }
   .cc-body {
@@ -6997,8 +6997,8 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     font-size: 13px;
   }
   .cc-id { font-family: monospace; color: var(--text-dim); font-size: 11px; }
-  .cc-label { font-weight: bold; font-size: 15px; color: var(--text); }
-  .cc-desc { color: var(--text-faint); font-size: 12px; flex: 1; }
+  .cc-label { font-weight: bold; font-size: 14px; color: var(--text); }
+  .cc-desc { color: var(--text-faint); font-size: 11px; flex: 1; }
   .cc-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
   .cc-tag { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-size: 10px; }
   .cc-footer {
@@ -7027,6 +7027,7 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
     <select id="catalogSelector" class="sel" style="min-width:200px; padding:8px; border-radius:6px; background:var(--ink); color:var(--text); border:1px solid var(--line2);">
       <option value="">Seleziona un catalogo...</option>
     </select>
+    <button class="btn" id="catalogDeleteBtn" style="display:none; color:#ff4444; border-color:transparent;" title="Elimina l'intero catalogo">🗑️ Elimina</button>
     <button class="btn primary" id="catalogNewBtn" title="Crea un nuovo catalogo vuoto">➕ Nuovo Catalogo</button>
     <button class="btn" id="catalogExportBtn" disabled>Esporta Catalogo</button>
     <button class="btn" id="catalogManageCategoriesBtn">Gestisci Categorie</button>
@@ -7146,6 +7147,44 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
   </div>
 </div>
 
+
+<!-- Modale Nuovo Catalogo -->
+<div id="catalogNewModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:70; padding:20px">
+  <div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(400px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+    <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line)">
+      <h3 style="margin:0; font-family:var(--serif); font-size:17px">Nuovo Catalogo</h3>
+    </div>
+    <div class="mb" style="padding:16px;">
+      <div class="field">
+        <label>Nome del Catalogo (solo lettere, numeri, trattini)</label>
+        <input type="text" id="catNewNameInput" placeholder="es. catalog-2" class="inp" style="width:100%; padding:8px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:6px">
+      </div>
+    </div>
+    <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center; justify-content:flex-end">
+      <button class="btn" id="catNewCancel">Annulla</button>
+      <button class="btn primary" id="catNewConfirm">Crea</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale Elimina Catalogo -->
+<div id="catalogDeleteFullModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:70; padding:20px">
+  <div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(450px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+    <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line)">
+      <h3 style="margin:0; font-family:var(--serif); font-size:17px; color:var(--warn)">⚠️ Elimina Catalogo</h3>
+    </div>
+    <div class="mb" style="padding:16px;">
+      <p style="margin:0 0 10px 0; font-size:14px">Stai per eliminare definitivamente il catalogo <strong id="catDeleteFullName"></strong> e tutti i suoi oggetti. L'operazione non è reversibile.</p>
+      <p style="margin:0 0 10px 0; font-size:13px; color:var(--text-dim)">Per confermare, digita <strong>delete</strong> qui sotto:</p>
+      <input type="text" id="catDeleteFullInput" placeholder="Scrivi delete" class="inp" style="width:100%; padding:8px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:6px; font-weight:bold; color:var(--warn)">
+    </div>
+    <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center; justify-content:flex-end">
+      <button class="btn" id="catDeleteFullCancel">Annulla</button>
+      <button class="btn" style="background:#ff4444; color:#fff" id="catDeleteFullConfirm" disabled>Elimina Catalogo</button>
+    </div>
+  </div>
+</div>
+
 <script id="catalog-script">
 // --- CATALOG LOGIC ---
 const CATALOG_API_BASE = "https://api.github.com/repos";
@@ -7191,6 +7230,12 @@ let catObjDeleteTarget = null;
       document.getElementById("logModal").style.display = "flex";
     });
   }
+  
+  const logCloseBtn = document.getElementById("logClose");
+  if(logCloseBtn) logCloseBtn.addEventListener("click", () => document.getElementById("logModal").style.display = "none");
+  const logModalEl = document.getElementById("logModal");
+  if(logModalEl) logModalEl.addEventListener("click", (e) => { if(e.target.id === "logModal") logModalEl.style.display = "none"; });
+
 })();
 
   // Event Listeners for UI
@@ -7198,20 +7243,78 @@ let catObjDeleteTarget = null;
     currentCatalog = e.target.value;
     if(currentCatalog) {
       $("#catalogExportBtn").disabled = false;
+      $("#catalogDeleteBtn").style.display = "inline-block";
       loadObjects(currentCatalog);
     } else {
       $("#catalogExportBtn").disabled = true;
+      $("#catalogDeleteBtn").style.display = "none";
       $("#catalogGrid").innerHTML = "";
       $("#catalogEmpty").style.display = "block";
     }
   });
   
   $("#catalogNewBtn").addEventListener("click", () => {
-    const name = prompt("Inserisci il nome per il nuovo catalogo (solo lettere, numeri, trattini):");
-    if(name && name.trim()) {
-      const safeName = name.trim().replace(/[^a-zA-Z0-9_-]/g, "").toLowerCase();
-      if(safeName) createNewCatalog(safeName);
-      else toast("Nome non valido.");
+    $("#catNewNameInput").value = "";
+    $("#catalogNewModal").style.display = "flex";
+  });
+  
+  $("#catNewCancel").addEventListener("click", () => $("#catalogNewModal").style.display = "none");
+  $("#catalogNewModal").addEventListener("click", e => { if(e.target.id === "catalogNewModal") $("#catalogNewModal").style.display = "none"; });
+  
+  $("#catNewConfirm").addEventListener("click", () => {
+    const name = $("#catNewNameInput").value.trim();
+    if(name) {
+      const safeName = name.replace(/[^a-zA-Z0-9_-]/g, "").toLowerCase();
+      if(safeName) {
+        $("#catalogNewModal").style.display = "none";
+        createNewCatalog(safeName);
+      } else toast("Nome non valido.");
+    }
+  });
+  
+  // Delete Catalog Modal Logic
+  $("#catalogDeleteBtn").addEventListener("click", () => {
+    if(!currentCatalog) return;
+    $("#catDeleteFullName").textContent = currentCatalog;
+    $("#catDeleteFullInput").value = "";
+    $("#catDeleteFullConfirm").disabled = true;
+    $("#catalogDeleteFullModal").style.display = "flex";
+  });
+  
+  $("#catDeleteFullInput").addEventListener("input", (e) => {
+    $("#catDeleteFullConfirm").disabled = e.target.value.trim().toLowerCase() !== "delete";
+  });
+  
+  $("#catDeleteFullCancel").addEventListener("click", () => $("#catalogDeleteFullModal").style.display = "none");
+  $("#catalogDeleteFullModal").addEventListener("click", e => { if(e.target.id === "catalogDeleteFullModal") $("#catalogDeleteFullModal").style.display = "none"; });
+  
+  $("#catDeleteFullConfirm").addEventListener("click", async () => {
+    if(!currentCatalog) return;
+    $("#catDeleteFullConfirm").disabled = true;
+    try {
+      toast("Eliminazione catalogo in corso...");
+      // Fetch all files in the catalog folder to delete them
+      const res = await ghFetch("catalogs/" + currentCatalog);
+      if(res.ok) {
+        const files = await res.json();
+        for(let file of files) {
+          await ghFetch(file.path, {
+            method: "DELETE",
+            body: JSON.stringify({ message: "Delete catalog file", sha: file.sha })
+          });
+        }
+      }
+      // Update UI
+      catalogList = catalogList.filter(c => c !== currentCatalog);
+      renderCatalogOptions();
+      $("#catalogSelector").value = "";
+      $("#catalogSelector").dispatchEvent(new Event("change"));
+      toast("Catalogo eliminato con successo!");
+      $("#catalogDeleteFullModal").style.display = "none";
+    } catch(e) {
+      console.error(e);
+      toast("Errore durante l'eliminazione del catalogo.");
+      $("#catDeleteFullConfirm").disabled = false;
     }
   });
 
