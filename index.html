@@ -423,15 +423,10 @@
     <button class="btn" id="autoFill" title="Sulla mappa attuale (muri e oggetti) posiziona i personaggi e genera gli indizi per una soluzione unica"><span class="k">🧩</span> Completa</button>
     <button class="btn" id="genBest" title="Genera più set di indizi e tiene il più elegante (soluzione unica)"><span class="k">✨</span> Più eleganti</button>
     <button class="btn" id="verify" title="Verifica matematicamente se il set di indizi attuale garantisce una soluzione unica per la mappa"><span class="k">✔</span> Verifica</button>
-    <div class="separator"></div>
-    <button class="btn ghost" id="doPrintMap" title="Stampa un PDF di 1 pagina contenente solo la mappa da risolvere (senza soluzione) e le regole"><span class="k">🖨</span> PDF Mappa</button>
-    <button class="btn ghost" id="doPrintFull" title="Stampa un PDF completo (mappa da risolvere + soluzione e ragionamento)"><span class="k">🖨</span> PDF Soluzione</button>
-    <div class="separator"></div>
-    <button class="btn ghost" id="copyCfg" title="Copia negli appunti lo stato attuale del puzzle in formato testuale"><span class="k">🗺️</span> Copia Txt</button>
-    <button class="btn ghost" id="impMarkdown" title="Incolla il testo (Markdown/JSON) di una mappa per caricarla"><span class="k">📂</span> Incolla</button>
-    <div class="separator"></div>
     <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">⬇️</span> Carica dal Cloud</button>
     <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">💾</span> Salva sul Cloud</button>
+    <div class="separator"></div>
+    <button class="btn ghost" id="otherActionsBtn" title="Altre azioni"><span class="k">➕</span> Other</button>
     <input type="file" id="fileInput" accept="application/json" style="display:none">
   </div>
 
@@ -793,6 +788,23 @@
     <div style="flex:1; overflow:auto; padding:10px; background:var(--desk); font-family:var(--mono); font-size:11px; white-space:pre-wrap; word-break:break-all;" id="logContent"></div>
     <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center; justify-content:flex-end">
       <button class="btn primary" id="logCopy">Copia Log</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale Other -->
+<div id="otherModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:9999; padding:20px">
+  <div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(320px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+    <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);">
+      <h3 style="margin:0; font-family:var(--serif); font-size:17px">➕ Altre Azioni</h3>
+      <span class="sp" style="flex:1"></span>
+      <button class="btn ghost" id="otherClose">X</button>
+    </div>
+    <div style="padding:16px; display:flex; flex-direction:column; gap:8px">
+      <button class="btn ghost" id="doPrintMap" style="justify-content:flex-start" title="Stampa un PDF di 1 pagina contenente solo la mappa da risolvere (senza soluzione) e le regole"><span class="k">🖨</span> PDF Mappa</button>
+      <button class="btn ghost" id="doPrintFull" style="justify-content:flex-start" title="Stampa un PDF completo (mappa da risolvere + soluzione e ragionamento)"><span class="k">🖨</span> PDF Soluzione</button>
+      <button class="btn ghost" id="copyCfg" style="justify-content:flex-start" title="Copia negli appunti lo stato attuale del puzzle in formato testuale"><span class="k">🗺️</span> Copia Mappa</button>
+      <button class="btn ghost" id="impMarkdown" style="justify-content:flex-start" title="Incolla il testo (Markdown/JSON) di una mappa per caricarla"><span class="k">📂</span> Incolla Mappa</button>
     </div>
   </div>
 </div>
@@ -6814,6 +6826,14 @@ $("#cloudSaveConfirm").addEventListener("click", async () => {
   }
 });
 
+// Modale Other
+$("#otherActionsBtn").addEventListener("click", () => $("#otherModal").style.display = "flex");
+$("#otherClose").addEventListener("click", () => $("#otherModal").style.display = "none");
+$("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal") $("#otherModal").style.display = "none"; });
+["doPrintMap", "doPrintFull", "copyCfg", "impMarkdown"].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener("click", () => $("#otherModal").style.display = "none");
+});
 </script>
 </body>
 </html>
