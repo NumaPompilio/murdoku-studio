@@ -245,14 +245,14 @@
     "article": "una",
     "symbol": "BU",
     "walkable": false,
-    "description": "Buccia di banana gialla aperta e scivolosa sul pavimento.",
     "categories": [
       "Casa & Interni"
     ],
+    "description": "Buccia di banana gialla aperta e scivolosa sul pavimento.",
     "render": {
       "type": "svg",
       "scale": 1,
-      "svgCode": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><text x=\"50\" y=\"50\" font-size=\"70\" text-anchor=\"middle\" dominant-baseline=\"central\">🍌</text></svg>"
+      "svgCode": "<svg xmlns=\"http://w3.org\" viewBox=\"0 0 200 200\" width=\"100%\" height=\"100%\">\n  <!-- Ombra a terra per dare profondità -->\n  <ellipse cx=\"100\" cy=\"165\" rx=\"55\" ry=\"8\" fill=\"#e0e0e0\" />\n\n  <!-- Picciolo superiore (Punto di giunzione marrone) -->\n  <path d=\"M 92 105 Q 100 95 108 105 Q 102 112 92 105 Z\" fill=\"#5d4037\" stroke=\"#3e2723\" stroke-width=\"1.5\" />\n\n  <!-- LEMBO SINISTRO -->\n  <!-- Parte interna chiara -->\n  <path d=\"M 94 106 Q 60 115 35 150 Q 65 145 96 118 Z\" fill=\"#fffde7\" />\n  <!-- Buccia esterna gialla -->\n  <path d=\"M 94 106 Q 55 110 30 152 Q 25 155 30 150 Q 60 135 96 118\" fill=\"#ffeb3b\" stroke=\"#fbc02d\" stroke-width=\"1.5\" stroke-linejoin=\"round\" />\n  <!-- Punta marrone del lembo -->\n  <path d=\"M 30 152 Q 26 154 33 148 Z\" fill=\"#5d4037\" />\n\n  <!-- LEMBO DESTRO -->\n  <!-- Parte interna chiara -->\n  <path d=\"M 106 106 Q 140 115 165 150 Q 135 145 104 118 Z\" fill=\"#fffde7\" />\n  <!-- Buccia esterna gialla -->\n  <path d=\"M 106 106 Q 145 110 170 152 Q 175 155 170 150 Q 140 135 104 118\" fill=\"#ffeb3b\" stroke=\"#fbc02d\" stroke-width=\"1.5\" stroke-linejoin=\"round\" />\n  <!-- Punta marrone del lembo -->\n  <path d=\"M 170 152 Q 174 154 167 148 Z\" fill=\"#5d4037\" />\n\n  <!-- LEMBO CENTRALE (In primo piano, rivolto verso il basso) -->\n  <!-- Parte interna chiara -->\n  <path d=\"M 95 116 Q 100 140 100 165 Q 105 140 105 116 Z\" fill=\"#fffde7\" />\n  <!-- Buccia esterna gialla -->\n  <path d=\"M 93 116 Q 95 145 98 167 Q 100 170 102 167 Q 105 145 107 116\" fill=\"#ffeb3b\" stroke=\"#fbc02d\" stroke-width=\"1.5\" stroke-linejoin=\"round\" />\n  <!-- Punta marrone del lembo centrale -->\n  <path d=\"M 98 167 Q 100 171 102 167 Z\" fill=\"#3e2723\" />\n\n  <!-- Macchie marroni di maturazione e linee di texture -->\n  <path d=\"M 95 110 Q 75 120 55 132\" fill=\"none\" stroke=\"#f57f17\" stroke-width=\"1.5\" opacity=\"0.6\" />\n  <path d=\"M 105 110 Q 125 120 145 132\" fill=\"none\" stroke=\"#f57f17\" stroke-width=\"1.5\" opacity=\"0.6\" />\n  <circle cx=\"70\" cy=\"120\" r=\"2\" fill=\"#5d4037\" opacity=\"0.5\" />\n  <circle cx=\"125\" cy=\"125\" r=\"2.5\" fill=\"#5d4037\" opacity=\"0.5\" />\n  <circle cx=\"102\" cy=\"140\" r=\"1.5\" fill=\"#5d4037\" opacity=\"0.4\" />\n</svg>"
     }
   },
   {
