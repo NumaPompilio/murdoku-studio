@@ -7680,9 +7680,8 @@ async function saveGithubFile(path, contentStr, message) {
 // UI Cards
 function renderObjectCards() {
   const grid = $("#catalogGrid");
-  grid.innerHTML = "";
-  
   const filterVal = $("#catalogWalkableFilter") ? $("#catalogWalkableFilter").value : "all";
+  grid.innerHTML = "";
   
   // Calculate Stats
   const total = catalogObjects.length;
