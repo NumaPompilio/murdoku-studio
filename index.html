@@ -6908,9 +6908,12 @@ $("#cloudLoadClose").addEventListener("click", () => $("#cloudLoadModal").style.
 $("#cloudLoadModal").addEventListener("click", e => { if(e.target.id==="cloudLoadModal") $("#cloudLoadModal").style.display="none"; });
 
 async function loadCloudMap(url, name) {
+  const cfg = getGithubConfig();
   try {
     toast("Scaricamento in corso...");
-    const res = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now());
+    const res = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), {
+      headers: { "Authorization": `token ${cfg.token}` }
+    });
     if(!res.ok) { toast(`Errore durante il download: HTTP ${res.status}`); return; }
     
     const txt = await res.text();
