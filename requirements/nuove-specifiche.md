@@ -545,3 +545,15 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - Persistenza stato Catalogo: se la pagina viene ricaricata mentre si è nel Catalogo (tramite hash #catalog nell URL), la vista Catalogo viene automaticamente ripristinata.
 
 - Creazione catalogo predefinito "Catalogo 1" popolato con 111 oggetti base (ciascuno con grafica SVG auto-generata basata su emoji, categorie e caratteristiche dettagliate).
+
+
+## Integrazione Catalogo Dinamico Editor e Rimozione Oggetti Hardcoded (v7.0)
+- **Rimozione Aggiunta Singolo Oggetto Locale**: Rimosso il pulsante "➕ Aggiungi" dalla sezione "Strumenti Mappa" e l"intero modale associato (`addObjectModal`) con la logica `requireAssetsDirectoryHandle`. L"inserimento di oggetti nella mappa si basa ora esclusivamente sui cataloghi.
+- **Rifattorizzazione Selettore Categoria (`#objCategory`)**: Il menu a tendina delle categorie degli oggetti dell"editor ora mappa i vari cataloghi disponibili caricati dinamicamente da GitHub anziché categorie fisse.
+- **Caricamento Oggetti Dinamico (`loadRemoteObjects`)**: Totalmente riscritto il caricamento all"avvio:
+  - Recupera la lista delle cartelle catalogo (da `catalogs/`).
+  - Carica e analizza in serie tutti i file `object.json` contenuti nei vari cataloghi.
+  - Genera `window.CATALOG_OBJECTS` con il dizionario dinamico di oggetti e lo inietta nei dizionari core (`OBJECT_LIB`, `MD_CODE`, `DYNAMIC_SVGS`).
+- **Rendering Vettoriale Dinamico (`objectGlyph`)**: Totalmente eliminata la logica di fallback ad icone/emoji di testo e gli SVG disegnati in modo procedurale "hardcoded" nel codice.
+  - La funzione usa in modo esclusivo il codice SVG fornito dal campo `svgCode` dei file `object.json`.
+  - Ripulito il file eliminando ~400 righe di SVG fissi inseriti manualmente, snellendo enormemente la base di codice e permettendo all"editor di supportare nativamente qualsiasi asset definito dai cataloghi.
