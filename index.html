@@ -7231,7 +7231,7 @@ let catObjDeleteTarget = null;
       document.getElementById("catalog-view").style.display = "flex";
       document.querySelector(".toprow").style.display = "none";
       document.getElementById("catalogTopbar").style.display = "flex";
-      window.location.hash = "#catalog";
+      window.location.hash = currentCatalog ? ("#catalog=" + encodeURIComponent(currentCatalog)) : "#catalog";
       
       if(catalogList.length === 0) loadCatalogs();
     });
@@ -7264,7 +7264,11 @@ let catObjDeleteTarget = null;
   if(logModalEl) logModalEl.addEventListener("click", (e) => { if(e.target.id === "logModal") logModalEl.style.display = "none"; });
 
   window.addEventListener("DOMContentLoaded", () => {
-    if (window.location.hash === "#catalog" || new URLSearchParams(window.location.search).get("mode") === "catalog") {
+    const hash = window.location.hash;
+    if (hash.startsWith("#catalog") || new URLSearchParams(window.location.search).get("mode") === "catalog") {
+      if (hash.startsWith("#catalog=")) {
+        currentCatalog = decodeURIComponent(hash.substring(9));
+      }
       setTimeout(() => {
         if(catalogBtn) catalogBtn.click();
       }, 100);
@@ -7279,6 +7283,7 @@ let catObjDeleteTarget = null;
   $("#catalogSelector").addEventListener("change", (e) => {
     currentCatalog = e.target.value;
     if(currentCatalog) {
+      window.location.hash = "#catalog=" + encodeURIComponent(currentCatalog);
       $("#catalogExportBtn").disabled = false;
       $("#catalogDeleteBtn").style.display = "inline-block";
       loadObjects(currentCatalog);
@@ -7505,7 +7510,10 @@ function renderCatalogOptions() {
     opt.textContent = c;
     sel.appendChild(opt);
   });
-  if(currentCatalog && catalogList.includes(currentCatalog)) sel.value = currentCatalog;
+  if(currentCatalog && catalogList.includes(currentCatalog)) {
+    sel.value = currentCatalog;
+    sel.dispatchEvent(new Event("change"));
+  }
 }
 
 async function createNewCatalog(name) {
