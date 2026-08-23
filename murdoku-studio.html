@@ -104,7 +104,7 @@
   .floor-btn:hover{border-color:var(--violet)}
   .floor-btn.active{border-color:var(--violet); background:#342a49; color:#fff; box-shadow:0 0 0 1px var(--violet) inset}
   .floor-preview{width:32px; height:20px; border-radius:4px; border:1px solid rgba(0,0,0,.25); display:block}
-  .color-row{display:flex; align-items:center; gap:7px; flex-wrap:wrap}
+  .color-row{display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-top:8px}
   .color-swatch{width:26px; height:26px; border-radius:7px; cursor:pointer; border:1px solid var(--line2); transition:.12s; position:relative}
   .color-swatch:hover{transform:scale(1.1); border-color:var(--violet)}
   .color-swatch.active{border-color:var(--violet); box-shadow:0 0 0 2px var(--violet)}
@@ -408,7 +408,7 @@
   <div class="brand">
     <span class="tab">MURDOKU</span>
     <div>
-      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.0</span></h1>
+      <h1>Studio <span id="appVersion" style="font-size:11px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.1</span></h1>
     </div>
   </div>
   <div class="spacer"></div>
@@ -431,6 +431,9 @@
     <button class="btn ghost" id="doPrintFull" title="Stampa un PDF completo (mappa da risolvere + soluzione e ragionamento)"><span class="k">🖨</span> PDF Mappa + Soluzione</button>
 
     <button class="btn ghost" id="copyCfg" title="Copia negli appunti lo stato attuale del puzzle in formato testuale"><span class="k">🗺️</span> Esporta Mappa + Indizi</button>
+    <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">☁️</span> Carica dal Cloud</button>
+    <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">☁️</span> Salva sul Cloud</button>
+    <button class="btn ghost" id="settingsBtn" title="Impostazioni dell'applicazione"><span class="k">⚙️</span> Impostazioni</button>
     <button class="btn ghost" id="impMarkdown" title="Incolla il testo (Markdown/JSON) di una mappa per caricarla"><span class="k">📂</span> Importa Mappa</button>
     <input type="file" id="fileInput" accept="application/json" style="display:none">
   </div>
@@ -528,13 +531,47 @@
       <div class="field">
         <label>Tinte interni & colore personalizzato</label>
         <div class="color-row" id="colorPresets">
-          <div class="color-swatch" data-color="#d2b48c" title="Parquet / Legno" style="background:#d2b48c"></div>
-          <div class="color-swatch" data-color="#e08d79" title="Cotto" style="background:#e08d79"></div>
-          <div class="color-swatch" data-color="#e8e4dc" title="Marmo chiaro" style="background:#e8e4dc"></div>
-          <div class="color-swatch" data-color="#a8d5e2" title="Piastrelle azzurre" style="background:#a8d5e2"></div>
-          <div class="color-swatch" data-color="#caa8dc" title="Moquette noir" style="background:#caa8dc"></div>
-          <div class="color-swatch" data-color="#bcd4c4" title="Salvia" style="background:#bcd4c4"></div>
-          <input type="color" id="areaColorPicker" value="#f4efe4" title="Seleziona colore libero" style="width:30px; height:26px; padding:0; border:1px solid var(--line2); border-radius:6px; cursor:pointer; background:var(--panel2)">
+          <!-- Row 1 -->
+          <div class="color-swatch" data-color="#F4F0E6" title="Bianco panna" style="background:#F4F0E6"></div>
+          <div class="color-swatch" data-color="#EDD4C4" title="Pesca chiaro" style="background:#EDD4C4"></div>
+          <div class="color-swatch" data-color="#EFCA9D" title="Beige sabbia" style="background:#EFCA9D"></div>
+          <div class="color-swatch" data-color="#E8AD7A" title="Arancio chiaro" style="background:#E8AD7A"></div>
+          <div class="color-swatch" data-color="#DF9669" title="Arancio scuro" style="background:#DF9669"></div>
+          <div class="color-swatch" data-color="#CB784A" title="Ruggine" style="background:#CB784A"></div>
+          <div class="color-swatch" data-color="#FBE4A8" title="Giallo pastello" style="background:#FBE4A8"></div>
+          <div class="color-swatch" data-color="#EAD17A" title="Senape" style="background:#EAD17A"></div>
+          <div class="color-swatch" data-color="#C8B75F" title="Verde oliva dorato" style="background:#C8B75F"></div>
+          <!-- Row 2 -->
+          <div class="color-swatch" data-color="#A5C87C" title="Verde pisello" style="background:#A5C87C"></div>
+          <div class="color-swatch" data-color="#7AA966" title="Verde prato" style="background:#7AA966"></div>
+          <div class="color-swatch" data-color="#549152" title="Verde scuro" style="background:#549152"></div>
+          <div class="color-swatch" data-color="#C4E7E7" title="Azzurro ghiaccio" style="background:#C4E7E7"></div>
+          <div class="color-swatch" data-color="#8FCED5" title="Azzurro cielo" style="background:#8FCED5"></div>
+          <div class="color-swatch" data-color="#5BA4B5" title="Ceruleo" style="background:#5BA4B5"></div>
+          <div class="color-swatch" data-color="#418099" title="Ottanio" style="background:#418099"></div>
+          <div class="color-swatch" data-color="#395F83" title="Blu jeans" style="background:#395F83"></div>
+          <div class="color-swatch" data-color="#293C5F" title="Blu notte" style="background:#293C5F"></div>
+          <!-- Row 3 -->
+          <div class="color-swatch" data-color="#DCD1FF" title="Lilla chiaro" style="background:#DCD1FF"></div>
+          <div class="color-swatch" data-color="#BFA4EC" title="Glicine" style="background:#BFA4EC"></div>
+          <div class="color-swatch" data-color="#A27DD5" title="Viola ametista" style="background:#A27DD5"></div>
+          <div class="color-swatch" data-color="#7550BA" title="Viola" style="background:#7550BA"></div>
+          <div class="color-swatch" data-color="#563695" title="Viola scuro" style="background:#563695"></div>
+          <div class="color-swatch" data-color="#361F63" title="Indaco profondo" style="background:#361F63"></div>
+          <div class="color-swatch" data-color="#F2B3B7" title="Rosa antico" style="background:#F2B3B7"></div>
+          <div class="color-swatch" data-color="#DB7676" title="Corallo" style="background:#DB7676"></div>
+          <div class="color-swatch" data-color="#CB4D4D" title="Rosso mattone" style="background:#CB4D4D"></div>
+          <!-- Row 4 -->
+          <div class="color-swatch" data-color="#A83636" title="Rosso scuro" style="background:#A83636"></div>
+          <div class="color-swatch" data-color="#742020" title="Rosso bordò" style="background:#742020"></div>
+          <div class="color-swatch" data-color="#410D0D" title="Marrone scuro" style="background:#410D0D"></div>
+          <div class="color-swatch" data-color="#EAEAEA" title="Grigio chiarissimo" style="background:#EAEAEA"></div>
+          <div class="color-swatch" data-color="#C6C6C6" title="Grigio chiaro" style="background:#C6C6C6"></div>
+          <div class="color-swatch" data-color="#949494" title="Grigio medio" style="background:#949494"></div>
+          <div class="color-swatch" data-color="#646464" title="Grigio scuro" style="background:#646464"></div>
+          <div class="color-swatch" data-color="#3A3A3A" title="Antracite" style="background:#3A3A3A"></div>
+          <div class="color-swatch" data-color="#1A1A1A" title="Nero" style="background:#1A1A1A"></div>
+          <input type="color" id="areaColorPicker" value="#F4F0E6" title="Seleziona colore libero" style="width:26px; height:26px; padding:0; border:1px solid var(--line2); border-radius:7px; cursor:pointer; background:var(--panel2)">
         </div>
       </div>
       <button class="btn ghost" id="resetAreaFloor" style="width:100%; font-size:11px; margin-top:4px">↺ Colore predefinito dell'area</button>
@@ -878,6 +915,57 @@
   </div>
   <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
     <button class="btn primary" id="addObjConfirm">Salva Oggetto su File</button>
+  </div>
+</div></div>
+
+<!-- Modale Impostazioni -->
+<div id="settingsModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(460px,96vw); display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+  <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);"><h3>Impostazioni</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="settingsClose">Chiudi</button></div>
+  <div style="padding:20px 16px; flex:1">
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">GitHub Personal Access Token (PAT)</label>
+      <input type="password" id="ghToken" placeholder="ghp_..." style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Repository Owner</label>
+      <input type="text" id="ghOwner" placeholder="es. NumaPompilio" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Repository Name</label>
+      <input type="text" id="ghRepo" placeholder="es. murdoku-studio" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+    </div>
+    <div style="font-size:11px; color:var(--text-faint); line-height:1.4">💡 I dati vengono salvati localmente sul tuo browser per interfacciarsi con le API di GitHub.</div>
+  </div>
+  <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
+    <button class="btn primary" id="settingsSave">Salva</button>
+  </div>
+</div></div>
+
+<!-- Modale Cloud Load -->
+<div id="cloudLoadModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(500px,96vw); max-height:80vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+  <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);"><h3>☁️ Carica Mappa dal Cloud</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="cloudLoadClose">Chiudi</button></div>
+  <div style="padding:20px 16px; flex:1; overflow-y:auto;">
+    <div id="cloudLoadList" style="display:flex; flex-direction:column; gap:8px;">
+      <div style="color:var(--text-faint); font-size:13px; text-align:center; padding:20px;">Caricamento...</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- Modale Cloud Save -->
+<div id="cloudSaveModal" class="modal" style="display:none; position:fixed; inset:0; background:rgba(10,8,14,.72); align-items:center; justify-content:center; z-index:60; padding:20px"><div class="box" style="background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(500px,96vw); max-height:80vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden">
+  <div class="mh" style="display:flex; align-items:center; gap:10px; padding:13px 16px; border-bottom:1px solid var(--line);"><h3>☁️ Salva Mappa sul Cloud</h3><span class="sp" style="flex:1"></span><button class="btn ghost" id="cloudSaveClose">Chiudi</button></div>
+  <div style="padding:20px 16px;">
+    <label style="font-size:12px; color:var(--text-dim); display:block; margin-bottom:8px">Nome del file (l'estensione .md verrà aggiunta automaticamente)</label>
+    <input type="text" id="cloudSaveFilename" placeholder="es. Omicidio_in_piazza" style="width:100%; padding:9px; background:var(--ink); color:var(--text); border:1px solid var(--line2); border-radius:7px;">
+  </div>
+  <div style="padding:0 16px 20px 16px; flex:1; overflow-y:auto; border-top:1px solid var(--line); margin-top:10px;">
+    <h4 style="margin:16px 0 10px 0; font-size:12px; color:var(--text-dim); text-transform:uppercase;">Seleziona per sovrascrivere</h4>
+    <div id="cloudSaveList" style="display:flex; flex-direction:column; gap:8px;">
+      <div style="color:var(--text-faint); font-size:13px; text-align:center; padding:10px;">Caricamento...</div>
+    </div>
+  </div>
+  <div class="mf" style="display:flex; gap:8px; padding:12px 16px; border-top:1px solid var(--line); align-items:center">
+    <button class="btn primary" id="cloudSaveConfirm">Salva sul Cloud</button>
   </div>
 </div></div>
 
@@ -6712,6 +6800,269 @@ window.addEventListener('DOMContentLoaded', async () => {
         setTimeout(() => overlay.classList.remove('active'), 500);
       }, 300);
     }
+  }
+});
+
+// --- GITHUB CLOUD LOGIC ---
+
+// Helper per ottenere la configurazione
+function getGithubConfig() {
+  try {
+    const data = localStorage.getItem("murdoku:github_config");
+    return data ? JSON.parse(data) : { token: "", owner: "", repo: "" };
+  } catch (e) {
+    return { token: "", owner: "", repo: "" };
+  }
+}
+
+// Helper per mostrare errori
+function showCloudError(res, defaultMsg) {
+  if(res.status === 401 || res.status === 403) toast("Errore GitHub: Token non valido o permessi insufficienti.");
+  else if(res.status === 404) toast("Errore GitHub: Repository o file non trovato.");
+  else toast(defaultMsg + ` (HTTP ${res.status})`);
+}
+
+// 1. Settings Modal
+$("#settingsBtn").addEventListener("click", () => {
+  const cfg = getGithubConfig();
+  $("#ghToken").value = cfg.token;
+  $("#ghOwner").value = cfg.owner;
+  $("#ghRepo").value = cfg.repo;
+  $("#settingsModal").style.display = "flex";
+});
+$("#settingsClose").addEventListener("click", () => $("#settingsModal").style.display="none");
+$("#settingsModal").addEventListener("click", e => { if(e.target.id==="settingsModal") $("#settingsModal").style.display="none"; });
+$("#settingsSave").addEventListener("click", () => {
+  const cfg = {
+    token: $("#ghToken").value.trim(),
+    owner: $("#ghOwner").value.trim(),
+    repo: $("#ghRepo").value.trim()
+  };
+  localStorage.setItem("murdoku:github_config", JSON.stringify(cfg));
+  toast("Impostazioni GitHub salvate");
+  $("#settingsModal").style.display = "none";
+});
+
+// 2. Cloud Load Modal
+$("#cloudLoadBtn").addEventListener("click", async () => {
+  $("#cloudLoadModal").style.display = "flex";
+  $("#cloudLoadList").innerHTML = '<div style="color:var(--text-faint); font-size:13px; text-align:center; padding:20px;">Caricamento mappe...</div>';
+  
+  const cfg = getGithubConfig();
+  if(!cfg.token || !cfg.owner || !cfg.repo) {
+    $("#cloudLoadList").innerHTML = '<div style="color:var(--warn); font-size:13px; text-align:center; padding:20px;">Configura Token, Owner e Repo nelle Impostazioni (⚙️) prima di procedere.</div>';
+    return;
+  }
+  
+  try {
+    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved`, {
+      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
+    });
+    
+    if(!res.ok) {
+      if(res.status === 404) {
+        $("#cloudLoadList").innerHTML = '<div style="color:var(--text-dim); font-size:13px; text-align:center; padding:20px;">Nessuna mappa trovata nella cartella maps/saved.</div>';
+      } else {
+        showCloudError(res, "Errore durante il recupero delle mappe.");
+        $("#cloudLoadList").innerHTML = `<div style="color:var(--warn); font-size:13px; text-align:center; padding:20px;">Errore HTTP ${res.status}</div>`;
+      }
+      return;
+    }
+    
+    const files = await res.json();
+    const mdFiles = files.filter(f => f.name.endsWith(".md"));
+    
+    if(mdFiles.length === 0) {
+      $("#cloudLoadList").innerHTML = '<div style="color:var(--text-dim); font-size:13px; text-align:center; padding:20px;">Nessuna mappa trovata.</div>';
+      return;
+    }
+    
+    $("#cloudLoadList").innerHTML = "";
+    mdFiles.forEach(file => {
+      const div = document.createElement("div");
+      div.className = "saved-map-item";
+      div.style.cursor = "pointer";
+      div.innerHTML = `
+        <div class="saved-map-info">
+          <div class="saved-map-title">📄 ${file.name}</div>
+        </div>
+        <div class="saved-map-actions">
+          <button class="btn primary" style="padding:4px 10px; font-size:11px;">Carica</button>
+        </div>
+      `;
+      div.addEventListener("click", () => loadCloudMap(file.download_url, file.name));
+      $("#cloudLoadList").appendChild(div);
+    });
+    
+  } catch (err) {
+    console.error(err);
+    $("#cloudLoadList").innerHTML = '<div style="color:var(--warn); font-size:13px; text-align:center; padding:20px;">Errore di rete. Riprova più tardi.</div>';
+  }
+});
+$("#cloudLoadClose").addEventListener("click", () => $("#cloudLoadModal").style.display="none");
+$("#cloudLoadModal").addEventListener("click", e => { if(e.target.id==="cloudLoadModal") $("#cloudLoadModal").style.display="none"; });
+
+async function loadCloudMap(url, name) {
+  try {
+    toast("Scaricamento in corso...");
+    const res = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now());
+    if(!res.ok) { toast(`Errore durante il download: HTTP ${res.status}`); return; }
+    
+    const txt = await res.text();
+    const match = txt.match(/<!-- MURDOKU_STATE_B64:\s*(.*?)\s*-->/);
+    if(!match) {
+      toast("Il file non contiene i dati di una mappa valida.");
+      return;
+    }
+    
+    const jsonStr = decodeURIComponent(escape(atob(match[1].trim())));
+    const data = JSON.parse(jsonStr);
+    deserialize(data);
+    
+    if(data.size) {
+      state.mapSize = data.size;
+      $("#sizeVal").textContent = state.mapSize;
+    }
+    if(data.title) {
+      $("#mapTitle").value = data.title;
+    }
+    
+    toast(`Mappa ${name} caricata!`);
+    autosave();
+    $("#cloudLoadModal").style.display = "none";
+    
+  } catch(e) {
+    console.error(e);
+    toast("Errore durante il caricamento della mappa.");
+  }
+}
+
+// 3. Cloud Save Modal
+let cloudMapsCache = [];
+
+$("#cloudSaveBtn").addEventListener("click", async () => {
+  $("#cloudSaveFilename").value = $("#mapTitle").value ? $("#mapTitle").value.replace(/[^a-zA-Z0-9_-]/g, "_") : "";
+  $("#cloudSaveModal").style.display = "flex";
+  $("#cloudSaveList").innerHTML = '<div style="color:var(--text-faint); font-size:13px; text-align:center; padding:10px;">Caricamento...</div>';
+  cloudMapsCache = [];
+  
+  const cfg = getGithubConfig();
+  if(!cfg.token || !cfg.owner || !cfg.repo) {
+    $("#cloudSaveList").innerHTML = '<div style="color:var(--warn); font-size:13px; text-align:center; padding:10px;">Configura Token, Owner e Repo nelle Impostazioni (⚙️) prima di procedere.</div>';
+    return;
+  }
+  
+  try {
+    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved`, {
+      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
+    });
+    
+    if(res.ok) {
+      cloudMapsCache = await res.json();
+    } else if(res.status !== 404) {
+      showCloudError(res, "Impossibile recuperare la lista delle mappe");
+    }
+    
+    const mdFiles = cloudMapsCache.filter(f => f.name.endsWith(".md"));
+    if(mdFiles.length === 0) {
+      $("#cloudSaveList").innerHTML = '<div style="color:var(--text-dim); font-size:13px; text-align:center; padding:10px;">Nessuna mappa presente (ne verrà creata una nuova).</div>';
+      return;
+    }
+    
+    $("#cloudSaveList").innerHTML = "";
+    mdFiles.forEach(file => {
+      const div = document.createElement("div");
+      div.className = "saved-map-item";
+      div.style.cursor = "pointer";
+      div.innerHTML = `
+        <div class="saved-map-info">
+          <div class="saved-map-title">📄 ${file.name}</div>
+        </div>
+      `;
+      div.addEventListener("click", () => {
+        const nameWithoutExt = file.name.replace(/\.md$/i, "");
+        $("#cloudSaveFilename").value = nameWithoutExt;
+      });
+      $("#cloudSaveList").appendChild(div);
+    });
+    
+  } catch (err) {
+    console.error(err);
+    $("#cloudSaveList").innerHTML = '<div style="color:var(--warn); font-size:13px; text-align:center; padding:10px;">Errore di rete.</div>';
+  }
+});
+
+$("#cloudSaveClose").addEventListener("click", () => $("#cloudSaveModal").style.display="none");
+$("#cloudSaveModal").addEventListener("click", e => { if(e.target.id==="cloudSaveModal") $("#cloudSaveModal").style.display="none"; });
+
+$("#cloudSaveConfirm").addEventListener("click", async () => {
+  let filename = $("#cloudSaveFilename").value.trim();
+  if(!filename){ toast("Il nome del file è obbligatorio"); return; }
+  if(!filename.toLowerCase().endsWith(".md")) filename += ".md";
+  
+  const cfg = getGithubConfig();
+  if(!cfg.token || !cfg.owner || !cfg.repo) {
+    toast("Configura Token, Owner e Repo nelle Impostazioni!");
+    return;
+  }
+  
+  const existingFile = cloudMapsCache.find(f => f.name.toLowerCase() === filename.toLowerCase());
+  let sha = existingFile ? existingFile.sha : null;
+  
+  if(!sha) {
+    try {
+      const chkRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved/${filename}`, {
+        headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
+      });
+      if(chkRes.ok) {
+        const chkData = await chkRes.json();
+        sha = chkData.sha;
+      }
+    } catch(e) {}
+  }
+  
+  const contentStr = buildMapConfigMarkdown();
+  
+  const utf8Encode = new TextEncoder().encode(contentStr);
+  let base64Content = "";
+  const chunk = 0x8000;
+  for (let i = 0; i < utf8Encode.length; i += chunk) {
+    base64Content += String.fromCharCode.apply(null, utf8Encode.subarray(i, i + chunk));
+  }
+  base64Content = btoa(base64Content);
+
+  const payload = {
+    message: `Cloud Save: ${filename}`,
+    content: base64Content
+  };
+  if(sha) payload.sha = sha;
+  
+  try {
+    toast("Salvataggio su Cloud in corso...");
+    $("#cloudSaveConfirm").disabled = true;
+    
+    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved/${filename}`, {
+      method: "PUT",
+      headers: { 
+        "Authorization": `token ${cfg.token}`, 
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    $("#cloudSaveConfirm").disabled = false;
+    
+    if(res.ok) {
+      toast(`Mappa salvata su Cloud: ${filename}`);
+      $("#cloudSaveModal").style.display = "none";
+    } else {
+      showCloudError(res, "Errore durante il salvataggio");
+    }
+  } catch(e) {
+    $("#cloudSaveConfirm").disabled = false;
+    console.error(e);
+    toast("Errore di rete durante il salvataggio.");
   }
 });
 
