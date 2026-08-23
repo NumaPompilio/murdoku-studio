@@ -410,7 +410,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.3</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v5.2</span></h1>
     </div>
   </div>
 
@@ -6639,16 +6639,11 @@ $("#cloudLoadBtn").addEventListener("click", async () => {
         <div class="saved-map-info">
           <div class="saved-map-title">📄 ${file.name}</div>
         </div>
-        <div class="saved-map-actions" style="display:flex; gap:6px;">
-          <button class="btn primary load-btn" style="padding:4px 10px; font-size:11px;">Carica</button>
-          <button class="btn ghost delete-btn" style="padding:4px 10px; font-size:11px; color:var(--bad);" title="Sposta nel cestino">🗑️</button>
+        <div class="saved-map-actions">
+          <button class="btn primary" style="padding:4px 10px; font-size:11px;">Carica</button>
         </div>
       `;
       div.addEventListener("click", () => loadCloudMap(file.url, file.name));
-      div.querySelector(".delete-btn").addEventListener("click", (e) => {
-        e.stopPropagation();
-        deleteCloudMap(file);
-      });
       $("#cloudLoadList").appendChild(div);
     });
     
@@ -6699,56 +6694,6 @@ async function loadCloudMap(url, name) {
   } catch(e) {
     console.error(e);
     toast("Errore durante il caricamento della mappa.");
-  }
-}
-
-async function deleteCloudMap(file) {
-  if (!confirm(`Sei sicuro di voler spostare la mappa "${file.name}" nel cestino?`)) return;
-  
-  const cfg = getGithubConfig();
-  if(!cfg.token || !cfg.owner || !cfg.repo) {
-    toast("Configurazione GitHub mancante.");
-    return;
-  }
-  
-  try {
-    toast("Spostamento nel cestino in corso...");
-    
-    // 1. Get file content (base64) and sha
-    const resGet = await fetch(file.url, {
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
-    });
-    if (!resGet.ok) throw new Error("Impossibile recuperare il file originale");
-    const fileData = await resGet.json();
-    
-    // 2. Put file in trash
-    const resPut = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/trash/${file.name}`, {
-      method: "PUT",
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: `Sposto ${file.name} nel cestino`,
-        content: fileData.content
-      })
-    });
-    if (!resPut.ok) throw new Error("Impossibile creare il file nel cestino");
-    
-    // 3. Delete file from saved
-    const resDel = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/maps/saved/${file.name}`, {
-      method: "DELETE",
-      headers: { "Authorization": `token ${cfg.token}`, "Accept": "application/vnd.github.v3+json", "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: `Rimosso ${file.name} da saved`,
-        sha: fileData.sha
-      })
-    });
-    if (!resDel.ok) throw new Error("Impossibile eliminare il file originale");
-    
-    toast(`Mappa "${file.name}" spostata nel cestino.`);
-    // Ricarica la lista
-    $("#cloudLoadBtn").click();
-  } catch (e) {
-    console.error(e);
-    toast("Errore durante l'operazione: " + e.message);
   }
 }
 
