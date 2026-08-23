@@ -431,6 +431,16 @@
     <input type="file" id="fileInput" accept="application/json" style="display:none">
   </div>
 
+  <div class="pulsantiera catalog-topbar" id="catalogTopbar" style="display:none; align-items:center;">
+    <select id="catalogSelector" class="sel" style="width:33.33%;">
+      <option value="">Seleziona un catalogo...</option>
+    </select>
+    <button class="btn" id="catalogDeleteBtn" style="display:none; color:#ff4444; border-color:transparent;" title="Elimina l'intero catalogo">🗑️</button>
+    <button class="btn primary" id="catalogNewBtn" title="Crea un nuovo catalogo vuoto">➕ Nuovo Catalogo</button>
+    <button class="btn" id="catalogExportBtn" disabled>Esporta Catalogo</button>
+    <button class="btn" id="catalogManageCategoriesBtn">Gestisci Categorie</button>
+  </div>
+
   <div style="flex: 1; display: flex; justify-content: flex-end;">
     <div class="mode-switch">
       <button class="btn active" id="modeEditorBtn">✏️ Editor</button>
