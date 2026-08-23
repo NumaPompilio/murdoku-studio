@@ -6911,16 +6911,16 @@ async function loadCloudMap(url, name) {
   const cfg = getGithubConfig();
   try {
     toast("Scaricamento in corso...");
-    // url contiene https://api.github.com/.../contents/...
     const res = await fetch(url + (url.includes('?') ? '&' : '?') + 't=' + Date.now(), {
       headers: { 
         "Authorization": `token ${cfg.token}`,
-        "Accept": "application/vnd.github.v3.raw"
+        "Accept": "application/vnd.github.v3+json"
       }
     });
     if(!res.ok) { toast(`Errore durante il download: HTTP ${res.status}`); return; }
     
-    const txt = await res.text();
+    const jsonResp = await res.json();
+    const txt = decodeURIComponent(escape(atob(jsonResp.content.replace(/\n/g, ''))));
     const match = txt.match(/<!-- MURDOKU_STATE_B64:\s*(.*?)\s*-->/);
     if(!match) {
       toast("Il file non contiene i dati di una mappa valida.");
