@@ -1,0 +1,3191 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Murdoku SVG Map</title>
+<style>
+  :root{
+    --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
+    --line:#3a2f4d; --line2:#4a3d61;
+    --violet:#8a6bff; --violet-bright:#a98bff; --violet-dim:#5b48a8;
+    --gold:#d8b25a; --paper:#f4efe4; --paper-line:#d9cfbb;
+    --text:#eee9f5; --text-dim:#b6acc7; --text-faint:#8a809c;
+    --evidence:#e4483d;
+    --serif: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono: ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:var(--sans); color:var(--text); background:
+      radial-gradient(1200px 700px at 80% -10%, #2a2036 0%, transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, #241b31 0%, transparent 55%),
+      var(--ink);
+    display:flex; flex-direction:column; min-height:100vh;
+  }
+  button{font-family:inherit}
+
+  header{
+    display:flex; align-items:center; gap:18px; padding:14px 20px;
+    border-bottom:1px solid var(--line); background:linear-gradient(180deg,#241c31,#1c1626);
+    position:sticky; top:0; z-index:20;
+  }
+  .brand{display:flex; align-items:baseline; gap:12px}
+  .brand .tab{
+    font-family:var(--serif); font-size:22px; letter-spacing:.5px; color:var(--paper);
+    background:var(--evidence); padding:4px 14px 6px; border-radius:3px 3px 0 0;
+    box-shadow:0 3px 0 #a5271f; transform:rotate(-1deg);
+  }
+  .brand h1{font-family:var(--serif); font-weight:600; font-size:20px; margin:0; letter-spacing:.3px}
+  .brand .sub{font-family:var(--mono); font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:2px}
+  .spacer{flex:1}
+  .toprow{display:flex; gap:8px; flex-wrap:wrap}
+  .btn{
+    background:var(--panel2); color:var(--text); border:1px solid var(--line2);
+    padding:9px 13px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:600;
+    display:inline-flex; align-items:center; gap:7px; transition:.12s;
+  }
+  .btn:hover{border-color:var(--violet); background:#332947}
+  .btn.primary{background:linear-gradient(180deg,var(--violet),var(--violet-dim)); border-color:var(--violet); color:#fff}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn.ghost{background:transparent}
+  .btn .k{font-family:var(--mono); font-size:15px}
+
+  main{
+    display:grid;
+    /* Centro sizes to the map (auto), spalle prendono lo spazio residuo (1fr).
+       Con min-width:280px sulle spalle evitiamo che collassino troppo. */
+    grid-template-columns:minmax(280px, 1fr) auto minmax(280px, 1fr);
+    gap:0; flex:1; min-height:0;
+  }
+  .col{overflow:auto; padding:14px; min-height:0; min-width:0}
+  .left{border-right:1px solid var(--line); background:var(--desk)}
+  .right{border-left:1px solid var(--line); background:var(--desk)}
+  .center{display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:14px;
+    background:repeating-linear-gradient(45deg,#191320 0 12px,#1b1522 12px 24px); padding:20px; min-width:0}
+
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px; margin-bottom:14px}
+  .card h2{margin:0 0 10px; font-size:12px; text-transform:uppercase; letter-spacing:1.6px; color:var(--gold); font-family:var(--mono)}
+  .field{display:flex; flex-direction:column; gap:5px; margin-bottom:11px}
+  .field label{font-size:12px; color:var(--text-dim)}
+  .field .row{display:flex; align-items:center; gap:8px}
+  input[type=range]{width:100%; accent-color:var(--violet)}
+  input[type=number],input[type=text]{
+    background:var(--panel2); color:var(--text); border:1px solid var(--line2);
+    border-radius:7px; padding:7px 9px; font-size:13px; width:100%;
+  }
+  .val{font-family:var(--mono); color:var(--violet-bright); font-size:13px; min-width:26px; text-align:right}
+  .hint{font-size:11px; color:var(--text-faint); line-height:1.5; margin-top:6px}
+  .hint-row{display:flex; align-items:center; gap:8px}
+  .spinner{width:14px; height:14px; flex:none; border-radius:50%; border:2px solid var(--line2); border-top-color:var(--violet-bright); animation:spin .7s linear infinite}
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .tools{display:grid; grid-template-columns:1fr 1fr; gap:7px}
+  .tool{
+    display:flex; flex-direction:column; align-items:center; gap:3px; padding:11px 4px;
+    background:var(--panel2); border:1px solid var(--line2); border-radius:9px; cursor:pointer; font-size:11px; color:var(--text-dim);
+  }
+  .tool .ico{font-size:20px; line-height:1}
+  .tool.active{border-color:var(--violet); background:#342a49; color:#fff; box-shadow:0 0 0 1px var(--violet) inset}
+  .tool:hover{border-color:var(--violet-dim)}
+
+  .swatches{display:grid; grid-template-columns:repeat(9,1fr); gap:4px}
+  .sw{width:100%; aspect-ratio:1/1; border-radius:5px; cursor:pointer; border:1px solid var(--line2); transition:.12s; position:relative}
+  .sw:hover{transform:scale(1.15); border-color:var(--violet); z-index:1}
+  .sw.active{border-color:var(--violet); box-shadow:0 0 0 2px var(--violet); z-index:1}
+
+  .picker-row{display:flex; align-items:center; gap:10px; margin-top:10px}
+  .picker-row input[type=color]{width:38px; height:34px; padding:0; border:1px solid var(--line2); border-radius:7px; background:var(--panel2); cursor:pointer}
+  .picker-row .btn{padding:7px 11px; font-size:12px}
+
+  .upload{display:flex; flex-direction:column; gap:6px; padding:10px; border:1px dashed var(--line2); border-radius:9px; background:var(--panel2)}
+  .upload input[type=file]{font-size:11px; color:var(--text-dim)}
+
+  .active-area-lbl{font-family:var(--mono); font-size:12px; color:var(--violet-bright); padding:6px 10px; background:var(--panel2); border:1px solid var(--line2); border-radius:7px; text-align:center; margin-bottom:10px}
+
+  .board-wrap{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:16px; box-shadow:0 20px 50px rgba(0,0,0,.45);
+    /* Larghezza dettata dall'altezza disponibile: la mappa è quadrata, così
+       resta sempre completa nel viewport e libera spazio per le spalle. */
+    width:calc(100vh - 140px); max-width:100%;
+    display:flex; align-items:center; justify-content:center;
+  }
+  svg.board{
+    display:block; user-select:none; -webkit-user-select:none;
+    background:var(--paper); border-radius:6px;
+    /* Scala con la wrap; il viewBox garantisce la forma quadrata. */
+    width:100%; height:auto; aspect-ratio:1 / 1; max-height:100%;
+  }
+
+  .status{font-size:12px; padding:8px 12px; border-radius:8px; border:1px solid var(--line2); color:var(--text-dim); background:var(--panel); text-align:center; max-width:640px}
+
+  /* Sezione Icone */
+  .iconeCard{margin-bottom:14px}
+  .icone-tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:12px}
+  .snap-toggle{display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--text-dim); cursor:pointer; user-select:none; margin-left:auto}
+  .snap-toggle input{accent-color:var(--violet); width:15px; height:15px}
+  .icon-library{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(56px, 1fr));
+    gap:8px; padding:10px; background:var(--panel2); border:1px solid var(--line2);
+    border-radius:9px; min-height:70px; margin-bottom:12px;
+    transition:background .12s, border-color .12s;
+  }
+  .icon-library.drop-active{
+    background:#332947; border-color:var(--violet); border-style:dashed;
+  }
+  .icon-empty{grid-column:1/-1; text-align:center; color:var(--text-faint); font-size:12px; padding:10px 4px; line-height:1.4}
+  .icon-thumb{
+    position:relative; aspect-ratio:1/1; background:#fff; border:1px solid var(--line2);
+    border-radius:8px; cursor:grab; display:flex; align-items:center; justify-content:center;
+    padding:4px;
+  }
+  .icon-thumb:active{cursor:grabbing}
+  .icon-thumb img{max-width:100%; max-height:100%; object-fit:contain; display:block; pointer-events:none}
+  .icon-thumb .thumb-x{
+    position:absolute; top:-5px; right:-5px; width:18px; height:18px; border-radius:50%;
+    background:var(--evidence); color:#fff; border:1px solid #a5271f; font-size:12px; line-height:1;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    opacity:0; transition:opacity .12s;
+  }
+  .icon-thumb:hover .thumb-x{opacity:1}
+  .icon-thumb.dragging{opacity:.5}
+  .icon-selection{background:var(--panel2); border:1px solid var(--line2); border-radius:9px; padding:12px}
+  .unit-toggle{display:inline-flex; border:1px solid var(--line2); border-radius:6px; overflow:hidden}
+  .unit-btn{
+    background:var(--panel); color:var(--text-dim); border:0; padding:3px 10px;
+    font-size:11px; cursor:pointer; font-family:var(--mono);
+  }
+  .unit-btn.active{background:var(--violet); color:#fff}
+  .board-wrap.drop-target{outline:2px dashed var(--violet); outline-offset:-4px}
+
+  /* Righe di assegnazione (sezioni "Oggetti" e "Stanze") */
+  .assign-row{background:var(--panel2); border:1px solid var(--line2); border-radius:9px; padding:10px; margin-bottom:8px}
+  .assign-row-top{display:flex; align-items:center; gap:10px}
+  .assign-drop{
+    position:relative; width:44px; height:44px; flex:none; background:#fff;
+    border:1px dashed var(--line2); border-radius:8px; display:flex; align-items:center;
+    justify-content:center; cursor:pointer; padding:4px; transition:background .12s, border-color .12s;
+  }
+  .assign-drop img{max-width:100%; max-height:100%; object-fit:contain; pointer-events:none}
+  .assign-drop .assign-drop-hint{color:var(--text-faint); font-size:18px; line-height:1; pointer-events:none}
+  .assign-drop.drop-active{background:#332947; border-color:var(--violet)}
+  .assign-info{flex:1; min-width:0}
+  .assign-name{font-size:13px; color:var(--text); font-weight:600}
+  .assign-count{font-weight:400; color:var(--text-faint); font-size:11px}
+  .assign-sub{margin-top:2px; min-height:12px}
+  .assign-badge{font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:var(--evidence); font-family:var(--mono)}
+  .assign-clear{
+    flex:none; width:22px; height:22px; border-radius:50%; background:var(--evidence); color:#fff;
+    border:1px solid #a5271f; font-size:13px; line-height:1; cursor:pointer; display:flex;
+    align-items:center; justify-content:center; padding:0;
+  }
+
+  #toast{position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:#000; color:#fff;
+    padding:10px 16px; border-radius:8px; font-size:13px; opacity:0; transition:.2s; pointer-events:none; z-index:70; border:1px solid var(--line2)}
+  #toast.show{opacity:1}
+
+  .modal{position:fixed; inset:0; background:rgba(10,8,14,.72); display:none; align-items:center; justify-content:center; z-index:60; padding:20px}
+  .modal.show{display:flex}
+  .modal .box{background:var(--panel); border:1px solid var(--line2); border-radius:14px; width:min(720px,96vw); max-height:85vh; display:flex; flex-direction:column; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden}
+  .modal .mh{display:flex; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line); gap:12px}
+  .modal .mh h3{margin:0; font-family:var(--serif); font-size:18px}
+  .modal .mb{padding:18px; overflow-y:auto}
+  .modal .mf{display:flex; gap:8px; padding:14px 18px; border-top:1px solid var(--line); justify-content:flex-end}
+  .modal textarea{width:100%; min-height:220px; background:var(--panel2); color:var(--text); border:1px solid var(--line2); border-radius:8px; padding:10px; font-family:var(--mono); font-size:12px; resize:vertical}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="tab">M</div>
+    <div>
+      <h1>Murdoku SVG Map</h1>
+      <div class="sub">Generatore SVG • mappe</div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="toprow">
+    <button class="btn ghost" id="btnUndo" title="Annulla ultima operazione (Ctrl/Cmd+Z)" disabled><span class="k">↶</span> Annulla</button>
+    <button class="btn ghost" id="btnImportMurdoku" title="Importa una mappa esportata dal Murdoku Editor"><span class="k">📥</span> Importa da Murdoku</button>
+    <button class="btn ghost" id="btnLoadCloud" title="Carica una mappa dalla cartella 'Mappe generate' del repo GitHub"><span class="k">☁️</span> Carica Mappa dal Cloud</button>
+    <button class="btn ghost" id="btnLoadJSON" title="Carica una mappa salvata (.json)"><span class="k">📂</span> Carica Mappa</button>
+    <button class="btn ghost" id="btnSaveJSON" title="Salva la mappa corrente in JSON"><span class="k">💾</span> Salva Mappa</button>
+    <button class="btn primary" id="btnExportImage" title="Esporta la mappa come immagine (PNG o SVG)"><span class="k">⇩</span> Esporta Immagine</button>
+    <button class="btn ghost" id="btnExportGrid" title="Esporta solo la griglia (bordi, muri, linee, numeri) in PNG x8"><span class="k">🔲</span> Esporta Griglia</button>
+  </div>
+</header>
+
+<main>
+  <aside class="col left">
+    <div class="card">
+      <h2>Dimensione mappa</h2>
+      <div class="field" style="margin-bottom:0">
+        <label>Celle per lato: <span class="val" id="sizeVal">8</span></label>
+        <input type="range" id="sizeRange" min="4" max="16" step="1" value="8">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Muri e contorno</h2>
+      <div class="field" style="margin-bottom:0">
+        <label>Spessore: <span class="val" id="wallWVal">4</span> px</label>
+        <input type="range" id="wallWRange" min="1" max="12" step="1" value="4">
+      </div>
+    </div>
+
+    <div class="card iconeCard" id="iconeCard">
+      <h2>Icone</h2>
+      <div class="icone-tools">
+        <button class="btn ghost" id="btnLoadIcons" style="padding:7px 11px; font-size:12px">📁 Carica</button>
+        <input type="file" id="iconFile" accept=".svg,image/svg+xml,.png,image/png,.webp,image/webp,.jpg,.jpeg,image/jpeg,.zip,application/zip" multiple hidden>
+        <button class="btn ghost" id="btnPasteIcon" style="padding:7px 11px; font-size:12px" title="Incolla un'immagine dagli appunti (Ctrl/Cmd+V)">📋 Incolla</button>
+        <label class="snap-toggle" title="Se attivo, le icone si ancorano al centro della cella durante il posizionamento e lo spostamento">
+          <input type="checkbox" id="snapToggle" checked>
+          Ancora a cella
+        </label>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Luminosità icone: <span class="val" id="iconShadeVal">50</span></label>
+        <input type="range" id="iconShadeRange" min="0" max="100" step="1" value="50">
+      </div>
+      <div class="icon-library" id="iconLibrary">
+        <div class="icon-empty">Trascina qui, carica o incolla immagini (SVG, PNG, WebP, JPEG) o file .zip.</div>
+      </div>
+      <div class="icon-selection" id="iconSelection" style="display:none">
+        <div class="field">
+          <label class="row" style="display:flex; align-items:center; justify-content:space-between; gap:8px">
+            <span>Dimensione: <span class="val" id="iconSizeVal">90</span> <span id="iconSizeUnit">%</span></span>
+            <span class="unit-toggle">
+              <button type="button" class="unit-btn active" data-unit="%" id="unitPct">%</button>
+              <button type="button" class="unit-btn" data-unit="px" id="unitPx">px</button>
+            </span>
+          </label>
+          <input type="range" id="iconSizeRange" min="20" max="200" step="5" value="90">
+        </div>
+        <button class="btn ghost" id="btnDeletePlacedIcon" style="width:100%; color:var(--evidence); border-color:#5c3030">🗑️ Rimuovi icona (Canc)</button>
+      </div>
+    </div>
+
+    <div class="card" id="objectsCard" style="display:none">
+      <h2>Oggetti</h2>
+      <div class="hint" style="margin:0 0 10px">Oggetti rilevati nella mappa importata. Trascina un'icona dalla libreria qui sopra nella casella di un oggetto per assegnarla automaticamente a tutte le celle in cui l'oggetto è presente.</div>
+      <div id="objectsList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Reset</h2>
+      <button class="btn ghost" id="btnClearWalls" style="width:100%; margin-bottom:6px">Rimuovi tutti i muri</button>
+      <button class="btn ghost" id="btnClearFills" style="width:100%; margin-bottom:6px">Rimuovi tutti gli sfondi</button>
+      <button class="btn ghost" id="btnClearObjects" style="width:100%; margin-bottom:6px">Rimuovi tutti gli oggetti</button>
+      <button class="btn ghost" id="btnClearAll" style="width:100%; color:var(--evidence); border-color:#5c3030">Reimposta tutto</button>
+    </div>
+  </aside>
+
+  <section class="col center">
+    <div class="board-wrap">
+      <svg id="board" class="board"></svg>
+    </div>
+  </section>
+
+  <aside class="col right">
+    <div class="card" id="cellCard">
+      <h2>Cella</h2>
+      <div class="active-area-lbl" id="activeCellLabel">doppio click su una cella…</div>
+      <div class="field" style="margin-top:8px">
+        <label class="row" style="display:flex; align-items:center; gap:8px; cursor:pointer">
+          <input type="checkbox" id="cellNonWalkable" disabled>
+          <span>Non calpestabile</span>
+        </label>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Intensità overlay: <span class="val" id="nonWalkIntensityVal">22</span></label>
+        <input type="range" id="nonWalkIntensityRange" min="0" max="100" step="1" value="22">
+      </div>
+    </div>
+
+    <div class="card" id="paintCard">
+      <h2>Colorazione stanza</h2>
+      <div class="active-area-lbl" id="activeAreaLabel">clicca una stanza…</div>
+      <div class="field">
+        <label>Palette colori</label>
+        <div class="swatches" id="swatches"></div>
+        <div class="picker-row">
+          <input type="color" id="colorPicker" value="#f4efe4">
+          <input type="text" id="colorText" value="#f4efe4" style="max-width:110px; font-family:var(--mono); font-size:12px">
+          <button class="btn" id="btnApplyColor">Applica</button>
+        </div>
+      </div>
+      <div class="field" style="margin-top:14px; margin-bottom:0">
+        <label>Gradazione: <span class="val" id="areaShadeVal">50</span></label>
+        <input type="range" id="areaShadeRange" min="0" max="100" step="1" value="50" disabled>
+      </div>
+      <div class="field" style="margin-top:14px">
+        <label>Sfondi personalizzati</label>
+        <div class="icone-tools" style="margin-bottom:8px">
+          <button class="btn ghost" id="btnLoadBgs" style="padding:7px 11px; font-size:12px">📁 Carica</button>
+          <input type="file" id="bgFile" accept=".svg,image/svg+xml,.png,image/png,.webp,image/webp,.jpg,.jpeg,image/jpeg,.zip,application/zip" multiple hidden>
+          <button class="btn ghost" id="btnPasteBg" style="padding:7px 11px; font-size:12px" title="Incolla un'immagine dagli appunti (Ctrl/Cmd+V)">📋 Incolla</button>
+        </div>
+        <div class="icon-library" id="bgLibrary">
+          <div class="icon-empty">Trascina qui, carica o incolla immagini (SVG, PNG, WebP, JPEG) o file .zip.</div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:6px; margin-bottom:0">
+        <button class="btn ghost" id="btnResetArea" style="padding:7px 11px; font-size:12px; width:100%">Ripristina colore predefinito</button>
+      </div>
+    </div>
+
+    <div class="card" id="roomsCard">
+      <h2>Stanze</h2>
+      <div class="hint" style="margin:0 0 10px">Stanze presenti nella mappa. Trascina un colore dalla palette o un'immagine dai «Sfondi personalizzati» qui sopra sulla casella di una stanza per assegnarlo.</div>
+      <div id="roomsList"></div>
+    </div>
+
+    <div class="card">
+      <h2>Linee interne celle</h2>
+      <div class="field">
+        <label>Spessore: <span class="val" id="gridWVal">1</span> px</label>
+        <input type="range" id="gridWRange" min="0" max="6" step="1" value="1">
+      </div>
+      <div class="field">
+        <label>Palette colori</label>
+        <div class="swatches" id="gridSwatches"></div>
+        <div class="picker-row">
+          <input type="color" id="gridColorPicker" value="#d9cfbb">
+          <input type="text" id="gridColorText" value="#d9cfbb" style="max-width:110px; font-family:var(--mono); font-size:12px">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Numeri di cella</h2>
+      <div class="field">
+        <label class="row" style="display:flex; align-items:center; gap:8px; cursor:pointer">
+          <input type="checkbox" id="hideNumbersToggle">
+          <span>Rimuovi numeri</span>
+        </label>
+      </div>
+      <div class="field">
+        <label>Dimensione font: <span class="val" id="fontSizeVal">11</span> px</label>
+        <input type="range" id="fontSizeRange" min="6" max="24" step="1" value="11">
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label>Palette colori</label>
+        <div class="swatches" id="fontSwatches"></div>
+        <div class="picker-row">
+          <input type="color" id="fontColorPicker" value="#7a6f58">
+          <input type="text" id="fontColorText" value="#7a6f58" style="max-width:110px; font-family:var(--mono); font-size:12px">
+        </div>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<div class="modal" id="importModal">
+  <div class="box">
+    <div class="mh"><h3>Importa mappa dal Murdoku Editor</h3></div>
+    <div class="mb">
+      <div class="field" style="margin:0 0 12px">
+        <label for="importCloudSelect">Carica da repository GitHub (murdoku-studio)</label>
+        <select id="importCloudSelect" style="background:var(--panel2); color:var(--text); border:1px solid var(--line2); border-radius:7px; padding:7px 9px; font-size:13px; width:100%" disabled></select>
+        <div class="hint hint-row" id="importCloudHint">
+          <span class="spinner" id="importCloudSpinner" style="display:none"></span>
+          <span id="importCloudHintText">Caricamento elenco mappe...</span>
+        </div>
+      </div>
+      <div class="hint" style="margin:0 0 8px">Incolla qui il testo esportato dal Murdoku Editor tramite il pulsante <b>Esporta Mappa + Indizi</b>, oppure seleziona una mappa dall'elenco qui sopra. Deve contenere il blocco <code>&lt;!-- MURDOKU_STATE_B64: ... --&gt;</code>. Verranno importati dimensione, muri, sfondi e oggetti (con la relativa calpestabilità, letta dalla legenda oggetti del testo).</div>
+      <textarea id="importText" spellcheck="false" placeholder="Incolla qui il testo esportato dal Murdoku Editor..."></textarea>
+    </div>
+    <div class="mf">
+      <button class="btn ghost" data-close-modal>Annulla</button>
+      <button class="btn primary" id="btnDoImport">Importa</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="cloudModal">
+  <div class="box">
+    <div class="mh"><h3>Carica mappa dal cloud</h3></div>
+    <div class="mb">
+      <div class="field" style="margin:0">
+        <label for="cloudMapSelect">Mappa</label>
+        <select id="cloudMapSelect" style="background:var(--panel2); color:var(--text); border:1px solid var(--line2); border-radius:7px; padding:7px 9px; font-size:13px" disabled></select>
+        <div class="hint hint-row" id="cloudMapHint">
+          <span class="spinner" id="cloudSpinner" style="display:none"></span>
+          <span id="cloudMapHintText">Caricamento elenco mappe...</span>
+        </div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn ghost" id="btnCloudCancel" data-close-modal>Annulla</button>
+      <button class="btn primary" id="btnDoCloudLoad" disabled>Carica</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="saveModal">
+  <div class="box">
+    <div class="mh"><h3>Salva mappa</h3></div>
+    <div class="mb">
+      <div class="field" style="margin:0">
+        <label for="saveFilename">Nome del file</label>
+        <input type="text" id="saveFilename" placeholder="mappa" spellcheck="false" autocomplete="off">
+        <div class="hint">Al nome verrà aggiunta automaticamente l'estensione <code>.json</code>.</div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn ghost" data-close-modal>Annulla</button>
+      <button class="btn primary" id="btnDoSave">Salva</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="exportModal">
+  <div class="box">
+    <div class="mh"><h3>Esporta immagine</h3></div>
+    <div class="mb">
+      <div class="field">
+        <label>Formato</label>
+        <div class="unit-toggle" id="exportFormatToggle" style="align-self:flex-start">
+          <button type="button" class="unit-btn active" data-format="png">PNG</button>
+          <button type="button" class="unit-btn" data-format="svg">SVG</button>
+        </div>
+      </div>
+      <div class="field" id="exportScaleField">
+        <label>Risoluzione</label>
+        <select id="exportScaleSelect" style="background:var(--panel2); color:var(--text); border:1px solid var(--line2); border-radius:7px; padding:7px 9px; font-size:13px; max-width:220px"></select>
+        <div class="hint" id="exportSvgHint" style="display:none">Il formato SVG è vettoriale: la risoluzione non si applica.</div>
+      </div>
+      <div class="field" style="margin-bottom:0">
+        <label for="exportFilename">Nome del file</label>
+        <input type="text" id="exportFilename" placeholder="mappa" spellcheck="false" autocomplete="off">
+        <div class="hint">Estensione <code id="exportExtHint">.png</code> aggiunta automaticamente.</div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn ghost" data-close-modal>Annulla</button>
+      <button class="btn primary" id="btnDoExport">Scarica</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="gridExportModal">
+  <div class="box">
+    <div class="mh"><h3>Esporta griglia</h3></div>
+    <div class="mb">
+      <div class="field" style="margin:0">
+        <label for="gridExportFilename">Nome del file</label>
+        <input type="text" id="gridExportFilename" placeholder="griglia" spellcheck="false" autocomplete="off">
+        <div class="hint">Estensione <code>.png</code> aggiunta automaticamente (risoluzione 8×).</div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn ghost" data-close-modal>Annulla</button>
+      <button class="btn primary" id="btnDoExportGrid">Scarica</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="confirmModal">
+  <div class="box" style="width:min(420px,92vw)">
+    <div class="mh"><h3 id="confirmModalTitle">Conferma</h3></div>
+    <div class="mb"><div class="hint" id="confirmModalMsg" style="margin:0; font-size:13px; color:var(--text); white-space:pre-line; line-height:1.5"></div></div>
+    <div class="mf">
+      <button class="btn ghost" id="confirmModalCancel">Annulla</button>
+      <button class="btn primary" id="confirmModalOk">Conferma</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fileLoadJson" accept=".json,application/json" style="display:none">
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+
+/* =====================================================================
+   MODELLO
+   ===================================================================== */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+const PRESET_COLORS = [
+  "#f4efe4","#f5d6c6","#f2c8a0","#e8b48a","#d99574","#c67853",
+  "#f5e4b7","#e9d187","#c9b46b","#a8c67a","#7fb069","#4f8a51",
+  "#bfe1e5","#8fc3d1","#5aa6c0","#3d7a99","#3b5b8a","#2e3f6b",
+  "#e0c9ff","#c7a5f0","#a67fd6","#7f5cc0","#5a3f9a","#3f2c73",
+  "#f3b3b3","#e07f7f","#c94f4f","#a83232","#6b1f1f","#3d1010",
+  "#e0e0e0","#c4c4c4","#8f8f8f","#5c5c5c","#333333","#141019"
+];
+
+const state = {
+  size: 8,
+  walls: new Set(),        // "r1,c1|r2,c2" con A<B lessicograficamente (solo edge interni)
+  areaFills: {},           // signature area -> {type:'color'|'svg', value:string}
+  areaShades: {},          // signature area -> 0-100 (50=default, 0=bianco, 100=nero)
+  areaNames: {},           // signature area -> nome reale (da import Murdoku, se disponibile)
+  nonWalkable: new Set(),  // "r,c" celle marcate come non calpestabili
+  selectedAreaSig: null,   // signature dell'ultima area cliccata
+  selectedCell: null,      // {r,c} cella selezionata via doppio click
+  style: {
+    wallWidth: 4,          // spessore muri e contorno
+    gridWidth: 1,          // spessore linee interne celle (0 = nascoste)
+    gridColor: "#d9cfbb",  // colore linee interne
+    fontSize: 11,          // dimensione font numeri
+    fontColor: "#7a6f58",  // colore dei numeri di cella
+    hideNumbers: false,    // se true, i numeri di riga/colonna non vengono disegnati
+    pngScale: 2,           // fattore di scala per export PNG (1×–8×)
+    nonWalkIntensity: 22,  // intensità overlay celle non calpestabili (0=trasparente, 100=nero)
+  },
+  icons: {
+    library: [],           // {id, name, dataUri}  (dataUri: image/svg+xml o image/png)
+    placed: [],            // {id, libId, fCol, fRow, size, unit}  size = numero, unit = '%' o 'px'
+    selectedId: null,      // id dell'icona posizionata attualmente selezionata
+    snap: true,            // ancora al centro della cella
+    unit: "%",             // unità di default per nuove icone
+    shade: 50,             // gradazione globale icone (50=default, 0=bianco, 100=nero)
+    nextLib: 1,
+    nextPlaced: 1,
+  },
+  bg: {
+    library: [],           // {id, name, dataUri}
+    nextId: 1,
+  },
+  objects: {
+    // {slug, name, walkable, cells:[[r,c],...], libId, size} — catalogo
+    // oggetti rilevati importando una mappa dal Murdoku Editor.
+    list: [],
+  },
+};
+
+const DEFAULT_ICON_PCT = 90;   // dimensione default in %
+const DEFAULT_ICON_PX = 40;    // dimensione default in px assoluti (SVG user coords)
+
+/* --- chiave muro (edge interno) --- */
+function key(r,c){ return r+","+c; }
+function wallKey(r1,c1,r2,c2){
+  const A = key(r1,c1), B = key(r2,c2);
+  return A < B ? A + "|" + B : B + "|" + A;
+}
+function hasWall(r1,c1,r2,c2){
+  // Fuori griglia = perimetro esterno (sempre chiuso, ma non è memorizzato)
+  const N = state.size;
+  if (r1<0||c1<0||r1>=N||c1>=N||r2<0||c2<0||r2>=N||c2>=N) return true;
+  return state.walls.has(wallKey(r1,c1,r2,c2));
+}
+function toggleWall(r1,c1,r2,c2){
+  const N = state.size;
+  if (r1<0||c1<0||r1>=N||c1>=N||r2<0||c2<0||r2>=N||c2>=N) return;
+  const k = wallKey(r1,c1,r2,c2);
+  if (state.walls.has(k)) state.walls.delete(k); else state.walls.add(k);
+  // Un cambio di muro può cambiare le firme delle aree: rimappa i fill.
+  remapAreaFillsAfterTopologyChange();
+  render();
+}
+
+/* --- calcolo aree (componenti connesse tra celle, bloccate dai muri) --- */
+function computeAreas(){
+  const N = state.size;
+  const area = new Array(N*N).fill(-1);
+  const areas = []; // ognuna: {id, cells:[[r,c]...]}
+  let id = 0;
+  const DIRS = [[-1,0],[1,0],[0,-1],[0,1]];
+  for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+    if (area[r*N+c] !== -1) continue;
+    const stack=[[r,c]]; area[r*N+c]=id;
+    const cells=[];
+    while(stack.length){
+      const [cr,cc] = stack.pop();
+      cells.push([cr,cc]);
+      for (const [dr,dc] of DIRS){
+        const nr=cr+dr, nc=cc+dc;
+        if (nr<0||nc<0||nr>=N||nc>=N) continue;
+        if (hasWall(cr,cc,nr,nc)) continue;
+        if (area[nr*N+nc] !== -1) continue;
+        area[nr*N+nc] = id;
+        stack.push([nr,nc]);
+      }
+    }
+    areas.push({id, cells});
+    id++;
+  }
+  return { area, areas, count: id };
+}
+
+/* Firma stabile di un'area = coordinate ordinate delle celle che la compongono.
+   Ci permette di mantenere gli sfondi anche quando l'ordine/numerazione delle
+   aree cambia dopo un edit sui muri. */
+function areaSignature(cells){
+  const sorted = cells.map(([r,c])=>r+","+c).sort();
+  return sorted.join(";");
+}
+
+/* Ogni volta che i muri cambiano, ricalcolo le aree e ri-associo i fill per
+   firma. I fill di aree che non esistono più vengono scartati. */
+function remapAreaFillsAfterTopologyChange(){
+  const an = computeAreas();
+  const newFills = {};
+  const newShades = {};
+  const newNames = {};
+  for (const a of an.areas){
+    const sig = areaSignature(a.cells);
+    if (state.areaFills[sig]) newFills[sig] = state.areaFills[sig];
+    if (state.areaShades[sig] != null) newShades[sig] = state.areaShades[sig];
+    if (state.areaNames[sig]) newNames[sig] = state.areaNames[sig];
+  }
+  state.areaFills = newFills;
+  state.areaShades = newShades;
+  state.areaNames = newNames;
+  // Se l'area selezionata non esiste più, azzero
+  if (state.selectedAreaSig && !newFills[state.selectedAreaSig]){
+    // può ancora esistere anche senza fill: ricontrolla
+    const stillExists = an.areas.some(a => areaSignature(a.cells) === state.selectedAreaSig);
+    if (!stillExists) state.selectedAreaSig = null;
+  }
+  renderRoomsSection();
+}
+
+/* Colore fallback per un'area (se non ha fill esplicito): paper. */
+function defaultAreaColor(){ return "var(--paper)"; }
+
+/* Gradazione (0-100, 50=default) dello sfondo di un'area: 0=bianco, 100=nero. */
+function getAreaShade(sig){
+  const v = state.areaShades[sig];
+  return typeof v === "number" && isFinite(v) ? Math.max(0, Math.min(100, v)) : 50;
+}
+
+/* Gradazione (0-100, 50=default) globale delle icone: 0=bianco, 100=nero. */
+function getIconShade(){
+  const v = state.icons.shade;
+  return typeof v === "number" && isFinite(v) ? Math.max(0, Math.min(100, v)) : 50;
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+const CELL_MIN = 32, CELL_MAX = 64;
+
+function cellSize(){
+  return Math.max(CELL_MIN, Math.min(CELL_MAX, Math.floor(560 / state.size)));
+}
+
+/* padding scalato in base alla dimensione font, così i numeri stanno sempre
+   comodamente fuori dal contorno anche a font grandi. */
+function paddingFor(fontSize){
+  return Math.max(20, Math.round(fontSize * 2.2));
+}
+
+/* Costruisce l'SVG. Se `forExport` è true, omette hitbox interattivi e rende
+   trasparente lo sfondo esterno (la fascia con i numeri, fuori dal contorno). */
+function buildSvg(forExport=false){
+  const N = state.size;
+  const CS = cellSize();
+  const FS = state.style.fontSize;
+  const WALL_W = state.style.wallWidth;
+  const BORDER_W = state.style.wallWidth;
+  const GRID_W = state.style.gridWidth;
+  const GRID_COL = state.style.gridColor;
+  const PAD = paddingFor(FS);
+  const W = PAD + N*CS + PAD;
+  const H = PAD + N*CS + PAD;
+  const an = computeAreas();
+
+  // Colleziona i pattern SVG unici usati
+  const patternDefs = [];
+  const svgPatternMap = {}; // dataUri -> patternId
+  for (const a of an.areas){
+    const sig = areaSignature(a.cells);
+    const fill = state.areaFills[sig];
+    if (fill && fill.type === "svg" && fill.value){
+      if (!svgPatternMap[fill.value]){
+        const pid = "svgpat" + patternDefs.length;
+        svgPatternMap[fill.value] = pid;
+        patternDefs.push({ id: pid, dataUri: fill.value });
+      }
+    }
+  }
+
+  let s = "";
+  // On-screen: nessun width/height fisso -> l'SVG scala col contenitore via CSS.
+  // Export: intrinsic width/height per la conversione PNG e per gli editor esterni.
+  const sizeAttrs = forExport ? ` width="${W}" height="${H}"` : "";
+  s += `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}"${sizeAttrs}>`;
+
+  // <defs> con i pattern e il filtro di gradazione icone
+  const iconShade = getIconShade();
+  let defsContent = "";
+  for (const pd of patternDefs){
+    // pattern che riempie una cella intera, ripetuto per cella
+    defsContent += `<pattern id="${pd.id}" patternUnits="userSpaceOnUse" x="${PAD}" y="${PAD}" width="${CS}" height="${CS}">`;
+    defsContent += `<image href="${pd.dataUri}" x="0" y="0" width="${CS}" height="${CS}" preserveAspectRatio="xMidYMid slice"/>`;
+    defsContent += `</pattern>`;
+  }
+  if (iconShade !== 50){
+    // Sfuma i colori dell'icona verso bianco (shade<50) o nero (shade>50),
+    // preservando la trasparenza (riga alpha identità).
+    const t = Math.abs(iconShade - 50) / 50;
+    const target = iconShade < 50 ? t : 0;
+    const k = 1 - t;
+    defsContent += `<filter id="iconShadeFilter" color-interpolation-filters="sRGB">`
+      + `<feColorMatrix type="matrix" values="${k} 0 0 0 ${target} 0 ${k} 0 0 ${target} 0 0 ${k} 0 ${target} 0 0 0 1 0"/>`
+      + `</filter>`;
+  }
+  if (defsContent) s += `<defs>${defsContent}</defs>`;
+
+  // sfondo esterno (fascia con i numeri): visibile solo on-screen; trasparente in export.
+  if (!forExport){
+    s += `<rect x="0" y="0" width="${W}" height="${H}" fill="#f4efe4"/>`;
+  }
+
+  // celle: fill per area (le linee interne del reticolo sono controllabili)
+  const strokeAttr = GRID_W > 0
+    ? ` stroke="${GRID_COL}" stroke-width="${GRID_W}"`
+    : ` stroke="none"`;
+  for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+    const x = PAD + c*CS, y = PAD + r*CS;
+    const aid = an.area[r*N+c];
+    const sig = areaSignature(an.areas[aid].cells);
+    const fill = state.areaFills[sig];
+    let f = "#f4efe4";
+    if (fill){
+      if (fill.type === "color") f = fill.value;
+      else if (fill.type === "svg" && svgPatternMap[fill.value]) f = `url(#${svgPatternMap[fill.value]})`;
+    }
+    const cls = forExport ? "" : ` class="cell" data-r="${r}" data-c="${c}"`;
+    s += `<rect${cls} x="${x}" y="${y}" width="${CS}" height="${CS}" fill="${f}"${strokeAttr}/>`;
+    // Gradazione sfondo stanza: overlay bianco/nero semi-trasparente
+    // (50=nessun effetto, 0=bianco pieno, 100=nero pieno).
+    const shade = getAreaShade(sig);
+    if (shade !== 50){
+      const lighten = shade < 50;
+      const alpha = Math.abs(shade - 50) / 50;
+      s += `<rect x="${x}" y="${y}" width="${CS}" height="${CS}" fill="${lighten ? "#fff" : "#000"}" opacity="${alpha}" pointer-events="none"/>`;
+    }
+  }
+
+  // Overlay per celle "non calpestabili" (leggermente più scuro).
+  // Va sopra il fill della cella ma sotto muri/icone, così l'effetto è visibile
+  // sia in editor che in export e non altera gli oggetti posizionati.
+  if (state.nonWalkable && state.nonWalkable.size){
+    const alpha = Math.max(0, Math.min(100, state.style.nonWalkIntensity|0)) / 100;
+    if (alpha > 0){
+      s += `<g pointer-events="none">`;
+      for (const key of state.nonWalkable){
+        const [r,c] = key.split(",").map(Number);
+        if (r>=N || c>=N) continue;
+        const x = PAD + c*CS, y = PAD + r*CS;
+        s += `<rect x="${x}" y="${y}" width="${CS}" height="${CS}" fill="rgba(0,0,0,${alpha})"/>`;
+      }
+      s += `</g>`;
+    }
+  }
+
+  // Cella selezionata (doppio click) — highlight tratteggiato
+  if (!forExport && state.selectedCell){
+    const {r, c} = state.selectedCell;
+    if (r < N && c < N){
+      const x = PAD + c*CS, y = PAD + r*CS;
+      s += `<rect x="${x+1.5}" y="${y+1.5}" width="${CS-3}" height="${CS-3}" fill="none" stroke="#8a6bff" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85" pointer-events="none"/>`;
+    }
+  }
+
+  // Selezione area corrente (leggero highlight)
+  if (!forExport && state.selectedAreaSig){
+    const sel = an.areas.find(a => areaSignature(a.cells) === state.selectedAreaSig);
+    if (sel){
+      s += `<g pointer-events="none">`;
+      for (const [r,c] of sel.cells){
+        const x = PAD + c*CS, y = PAD + r*CS;
+        s += `<rect x="${x+1.5}" y="${y+1.5}" width="${CS-3}" height="${CS-3}" fill="none" stroke="#8a6bff" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.85"/>`;
+      }
+      s += `</g>`;
+    }
+  }
+
+  // muri interni
+  s += `<g stroke="#2a2130" stroke-width="${WALL_W}" stroke-linecap="round" pointer-events="none">`;
+  for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+    const x = PAD + c*CS, y = PAD + r*CS;
+    if (c+1<N && state.walls.has(wallKey(r,c,r,c+1)))
+      s += `<line x1="${x+CS}" y1="${y}" x2="${x+CS}" y2="${y+CS}"/>`;
+    if (r+1<N && state.walls.has(wallKey(r,c,r+1,c)))
+      s += `<line x1="${x}" y1="${y+CS}" x2="${x+CS}" y2="${y+CS}"/>`;
+  }
+  s += `</g>`;
+
+  // perimetro esterno
+  s += `<rect x="${PAD}" y="${PAD}" width="${N*CS}" height="${N*CS}" fill="none" stroke="#2a2130" stroke-width="${BORDER_W}" rx="3"/>`;
+
+  // numeri riga/colonna
+  const topY = PAD - Math.max(6, Math.round(FS * 0.55));
+  const leftX = PAD - Math.max(8, Math.round(FS * 0.85));
+  const leftDy = Math.round(FS * 0.36);
+  if (!state.style.hideNumbers){
+    s += `<g font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" font-size="${FS}" fill="${state.style.fontColor}" text-anchor="middle" font-weight="700">`;
+    for (let i=0;i<N;i++){
+      s += `<text x="${PAD + i*CS + CS/2}" y="${topY}">${i+1}</text>`;
+      s += `<text x="${leftX}" y="${PAD + i*CS + CS/2 + leftDy}">${i+1}</text>`;
+    }
+    s += `</g>`;
+  }
+
+  // hitbox interattivi (solo on-screen)
+  if (!forExport){
+    // Prima gli hitbox celle (sotto), poi quelli dei muri (sopra) così i click
+    // sui bordi hanno la precedenza rispetto ai click all'interno della cella.
+    s += `<g>`;
+    for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+      const x = PAD + c*CS, y = PAD + r*CS;
+      s += `<rect class="chit" data-r="${r}" data-c="${c}" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="transparent" style="cursor:pointer"/>`;
+    }
+    s += `</g>`;
+    s += `<g>`;
+    for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+      const x = PAD + c*CS, y = PAD + r*CS;
+      if (c+1<N)
+        s += `<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r}" data-wc2="${c+1}" x="${x+CS-8}" y="${y+8}" width="16" height="${CS-16}" fill="transparent" style="cursor:crosshair"/>`;
+      if (r+1<N)
+        s += `<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r+1}" data-wc2="${c}" x="${x+8}" y="${y+CS-8}" width="${CS-16}" height="16" fill="transparent" style="cursor:crosshair"/>`;
+    }
+    s += `</g>`;
+  }
+
+  // Icone posizionate (sopra a tutto — inclusi gli hitbox — così sono cliccabili)
+  for (const ic of state.icons.placed){
+    const lib = state.icons.library.find(l => l.id === ic.libId);
+    if (!lib) continue;
+    const sizePx = iconAbsSize(ic, CS);
+    const cx = PAD + ic.fCol * CS;
+    const cy = PAD + ic.fRow * CS;
+    const x = cx - sizePx/2, y = cy - sizePx/2;
+    if (!forExport && state.icons.selectedId === ic.id){
+      s += `<rect x="${x-3}" y="${y-3}" width="${sizePx+6}" height="${sizePx+6}" fill="none" stroke="#8a6bff" stroke-width="1.5" stroke-dasharray="4 3" pointer-events="none"/>`;
+    }
+    const attrs = forExport ? "" : ` class="picon" data-pid="${ic.id}" style="cursor:move"`;
+    const filterAttr = iconShade !== 50 ? ` filter="url(#iconShadeFilter)"` : "";
+    s += `<image${attrs}${filterAttr} href="${lib.dataUri}" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet"/>`;
+  }
+
+  s += `</svg>`;
+  return { svg: s, width: W, height: H };
+}
+
+/* Costruisce l'SVG per "Esporta Griglia": solo bordi/muri/linee/numeri in
+   nero e celle non calpestabili/calpestabili, con stili fissi indipendenti
+   da quelli scelti dall'utente per la mappa a schermo (niente sfondi,
+   icone o gradazioni). */
+function buildGridSvg(){
+  const N = state.size;
+  const CS = cellSize();
+  const FS = 14;
+  const WALL_W = 5;
+  const BORDER_W = 5;
+  const GRID_W = 1;
+  const GRID_COL = "#000000";
+  const PAD = paddingFor(FS);
+  const W = PAD + N*CS + PAD;
+  const H = PAD + N*CS + PAD;
+
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}">`;
+
+  // celle: bianche, grigie (#8f8f8f) se non calpestabili
+  const strokeAttr = ` stroke="${GRID_COL}" stroke-width="${GRID_W}"`;
+  for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+    const x = PAD + c*CS, y = PAD + r*CS;
+    const isNonWalk = state.nonWalkable.has(`${r},${c}`);
+    s += `<rect x="${x}" y="${y}" width="${CS}" height="${CS}" fill="${isNonWalk ? "#8f8f8f" : "#ffffff"}"${strokeAttr}/>`;
+  }
+
+  // muri interni
+  s += `<g stroke="#000000" stroke-width="${WALL_W}" stroke-linecap="round">`;
+  for (let r=0;r<N;r++) for (let c=0;c<N;c++){
+    const x = PAD + c*CS, y = PAD + r*CS;
+    if (c+1<N && state.walls.has(wallKey(r,c,r,c+1)))
+      s += `<line x1="${x+CS}" y1="${y}" x2="${x+CS}" y2="${y+CS}"/>`;
+    if (r+1<N && state.walls.has(wallKey(r,c,r+1,c)))
+      s += `<line x1="${x}" y1="${y+CS}" x2="${x+CS}" y2="${y+CS}"/>`;
+  }
+  s += `</g>`;
+
+  // perimetro esterno
+  s += `<rect x="${PAD}" y="${PAD}" width="${N*CS}" height="${N*CS}" fill="none" stroke="#000000" stroke-width="${BORDER_W}" rx="3"/>`;
+
+  // numeri riga/colonna
+  const topY = PAD - Math.max(6, Math.round(FS * 0.55));
+  const leftX = PAD - Math.max(8, Math.round(FS * 0.85));
+  const leftDy = Math.round(FS * 0.36);
+  s += `<g font-family="ui-monospace, SF Mono, Menlo, Consolas, monospace" font-size="${FS}" fill="#000000" text-anchor="middle" font-weight="700">`;
+  for (let i=0;i<N;i++){
+    s += `<text x="${PAD + i*CS + CS/2}" y="${topY}">${i+1}</text>`;
+    s += `<text x="${leftX}" y="${PAD + i*CS + CS/2 + leftDy}">${i+1}</text>`;
+  }
+  s += `</g>`;
+
+  s += `</svg>`;
+  return { svg: s, width: W, height: H };
+}
+
+function openGridExportModal(){
+  $("#gridExportFilename").value = `griglia-${state.size}x${state.size}`;
+  openModal("gridExportModal");
+  setTimeout(() => { const i = $("#gridExportFilename"); if (i){ i.focus(); i.select(); } }, 0);
+}
+
+function exportGridPngFile(filename){
+  const { svg, width, height } = buildGridSvg();
+  const scale = 8;
+  const outName = normalizeExportFilename(filename, "png");
+  const img = new Image();
+  const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(svgBlob);
+  img.onload = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(scale, scale);
+    ctx.drawImage(img, 0, 0);
+    canvas.toBlob(b => {
+      downloadBlob(b, outName);
+      URL.revokeObjectURL(url);
+    }, "image/png");
+  };
+  img.onerror = () => {
+    URL.revokeObjectURL(url);
+    toast("Errore nella conversione PNG.");
+  };
+  img.src = url;
+}
+
+/* Ritorna la dimensione assoluta in unità SVG dell'icona (converte % -> px in
+   base al cellSize corrente). */
+function iconAbsSize(ic, CS){
+  if (ic.unit === "px") return ic.size;
+  return (ic.size / 100) * CS;
+}
+
+function render(){
+  const { svg } = buildSvg(false);
+  $("#board").outerHTML = svg.replace(/^<svg /, `<svg id="board" class="board" `);
+  attachBoardEvents();
+  updatePaintCardUI();
+  updateCellCardUI();
+  scheduleAutoSave();
+}
+
+function attachBoardEvents(){
+  const svg = $("#board");
+  if (!svg) return;
+  svg.querySelectorAll(".whit").forEach(el => {
+    el.addEventListener("click", () => {
+      pushHistoryNow();
+      toggleWall(+el.dataset.wr, +el.dataset.wc, +el.dataset.wr2, +el.dataset.wc2);
+    });
+  });
+  svg.querySelectorAll(".chit").forEach(el => {
+    // Il singolo click seleziona la stanza (per la colorazione); il doppio
+    // click seleziona SOLO la cella. Un breve ritardo disambigua le due
+    // interazioni: il click parte solo se non seguito da un dblclick.
+    el.addEventListener("click", () => {
+      const r = +el.dataset.r, c = +el.dataset.c;
+      if (cellClickTimer) clearTimeout(cellClickTimer);
+      cellClickTimer = setTimeout(() => {
+        cellClickTimer = null;
+        onCellClickPaint(r, c);
+      }, 220);
+    });
+    el.addEventListener("dblclick", () => {
+      if (cellClickTimer){ clearTimeout(cellClickTimer); cellClickTimer = null; }
+      selectCell(+el.dataset.r, +el.dataset.c);
+    });
+  });
+  svg.querySelectorAll(".picon").forEach(el => {
+    attachPlacedIconEvents(el);
+  });
+}
+let cellClickTimer = null;
+
+/* -------------------- ICONE POSIZIONATE ---------------------- */
+
+/* Converte coordinate client in coordinate SVG user (in base al viewBox). */
+function svgUserPoint(svg, clientX, clientY){
+  const pt = svg.createSVGPoint();
+  pt.x = clientX; pt.y = clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+
+/* Da coordinate SVG assolute (x,y) restituisce (fCol,fRow) rispetto alla
+   griglia, applicando l'ancoraggio se attivo. */
+function svgToCellFrac(x, y, snap){
+  const N = state.size;
+  const CS = cellSize();
+  const FS = state.style.fontSize;
+  const PAD = paddingFor(FS);
+  let fCol = (x - PAD) / CS;
+  let fRow = (y - PAD) / CS;
+  if (snap){
+    // centro della cella cliccata (o della più vicina se fuori dalla griglia)
+    let col = Math.floor(fCol);
+    let row = Math.floor(fRow);
+    col = Math.max(0, Math.min(N-1, col));
+    row = Math.max(0, Math.min(N-1, row));
+    fCol = col + 0.5;
+    fRow = row + 0.5;
+  } else {
+    // clampa dentro la griglia
+    fCol = Math.max(0, Math.min(N, fCol));
+    fRow = Math.max(0, Math.min(N, fRow));
+  }
+  return { fCol, fRow };
+}
+
+function attachPlacedIconEvents(el){
+  const pid = +el.dataset.pid;
+  let dragging = false;
+  let startClient = null;
+  let pointerId = null;
+
+  el.addEventListener("pointerdown", e => {
+    e.stopPropagation();
+    e.preventDefault();
+    // Seleziona subito (fornisce feedback immediato)
+    if (state.icons.selectedId !== pid){
+      state.icons.selectedId = pid;
+      state.selectedAreaSig = null;
+      updateIconSelectionUI();
+      render();
+      // dopo render l'elemento è cambiato — le successive pointer* le prendiamo
+      // sul nuovo elemento via delegation nel documento
+    }
+    dragging = false;
+    startClient = { x: e.clientX, y: e.clientY };
+    pointerId = e.pointerId;
+    try { el.setPointerCapture(pointerId); } catch(_){}
+  });
+
+  el.addEventListener("pointermove", e => {
+    if (pointerId == null || e.pointerId !== pointerId) return;
+    const dx = e.clientX - startClient.x, dy = e.clientY - startClient.y;
+    if (!dragging && (dx*dx + dy*dy) > 9){
+      // Solo ora è un vero drag (non un semplice click di selezione):
+      // snapshot per l'undo prima di modificare fCol/fRow.
+      pushHistoryNow();
+      dragging = true;
+    }
+    if (!dragging) return;
+    const svg = $("#board");
+    if (!svg) return;
+    const p = svgUserPoint(svg, e.clientX, e.clientY);
+    const { fCol, fRow } = svgToCellFrac(p.x, p.y, state.icons.snap);
+    const ic = state.icons.placed.find(x => x.id === pid);
+    if (!ic) return;
+    ic.fCol = fCol; ic.fRow = fRow;
+    // aggiorna posizione direttamente senza ri-render per fluidità
+    updateIconElementPosition(el, ic);
+  });
+
+  const endDrag = e => {
+    if (pointerId == null || e.pointerId !== pointerId) return;
+    try { el.releasePointerCapture(pointerId); } catch(_){}
+    pointerId = null;
+    if (dragging){
+      render();  // per aggiornare highlight ecc.
+    }
+    dragging = false;
+  };
+  el.addEventListener("pointerup", endDrag);
+  el.addEventListener("pointercancel", endDrag);
+}
+
+/* Aggiorna position/size dell'element image (e del suo highlight fratello se
+   presente) senza fare un render completo. */
+function updateIconElementPosition(el, ic){
+  const CS = cellSize();
+  const FS = state.style.fontSize;
+  const PAD = paddingFor(FS);
+  const sizePx = iconAbsSize(ic, CS);
+  const cx = PAD + ic.fCol * CS, cy = PAD + ic.fRow * CS;
+  const x = cx - sizePx/2, y = cy - sizePx/2;
+  el.setAttribute("x", x);
+  el.setAttribute("y", y);
+  el.setAttribute("width", sizePx);
+  el.setAttribute("height", sizePx);
+  // Aggiorna anche il rect di selezione se presente (fratello immediatamente prima)
+  const prev = el.previousElementSibling;
+  if (prev && prev.tagName === "rect" && prev.getAttribute("stroke") === "#8a6bff"){
+    prev.setAttribute("x", x-3);
+    prev.setAttribute("y", y-3);
+    prev.setAttribute("width", sizePx+6);
+    prev.setAttribute("height", sizePx+6);
+  }
+}
+
+function onCellClickPaint(r,c){
+  // Se avevo un'icona selezionata, deselezionala e non selezionare l'area
+  if (state.icons.selectedId != null){
+    state.icons.selectedId = null;
+    updateIconSelectionUI();
+  }
+  const an = computeAreas();
+  const N = state.size;
+  const aid = an.area[r*N+c];
+  const sig = areaSignature(an.areas[aid].cells);
+  state.selectedAreaSig = sig;
+  render();
+}
+
+function selectCell(r,c){
+  state.selectedCell = { r, c };
+  // Il doppio click serve a settare "Non calpestabile" sulla sola cella:
+  // scarichiamo qualunque selezione di stanza/icona che sarebbe rimasta
+  // dal primo click della sequenza (in genere già soppresso dal delay).
+  state.selectedAreaSig = null;
+  if (state.icons.selectedId != null){
+    state.icons.selectedId = null;
+    updateIconSelectionUI();
+  }
+  render();
+}
+
+function cellKey(r,c){ return `${r},${c}`; }
+
+function updateCellCardUI(){
+  const lbl = $("#activeCellLabel");
+  const cb = $("#cellNonWalkable");
+  if (!lbl || !cb) return;
+  if (!state.selectedCell){
+    lbl.textContent = "doppio click su una cella…";
+    cb.checked = false;
+    cb.disabled = true;
+  } else {
+    const {r, c} = state.selectedCell;
+    lbl.textContent = `Cella riga ${r+1}, colonna ${c+1}`;
+    cb.checked = state.nonWalkable.has(cellKey(r,c));
+    cb.disabled = false;
+  }
+}
+
+/* =====================================================================
+   UI: strumenti, palette, upload
+   ===================================================================== */
+function renderSwatches(){
+  const box = $("#swatches");
+  box.innerHTML = PRESET_COLORS.map(col =>
+    `<div class="sw" draggable="true" data-color="${col}" style="background:${col}" title="${col}"></div>`
+  ).join("");
+  box.querySelectorAll(".sw").forEach(el => {
+    el.addEventListener("dragstart", e => {
+      e.dataTransfer.effectAllowed = "copy";
+      e.dataTransfer.setData("application/x-murdoku-color", el.dataset.color);
+      e.dataTransfer.setData("text/plain", "murdoku-color:" + el.dataset.color);
+    });
+    el.addEventListener("click", () => {
+      applyFillToSelected({ type: "color", value: el.dataset.color });
+    });
+  });
+  // Palette per le linee interne celle
+  const gbox = $("#gridSwatches");
+  gbox.innerHTML = PRESET_COLORS.map(col =>
+    `<div class="sw" data-color="${col}" style="background:${col}" title="${col}"></div>`
+  ).join("");
+  gbox.querySelectorAll(".sw").forEach(el => {
+    el.addEventListener("click", () => {
+      applyGridColor(el.dataset.color);
+    });
+  });
+  // Palette per il colore dei numeri di cella
+  const fbox = $("#fontSwatches");
+  if (fbox){
+    fbox.innerHTML = PRESET_COLORS.map(col =>
+      `<div class="sw" data-color="${col}" style="background:${col}" title="${col}"></div>`
+    ).join("");
+    fbox.querySelectorAll(".sw").forEach(el => {
+      el.addEventListener("click", () => {
+        applyFontColor(el.dataset.color);
+      });
+    });
+  }
+}
+
+function applyGridColor(v){
+  if (!/^#[0-9a-fA-F]{6}$/.test(v)) return;
+  pushHistoryNow();
+  applyGridColorNoHistory(v);
+}
+
+/* Come applyGridColor ma senza aggiungere step di history: usata dai
+   listener 'input' del color picker che sparano di continuo durante il
+   drag (la history è già gestita da pushHistoryDebounced nel binding). */
+function applyGridColorNoHistory(v){
+  if (!/^#[0-9a-fA-F]{6}$/.test(v)) return;
+  state.style.gridColor = v.toLowerCase();
+  $("#gridColorPicker").value = state.style.gridColor;
+  $("#gridColorText").value = state.style.gridColor;
+  updateGridSwatchActive();
+  render();
+}
+
+function updateGridSwatchActive(){
+  const cur = state.style.gridColor.toLowerCase();
+  $$("#gridSwatches .sw").forEach(el => {
+    el.classList.toggle("active", el.dataset.color.toLowerCase() === cur);
+  });
+}
+
+function applyFontColor(v){
+  if (!/^#[0-9a-fA-F]{6}$/.test(v)) return;
+  pushHistoryNow();
+  applyFontColorNoHistory(v);
+}
+
+function applyFontColorNoHistory(v){
+  if (!/^#[0-9a-fA-F]{6}$/.test(v)) return;
+  state.style.fontColor = v.toLowerCase();
+  $("#fontColorPicker").value = state.style.fontColor;
+  $("#fontColorText").value = state.style.fontColor;
+  updateFontSwatchActive();
+  render();
+}
+
+function updateFontSwatchActive(){
+  const cur = (state.style.fontColor || "#7a6f58").toLowerCase();
+  $$("#fontSwatches .sw").forEach(el => {
+    el.classList.toggle("active", el.dataset.color.toLowerCase() === cur);
+  });
+}
+
+function applyFillToSelected(fill){
+  if (!state.selectedAreaSig){
+    toast("Seleziona prima una stanza cliccando una cella.");
+    return;
+  }
+  pushHistoryNow();
+  state.areaFills[state.selectedAreaSig] = fill;
+  renderRoomsSection();
+  render();
+  toast("Stile stanza aggiornato.");
+}
+
+function updatePaintCardUI(){
+  const lbl = $("#activeAreaLabel");
+  if (!lbl) return;
+  if (!state.selectedAreaSig){
+    lbl.textContent = "clicca una stanza…";
+  } else {
+    const an = computeAreas();
+    const idx = an.areas.findIndex(a => areaSignature(a.cells) === state.selectedAreaSig);
+    const cellCount = idx>=0 ? an.areas[idx].cells.length : 0;
+    lbl.textContent = `${roomLabel(state.selectedAreaSig, idx)} · ${cellCount} celle`;
+  }
+  const shadeRange = $("#areaShadeRange");
+  const shadeVal = $("#areaShadeVal");
+  if (shadeRange && shadeVal){
+    const shade = state.selectedAreaSig ? getAreaShade(state.selectedAreaSig) : 50;
+    shadeRange.value = shade;
+    shadeVal.textContent = shade;
+    shadeRange.disabled = !state.selectedAreaSig;
+  }
+  // Swatch attivo (solo la palette della card "Colorazione stanza")
+  $$("#swatches .sw").forEach(el => {
+    const active = !!(state.selectedAreaSig
+      && state.areaFills[state.selectedAreaSig]
+      && state.areaFills[state.selectedAreaSig].type === "color"
+      && state.areaFills[state.selectedAreaSig].value.toLowerCase() === el.dataset.color.toLowerCase());
+    el.classList.toggle("active", active);
+  });
+}
+
+/* =====================================================================
+   Sezione "Stanze" (elenco delle stanze correnti, con assegnazione
+   colore/sfondo e gradazione per riga tramite drag&drop dalla card
+   "Colorazione stanza")
+   ===================================================================== */
+function roomLabel(sig, idx){
+  return state.areaNames[sig] || `Stanza ${idx + 1}`;
+}
+
+function isColorDrag(e){
+  if (!e.dataTransfer) return false;
+  const types = e.dataTransfer.types || [];
+  return Array.from(types).some(t => t === "application/x-murdoku-color" || t === "text/plain");
+}
+function isBgDrag(e){
+  if (!e.dataTransfer) return false;
+  const types = e.dataTransfer.types || [];
+  return Array.from(types).some(t => t === "application/x-murdoku-bg" || t === "text/plain");
+}
+
+function applyFillToRoom(sig, fill){
+  pushHistoryNow();
+  state.areaFills[sig] = fill;
+  renderRoomsSection();
+  render();
+  toast("Stile stanza aggiornato.");
+}
+
+function clearRoomFill(sig){
+  pushHistoryNow();
+  delete state.areaFills[sig];
+  delete state.areaShades[sig];
+  renderRoomsSection();
+  render();
+}
+
+function setRoomShade(sig, value){
+  pushHistoryDebounced();
+  state.areaShades[sig] = value;
+  render();
+}
+
+function bindRoomDropZone(el, sig){
+  el.addEventListener("dragover", e => {
+    if (!isColorDrag(e) && !isBgDrag(e)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+    el.classList.add("drop-active");
+  });
+  el.addEventListener("dragleave", () => el.classList.remove("drop-active"));
+  el.addEventListener("drop", e => {
+    el.classList.remove("drop-active");
+    let color = e.dataTransfer.getData("application/x-murdoku-color");
+    if (!color){
+      const t = e.dataTransfer.getData("text/plain");
+      if (t.startsWith("murdoku-color:")) color = t.slice("murdoku-color:".length);
+    }
+    if (color){
+      e.preventDefault();
+      applyFillToRoom(sig, { type: "color", value: color });
+      return;
+    }
+    let bgId = e.dataTransfer.getData("application/x-murdoku-bg");
+    if (!bgId){
+      const t = e.dataTransfer.getData("text/plain");
+      if (t.startsWith("murdoku-bg:")) bgId = t.slice("murdoku-bg:".length);
+    }
+    if (!bgId) return;
+    const bg = state.bg.library.find(b => b.id === +bgId);
+    if (!bg) return;
+    e.preventDefault();
+    applyFillToRoom(sig, { type: "svg", value: bg.dataUri });
+  });
+}
+
+function renderRoomsSection(){
+  const box = $("#roomsList");
+  if (!box) return;
+  const an = computeAreas();
+  box.innerHTML = an.areas.map((a, idx) => {
+    const sig = areaSignature(a.cells);
+    const fill = state.areaFills[sig];
+    const shade = getAreaShade(sig);
+    const label = roomLabel(sig, idx);
+    const cellWord = a.cells.length === 1 ? "cella" : "celle";
+    const previewHtml = (fill && fill.type === "svg" && fill.value)
+      ? `<img src="${fill.value}" alt="">`
+      : `<span style="display:block; width:100%; height:100%; border-radius:6px; background:${escapeHtmlAttr((fill && fill.type === "color" && fill.value) || "#f4efe4")}"></span>`;
+    const hasCustom = !!fill || shade !== 50;
+    return `
+      <div class="assign-row" data-room-sig="${escapeHtmlAttr(sig)}">
+        <div class="assign-row-top">
+          <div class="assign-drop" data-room-sig="${escapeHtmlAttr(sig)}" title="Trascina qui un colore o uno sfondo per assegnarlo">${previewHtml}</div>
+          <div class="assign-info">
+            <div class="assign-name">${escapeHtmlAttr(label)} <span class="assign-count">· ${a.cells.length} ${cellWord}</span></div>
+          </div>
+          ${hasCustom ? `<button type="button" class="assign-clear" data-room-sig="${escapeHtmlAttr(sig)}" title="Ripristina colore predefinito">×</button>` : ""}
+        </div>
+        <div class="field" style="margin:8px 0 0">
+          <label>Gradazione: <span class="val room-shade-val">${shade}</span></label>
+          <input type="range" class="room-shade-range" min="0" max="100" step="1" value="${shade}" data-room-sig="${escapeHtmlAttr(sig)}">
+        </div>
+      </div>`;
+  }).join("");
+
+  box.querySelectorAll(".assign-drop").forEach(el => {
+    bindRoomDropZone(el, el.dataset.roomSig);
+  });
+  box.querySelectorAll(".assign-row").forEach(row => {
+    row.addEventListener("click", e => {
+      if (e.target.closest(".assign-clear")) return;
+      state.selectedAreaSig = row.dataset.roomSig;
+      if (state.icons.selectedId != null){
+        state.icons.selectedId = null;
+        updateIconSelectionUI();
+      }
+      state.selectedCell = null;
+      render();
+    });
+  });
+  box.querySelectorAll(".assign-clear").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      clearRoomFill(btn.dataset.roomSig);
+    });
+  });
+  box.querySelectorAll(".room-shade-range").forEach(el => {
+    el.addEventListener("input", e => {
+      const sig = el.dataset.roomSig;
+      const v = +e.target.value;
+      const row = el.closest(".assign-row");
+      if (row) row.querySelector(".room-shade-val").textContent = v;
+      setRoomShade(sig, v);
+    });
+    el.addEventListener("click", e => e.stopPropagation());
+  });
+}
+
+/* =====================================================================
+   Upload SVG utente
+   ===================================================================== */
+/* =====================================================================
+   Libreria sfondi (upload multipli + ZIP + paste, applicati alle aree)
+   ===================================================================== */
+function addBgToLibrary(dataUri, name){
+  pushHistoryNow();
+  const id = state.bg.nextId++;
+  state.bg.library.push({ id, name: name || `bg-${id}`, dataUri });
+  renderBgLibrary();
+}
+
+async function removeBgFromLibrary(bgId){
+  const bg = state.bg.library.find(b => b.id === bgId);
+  if (!bg) return;
+  // Conta quante aree usano questo sfondo
+  const usedBy = [];
+  for (const [sig, f] of Object.entries(state.areaFills)){
+    if (f && f.type === "svg" && f.value === bg.dataUri) usedBy.push(sig);
+  }
+  if (usedBy.length){
+    if (!(await askConfirm(`Rimuovere «${bg.name}» dalla libreria?\n${usedBy.length} stanza/e lo usano come sfondo: torneranno al colore predefinito.`))) return;
+  }
+  pushHistoryNow();
+  for (const sig of usedBy) delete state.areaFills[sig];
+  state.bg.library = state.bg.library.filter(b => b.id !== bgId);
+  renderBgLibrary();
+  render();
+}
+
+function renderBgLibrary(){
+  scheduleAutoSave();
+  const box = $("#bgLibrary");
+  if (!box) return;
+  if (!state.bg.library.length){
+    box.innerHTML = `<div class="icon-empty">Trascina qui, carica o incolla immagini (SVG, PNG, WebP, JPEG) o file .zip.</div>`;
+    return;
+  }
+  box.innerHTML = state.bg.library.map(b =>
+    `<div class="icon-thumb bg-thumb" draggable="true" data-bg-id="${b.id}" title="${escapeHtmlAttr(b.name)}\nClick per applicare alla stanza selezionata, o trascina su una riga in «Stanze»">
+       <img src="${b.dataUri}" alt="${escapeHtmlAttr(b.name)}">
+       <button type="button" class="thumb-x" data-bg-id="${b.id}" title="Rimuovi dalla libreria">×</button>
+     </div>`
+  ).join("");
+  box.querySelectorAll(".bg-thumb").forEach(el => {
+    el.addEventListener("dragstart", e => {
+      e.dataTransfer.effectAllowed = "copy";
+      e.dataTransfer.setData("application/x-murdoku-bg", el.dataset.bgId);
+      e.dataTransfer.setData("text/plain", "murdoku-bg:" + el.dataset.bgId);
+      el.classList.add("dragging");
+    });
+    el.addEventListener("dragend", () => el.classList.remove("dragging"));
+    el.addEventListener("click", e => {
+      if (e.target.classList.contains("thumb-x")) return;
+      const bg = state.bg.library.find(b => b.id === +el.dataset.bgId);
+      if (!bg) return;
+      applyFillToSelected({ type: "svg", value: bg.dataUri });
+    });
+  });
+  box.querySelectorAll(".thumb-x").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      removeBgFromLibrary(+btn.dataset.bgId);
+    });
+  });
+}
+
+async function handleBgFilesUpload(files){
+  let added = 0;
+  for (const f of files){
+    const items = await extractImageEntries(f);
+    for (const it of items){
+      addBgToLibrary(it.dataUri, it.name);
+      added++;
+    }
+  }
+  if (added > 1) toast(`${added} sfondi aggiunti alla libreria.`);
+}
+
+async function pasteBgFromClipboard(){
+  try {
+    if (navigator.clipboard && navigator.clipboard.read){
+      const items = await navigator.clipboard.read();
+      for (const it of items){
+        const type = it.types.find(t =>
+          t === "image/png" || t === "image/svg+xml" ||
+          t === "image/webp" || t === "image/jpeg"
+        );
+        if (type){
+          const blob = await it.getType(type);
+          if (type === "image/svg+xml"){
+            const txt = await blob.text();
+            addBgToLibrary("data:image/svg+xml;utf8," + encodeURIComponent(txt), "clipboard.svg");
+          } else {
+            const ext = type.split("/")[1];
+            const rd = new FileReader();
+            rd.onload = e => addBgToLibrary(e.target.result, "clipboard." + ext);
+            rd.readAsDataURL(blob);
+          }
+          toast("Sfondo incollato.");
+          return;
+        }
+      }
+    }
+  } catch(_){}
+  try {
+    if (navigator.clipboard && navigator.clipboard.readText){
+      const txt = await navigator.clipboard.readText();
+      if (/^<\?xml|^<svg/i.test((txt||"").trim())){
+        addBgToLibrary("data:image/svg+xml;utf8," + encodeURIComponent(txt.trim()), "clipboard.svg");
+        toast("Sfondo SVG incollato.");
+        return;
+      }
+    }
+  } catch(_){}
+  toast("Impossibile leggere un'immagine dagli appunti.");
+}
+
+/* =====================================================================
+   ZIP reader minimale (usa DecompressionStream nativa del browser)
+   Supporta metodi 0 (stored) e 8 (deflate). Nessun supporto crittografia.
+   ===================================================================== */
+async function readZipFiles(arrayBuffer){
+  const view = new DataView(arrayBuffer);
+  const bytes = new Uint8Array(arrayBuffer);
+  const size = arrayBuffer.byteLength;
+  const EOCD_SIG = 0x06054b50;
+  let eocdPos = -1;
+  const maxScan = Math.min(65557, size);
+  for (let i = size - 22; i >= size - maxScan && i >= 0; i--){
+    if (view.getUint32(i, true) === EOCD_SIG){ eocdPos = i; break; }
+  }
+  if (eocdPos < 0) throw new Error("EOCD non trovato: non è un file ZIP valido.");
+  const cdOffset = view.getUint32(eocdPos + 16, true);
+  const totalEntries = view.getUint16(eocdPos + 10, true);
+  const CD_SIG = 0x02014b50;
+  const LH_SIG = 0x04034b50;
+  const entries = [];
+  let pos = cdOffset;
+  const decName = new TextDecoder("utf-8");
+  for (let i = 0; i < totalEntries; i++){
+    if (view.getUint32(pos, true) !== CD_SIG) throw new Error("Signature Central Directory non valida.");
+    const method = view.getUint16(pos + 10, true);
+    const compSize = view.getUint32(pos + 20, true);
+    const nameLen = view.getUint16(pos + 28, true);
+    const extraLen = view.getUint16(pos + 30, true);
+    const commentLen = view.getUint16(pos + 32, true);
+    const localOffset = view.getUint32(pos + 42, true);
+    const name = decName.decode(bytes.subarray(pos + 46, pos + 46 + nameLen));
+    pos += 46 + nameLen + extraLen + commentLen;
+    if (name.endsWith("/")) continue;               // directory
+    entries.push({ name, method, compSize, localOffset });
+  }
+  const results = [];
+  for (const f of entries){
+    if (view.getUint32(f.localOffset, true) !== LH_SIG) continue;
+    const lhNameLen = view.getUint16(f.localOffset + 26, true);
+    const lhExtraLen = view.getUint16(f.localOffset + 28, true);
+    const dataStart = f.localOffset + 30 + lhNameLen + lhExtraLen;
+    const compData = bytes.subarray(dataStart, dataStart + f.compSize);
+    let uncomp;
+    if (f.method === 0){
+      uncomp = compData;
+    } else if (f.method === 8){
+      try {
+        const stream = new Blob([compData]).stream()
+          .pipeThrough(new DecompressionStream("deflate-raw"));
+        const buf = await new Response(stream).arrayBuffer();
+        uncomp = new Uint8Array(buf);
+      } catch(e){ continue; }
+    } else {
+      continue; // metodo di compressione non supportato
+    }
+    results.push({ name: f.name, bytes: uncomp });
+  }
+  return results;
+}
+
+/* Converte bytes di un'immagine in data URI, in base all'estensione del nome.
+   Restituisce null se il formato non è tra quelli accettati. */
+function bytesToDataUri(bytesOrBlob, name){
+  const ext = (name.match(/\.([^.\/\\]+)$/)||[])[1]?.toLowerCase();
+  if (ext === "svg"){
+    // SVG: sempre come testo
+    const blob = bytesOrBlob instanceof Blob ? bytesOrBlob : new Blob([bytesOrBlob], { type: "image/svg+xml" });
+    return blob.text().then(txt => "data:image/svg+xml;utf8," + encodeURIComponent(txt));
+  }
+  const mime = ext === "png" ? "image/png"
+             : ext === "webp" ? "image/webp"
+             : (ext === "jpg" || ext === "jpeg") ? "image/jpeg"
+             : null;
+  if (!mime) return Promise.resolve(null);
+  const blob = bytesOrBlob instanceof Blob ? bytesOrBlob : new Blob([bytesOrBlob], { type: mime });
+  return new Promise(res => {
+    const rd = new FileReader();
+    rd.onload = e => res(e.target.result);
+    rd.onerror = () => res(null);
+    rd.readAsDataURL(blob);
+  });
+}
+
+/* Estrae le immagini valide da un File. Se è ZIP le estrae tutte, altrimenti
+   restituisce il singolo file. Ritorna [{ name, dataUri }]. */
+async function extractImageEntries(file){
+  const isZip = /\.zip$/i.test(file.name) || file.type === "application/zip";
+  if (!isZip){
+    const dataUri = await bytesToDataUri(file, file.name);
+    return dataUri ? [{ name: file.name, dataUri }] : [];
+  }
+  let entries;
+  try {
+    const ab = await file.arrayBuffer();
+    entries = await readZipFiles(ab);
+  } catch(err){
+    toast("Errore leggendo lo ZIP: " + err.message);
+    return [];
+  }
+  const out = [];
+  for (const en of entries){
+    // Salta file macOS metadata
+    if (en.name.startsWith("__MACOSX/") || en.name.split("/").pop().startsWith(".")) continue;
+    const dataUri = await bytesToDataUri(en.bytes, en.name);
+    if (dataUri) out.push({ name: en.name.split("/").pop(), dataUri });
+  }
+  return out;
+}
+
+/* =====================================================================
+   Libreria icone (upload + paste + drag&drop sulla mappa)
+   ===================================================================== */
+function addIconToLibrary(dataUri, name){
+  pushHistoryNow();
+  const id = state.icons.nextLib++;
+  state.icons.library.push({ id, name: name || `icon-${id}`, dataUri });
+  renderIconLibrary();
+}
+
+async function removeIconFromLibrary(libId){
+  const lib = state.icons.library.find(l => l.id === libId);
+  if (!lib) return;
+  const placedCount = state.icons.placed.filter(p => p.libId === libId).length;
+  if (placedCount > 0){
+    if (!(await askConfirm(`Rimuovere «${lib.name}» dalla libreria?\nCi sono ${placedCount} istanze piazzate sulla mappa: verranno rimosse anche loro.`))) return;
+  }
+  pushHistoryNow();
+  if (placedCount > 0){
+    state.icons.placed = state.icons.placed.filter(p => p.libId !== libId);
+    if (state.icons.selectedId != null &&
+        !state.icons.placed.some(p => p.id === state.icons.selectedId)){
+      state.icons.selectedId = null;
+    }
+  }
+  state.icons.library = state.icons.library.filter(l => l.id !== libId);
+  for (const o of state.objects.list) if (o.libId === libId) o.libId = null;
+  renderIconLibrary();
+  renderObjectsSection();
+  updateIconSelectionUI();
+  render();
+}
+
+function renderIconLibrary(){
+  scheduleAutoSave();
+  const box = $("#iconLibrary");
+  if (!box) return;
+  if (!state.icons.library.length){
+    box.innerHTML = `<div class="icon-empty">Trascina qui, carica o incolla immagini (SVG, PNG, WebP, JPEG) o file .zip.</div>`;
+    return;
+  }
+  box.innerHTML = state.icons.library.map(l =>
+    `<div class="icon-thumb" draggable="true" data-lib-id="${l.id}" title="${escapeHtmlAttr(l.name)}">
+       <img src="${l.dataUri}" alt="${escapeHtmlAttr(l.name)}">
+       <button type="button" class="thumb-x" data-lib-id="${l.id}" title="Rimuovi dalla libreria">×</button>
+     </div>`
+  ).join("");
+  box.querySelectorAll(".icon-thumb").forEach(el => {
+    el.addEventListener("dragstart", e => {
+      e.dataTransfer.effectAllowed = "copy";
+      e.dataTransfer.setData("application/x-murdoku-icon", el.dataset.libId);
+      // fallback per browser che ignorano tipi custom
+      e.dataTransfer.setData("text/plain", "murdoku-icon:" + el.dataset.libId);
+      el.classList.add("dragging");
+    });
+    el.addEventListener("dragend", () => el.classList.remove("dragging"));
+  });
+  box.querySelectorAll(".thumb-x").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      removeIconFromLibrary(+btn.dataset.libId);
+    });
+  });
+}
+
+function escapeHtmlAttr(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* Handler drop dalla libreria sulla mappa */
+function bindBoardDropZone(){
+  const wrap = document.querySelector(".board-wrap");
+  wrap.addEventListener("dragover", e => {
+    if (!isLibIconDrag(e)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+    wrap.classList.add("drop-target");
+  });
+  wrap.addEventListener("dragleave", e => {
+    if (e.target === wrap) wrap.classList.remove("drop-target");
+  });
+  wrap.addEventListener("drop", e => {
+    wrap.classList.remove("drop-target");
+    let libId = e.dataTransfer.getData("application/x-murdoku-icon");
+    if (!libId){
+      const t = e.dataTransfer.getData("text/plain");
+      if (t.startsWith("murdoku-icon:")) libId = t.slice("murdoku-icon:".length);
+    }
+    if (!libId) return;
+    e.preventDefault();
+    const svg = $("#board");
+    const p = svgUserPoint(svg, e.clientX, e.clientY);
+    const { fCol, fRow } = svgToCellFrac(p.x, p.y, state.icons.snap);
+    placeIcon(+libId, fCol, fRow);
+  });
+}
+
+function isLibIconDrag(e){
+  if (!e.dataTransfer) return false;
+  const types = e.dataTransfer.types || [];
+  return Array.from(types).some(t => t === "application/x-murdoku-icon" || t === "text/plain");
+}
+
+function placeIcon(libId, fCol, fRow){
+  pushHistoryNow();
+  const id = state.icons.nextPlaced++;
+  const unit = state.icons.unit;
+  const size = unit === "px" ? DEFAULT_ICON_PX : DEFAULT_ICON_PCT;
+  state.icons.placed.push({ id, libId, fCol, fRow, size, unit });
+  state.icons.selectedId = id;
+  updateIconSelectionUI();
+  render();
+}
+
+function switchSelectedIconUnit(newUnit){
+  const id = state.icons.selectedId;
+  if (id == null) return;
+  const ic = state.icons.placed.find(p => p.id === id);
+  if (!ic || ic.unit === newUnit) return;
+  pushHistoryNow();
+  const CS = cellSize();
+  // Converte mantenendo la dimensione assoluta
+  const absPx = iconAbsSize(ic, CS);
+  ic.unit = newUnit;
+  ic.size = newUnit === "px"
+    ? Math.max(4, Math.round(absPx))
+    : Math.max(1, Math.round((absPx / CS) * 100));
+  state.icons.unit = newUnit;   // aggiorna anche l'unità di default per nuove icone
+  updateIconSelectionUI();
+  render();
+}
+
+function deleteSelectedPlacedIcon(){
+  const id = state.icons.selectedId;
+  if (id == null) return;
+  pushHistoryNow();
+  state.icons.placed = state.icons.placed.filter(p => p.id !== id);
+  state.icons.selectedId = null;
+  updateIconSelectionUI();
+  render();
+}
+
+function updateIconSelectionUI(){
+  const panel = $("#iconSelection");
+  if (!panel) return;
+  const id = state.icons.selectedId;
+  const ic = id != null ? state.icons.placed.find(p => p.id === id) : null;
+  if (!ic){
+    panel.style.display = "none";
+    return;
+  }
+  panel.style.display = "";
+  const range = $("#iconSizeRange");
+  const val = $("#iconSizeVal");
+  const unitLbl = $("#iconSizeUnit");
+  // Sincronizza slider a seconda dell'unità dell'icona selezionata
+  if (ic.unit === "px"){
+    range.min = 8; range.max = 400; range.step = 2;
+  } else {
+    range.min = 20; range.max = 200; range.step = 5;
+  }
+  range.value = ic.size;
+  val.textContent = ic.size;
+  unitLbl.textContent = ic.unit;
+  // Toggle unità: pulsante attivo = unità dell'icona
+  $("#unitPct").classList.toggle("active", ic.unit === "%");
+  $("#unitPx").classList.toggle("active", ic.unit === "px");
+}
+
+/* =====================================================================
+   Sezione "Oggetti" (catalogo derivato dall'import dal Murdoku Editor)
+   ===================================================================== */
+
+/* Deriva uno slug snake_case da un nome leggibile, per far combaciare i
+   nomi della legenda testuale con gli slug usati in json.cells[].object. */
+function slugifyObjectName(name){
+  return String(name || "")
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "");
+}
+
+/* Estrae dalla "Legenda oggetti" del testo esportato (righe tipo
+   "- `AU2` = Albero ulivo (ostacolo)") la calpestabilità per slug, dato che
+   il blocco MURDOKU_STATE_B64 non la contiene. */
+function parseMurdokuObjectsLegend(txt){
+  const map = {};
+  const re = /^-\s*`[^`]+`\s*=\s*(.+?)\s*\((ostacolo|calpestabile)\)\s*$/gm;
+  let m;
+  while ((m = re.exec(txt))){
+    const name = m[1].trim();
+    const walkable = m[2] === "calpestabile";
+    const slug = slugifyObjectName(name);
+    if (slug) map[slug] = { name, walkable };
+  }
+  return map;
+}
+
+function findObject(slug){
+  return state.objects.list.find(o => o.slug === slug);
+}
+
+function createObjectPlacedIcon(obj, r, c){
+  return {
+    id: state.icons.nextPlaced++,
+    libId: obj.libId,
+    fCol: c + 0.5,
+    fRow: r + 0.5,
+    size: obj.size,
+    unit: "%",
+    objSlug: obj.slug,
+  };
+}
+
+/* Assegna (o sostituisce) l'icona di un oggetto: se esistono già istanze
+   piazzate per quell'oggetto, ne aggiorna solo l'immagine mantenendo la
+   posizione (anche se spostata manualmente); altrimenti le crea ancorate
+   al centro di ogni cella in cui l'oggetto è presente. */
+function assignIconToObject(slug, libId){
+  const obj = findObject(slug);
+  if (!obj) return;
+  pushHistoryNow();
+  obj.libId = libId;
+  const existing = state.icons.placed.filter(p => p.objSlug === slug);
+  if (existing.length){
+    for (const p of existing) p.libId = libId;
+  } else {
+    for (const [r,c] of obj.cells) state.icons.placed.push(createObjectPlacedIcon(obj, r, c));
+  }
+  renderObjectsSection();
+  render();
+  toast(`Icona assegnata a "${obj.name}".`);
+}
+
+/* Rimuove l'assegnazione icona di un oggetto ed elimina tutte le sue
+   istanze piazzate sulla mappa. */
+function clearObjectIconAssignment(slug){
+  const obj = findObject(slug);
+  if (!obj || obj.libId == null) return;
+  pushHistoryNow();
+  obj.libId = null;
+  const hadSel = state.icons.selectedId != null &&
+    state.icons.placed.some(p => p.id === state.icons.selectedId && p.objSlug === slug);
+  state.icons.placed = state.icons.placed.filter(p => p.objSlug !== slug);
+  if (hadSel){ state.icons.selectedId = null; updateIconSelectionUI(); }
+  renderObjectsSection();
+  render();
+}
+
+/* Cambia la dimensione (in %) di tutte le istanze piazzate di un oggetto. */
+function setObjectIconSize(slug, size){
+  const obj = findObject(slug);
+  if (!obj) return;
+  pushHistoryDebounced();
+  obj.size = size;
+  for (const p of state.icons.placed) if (p.objSlug === slug) p.size = size;
+  render();
+}
+
+function updateObjectsCardVisibility(){
+  const card = $("#objectsCard");
+  if (card) card.style.display = state.objects.list.length ? "" : "none";
+}
+
+function renderObjectsSection(){
+  updateObjectsCardVisibility();
+  const box = $("#objectsList");
+  if (!box) return;
+  if (!state.objects.list.length){ box.innerHTML = ""; return; }
+  box.innerHTML = state.objects.list.map(o => {
+    const lib = o.libId != null ? state.icons.library.find(l => l.id === o.libId) : null;
+    const previewHtml = lib
+      ? `<img src="${lib.dataUri}" alt="${escapeHtmlAttr(lib.name)}">`
+      : `<span class="assign-drop-hint">+</span>`;
+    const cellWord = o.cells.length === 1 ? "cella" : "celle";
+    const walkBadge = o.walkable ? "" : `<span class="assign-badge">non calpestabile</span>`;
+    return `
+      <div class="assign-row">
+        <div class="assign-row-top">
+          <div class="assign-drop" data-obj-slug="${escapeHtmlAttr(o.slug)}" title="Trascina qui un'icona per assegnarla">${previewHtml}</div>
+          <div class="assign-info">
+            <div class="assign-name">${escapeHtmlAttr(o.name)} <span class="assign-count">· ${o.cells.length} ${cellWord}</span></div>
+            <div class="assign-sub">${walkBadge}</div>
+          </div>
+          ${lib ? `<button type="button" class="assign-clear" data-obj-slug="${escapeHtmlAttr(o.slug)}" title="Rimuovi icona assegnata">×</button>` : ""}
+        </div>
+        <div class="field" style="margin:8px 0 0">
+          <label>Dimensione icone: <span class="val object-size-val">${o.size}</span> %</label>
+          <input type="range" class="object-size-range" min="20" max="200" step="5" value="${o.size}" data-obj-slug="${escapeHtmlAttr(o.slug)}">
+        </div>
+      </div>`;
+  }).join("");
+
+  box.querySelectorAll(".assign-drop").forEach(el => {
+    bindObjectDropZone(el, el.dataset.objSlug);
+  });
+  box.querySelectorAll(".assign-clear").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.stopPropagation();
+      clearObjectIconAssignment(btn.dataset.objSlug);
+    });
+  });
+  box.querySelectorAll(".object-size-range").forEach(el => {
+    el.addEventListener("input", e => {
+      const slug = el.dataset.objSlug;
+      const v = +e.target.value;
+      const row = el.closest(".assign-row");
+      if (row) row.querySelector(".object-size-val").textContent = v;
+      setObjectIconSize(slug, v);
+    });
+  });
+}
+
+/* Drop di un'icona dalla libreria sulla casella di un oggetto (stesso
+   protocollo drag&drop usato per il drop sulla mappa: vedi isLibIconDrag). */
+function bindObjectDropZone(el, slug){
+  el.addEventListener("dragover", e => {
+    if (!isLibIconDrag(e)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+    el.classList.add("drop-active");
+  });
+  el.addEventListener("dragleave", () => el.classList.remove("drop-active"));
+  el.addEventListener("drop", e => {
+    el.classList.remove("drop-active");
+    let libId = e.dataTransfer.getData("application/x-murdoku-icon");
+    if (!libId){
+      const t = e.dataTransfer.getData("text/plain");
+      if (t.startsWith("murdoku-icon:")) libId = t.slice("murdoku-icon:".length);
+    }
+    if (!libId) return;
+    e.preventDefault();
+    assignIconToObject(slug, +libId);
+  });
+}
+
+/* Registra drop-zone per file OS su un contenitore libreria. `uploader` è la
+   funzione async che accetta un array di File. */
+function bindLibraryDropZone(box, uploader){
+  if (!box) return;
+  const hasFiles = e => e.dataTransfer && Array.from(e.dataTransfer.types || []).includes("Files");
+  let depth = 0;
+  box.addEventListener("dragenter", e => {
+    if (!hasFiles(e)) return;
+    e.preventDefault();
+    depth++;
+    box.classList.add("drop-active");
+  });
+  box.addEventListener("dragover", e => {
+    if (!hasFiles(e)) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  });
+  box.addEventListener("dragleave", e => {
+    if (!hasFiles(e)) return;
+    depth--;
+    if (depth <= 0){ depth = 0; box.classList.remove("drop-active"); }
+  });
+  box.addEventListener("drop", e => {
+    if (!hasFiles(e)) return;
+    e.preventDefault();
+    depth = 0;
+    box.classList.remove("drop-active");
+    const files = Array.from(e.dataTransfer.files || []);
+    if (files.length) uploader(files);
+  });
+}
+
+async function handleIconFilesUpload(files){
+  let added = 0;
+  for (const f of files){
+    const items = await extractImageEntries(f);
+    for (const it of items){
+      addIconToLibrary(it.dataUri, it.name);
+      added++;
+    }
+  }
+  if (added > 1) toast(`${added} icone aggiunte alla libreria.`);
+}
+
+async function pasteIconFromClipboard(){
+  try {
+    if (navigator.clipboard && navigator.clipboard.read){
+      const items = await navigator.clipboard.read();
+      for (const it of items){
+        const type = it.types.find(t =>
+          t === "image/png" || t === "image/svg+xml" ||
+          t === "image/webp" || t === "image/jpeg"
+        );
+        if (type){
+          const blob = await it.getType(type);
+          if (type === "image/svg+xml"){
+            const txt = await blob.text();
+            addIconToLibrary("data:image/svg+xml;utf8," + encodeURIComponent(txt), "clipboard.svg");
+          } else {
+            const ext = type.split("/")[1];
+            const rd = new FileReader();
+            rd.onload = e => addIconToLibrary(e.target.result, "clipboard." + ext);
+            rd.readAsDataURL(blob);
+          }
+          toast("Icona incollata.");
+          return;
+        }
+      }
+    }
+  } catch(_){}
+  try {
+    if (navigator.clipboard && navigator.clipboard.readText){
+      const txt = await navigator.clipboard.readText();
+      if (/^<\?xml|^<svg/i.test((txt||"").trim())){
+        addIconToLibrary("data:image/svg+xml;utf8," + encodeURIComponent(txt.trim()), "clipboard.svg");
+        toast("Icona SVG incollata.");
+        return;
+      }
+    }
+  } catch(_){}
+  toast("Impossibile leggere un'immagine dagli appunti.");
+}
+
+/* =====================================================================
+   Dimensione mappa
+   ===================================================================== */
+function setSize(n){
+  n = Math.max(4, Math.min(16, n|0));
+  if (n === state.size) return;
+  pushHistoryNow();
+  state.size = n;
+  state.walls = new Set();
+  state.areaFills = {};
+  state.areaShades = {};
+  state.areaNames = {};
+  state.nonWalkable = new Set();
+  state.selectedAreaSig = null;
+  state.selectedCell = null;
+  state.icons.placed = [];
+  state.icons.selectedId = null;
+  state.objects.list = [];
+  $("#sizeVal").textContent = n;
+  $("#sizeRange").value = n;
+  updateIconSelectionUI();
+  updatePngScaleOptions();
+  renderObjectsSection();
+  renderRoomsSection();
+  render();
+}
+
+/* =====================================================================
+   Undo — history stack (max 30). Snapshot fatto con serializeState()
+   PRIMA della mutazione; loadJsonPayload() ripristina esattamente lo stato.
+   pushHistoryDebounced() coalesce burst di eventi (es. slider drag) in
+   un unico snapshot: cattura il pre-stato al primo input della burst e
+   lo commit-a in coda dopo un breve idle.
+   ===================================================================== */
+const MAX_HISTORY = 30;
+const history = [];
+let historyBufferSnapshot = null;
+let historyBufferTimer = null;
+let historyRestoring = false;   // vero durante undo(): sopprime pushHistory ri-entrante
+
+function updateUndoButton(){
+  const btn = $("#btnUndo");
+  if (!btn) return;
+  const has = history.length > 0 || historyBufferSnapshot != null;
+  btn.disabled = !has;
+}
+
+function flushDebouncedHistory(){
+  if (historyBufferTimer){ clearTimeout(historyBufferTimer); historyBufferTimer = null; }
+  if (historyBufferSnapshot){
+    history.push(historyBufferSnapshot);
+    if (history.length > MAX_HISTORY) history.shift();
+    historyBufferSnapshot = null;
+  }
+  updateUndoButton();
+}
+
+function pushHistoryNow(){
+  if (historyRestoring) return;
+  flushDebouncedHistory();
+  history.push(serializeState());
+  if (history.length > MAX_HISTORY) history.shift();
+  updateUndoButton();
+}
+
+function pushHistoryDebounced(){
+  if (historyRestoring) return;
+  if (!historyBufferSnapshot) historyBufferSnapshot = serializeState();
+  if (historyBufferTimer) clearTimeout(historyBufferTimer);
+  historyBufferTimer = setTimeout(flushDebouncedHistory, 400);
+}
+
+function undo(){
+  flushDebouncedHistory();
+  if (history.length === 0){ toast("Niente da annullare."); return; }
+  const snap = history.pop();
+  historyRestoring = true;
+  try { loadJsonPayload(snap, /*silent*/ true); }
+  finally { historyRestoring = false; }
+  toast("Annullato.");
+  updateUndoButton();
+}
+
+/* =====================================================================
+   Export/Import
+   ===================================================================== */
+/* Normalizza un nome file: rimuove estensioni note, sostituisce caratteri
+   illegali, e appende l'estensione desiderata. Se il nome è vuoto ripiega
+   su un default basato sulla dimensione della mappa. */
+function normalizeExportFilename(rawName, ext){
+  let name = String(rawName || "").trim();
+  if (!name) name = `mappa-${state.size}x${state.size}`;
+  // Rimuove estensioni doppie tipo ".png" o ".svg" già presenti
+  name = name.replace(/\.(png|svg|jpg|jpeg|webp)$/i, "");
+  name = name.replace(/[\\/:*?"<>|]/g, "_");
+  return name + "." + ext;
+}
+
+function exportSvgFile(filename){
+  const { svg } = buildSvg(true);
+  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  downloadBlob(blob, normalizeExportFilename(filename, "svg"));
+}
+
+function exportPngFile(scaleOverride, filename){
+  const { svg, width, height } = buildSvg(true);
+  const scale = Math.max(1, Math.min(8, scaleOverride|0 || state.style.pngScale));
+  const outName = normalizeExportFilename(filename, "png");
+  const img = new Image();
+  const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(svgBlob);
+  img.onload = () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = width * scale;
+    canvas.height = height * scale;
+    const ctx = canvas.getContext("2d");
+    ctx.scale(scale, scale);
+    ctx.drawImage(img, 0, 0);
+    canvas.toBlob(b => {
+      downloadBlob(b, outName);
+      URL.revokeObjectURL(url);
+    }, "image/png");
+  };
+  img.onerror = () => {
+    URL.revokeObjectURL(url);
+    toast("Errore nella conversione PNG.");
+  };
+  img.src = url;
+}
+
+/* --- Modal "Esporta Immagine" ------------------------------------ */
+let exportFormat = "png";
+
+function populateExportScale(){
+  const sel = $("#exportScaleSelect");
+  if (!sel) return;
+  const N = state.size;
+  const CS = cellSize();
+  const PAD = paddingFor(state.style.fontSize);
+  const base = PAD + N*CS + PAD;
+  const cur = state.style.pngScale;
+  sel.innerHTML = [1,2,4,8].map(s => {
+    const px = base * s;
+    return `<option value="${s}"${s===cur?" selected":""}>${s}× (${px}×${px}px)</option>`;
+  }).join("");
+}
+
+function openExportModal(){
+  populateExportScale();
+  updateExportFormatUI();
+  $("#exportFilename").value = `mappa-${state.size}x${state.size}`;
+  openModal("exportModal");
+  setTimeout(() => { const i = $("#exportFilename"); if (i){ i.focus(); i.select(); } }, 0);
+}
+
+function updateExportFormatUI(){
+  $$("#exportFormatToggle .unit-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.format === exportFormat);
+  });
+  const isSvg = exportFormat === "svg";
+  $("#exportScaleSelect").disabled = isSvg;
+  $("#exportSvgHint").style.display = isSvg ? "" : "none";
+  const ext = $("#exportExtHint");
+  if (ext) ext.textContent = "." + (isSvg ? "svg" : "png");
+}
+
+function bindExportModal(){
+  $$("#exportFormatToggle .unit-btn").forEach(b => {
+    b.addEventListener("click", () => {
+      exportFormat = b.dataset.format === "svg" ? "svg" : "png";
+      updateExportFormatUI();
+    });
+  });
+  $("#exportScaleSelect").addEventListener("change", e => {
+    state.style.pngScale = parseInt(e.target.value, 10) || 2;
+  });
+  $("#btnDoExport").addEventListener("click", () => {
+    const name = $("#exportFilename").value;
+    if (exportFormat === "svg"){
+      exportSvgFile(name);
+    } else {
+      const scale = parseInt($("#exportScaleSelect").value, 10) || state.style.pngScale;
+      state.style.pngScale = scale;
+      exportPngFile(scale, name);
+    }
+    closeModal("exportModal");
+  });
+  $("#exportFilename").addEventListener("keydown", e => {
+    if (e.key === "Enter"){ e.preventDefault(); $("#btnDoExport").click(); }
+  });
+}
+
+function serializeState(opts){
+  const trimLibrary = !!(opts && opts.trimLibrary);
+  let iconLibrary = state.icons.library;
+  let bgLibrary = state.bg.library;
+  if (trimLibrary){
+    // Il file scaricato/pubblicato deve contenere solo le icone e gli
+    // sfondi effettivamente usati nella mappa, non l'intera libreria
+    // caricata dall'utente (che può pesare decine di MB e far superare
+    // il limite di dimensione dei file di GitHub).
+    const usedLibIds = new Set(state.icons.placed.map(p => p.libId));
+    for (const o of state.objects.list) if (o.libId != null) usedLibIds.add(o.libId);
+    iconLibrary = state.icons.library.filter(l => usedLibIds.has(l.id));
+    const usedBgUris = new Set(
+      Object.values(state.areaFills)
+        .filter(f => f && f.type === "svg" && typeof f.value === "string")
+        .map(f => f.value)
+    );
+    bgLibrary = state.bg.library.filter(b => usedBgUris.has(b.dataUri));
+  }
+  return {
+    app: "murdoku-svg-map",
+    version: 4,
+    size: state.size,
+    walls: [...state.walls],
+    areaFills: state.areaFills,
+    areaShades: state.areaShades,
+    areaNames: state.areaNames,
+    nonWalkable: [...state.nonWalkable],
+    style: { ...state.style },
+    icons: {
+      library: iconLibrary,
+      placed: state.icons.placed,
+      snap: state.icons.snap,
+      unit: state.icons.unit,
+      shade: state.icons.shade,
+    },
+    bg: {
+      library: bgLibrary,
+    },
+    objects: {
+      list: state.objects.list.map(o => ({
+        slug: o.slug, name: o.name, walkable: o.walkable,
+        cells: o.cells, libId: o.libId, size: o.size,
+      })),
+    },
+  };
+}
+
+function saveJsonFile(filename){
+  const blob = new Blob([JSON.stringify(serializeState({ trimLibrary: true }), null, 2)], { type: "application/json" });
+  let name = String(filename || "").trim();
+  if (!name) name = `mappa-${state.size}x${state.size}`;
+  if (!/\.json$/i.test(name)) name += ".json";
+  // Sanifica caratteri illegali per i filesystem comuni
+  name = name.replace(/[\\/:*?"<>|]/g, "_");
+  downloadBlob(blob, name);
+}
+
+/* Autosave in IndexedDB (quota molto più ampia di localStorage — necessaria
+   perché icone e sfondi vengono salvati come dataURI). Debounced perché
+   render() è chiamato molto spesso.
+   In caso di errore (browser senza IDB o quota esaurita) fallback a
+   localStorage; se anche questo fallisce, toast una volta sola. */
+const IDB_NAME = "murdoku-svg-map";
+const IDB_STORE = "kv";
+const IDB_KEY = "autosave";
+const LS_KEY = "murdoku-svg-map:autosave";
+let idbReady = null;
+
+function openIdb(){
+  if (idbReady) return idbReady;
+  idbReady = new Promise((resolve, reject) => {
+    if (!("indexedDB" in window)) return reject(new Error("no-idb"));
+    const req = indexedDB.open(IDB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(IDB_STORE);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error("idb-open"));
+  }).catch(err => { idbReady = null; throw err; });
+  return idbReady;
+}
+
+async function idbPut(value){
+  const db = await openIdb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, "readwrite");
+    tx.objectStore(IDB_STORE).put(value, IDB_KEY);
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error || new Error("idb-put"));
+    tx.onabort = () => reject(tx.error || new Error("idb-abort"));
+  });
+}
+
+async function idbGet(){
+  const db = await openIdb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(IDB_STORE, "readonly");
+    const req = tx.objectStore(IDB_STORE).get(IDB_KEY);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error || new Error("idb-get"));
+  });
+}
+
+let saveTimer = null;
+let quotaWarned = false;
+function scheduleAutoSave(){
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    saveTimer = null;
+    const payload = serializeState();
+    try {
+      await idbPut(payload);
+      quotaWarned = false;
+      return;
+    } catch (_){
+      // fallback a localStorage (utile per data: URL o browser senza IDB)
+      try {
+        localStorage.setItem(LS_KEY, JSON.stringify(payload));
+        quotaWarned = false;
+      } catch (err){
+        if (!quotaWarned){
+          quotaWarned = true;
+          toast("Salvataggio automatico non riuscito (spazio esaurito). Usa 'Salva JSON'.");
+        }
+      }
+    }
+  }, 300);
+}
+
+async function loadFromStorage(){
+  // 1) prova IndexedDB
+  try {
+    const obj = await idbGet();
+    if (obj){ loadJsonPayload(obj, /*silent*/ true); return true; }
+  } catch (_){}
+  // 2) fallback / migrazione dal vecchio localStorage
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return false;
+    const obj = JSON.parse(raw);
+    loadJsonPayload(obj, /*silent*/ true);
+    // best-effort: migra il payload in IDB, poi svuota LS
+    try { await idbPut(obj); localStorage.removeItem(LS_KEY); } catch (_){}
+    return true;
+  } catch (_){ return false; }
+}
+
+function loadJsonPayload(obj, silent=false){
+  if (!obj || typeof obj !== "object") throw new Error("JSON non valido");
+  const n = obj.size|0;
+  if (n < 4 || n > 16) throw new Error("Dimensione fuori range (4–16).");
+  state.size = n;
+  state.walls = new Set((obj.walls||[]).filter(k => typeof k === "string"));
+  state.areaFills = obj.areaFills && typeof obj.areaFills === "object" ? obj.areaFills : {};
+  state.areaShades = obj.areaShades && typeof obj.areaShades === "object" ? obj.areaShades : {};
+  state.areaNames = obj.areaNames && typeof obj.areaNames === "object" ? obj.areaNames : {};
+  state.nonWalkable = new Set(Array.isArray(obj.nonWalkable) ? obj.nonWalkable.filter(k => typeof k === "string") : []);
+  state.selectedCell = null;
+  // Ripristina i default per le chiavi assenti nel file (importante per
+  // file vecchi che non contengono chiavi introdotte dopo, es. fontColor)
+  const styleDefaults = {
+    wallWidth: 4, gridWidth: 1, gridColor: "#d9cfbb",
+    fontSize: 11, fontColor: "#7a6f58", hideNumbers: false,
+    pngScale: 2, nonWalkIntensity: 22,
+  };
+  state.style = { ...styleDefaults, ...(obj.style && typeof obj.style === "object" ? obj.style : {}) };
+  // Icone
+  state.icons.library = [];
+  state.icons.placed = [];
+  state.icons.selectedId = null;
+  state.icons.nextLib = 1;
+  state.icons.nextPlaced = 1;
+  let oldToNew = new Map();
+  if (obj.icons && typeof obj.icons === "object"){
+    for (const l of (obj.icons.library || [])){
+      if (l && l.dataUri) state.icons.library.push({ id: state.icons.nextLib++, name: l.name || "icon", dataUri: l.dataUri });
+    }
+    // rimappa i libId vecchi -> nuovi (i vecchi id nel file corrispondono all'ordine)
+    oldToNew = new Map();
+    (obj.icons.library || []).forEach((l, i) => { if (l && l.id != null) oldToNew.set(l.id, state.icons.library[i]?.id); });
+    for (const p of (obj.icons.placed || [])){
+      const newLibId = oldToNew.get(p.libId);
+      if (newLibId == null) continue;
+      state.icons.placed.push({
+        id: state.icons.nextPlaced++,
+        libId: newLibId,
+        fCol: +p.fCol || 0,
+        fRow: +p.fRow || 0,
+        size: +p.size || DEFAULT_ICON_PCT,
+        unit: p.unit === "px" ? "px" : "%",
+        objSlug: typeof p.objSlug === "string" ? p.objSlug : null,
+      });
+    }
+    state.icons.snap = obj.icons.snap !== false;
+    state.icons.unit = obj.icons.unit === "px" ? "px" : "%";
+    const sh = obj.icons.shade;
+    state.icons.shade = typeof sh === "number" && isFinite(sh) ? Math.max(0, Math.min(100, sh)) : 50;
+  } else {
+    state.icons.shade = 50;
+  }
+  // Libreria sfondi
+  state.bg.library = [];
+  state.bg.nextId = 1;
+  if (obj.bg && Array.isArray(obj.bg.library)){
+    for (const b of obj.bg.library){
+      if (b && b.dataUri) state.bg.library.push({ id: state.bg.nextId++, name: b.name || "bg", dataUri: b.dataUri });
+    }
+  }
+  // Catalogo oggetti (sezione "Oggetti")
+  state.objects.list = [];
+  if (obj.objects && Array.isArray(obj.objects.list)){
+    for (const o of obj.objects.list){
+      if (!o || typeof o.slug !== "string") continue;
+      const remappedLibId = o.libId != null ? (oldToNew.get(o.libId) ?? null) : null;
+      state.objects.list.push({
+        slug: o.slug,
+        name: typeof o.name === "string" ? o.name : o.slug,
+        walkable: o.walkable !== false,
+        cells: Array.isArray(o.cells) ? o.cells.filter(c => Array.isArray(c) && c.length === 2).map(c => [c[0]|0, c[1]|0]) : [],
+        libId: remappedLibId,
+        size: Number.isFinite(o.size) ? o.size : DEFAULT_ICON_PCT,
+      });
+    }
+  }
+  state.selectedAreaSig = null;
+  syncStyleControls();
+  $("#snapToggle").checked = state.icons.snap;
+  $("#iconShadeRange").value = state.icons.shade;
+  $("#iconShadeVal").textContent = state.icons.shade;
+  $("#sizeVal").textContent = n;
+  $("#sizeRange").value = n;
+  renderIconLibrary();
+  renderBgLibrary();
+  renderObjectsSection();
+  renderRoomsSection();
+  updateIconSelectionUI();
+  render();
+  if (!silent) toast("Progetto caricato.");
+}
+
+/* Le opzioni di scala vivono ora nel modal "Esporta Immagine".
+   Rigeneriamo il select se il modal è già in DOM: le sue voci mostrano
+   le dimensioni in pixel, che dipendono da size/fontSize. */
+function updatePngScaleOptions(){
+  if ($("#exportScaleSelect")) populateExportScale();
+}
+
+function syncStyleControls(){
+  $("#wallWRange").value = state.style.wallWidth;
+  $("#wallWVal").textContent = state.style.wallWidth;
+  $("#gridWRange").value = state.style.gridWidth;
+  $("#gridWVal").textContent = state.style.gridWidth;
+  $("#gridColorPicker").value = state.style.gridColor;
+  $("#gridColorText").value = state.style.gridColor;
+  $("#fontSizeRange").value = state.style.fontSize;
+  $("#fontSizeVal").textContent = state.style.fontSize;
+  const fc = state.style.fontColor || "#7a6f58";
+  $("#fontColorPicker").value = fc;
+  $("#fontColorText").value = fc;
+  $("#hideNumbersToggle").checked = !!state.style.hideNumbers;
+  const nwi = state.style.nonWalkIntensity ?? 22;
+  $("#nonWalkIntensityRange").value = nwi;
+  $("#nonWalkIntensityVal").textContent = nwi;
+  updatePngScaleOptions();
+  updateGridSwatchActive();
+  updateFontSwatchActive();
+}
+
+function downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100);
+}
+
+/* --- Carica Mappa dal Cloud (cartella "Mappe generate" su GitHub) --- */
+const CLOUD_MAPS_REPO = "NumaPompilio/Murdoku-Map-Generator";
+const CLOUD_MAPS_BRANCH = "main";
+const CLOUD_MAPS_PATH = "Mappe generate";
+
+async function fetchCloudMapList(){
+  const url = `https://api.github.com/repos/${CLOUD_MAPS_REPO}/contents/${encodeURIComponent(CLOUD_MAPS_PATH)}?ref=${CLOUD_MAPS_BRANCH}`;
+  const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
+  if (!res.ok) throw new Error(`Errore API GitHub (${res.status})`);
+  const items = await res.json();
+  if (!Array.isArray(items)) throw new Error("Risposta inattesa dall'API GitHub.");
+  return items
+    .filter(it => it && it.type === "file" && /\.json$/i.test(it.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function setCloudHint(text, showSpinner){
+  $("#cloudMapHintText").textContent = text;
+  $("#cloudSpinner").style.display = showSpinner ? "inline-block" : "none";
+}
+
+// Blocca la chiusura del modal (Annulla / click fuori) mentre è in corso
+// una fetch, così l'utente non può continuare a cliccare in giro pensando
+// che non stia succedendo nulla.
+function setCloudModalLocked(locked){
+  $("#cloudModal").dataset.locked = locked ? "1" : "";
+  $("#btnCloudCancel").disabled = locked;
+  $("#cloudMapSelect").disabled = locked || !$("#cloudMapSelect").options.length;
+}
+
+function openCloudModal(){
+  const sel = $("#cloudMapSelect");
+  const btn = $("#btnDoCloudLoad");
+  sel.innerHTML = "";
+  btn.disabled = true;
+  setCloudModalLocked(true);
+  setCloudHint("Caricamento elenco mappe...", true);
+  openModal("cloudModal");
+  fetchCloudMapList().then(files => {
+    if (!files.length){
+      setCloudHint("Nessuna mappa trovata nella cartella 'Mappe generate' del repo.", false);
+      return;
+    }
+    sel.innerHTML = files.map(f =>
+      `<option value="${escapeHtmlAttr(f.download_url)}">${escapeHtmlAttr(f.name.replace(/\.json$/i, ""))}</option>`
+    ).join("");
+    btn.disabled = false;
+    setCloudHint(`${files.length} mappa/e disponibile/i.`, false);
+  }).catch(err => {
+    setCloudHint("Errore nel caricamento dell'elenco: " + err.message, false);
+  }).finally(() => { setCloudModalLocked(false); });
+}
+
+function doCloudLoad(){
+  const url = $("#cloudMapSelect").value;
+  if (!url) return;
+  const btn = $("#btnDoCloudLoad");
+  btn.disabled = true;
+  setCloudModalLocked(true);
+  setCloudHint("Caricamento mappa in corso...", true);
+  fetch(url).then(r => {
+    if (!r.ok) throw new Error(`Errore HTTP ${r.status}`);
+    return r.json();
+  }).then(obj => {
+    pushHistoryNow();
+    loadJsonPayload(obj);
+    closeModal("cloudModal");
+  }).catch(err => {
+    toast("Errore: " + err.message);
+    setCloudHint("Errore nel caricamento della mappa: " + err.message, false);
+  }).finally(() => { btn.disabled = false; setCloudModalLocked(false); });
+}
+
+/* --- Elenco mappe salvate del repo murdoku-studio (per il popup di import) --- */
+const IMPORT_MAPS_REPO = "NumaPompilio/murdoku-studio";
+const IMPORT_MAPS_BRANCH = "main";
+const IMPORT_MAPS_PATH = "Mappe Salvate";
+
+async function fetchImportMapList(){
+  const url = `https://api.github.com/repos/${IMPORT_MAPS_REPO}/contents/${encodeURIComponent(IMPORT_MAPS_PATH)}?ref=${IMPORT_MAPS_BRANCH}`;
+  const res = await fetch(url, { headers: { Accept: "application/vnd.github+json" } });
+  if (!res.ok) throw new Error(`Errore API GitHub (${res.status})`);
+  const items = await res.json();
+  if (!Array.isArray(items)) throw new Error("Risposta inattesa dall'API GitHub.");
+  return items
+    .filter(it => it && it.type === "file" && /\.md$/i.test(it.name))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function setImportCloudHint(text, showSpinner){
+  $("#importCloudHintText").textContent = text;
+  $("#importCloudSpinner").style.display = showSpinner ? "inline-block" : "none";
+}
+
+function openImportModal(){
+  $("#importText").value = "";
+  const sel = $("#importCloudSelect");
+  sel.innerHTML = "";
+  sel.disabled = true;
+  setImportCloudHint("Caricamento elenco mappe...", true);
+  openModal("importModal");
+  fetchImportMapList().then(files => {
+    if (!files.length){
+      setImportCloudHint(`Nessuna mappa trovata nella cartella '${IMPORT_MAPS_PATH}' del repo.`, false);
+      return;
+    }
+    sel.innerHTML = `<option value="">— Seleziona una mappa —</option>` + files.map(f =>
+      `<option value="${escapeHtmlAttr(f.download_url)}">${escapeHtmlAttr(f.name.replace(/\.md$/i, ""))}</option>`
+    ).join("");
+    sel.disabled = false;
+    setImportCloudHint(`${files.length} mappa/e disponibile/i.`, false);
+  }).catch(err => {
+    setImportCloudHint("Errore nel caricamento dell'elenco: " + err.message, false);
+  });
+}
+
+function loadImportMapIntoTextarea(){
+  const sel = $("#importCloudSelect");
+  const url = sel.value;
+  if (!url) return;
+  sel.disabled = true;
+  setImportCloudHint("Caricamento mappa in corso...", true);
+  fetch(url).then(r => {
+    if (!r.ok) throw new Error(`Errore HTTP ${r.status}`);
+    return r.text();
+  }).then(txt => {
+    $("#importText").value = txt;
+    setImportCloudHint("Mappa caricata: puoi modificarla o cliccare Importa.", false);
+  }).catch(err => {
+    toast("Errore: " + err.message);
+    setImportCloudHint("Errore nel caricamento della mappa: " + err.message, false);
+  }).finally(() => { sel.disabled = false; });
+}
+
+/* --- Import dal Murdoku Editor --- */
+function importFromMurdokuText(txt){
+  const m = txt.match(/<!--\s*MURDOKU_STATE_B64:\s*([^\s-][^\s]*)\s*-->/);
+  if (!m) throw new Error("Blocco MURDOKU_STATE_B64 non trovato nel testo.");
+  const b64 = m[1];
+  let json;
+  try {
+    json = JSON.parse(decodeURIComponent(escape(atob(b64))));
+  } catch(e){
+    throw new Error("Blocco base64 non decodificabile.");
+  }
+  const n = json.size|0;
+  if (n < 4 || n > 16) throw new Error("Dimensione mappa non supportata (min 4, max 16).");
+  state.size = n;
+  // Import muri: teniamo solo i muri INTERNI (perimetro sempre chiuso di suo)
+  const walls = new Set();
+  for (const wk of (json.walls||[])){
+    // formato "r1,c1|r2,c2"
+    const parts = wk.split("|");
+    if (parts.length !== 2) continue;
+    const [a,b] = parts;
+    const [r1,c1] = a.split(",").map(x=>+x);
+    const [r2,c2] = b.split(",").map(x=>+x);
+    if (Number.isNaN(r1)||Number.isNaN(c1)||Number.isNaN(r2)||Number.isNaN(c2)) continue;
+    // scarta muri sul perimetro esterno
+    if (r1<0||c1<0||r2<0||c2<0) continue;
+    if (r1>=n||c1>=n||r2>=n||c2>=n) continue;
+    walls.add(wallKey(r1,c1,r2,c2));
+  }
+  state.walls = walls;
+
+  // Import sfondi: le aree in Murdoku sono numerate da 0..k. Ricalcoliamo le
+  // aree con la nostra logica (identica a quella del Murdoku) e mappiamo per id
+  // per convertire da areaFloors {id: {type,value}} a areaFills {sig: {type,value}}.
+  state.areaFills = {};
+  state.areaShades = {};
+  const an = computeAreas();
+  const idToSig = an.areas.map(a => areaSignature(a.cells));
+  const murdokuFloors = json.areaFloors || {};
+  for (const k of Object.keys(murdokuFloors)){
+    const idx = +k;
+    if (idx < 0 || idx >= idToSig.length) continue;
+    const f = murdokuFloors[k];
+    if (!f || !f.type) continue;
+    if (f.type === "color" && typeof f.value === "string"){
+      state.areaFills[idToSig[idx]] = { type: "color", value: f.value };
+    }
+    // I "pattern" del Murdoku (mare/terra/…) non sono supportati qui:
+    // vengono ignorati e l'area resta col colore di default.
+  }
+
+  // Import nomi stanza: stessa mappatura per indice -> firma di areaFloors.
+  state.areaNames = {};
+  const murdokuNames = json.areaNames || {};
+  for (const k of Object.keys(murdokuNames)){
+    const idx = +k;
+    if (idx < 0 || idx >= idToSig.length) continue;
+    const name = murdokuNames[k];
+    if (typeof name === "string" && name.trim()) state.areaNames[idToSig[idx]] = name.trim();
+  }
+
+  // Import oggetti: raggruppa le celle per tipo di oggetto (slug) e deriva
+  // la calpestabilità dalla legenda testuale "(ostacolo)"/"(calpestabile)",
+  // dato che il blocco MURDOKU_STATE_B64 non la contiene esplicitamente.
+  // Le celle il cui oggetto è un ostacolo diventano "non calpestabili" di
+  // default (intensità overlay 15).
+  const legend = parseMurdokuObjectsLegend(txt);
+  const prevBySlug = new Map(state.objects.list.map(o => [o.slug, o]));
+  const bySlug = new Map();
+  const newNonWalkable = [];
+  for (const cell of (json.cells || [])){
+    const r = cell.row|0, c = cell.col|0;
+    if (r<0||c<0||r>=n||c>=n) continue;
+    if (cell.walkable === false) newNonWalkable.push(cellKey(r,c));
+    const slug = cell.object;
+    if (!slug) continue;
+    if (!bySlug.has(slug)) bySlug.set(slug, []);
+    bySlug.get(slug).push([r,c]);
+  }
+  // Ripulisce completamente le icone piazzate e le celle non calpestabili
+  // della mappa precedente: dopo l'import deve restare visibile solo ciò
+  // che appartiene alla nuova mappa. Le assegnazioni icona per slug restano
+  // comunque disponibili tramite prevBySlug qui sopra.
+  state.icons.placed = [];
+  state.icons.selectedId = null;
+  state.nonWalkable = new Set();
+  const newObjects = [];
+  for (const [slug, cells] of bySlug){
+    const info = legend[slug];
+    const name = info ? info.name : slug.replace(/_/g, " ").replace(/\b\w/g, ch => ch.toUpperCase());
+    const walkable = info ? info.walkable : true;
+    const prev = prevBySlug.get(slug);
+    const obj = {
+      slug, name, walkable, cells,
+      libId: prev ? prev.libId : null,
+      size: prev ? prev.size : DEFAULT_ICON_PCT,
+    };
+    newObjects.push(obj);
+    if (!walkable) for (const [r,c] of cells) newNonWalkable.push(cellKey(r,c));
+    if (obj.libId != null){
+      for (const [r,c] of cells) state.icons.placed.push(createObjectPlacedIcon(obj, r, c));
+    }
+  }
+  newObjects.sort((a,b) => a.name.localeCompare(b.name, "it"));
+  state.objects.list = newObjects;
+  if (newNonWalkable.length){
+    for (const k of newNonWalkable) state.nonWalkable.add(k);
+    state.style.nonWalkIntensity = 15;
+    syncStyleControls();
+  }
+
+  state.selectedAreaSig = null;
+  $("#sizeVal").textContent = n;
+  $("#sizeRange").value = n;
+  renderObjectsSection();
+  renderRoomsSection();
+  render();
+  toast("Mappa importata dal Murdoku.");
+}
+
+/* =====================================================================
+   Toast + Modal
+   ===================================================================== */
+let toastTimer = null;
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+}
+function openModal(id){ $("#"+id).classList.add("show"); }
+function closeModal(id){ $("#"+id).classList.remove("show"); }
+
+/* Sostituisce window.confirm(): i dialoghi nativi non sono affidabili in
+   tutti gli ambienti (es. vengono soppressi in alcuni browser di anteprima
+   sandboxati), quindi usiamo un modal in pagina. Ritorna una Promise<boolean>. */
+let confirmResolve = null;
+function askConfirm(message, title = "Conferma"){
+  return new Promise(resolve => {
+    confirmResolve = resolve;
+    $("#confirmModalTitle").textContent = title;
+    $("#confirmModalMsg").textContent = message;
+    openModal("confirmModal");
+  });
+}
+function resolveConfirm(result){
+  closeModal("confirmModal");
+  if (confirmResolve){
+    const r = confirmResolve;
+    confirmResolve = null;
+    r(result);
+  }
+}
+
+/* =====================================================================
+   Bind eventi
+   ===================================================================== */
+function bindEvents(){
+  // Size
+  $("#sizeRange").addEventListener("input", e => {
+    $("#sizeVal").textContent = e.target.value;
+  });
+  $("#sizeRange").addEventListener("change", e => {
+    setSize(+e.target.value);
+  });
+
+  // Palette "Colorazione stanza": picker ↔ text bidirezionali, Applica usa il
+  // valore corrente. Enter nel campo HEX applica come il bottone.
+  $("#colorPicker").addEventListener("input", e => {
+    const v = e.target.value.toLowerCase();
+    $("#colorText").value = v;
+  });
+  $("#colorText").addEventListener("input", e => {
+    const v = e.target.value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) $("#colorPicker").value = v.toLowerCase();
+  });
+  $("#colorText").addEventListener("keydown", e => {
+    if (e.key === "Enter"){ e.preventDefault(); $("#btnApplyColor").click(); }
+  });
+  $("#btnApplyColor").addEventListener("click", () => {
+    const raw = ($("#colorText").value || "").trim();
+    const v = /^#[0-9a-fA-F]{6}$/.test(raw) ? raw.toLowerCase() : $("#colorPicker").value;
+    $("#colorPicker").value = v;
+    $("#colorText").value = v;
+    applyFillToSelected({ type: "color", value: v });
+  });
+  $("#areaShadeRange").addEventListener("input", e => {
+    if (!state.selectedAreaSig) return;
+    pushHistoryDebounced();
+    state.areaShades[state.selectedAreaSig] = +e.target.value;
+    $("#areaShadeVal").textContent = e.target.value;
+    render();
+  });
+
+  // Libreria sfondi
+  $("#btnLoadBgs").addEventListener("click", () => $("#bgFile").click());
+  $("#bgFile").addEventListener("change", e => {
+    // Snapshot la FileList in un array PRIMA di resettare value:
+    // la FileList è live sull'input, e resettare value="" mentre l'async
+    // upload è ancora in corso taglierebbe l'iterazione dopo il primo file.
+    const files = Array.from(e.target.files);
+    e.target.value = "";
+    handleBgFilesUpload(files);
+  });
+  $("#btnPasteBg").addEventListener("click", pasteBgFromClipboard);
+  // Click fuori dalla mappa (e fuori dai pannelli che agiscono sulla
+  // selezione) -> deseleziona stanza e icona posizionata.
+  document.addEventListener("click", e => {
+    const t = e.target;
+    if (!(t instanceof Element)) return;
+    if (t.closest("svg.board")) return;
+    if (t.closest("#paintCard")) return;
+    if (t.closest("#iconeCard")) return;
+    if (t.closest("#cellCard")) return;
+    let dirty = false;
+    if (state.selectedAreaSig){ state.selectedAreaSig = null; dirty = true; }
+    if (state.selectedCell){ state.selectedCell = null; dirty = true; }
+    if (state.icons.selectedId != null){
+      state.icons.selectedId = null;
+      updateIconSelectionUI();
+      dirty = true;
+    }
+    if (dirty) render();
+  });
+
+  // Canc/Backspace: rimuove l'icona posizionata selezionata (se il focus non è
+  // dentro un input/textarea).
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Delete" && e.key !== "Backspace") return;
+    const a = document.activeElement;
+    if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA")) return;
+    if (state.icons.selectedId == null) return;
+    e.preventDefault();
+    deleteSelectedPlacedIcon();
+  });
+
+  // ---- Sezione Icone ----
+  $("#btnLoadIcons").addEventListener("click", () => $("#iconFile").click());
+  $("#iconFile").addEventListener("change", e => {
+    const files = Array.from(e.target.files);
+    e.target.value = "";
+    handleIconFilesUpload(files);
+  });
+  $("#btnPasteIcon").addEventListener("click", pasteIconFromClipboard);
+  $("#snapToggle").addEventListener("change", e => {
+    state.icons.snap = !!e.target.checked;
+  });
+  $("#iconShadeRange").addEventListener("input", e => {
+    pushHistoryDebounced();
+    state.icons.shade = +e.target.value;
+    $("#iconShadeVal").textContent = e.target.value;
+    render();
+  });
+  $("#iconSizeRange").addEventListener("input", e => {
+    const id = state.icons.selectedId;
+    if (id == null) return;
+    const ic = state.icons.placed.find(p => p.id === id);
+    if (!ic) return;
+    pushHistoryDebounced();
+    ic.size = +e.target.value;
+    $("#iconSizeVal").textContent = ic.size;
+    render();
+  });
+  $("#unitPct").addEventListener("click", () => switchSelectedIconUnit("%"));
+  $("#unitPx").addEventListener("click", () => switchSelectedIconUnit("px"));
+  $("#btnDeletePlacedIcon").addEventListener("click", deleteSelectedPlacedIcon);
+  bindBoardDropZone();
+
+
+  // Aspetto (spessori, colori, font)
+  $("#wallWRange").addEventListener("input", e => {
+    pushHistoryDebounced();
+    state.style.wallWidth = +e.target.value;
+    $("#wallWVal").textContent = e.target.value;
+    render();
+  });
+  $("#gridWRange").addEventListener("input", e => {
+    pushHistoryDebounced();
+    state.style.gridWidth = +e.target.value;
+    $("#gridWVal").textContent = e.target.value;
+    render();
+  });
+  $("#gridColorPicker").addEventListener("input", e => {
+    pushHistoryDebounced();
+    applyGridColorNoHistory(e.target.value);
+  });
+  $("#gridColorText").addEventListener("change", e => applyGridColor(e.target.value.trim()));
+  $("#fontSizeRange").addEventListener("input", e => {
+    pushHistoryDebounced();
+    state.style.fontSize = +e.target.value;
+    $("#fontSizeVal").textContent = e.target.value;
+    updatePngScaleOptions();
+    render();
+  });
+  $("#fontColorPicker").addEventListener("input", e => {
+    pushHistoryDebounced();
+    applyFontColorNoHistory(e.target.value);
+  });
+  $("#fontColorText").addEventListener("change", e => applyFontColor(e.target.value.trim()));
+  $("#hideNumbersToggle").addEventListener("change", e => {
+    pushHistoryNow();
+    state.style.hideNumbers = !!e.target.checked;
+    render();
+  });
+  $("#btnResetArea").addEventListener("click", () => {
+    if (!state.selectedAreaSig){ toast("Seleziona prima una stanza."); return; }
+    pushHistoryNow();
+    delete state.areaFills[state.selectedAreaSig];
+    delete state.areaShades[state.selectedAreaSig];
+    renderRoomsSection();
+    render();
+  });
+
+  // Checkbox "Non calpestabile" per la cella selezionata
+  $("#cellNonWalkable").addEventListener("change", e => {
+    if (!state.selectedCell) return;
+    pushHistoryNow();
+    const k = cellKey(state.selectedCell.r, state.selectedCell.c);
+    if (e.target.checked) state.nonWalkable.add(k);
+    else state.nonWalkable.delete(k);
+    render();
+  });
+  $("#nonWalkIntensityRange").addEventListener("input", e => {
+    pushHistoryDebounced();
+    state.style.nonWalkIntensity = +e.target.value;
+    $("#nonWalkIntensityVal").textContent = e.target.value;
+    render();
+  });
+
+  // Reset
+  $("#btnClearWalls").addEventListener("click", async () => {
+    if (!(await askConfirm("Rimuovere tutti i muri?"))) return;
+    pushHistoryNow();
+    state.walls = new Set();
+    remapAreaFillsAfterTopologyChange();
+    render();
+  });
+  $("#btnClearFills").addEventListener("click", async () => {
+    if (!(await askConfirm("Rimuovere tutti gli sfondi delle stanze?"))) return;
+    pushHistoryNow();
+    state.areaFills = {};
+    state.areaShades = {};
+    renderRoomsSection();
+    render();
+  });
+  $("#btnClearObjects").addEventListener("click", async () => {
+    if (!(await askConfirm("Rimuovere tutti gli oggetti dalla mappa?"))) return;
+    pushHistoryNow();
+    state.icons.placed = [];
+    state.icons.selectedId = null;
+    for (const o of state.objects.list) o.libId = null;
+    renderObjectsSection();
+    updateIconSelectionUI();
+    render();
+  });
+  $("#btnClearAll").addEventListener("click", async () => {
+    if (!(await askConfirm("Reimpostare l'intera mappa (muri, sfondi, icone)?"))) return;
+    pushHistoryNow();
+    state.walls = new Set();
+    state.areaFills = {};
+    state.areaShades = {};
+    state.areaNames = {};
+    state.nonWalkable = new Set();
+    state.selectedAreaSig = null;
+    state.selectedCell = null;
+    state.icons.library = [];
+    state.icons.placed = [];
+    state.icons.selectedId = null;
+    state.icons.shade = 50;
+    state.bg.library = [];
+    state.objects.list = [];
+    $("#iconShadeRange").value = 50;
+    $("#iconShadeVal").textContent = 50;
+    renderIconLibrary();
+    renderBgLibrary();
+    renderObjectsSection();
+    renderRoomsSection();
+    updateIconSelectionUI();
+    render();
+  });
+
+  // Undo
+  $("#btnUndo").addEventListener("click", undo);
+  document.addEventListener("keydown", e => {
+    // Ctrl/Cmd+Z (senza Shift): undo. Ignora se il focus è dentro un input
+    // testuale, così Ctrl+Z nativo del campo continua a funzionare.
+    if (!(e.key === "z" || e.key === "Z")) return;
+    if (!(e.ctrlKey || e.metaKey)) return;
+    if (e.shiftKey || e.altKey) return;
+    const a = document.activeElement;
+    if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA")) return;
+    e.preventDefault();
+    undo();
+  });
+
+  // Save Mappa (modal con nome file)
+  $("#btnSaveJSON").addEventListener("click", () => {
+    $("#saveFilename").value = `mappa-${state.size}x${state.size}`;
+    openModal("saveModal");
+    // Focus + selezione automatica del nome per riscritture rapide
+    setTimeout(() => { const i = $("#saveFilename"); if (i){ i.focus(); i.select(); } }, 0);
+  });
+  $("#btnDoSave").addEventListener("click", () => {
+    saveJsonFile($("#saveFilename").value);
+    closeModal("saveModal");
+  });
+  $("#saveFilename").addEventListener("keydown", e => {
+    if (e.key === "Enter"){ e.preventDefault(); $("#btnDoSave").click(); }
+  });
+
+  // Load Mappa
+  $("#btnLoadJSON").addEventListener("click", () => $("#fileLoadJson").click());
+  $("#fileLoadJson").addEventListener("change", e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = ev => {
+      try {
+        const obj = JSON.parse(ev.target.result);
+        pushHistoryNow();
+        loadJsonPayload(obj);
+      }
+      catch(err){ toast("Errore: " + err.message); }
+    };
+    rd.readAsText(f);
+    e.target.value = "";
+  });
+
+  // Esporta Immagine (modal PNG/SVG + scala)
+  bindExportModal();
+  $("#btnExportImage").addEventListener("click", openExportModal);
+  $("#btnExportGrid").addEventListener("click", openGridExportModal);
+  $("#btnDoExportGrid").addEventListener("click", () => {
+    exportGridPngFile($("#gridExportFilename").value);
+    closeModal("gridExportModal");
+  });
+  $("#gridExportFilename").addEventListener("keydown", e => {
+    if (e.key === "Enter"){ e.preventDefault(); $("#btnDoExportGrid").click(); }
+  });
+
+  // Carica Mappa dal Cloud
+  $("#btnLoadCloud").addEventListener("click", openCloudModal);
+  $("#btnDoCloudLoad").addEventListener("click", doCloudLoad);
+
+  // Import Murdoku
+  $("#btnImportMurdoku").addEventListener("click", openImportModal);
+  $("#importCloudSelect").addEventListener("change", loadImportMapIntoTextarea);
+  $("#btnDoImport").addEventListener("click", () => {
+    try {
+      pushHistoryNow();
+      importFromMurdokuText($("#importText").value || "");
+      closeModal("importModal");
+    } catch(err){
+      toast("Errore: " + err.message);
+    }
+  });
+  $$("[data-close-modal]").forEach(el => {
+    el.addEventListener("click", () => {
+      const m = el.closest(".modal");
+      if (m.dataset.locked === "1") return;
+      m.classList.remove("show");
+    });
+  });
+  $$(".modal").forEach(m => {
+    m.addEventListener("click", e => {
+      if (e.target === m && m.dataset.locked !== "1") m.classList.remove("show");
+    });
+  });
+
+  // Modal di conferma custom (askConfirm)
+  $("#confirmModalOk").addEventListener("click", () => resolveConfirm(true));
+  $("#confirmModalCancel").addEventListener("click", () => resolveConfirm(false));
+  $("#confirmModal").addEventListener("click", e => {
+    if (e.target === $("#confirmModal")) resolveConfirm(false);
+  });
+}
+
+/* =====================================================================
+   INIT
+   ===================================================================== */
+async function init(){
+  bindEvents();
+  renderSwatches();
+  bindLibraryDropZone($("#iconLibrary"), handleIconFilesUpload);
+  bindLibraryDropZone($("#bgLibrary"), handleBgFilesUpload);
+  // Ripristina lo stato salvato (async — IDB). Se presente, loadJsonPayload
+  // richiama syncStyleControls/renderIconLibrary/renderBgLibrary/render.
+  const loaded = await loadFromStorage();
+  if (!loaded){
+    syncStyleControls();
+    renderIconLibrary();
+    renderBgLibrary();
+    renderObjectsSection();
+    renderRoomsSection();
+    updateIconSelectionUI();
+    render();
+  }
+}
+
+init();
+</script>
+</body>
+</html>

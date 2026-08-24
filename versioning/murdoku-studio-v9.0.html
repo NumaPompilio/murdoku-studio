@@ -406,7 +406,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.1</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.0</span></h1>
     </div>
   </div>
 
@@ -3034,6 +3034,7 @@ function objectGlyph(kind, cx, cy, CS){
     const y = cy - actualS/2;
     return `<svg x="${x}" y="${y}" width="${actualS}" height="${actualS}" opacity="${op}" pointer-events="none">${window.DYNAMIC_SVGS[kind].code}</svg>`;
   }
+  
   return `<g opacity="${op}" pointer-events="none"><rect x="${cx-s/2}" y="${cy-s/2}" width="${s}" height="${s}" fill="#555" rx="4"/><text x="${cx}" y="${cy+s*0.2}" font-size="${s*0.5}" fill="white" text-anchor="middle">?</text></g>`;
 }
 
@@ -5199,8 +5200,6 @@ async function loadRemoteSettings() {
 }
 
 async function loadRemoteObjects() {
-  const gSpinner = document.getElementById("globalSpinner");
-  if (gSpinner) gSpinner.style.display = "flex";
   try {
     const res = await ghFetch("catalogs");
     if(res.ok) {
@@ -5267,9 +5266,6 @@ async function loadRemoteObjects() {
   } catch(e) {
     console.error(e);
     toast("Errore fetch cataloghi: " + e.message);
-  } finally {
-    const gSpinner = document.getElementById("globalSpinner");
-    if (gSpinner) gSpinner.style.display = "none";
   }
 }
 

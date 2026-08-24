@@ -569,4 +569,11 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Spinner Modale a Tutto Schermo (v8.2)**: Inserito un overlay modale globale bloccante (`#globalSpinner`) con animazione di caricamento ("Caricamento in corso..."), impedendo interazioni durante il download asincrono dei dati del catalogo da GitHub.
 - **Spostamento Pulsante Impostazioni (v8.3)**: Il pulsante delle Impostazioni (`#settingsBtn`, ⚙️) è stato spostato alla destra dello switcher di modalità in testata (`.mode-switch`), rimanendo costantemente visibile e accessibile sia nella vista **Editor** che nella vista **Catalog**.
 
+## Integrazione Editor Grafico "Murdoku SVG Map" (v9.0)
+- **Nuovo Pulsante "Graphic" nello Switcher**: Aggiunto un nuovo pulsante "🎨 Graphic" all'interno dello Switcher per alternare la vista.
+- **Porting Editor SVG**: È stato integrato interamente il codice dell'editor `murdoku-svg-map.html` (HTML, CSS e JS) all'interno del file principale `murdoku-studio.html`. L'interfaccia grafica e tutte le logiche di rendering SVG, esportazione ed editing visuale della piantina sono state importate all'interno del nuovo contenitore `#graphic-view`.
+- **Isolamento ID (Prefisso `svg_`)**: Per garantire un porting fedele "senza modifiche" strutturali o logiche e per evitare collisioni di variabili o ID (es. `board`, `importModal`, `toast`) con l'Editor principale, tutti gli ID e i riferimenti nel DOM importato sono stati prefissati in modo sicuro con `svg_`.
+## Spinner Globale all'Avvio (v9.1)
+- **Miglioramento caricamento iniziale**: L'overlay modale globale bloccante (`#globalSpinner`) con animazione di caricamento ("Caricamento in corso..."), introdotto nella versione v8.2 per il cambio catalogo, è stato esteso anche alla primissima fase di caricamento della pagina (refresh o prima apertura dell'editor).
+- **Logica**: All'interno della funzione asincrona `loadRemoteObjects()`, lo spinner viene ora attivato all'inizio del fetching da GitHub e nascosto in modo sicuro nel blocco `finally`. Questo impedisce qualsiasi interazione prematura e previene il fastidioso glitch visivo ("box neri con punto interrogativo") in cui la mappa tentava di renderizzare icone vettoriali non ancora scaricate dal server, offrendo un'esperienza fluida all'utente.
 
