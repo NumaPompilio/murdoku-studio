@@ -577,3 +577,9 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Miglioramento caricamento iniziale**: L'overlay modale globale bloccante (`#globalSpinner`) con animazione di caricamento ("Caricamento in corso..."), introdotto nella versione v8.2 per il cambio catalogo, è stato esteso anche alla primissima fase di caricamento della pagina (refresh o prima apertura dell'editor).
 - **Logica**: All'interno della funzione asincrona `loadRemoteObjects()`, lo spinner viene ora attivato all'inizio del fetching da GitHub e nascosto in modo sicuro nel blocco `finally`. Questo impedisce qualsiasi interazione prematura e previene il fastidioso glitch visivo ("box neri con punto interrogativo") in cui la mappa tentava di renderizzare icone vettoriali non ancora scaricate dal server, offrendo un'esperienza fluida all'utente.
 
+## Stile Dinamico Oggetti in Mappa (v9.2)
+- **Selettore Set Oggetti**: Aggiunta una nuova picklist nella card "Icone" della vista "Graphic", che permette di selezionare un set grafico specifico (es. "set 1", "set 2") per personalizzare l'aspetto visivo degli oggetti direttamente sulla mappa SVG.
+- **Rendering Dinamico e Fallback**:
+  - Se il valore del selettore è impostato su `Nessuno (Testo)` (valore di default `null` o `""`), gli oggetti sulla mappa vengono renderizzati come box quadrati (con sfondo `#f4efe4` e bordo scuro) contenenti le prime 3 lettere in maiuscolo del nome dell'oggetto.
+  - Se viene selezionato un set specifico (es. "set 1"), la mappa carica dinamicamente per ciascun oggetto posizionato il corrispondente file PNG dal percorso `icons/[SET]/[slug].png`.
+- **Integrazione di Stato**: Il set scelto (`state.icons.globalSet`) viene conservato nello stato interno del graphic editor, garantendo che le preferenze visive restino coerenti durante l'uso ed esportate nella persistenza.

@@ -406,7 +406,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.1</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.2</span></h1>
     </div>
   </div>
 
@@ -688,6 +688,15 @@
 
     <div class="card iconeCard" id="svg_iconeCard">
       <h2>Icone</h2>
+      <div class="field" style="margin-bottom:12px">
+        <label>Set Oggetti: 
+          <select id="svg_globalIconSetSelect" style="width:100%; margin-top:4px; padding:6px; border-radius:4px; background:var(--panel2); color:var(--text); border:1px solid var(--line2);">
+            <option value="">Nessuno (Testo)</option>
+            <option value="set 1">set 1</option>
+            <option value="set 2">set 2</option>
+          </select>
+        </label>
+      </div>
       <div class="icone-tools">
         <button class="btn ghost" id="svg_btnLoadIcons" style="padding:7px 11px; font-size:12px">📁 Carica</button>
         <input type="file" id="svg_iconFile" accept=".svg,image/svg+xml,.png,image/png,.webp,image/webp,.jpg,.jpeg,image/jpeg,.zip,application/zip" multiple hidden>
@@ -6907,6 +6916,7 @@ const state = {
     nonWalkIntensity: 22,  // intensità overlay celle non calpestabili (0=trasparente, 100=nero)
   },
   icons: {
+    globalSet: "",         // set icone globale per oggetti
     library: [],           // {id, name, dataUri}  (dataUri: image/svg+xml o image/png)
     placed: [],            // {id, libId, fCol, fRow, size, unit}  size = numero, unit = '%' o 'px'
     selectedId: null,      // id dell'icona posizionata attualmente selezionata
@@ -7217,6 +7227,33 @@ function buildSvg(forExport=false){
         s += `<rect class="whit" data-wr="${r}" data-wc="${c}" data-wr2="${r+1}" data-wc2="${c}" x="${x+8}" y="${y+CS-8}" width="${CS-16}" height="16" fill="transparent" style="cursor:crosshair"/>`;
     }
     s += `</g>`;
+  }
+
+  // Disegno Oggetti (box testo o set globale PNG)
+  const globalSet = state.icons.globalSet;
+  for (const obj of state.objects.list) {
+    if (!obj.cells || obj.cells.length === 0) continue;
+    for (const [r, c] of obj.cells) {
+      const cx = PAD + c * CS;
+      const cy = PAD + r * CS;
+      if (globalSet) {
+        // Usa il PNG del set selezionato
+        const sizePct = obj.size || DEFAULT_ICON_PCT;
+        const sizePx = (sizePct / 100) * CS;
+        const x = cx + CS/2 - sizePx/2;
+        const y = cy + CS/2 - sizePx/2;
+        const filterAttr = iconShade !== 50 ? ` filter="url(#iconShadeFilter)"` : "";
+        s += `<image${filterAttr} href="icons/${globalSet}/${obj.slug}.png" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet" pointer-events="none"/>`;
+      } else {
+        // Disegna box con prime 3 lettere
+        const boxSize = CS * 0.8;
+        const x = cx + CS/2 - boxSize/2;
+        const y = cy + CS/2 - boxSize/2;
+        const text = (obj.name || obj.slug).substring(0, 3).toUpperCase();
+        s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#f4efe4" stroke="#263238" stroke-width="2" rx="4" pointer-events="none"/>`;
+        s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#263238" text-anchor="middle" pointer-events="none">${text}</text>`;
+      }
+    }
   }
 
   // Icone posizionate (sopra a tutto — inclusi gli hitbox — così sono cliccabili)
@@ -8675,6 +8712,7 @@ function serializeState(opts){
       snap: state.icons.snap,
       unit: state.icons.unit,
       shade: state.icons.shade,
+      globalSet: state.icons.globalSet,
     },
     bg: {
       library: bgLibrary,
@@ -8836,8 +8874,10 @@ function loadJsonPayload(obj, silent=false){
     state.icons.unit = obj.icons.unit === "px" ? "px" : "%";
     const sh = obj.icons.shade;
     state.icons.shade = typeof sh === "number" && isFinite(sh) ? Math.max(0, Math.min(100, sh)) : 50;
+    state.icons.globalSet = typeof obj.icons.globalSet === "string" ? obj.icons.globalSet : "";
   } else {
     state.icons.shade = 50;
+    state.icons.globalSet = "";
   }
   // Libreria sfondi
   state.bg.library = [];
@@ -8866,6 +8906,8 @@ function loadJsonPayload(obj, silent=false){
   state.selectedAreaSig = null;
   syncStyleControls();
   $("#svg_snapToggle").checked = state.icons.snap;
+  const setSel = $("#svg_globalIconSetSelect");
+  if (setSel) setSel.value = state.icons.globalSet;
   $("#svg_iconShadeRange").value = state.icons.shade;
   $("#svg_iconShadeVal").textContent = state.icons.shade;
   $("#svg_sizeVal").textContent = n;
@@ -9287,6 +9329,13 @@ function bindEvents(){
   });
 
   // ---- Sezione Icone ----
+  const iconSetSel = $("#svg_globalIconSetSelect");
+  if (iconSetSel) {
+    iconSetSel.addEventListener("change", e => {
+      state.icons.globalSet = e.target.value;
+      render();
+    });
+  }
   $("#svg_btnLoadIcons").addEventListener("click", () => $("#svg_iconFile").click());
   $("#svg_iconFile").addEventListener("change", e => {
     const files = Array.from(e.target.files);
