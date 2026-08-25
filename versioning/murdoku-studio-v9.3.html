@@ -406,7 +406,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.4</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.3</span></h1>
     </div>
   </div>
 
@@ -427,10 +427,11 @@
   
   <div class="pulsantiera graphic-topbar" id="graphicTopbar" style="display:none; align-items:center; flex-wrap:nowrap;">
 
-    <button class="btn ghost" id="svg_btnUndo" title="Annulla ultima operazione (Ctrl/Cmd+Z)" disabled><span class="k">↶</span></button>
-    <button class="btn ghost" id="svg_btnLoadCloud" title="Carica una mappa dal Cloud (GitHub)"><span class="k">⬇️</span> Carica dal Cloud</button>
-    <button class="btn ghost" id="svg_btnSaveCloud" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">💾</span> Salva sul Cloud</button>
-    <div class="separator"></div>
+    <button class="btn ghost" id="svg_btnUndo" title="Annulla ultima operazione (Ctrl/Cmd+Z)" disabled><span class="k">↶</span> Annulla</button>
+    <button class="btn ghost" id="svg_btnImportMurdoku" title="Importa una mappa esportata dal Murdoku Editor"><span class="k">📥</span> Importa da Murdoku</button>
+    <button class="btn ghost" id="svg_btnLoadCloud" title="Carica una mappa dalla cartella 'Mappe generate' del repo GitHub"><span class="k">☁️</span> Carica Mappa dal Cloud</button>
+    <button class="btn ghost" id="svg_btnLoadJSON" title="Carica una mappa salvata (.json)"><span class="k">📂</span> Carica Mappa</button>
+    <button class="btn ghost" id="svg_btnSaveJSON" title="Salva la mappa corrente in JSON"><span class="k">💾</span> Salva Mappa</button>
     <button class="btn primary" id="svg_btnExportImage" title="Esporta la mappa come immagine (PNG o SVG)"><span class="k">⇩</span> Esporta Immagine</button>
     <button class="btn ghost" id="svg_btnExportGrid" title="Esporta solo la griglia (bordi, muri, linee, numeri) in PNG x8"><span class="k">🔲</span> Esporta Griglia</button>
   
@@ -881,23 +882,6 @@
     <div class="mf">
       <button class="btn ghost" id="svg_btnCloudCancel" data-close-modal>Annulla</button>
       <button class="btn primary" id="svg_btnDoCloudLoad" disabled>Carica</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="svg_cloudSaveModal">
-  <div class="box">
-    <div class="mh"><h3>Salva mappa sul Cloud</h3></div>
-    <div class="mb">
-      <div class="field" style="margin:0">
-        <label for="svg_cloudSaveFilename">Nome del file</label>
-        <input type="text" id="svg_cloudSaveFilename" placeholder="mappa" spellcheck="false" autocomplete="off">
-        <div class="hint">Al nome verrà aggiunta l'estensione <code>.json</code>. Verrà salvata in <b>Mappe generate</b> su GitHub.</div>
-      </div>
-    </div>
-    <div class="mf">
-      <button class="btn ghost" data-close-modal>Annulla</button>
-      <button class="btn primary" id="svg_btnDoCloudSave">Salva sul Cloud</button>
     </div>
   </div>
 </div>
@@ -9086,94 +9070,6 @@ function doCloudLoad(){
   }).finally(() => { btn.disabled = false; setCloudModalLocked(false); });
 }
 
-let svgCloudMapsCache = [];
-function openCloudSaveModal(){
-  $("#svg_cloudSaveFilename").value = `mappa-${state.size}x${state.size}`;
-  $("#svg_btnDoCloudSave").disabled = true;
-  openModal("svg_cloudSaveModal");
-  svgCloudMapsCache = [];
-  
-  fetchCloudMapList().then(files => {
-    svgCloudMapsCache = files;
-    $("#svg_btnDoCloudSave").disabled = false;
-  }).catch(err => {
-    toast("Avviso: Impossibile recuperare lista mappe esistenti (" + err.message + ")");
-    $("#svg_btnDoCloudSave").disabled = false;
-  });
-}
-
-async function doCloudSave(){
-  let filename = $("#svg_cloudSaveFilename").value.trim();
-  if(!filename){ toast("Il nome del file è obbligatorio"); return; }
-  if(!filename.toLowerCase().endsWith(".json")) filename += ".json";
-  
-  const cfg = getGithubConfig();
-  if(!cfg.token || !cfg.owner || !cfg.repo) {
-    toast("Configura Token, Owner e Repo nelle Impostazioni!");
-    return;
-  }
-  
-  const existingFile = svgCloudMapsCache.find(f => f.name.toLowerCase() === filename.toLowerCase());
-  let sha = existingFile ? existingFile.sha : null;
-  
-  if(!sha) {
-    try {
-      const chkRes = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(CLOUD_MAPS_PATH)}/${encodeURIComponent(filename)}`, {
-        headers: { "Authorization": `Bearer ${cfg.token}`, "Accept": "application/vnd.github.v3+json" }
-      });
-      if(chkRes.ok) {
-        const chkData = await chkRes.json();
-        sha = chkData.sha;
-      }
-    } catch(e) {}
-  }
-  
-  const obj = serializeState();
-  const contentStr = JSON.stringify(obj, null, 2);
-  
-  const utf8Encode = new TextEncoder().encode(contentStr);
-  let base64Content = "";
-  const chunk = 0x8000;
-  for (let i = 0; i < utf8Encode.length; i += chunk) {
-    base64Content += String.fromCharCode.apply(null, utf8Encode.subarray(i, i + chunk));
-  }
-  base64Content = btoa(base64Content);
-
-  const payload = {
-    message: `Salvataggio da GRAPHIC: ${filename}`,
-    content: base64Content
-  };
-  if(sha) payload.sha = sha;
-  
-  try {
-    toast("Salvataggio su Cloud in corso...");
-    $("#svg_btnDoCloudSave").disabled = true;
-    
-    const res = await fetch(`https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${encodeURIComponent(CLOUD_MAPS_PATH)}/${encodeURIComponent(filename)}`, {
-      method: "PUT",
-      headers: { 
-        "Authorization": `Bearer ${cfg.token}`, 
-        "Accept": "application/vnd.github.v3+json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-    
-    $("#svg_btnDoCloudSave").disabled = false;
-    
-    if(res.ok) {
-      toast(`Mappa salvata su Cloud: ${filename}`);
-      closeModal("svg_cloudSaveModal");
-    } else {
-      showCloudError(res, "Errore durante il salvataggio");
-    }
-  } catch(e) {
-    console.error(e);
-    toast("Errore di rete durante il salvataggio.");
-    $("#svg_btnDoCloudSave").disabled = false;
-  }
-}
-
 /* --- Elenco mappe salvate del repo murdoku-studio (per il popup di import) --- */
 const IMPORT_MAPS_REPO = "NumaPompilio/murdoku-studio";
 const IMPORT_MAPS_BRANCH = "main";
@@ -9639,14 +9535,12 @@ function bindEvents(){
   });
 
   // Save Mappa (modal con nome file)
-  if ($("#svg_btnSaveJSON")) {
-    $("#svg_btnSaveJSON").addEventListener("click", () => {
-      $("#svg_saveFilename").value = `mappa-${state.size}x${state.size}`;
-      openModal("svg_saveModal");
-      // Focus + selezione automatica del nome per riscritture rapide
-      setTimeout(() => { const i = $("#svg_saveFilename"); if (i){ i.focus(); i.select(); } }, 0);
-    });
-  }
+  $("#svg_btnSaveJSON").addEventListener("click", () => {
+    $("#svg_saveFilename").value = `mappa-${state.size}x${state.size}`;
+    openModal("svg_saveModal");
+    // Focus + selezione automatica del nome per riscritture rapide
+    setTimeout(() => { const i = $("#svg_saveFilename"); if (i){ i.focus(); i.select(); } }, 0);
+  });
   $("#svg_btnDoSave").addEventListener("click", () => {
     saveJsonFile($("#svg_saveFilename").value);
     closeModal("svg_saveModal");
@@ -9656,9 +9550,7 @@ function bindEvents(){
   });
 
   // Load Mappa
-  if ($("#svg_btnLoadJSON")) {
-    $("#svg_btnLoadJSON").addEventListener("click", () => $("#svg_fileLoadJson").click());
-  }
+  $("#svg_btnLoadJSON").addEventListener("click", () => $("#svg_fileLoadJson").click());
   $("#svg_fileLoadJson").addEventListener("change", e => {
     const f = e.target.files[0];
     if (!f) return;
@@ -9687,16 +9579,12 @@ function bindEvents(){
     if (e.key === "Enter"){ e.preventDefault(); $("#svg_btnDoExportGrid").click(); }
   });
 
-  // Cloud Load e Save
+  // Carica Mappa dal Cloud
   $("#svg_btnLoadCloud").addEventListener("click", openCloudModal);
   $("#svg_btnDoCloudLoad").addEventListener("click", doCloudLoad);
-  $("#svg_btnSaveCloud").addEventListener("click", openCloudSaveModal);
-  $("#svg_btnDoCloudSave").addEventListener("click", doCloudSave);
 
   // Import Murdoku
-  if ($("#svg_btnImportMurdoku")) {
-    $("#svg_btnImportMurdoku").addEventListener("click", openImportModal);
-  }
+  $("#svg_btnImportMurdoku").addEventListener("click", openImportModal);
   $("#svg_importCloudSelect").addEventListener("change", loadImportMapIntoTextarea);
   $("#svg_btnDoImport").addEventListener("click", () => {
     try {
