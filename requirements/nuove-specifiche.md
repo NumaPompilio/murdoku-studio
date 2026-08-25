@@ -587,3 +587,10 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 ## Caricamento Remoto dei Set Oggetti da GitHub (v9.3)
 - **Integrazione API di GitHub**: Invece di hardcodare i nomi dei set e risolverli localmente, la lista dei set di icone viene popolata dinamicamente interrogando le API di GitHub (directory `/icons`).
 - **Rendering tramite Raw URL**: Le immagini degli oggetti vengono renderizzate impostando come `href` del tag `<image>` la URL raw di GitHub (`https://raw.githubusercontent.com/{owner}/{repo}/main/icons/{set}/{slug}.png`), permettendo all'applicazione di funzionare in modo totalmente slegato dal file system locale anche quando in esecuzione in un ambiente sandbox o standalone esterno.
+
+## Modifiche alla Pulsantiera Graphic e Salvataggio su Cloud per Mappe SVG (v9.4)
+- **Nuova Pulsantiera Graphic**: La barra degli strumenti della modalità Graphic è stata snellita e armonizzata con quella dell'Editor. La pulsantiera ora include i seguenti pulsanti visibili:
+  - **Undo**: ridotto a sola icona vettoriale, posizionato come primo pulsante a sinistra (capace di annullare fino a 30 operazioni).
+  - **Carica dal Cloud** e **Salva sul Cloud**: resi visivamente identici ai corrispondenti pulsanti dell'Editor per continuità stilistica.
+  - I vecchi pulsanti per il salvataggio/caricamento locale JSON e l'importazione Murdoku sono stati rimossi dall'interfaccia principale, mantenendo intatte solo le opzioni per esportazione immagine e griglia.
+- **Implementazione Salvataggio Mappe SVG sul Cloud**: Aggiunta la funzionalità logica completa per salvare le piantine (in formato JSON `murdoku-svg-map`) direttamente nel branch remoto, emulando il funzionamento dell'Editor ma indirizzando i file alla cartella specifica `Mappe generate`. Include un nuovo modale dedicato (`svg_cloudSaveModal`) che permette di sovrascrivere file esistenti o crearne di nuovi con serializzazione e Base64 encoding.
