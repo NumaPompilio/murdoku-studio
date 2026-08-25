@@ -578,8 +578,12 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 - **Logica**: All'interno della funzione asincrona `loadRemoteObjects()`, lo spinner viene ora attivato all'inizio del fetching da GitHub e nascosto in modo sicuro nel blocco `finally`. Questo impedisce qualsiasi interazione prematura e previene il fastidioso glitch visivo ("box neri con punto interrogativo") in cui la mappa tentava di renderizzare icone vettoriali non ancora scaricate dal server, offrendo un'esperienza fluida all'utente.
 
 ## Stile Dinamico Oggetti in Mappa (v9.2)
-- **Selettore Set Oggetti**: Aggiunta una nuova picklist nella card "Icone" della vista "Graphic", che permette di selezionare un set grafico specifico (es. "set 1", "set 2") per personalizzare l'aspetto visivo degli oggetti direttamente sulla mappa SVG.
+- **Selettore Set Oggetti**: Aggiunta una nuova picklist nella card "Icone" della vista "Graphic", che permette di selezionare un set grafico specifico per personalizzare l'aspetto visivo degli oggetti direttamente sulla mappa SVG.
 - **Rendering Dinamico e Fallback**:
   - Se il valore del selettore è impostato su `Nessuno (Testo)` (valore di default `null` o `""`), gli oggetti sulla mappa vengono renderizzati come box quadrati (con sfondo `#f4efe4` e bordo scuro) contenenti le prime 3 lettere in maiuscolo del nome dell'oggetto.
-  - Se viene selezionato un set specifico (es. "set 1"), la mappa carica dinamicamente per ciascun oggetto posizionato il corrispondente file PNG dal percorso `icons/[SET]/[slug].png`.
+  - Se viene selezionato un set specifico, la mappa carica dinamicamente per ciascun oggetto posizionato il corrispondente file PNG.
 - **Integrazione di Stato**: Il set scelto (`state.icons.globalSet`) viene conservato nello stato interno del graphic editor, garantendo che le preferenze visive restino coerenti durante l'uso ed esportate nella persistenza.
+
+## Caricamento Remoto dei Set Oggetti da GitHub (v9.3)
+- **Integrazione API di GitHub**: Invece di hardcodare i nomi dei set e risolverli localmente, la lista dei set di icone viene popolata dinamicamente interrogando le API di GitHub (directory `/icons`).
+- **Rendering tramite Raw URL**: Le immagini degli oggetti vengono renderizzate impostando come `href` del tag `<image>` la URL raw di GitHub (`https://raw.githubusercontent.com/{owner}/{repo}/main/icons/{set}/{slug}.png`), permettendo all'applicazione di funzionare in modo totalmente slegato dal file system locale anche quando in esecuzione in un ambiente sandbox o standalone esterno.

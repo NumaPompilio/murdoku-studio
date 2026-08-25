@@ -406,7 +406,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.3</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.2</span></h1>
     </div>
   </div>
 
@@ -692,7 +692,8 @@
         <label>Set Oggetti: 
           <select id="svg_globalIconSetSelect" style="width:100%; margin-top:4px; padding:6px; border-radius:4px; background:var(--panel2); color:var(--text); border:1px solid var(--line2);">
             <option value="">Nessuno (Testo)</option>
-            <option value="" disabled>Caricamento set...</option>
+            <option value="set 1">set 1</option>
+            <option value="set 2">set 2</option>
           </select>
         </label>
       </div>
@@ -5247,7 +5248,6 @@ async function loadRemoteObjects() {
           console.warn(`Errore caricamento catalogo ${dir}`, e);
         }
       }
-      await loadRemoteIconSets();
       
       const byLabel = (a, b) => (E.OBJECT_LIB[a]?.label || a).localeCompare(E.OBJECT_LIB[b]?.label || b, 'it');
       OBJ_ORDER.sort(byLabel);
@@ -5289,41 +5289,6 @@ window.addEventListener('DOMContentLoaded', async () => {
   await loadRemoteSettings();
   await loadRemoteObjects();
 });
-
-// Carica i set di icone direttamente da GitHub
-async function loadRemoteIconSets() {
-  const select = document.getElementById("svg_globalIconSetSelect");
-  if (!select) return;
-  
-  select.innerHTML = '<option value="">Nessuno (Testo)</option>';
-  
-  try {
-    const res = await ghFetch("icons");
-    if (res.ok) {
-      const data = await res.json();
-      const dirs = data.filter(d => d.type === "dir").map(d => d.name);
-      dirs.forEach(dir => {
-        const opt = document.createElement("option");
-        opt.value = dir;
-        opt.textContent = dir;
-        select.appendChild(opt);
-      });
-      select.value = state.icons.globalSet;
-      return;
-    }
-  } catch(e) {
-    console.warn("Impossibile caricare i set di icone da GitHub, fallback su locali", e);
-  }
-  
-  // Fallback locale/hardcoded
-  ["set 1", "set 2"].forEach(dir => {
-    const opt = document.createElement("option");
-    opt.value = dir;
-    opt.textContent = dir;
-    select.appendChild(opt);
-  });
-  select.value = state.icons.globalSet;
-}
 
 
 
@@ -7266,24 +7231,19 @@ function buildSvg(forExport=false){
 
   // Disegno Oggetti (box testo o set globale PNG)
   const globalSet = state.icons.globalSet;
-  const cfg = getGithubConfig();
-  const owner = cfg.owner || "NumaPompilio";
-  const repo = cfg.repo || "murdoku-studio";
-  const baseIconsUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/icons`;
-
   for (const obj of state.objects.list) {
     if (!obj.cells || obj.cells.length === 0) continue;
     for (const [r, c] of obj.cells) {
       const cx = PAD + c * CS;
       const cy = PAD + r * CS;
       if (globalSet) {
-        // Usa il PNG del set selezionato da GitHub
+        // Usa il PNG del set selezionato
         const sizePct = obj.size || DEFAULT_ICON_PCT;
         const sizePx = (sizePct / 100) * CS;
         const x = cx + CS/2 - sizePx/2;
         const y = cy + CS/2 - sizePx/2;
         const filterAttr = iconShade !== 50 ? ` filter="url(#iconShadeFilter)"` : "";
-        s += `<image${filterAttr} href="${baseIconsUrl}/${globalSet}/${obj.slug}.png" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet" pointer-events="none"/>`;
+        s += `<image${filterAttr} href="icons/${globalSet}/${obj.slug}.png" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet" pointer-events="none"/>`;
       } else {
         // Disegna box con prime 3 lettere
         const boxSize = CS * 0.8;
