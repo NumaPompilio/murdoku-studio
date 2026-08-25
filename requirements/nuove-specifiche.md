@@ -594,3 +594,17 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
   - **Carica dal Cloud** e **Salva sul Cloud**: resi visivamente identici ai corrispondenti pulsanti dell'Editor per continuità stilistica.
   - I vecchi pulsanti per il salvataggio/caricamento locale JSON e l'importazione Murdoku sono stati rimossi dall'interfaccia principale, mantenendo intatte solo le opzioni per esportazione immagine e griglia.
 - **Implementazione Salvataggio Mappe SVG sul Cloud**: Aggiunta la funzionalità logica completa per salvare le piantine (in formato JSON `murdoku-svg-map`) direttamente nel branch remoto, emulando il funzionamento dell'Editor ma indirizzando i file alla cartella specifica `Mappe generate`. Include un nuovo modale dedicato (`svg_cloudSaveModal`) che permette di sovrascrivere file esistenti o crearne di nuovi con serializzazione e Base64 encoding.
+
+### VERSIONE 9.5 (Graphic vs Editor Sync)
+- **Importa da Editor:** Aggiunto pulsante nella toolbar di Graphic per importare istantaneamente lo stato corrente dell'EDITOR.
+- **Set Icone per Oggetto:** Implementata la possibilita di scegliere un set di icone specifico per ogni singolo oggetto, indipendente dal set globale.
+- **Salvataggio Unificato su Cloud:** Quando si salva la mappa dal Cloud mentre si e' in GRAPHIC, il file JSON includera' anche lo stato e gli indizi dell'EDITOR, in modo che caricandolo dal cloud venga ripristinata la mappa completa.
+
+### VERSIONE 9.6 (Miglioramenti UI Oggetti Graphic)
+- **Dimensione Globale Oggetti**: Aggiunto uno slider alla sezione OGGETTI (in Graphic) per poter impostare e applicare rapidamente una dimensione comune a tutti gli oggetti presenti nella mappa SVG.
+- **Visualizzazione Default Oggetti**: Modificata l'anteprima degli oggetti nella lista assegnazione. Se un oggetto non ha alcun set di icone o immagine libreria selezionati, viene ora visualizzato con un'icona quadrata che mostra le prime 2 lettere dell'ID dell'oggetto invece del precedente placeholder generico.
+- **Ottimizzazione Etichette**: La label del menu a tendina "Nessuno / Eredita Globale" è stata semplificata in "nessuno".
+
+### VERSIONE 9.7 (Bugfix e Anteprima Oggetti Graphic)
+- **Anteprima Icona Set Oggetto**: Quando viene assegnato un set da GitHub ad un oggetto (oppure eredita il set globale), il box di anteprima nella lista laterale di Graphic mostra l"icona PNG effettiva corrispondente al set selezionato anziché il pulsante "+", garantendo un immediato feedback visivo corrispondente a quanto renderizzato in mappa.
+- **Bugfix Rendering "nessuno"**: Corretto un difetto in cui le opzioni vuote associate al valore "nessuno" per i set venivano trattate impropriamente come set validi, forzando la visualizzazione corretta del box fallback con le prime 2 lettere in assenza di un set grafico.

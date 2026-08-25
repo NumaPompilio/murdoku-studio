@@ -61,3 +61,6 @@ Ogni volta che viene richiesto di implementare un popup o finestra modale, quest
    - Chiusura impostando `.style.display = "none"`.
    - Gestione della chiusura cliccando sull'overlay (lo sfondo esterno al `.box`).
    - Gestione del pulsante di chiusura.
+
+## Gestione Case Sensitivity su Git (macOS)
+**ATTENZIONE**: Il file system di macOS è case-insensitive per default. Se viene richiesto di rinominare dei file cambiando solo le maiuscole/minuscole (es. `Luminarie.png` -> `luminarie.png`), `git` non rileverà automaticamente la modifica. Per forzare Git a registrare questi cambiamenti, eseguire sempre `git config core.ignorecase false` prima di fare `git add`, oppure usare il comando `git mv` per rinominare esplicitamente i file.

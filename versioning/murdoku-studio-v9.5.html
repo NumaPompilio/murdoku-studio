@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Murdoku Studio v9.7 — generatore ed editor di enigmi</title>
+<title>Murdoku Studio — generatore ed editor di enigmi</title>
 <style>
   :root{
     --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
@@ -406,7 +406,7 @@
   <div class="brand" style="flex: 1;">
     <span class="tab" style="font-size:16px;">MURDOKU</span>
     <div>
-      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.6</span></h1>
+      <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.4</span></h1>
     </div>
   </div>
 
@@ -428,7 +428,6 @@
   <div class="pulsantiera graphic-topbar" id="graphicTopbar" style="display:none; align-items:center; flex-wrap:nowrap;">
 
     <button class="btn ghost" id="svg_btnUndo" title="Annulla ultima operazione (Ctrl/Cmd+Z)" disabled><span class="k">↶</span></button>
-    <button class="btn ghost" id="svg_btnImportEditor" title="Importa la mappa dall'Editor in tempo reale"><span class="k">📥</span> Importa da Editor</button>
     <button class="btn ghost" id="svg_btnLoadCloud" title="Carica una mappa dal Cloud (GitHub)"><span class="k">⬇️</span> Carica dal Cloud</button>
     <button class="btn ghost" id="svg_btnSaveCloud" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">💾</span> Salva sul Cloud</button>
     <div class="separator"></div>
@@ -688,7 +687,14 @@
 
     <div class="card iconeCard" id="svg_iconeCard">
       <h2>Icone</h2>
-
+      <div class="field" style="margin-bottom:12px">
+        <label>Set Oggetti: 
+          <select id="svg_globalIconSetSelect" style="width:100%; margin-top:4px; padding:6px; border-radius:4px; background:var(--panel2); color:var(--text); border:1px solid var(--line2);">
+            <option value="">Nessuno (Testo)</option>
+            <option value="" disabled>Caricamento set...</option>
+          </select>
+        </label>
+      </div>
       <div class="icone-tools">
         <button class="btn ghost" id="svg_btnLoadIcons" style="padding:7px 11px; font-size:12px">📁 Carica</button>
         <input type="file" id="svg_iconFile" accept=".svg,image/svg+xml,.png,image/png,.webp,image/webp,.jpg,.jpeg,image/jpeg,.zip,application/zip" multiple hidden>
@@ -723,17 +729,6 @@
     <div class="card" id="svg_objectsCard" style="display:none">
       <h2>Oggetti</h2>
       <div class="hint" style="margin:0 0 10px">Oggetti rilevati nella mappa importata. Trascina un'icona dalla libreria qui sopra nella casella di un oggetto per assegnarla automaticamente a tutte le celle in cui l'oggetto è presente.</div>
-      <div class="field" style="margin-bottom:12px">
-        <label>Applica a tutti gli oggetti: 
-          <select id="svg_globalIconSetSelect" style="width:100%; margin-top:4px; padding:6px; border-radius:4px; background:var(--panel2); color:var(--text); border:1px solid var(--line2);">
-            <option value="">Nessuno (Testo)</option>
-            <option value="" disabled>Caricamento set...</option>
-          </select>
-        </label>
-        <label style="margin-top:10px; display:block">Dimensione globale oggetti: <span id="svg_globalObjectSizeVal" class="val">80</span> %
-          <input type="range" id="svg_globalObjectSize" min="20" max="200" step="5" value="80" style="width:100%; margin-top:4px;">
-        </label>
-      </div>
       <div id="svg_objectsList"></div>
     </div>
 
@@ -4153,14 +4148,8 @@ function deserialize(d){
   state.aiValidationMsg = d.aiValidationMsg || null;
   state.aiDifficulty = d.aiDifficulty || null;
   state.aiHumanEvaluation = d.aiHumanEvaluation || null;
-  
-  state.graphicConfig = d.graphicConfig || null;
 
   render(); renderPalette(); renderClues(); renderSteps(); updateFloorUI();
-  
-  if (state.graphicConfig && window.graphicApp) {
-      window.graphicApp.loadConfig(state.graphicConfig);
-  }
   
   if(state.clueObjs.length > 0) {
     setVerdict("ok", `Progetto importato con successo (${state.clueObjs.length} indizi).`);
@@ -5329,35 +5318,27 @@ async function loadRemoteIconSets() {
     if (res.ok) {
       const data = await res.json();
       const dirs = data.filter(d => d.type === "dir").map(d => d.name);
-      
-      // Update the graphic state
-      if (window.graphicApp && window.graphicApp.setAvailableSets) {
-          window.graphicApp.setAvailableSets(dirs);
-      }
-      
       dirs.forEach(dir => {
         const opt = document.createElement("option");
         opt.value = dir;
         opt.textContent = dir;
         select.appendChild(opt);
       });
-      // The select value will be set later when Graphic loads the map
+      select.value = state.icons.globalSet;
       return;
     }
   } catch(e) {
     console.warn("Impossibile caricare i set di icone da GitHub, fallback su locali", e);
   }
   
-  const fallbackDirs = ["set 1", "set 2"];
-  if (window.graphicApp && window.graphicApp.setAvailableSets) {
-      window.graphicApp.setAvailableSets(fallbackDirs);
-  }
-  fallbackDirs.forEach(dir => {
+  // Fallback locale/hardcoded
+  ["set 1", "set 2"].forEach(dir => {
     const opt = document.createElement("option");
     opt.value = dir;
     opt.textContent = dir;
     select.appendChild(opt);
   });
+  select.value = state.icons.globalSet;
 }
 
 
@@ -6951,8 +6932,6 @@ async function confirmDeleteObject() {
 
 "use strict";
 
-window.graphicApp = {};
-
 /* =====================================================================
    MODELLO
    ===================================================================== */
@@ -6989,7 +6968,6 @@ const state = {
   },
   icons: {
     globalSet: "",         // set icone globale per oggetti
-    availableSets: [],     // list of available icon sets from github
     library: [],           // {id, name, dataUri}  (dataUri: image/svg+xml o image/png)
     placed: [],            // {id, libId, fCol, fRow, size, unit}  size = numero, unit = '%' o 'px'
     selectedId: null,      // id dell'icona posizionata attualmente selezionata
@@ -7168,7 +7146,7 @@ function buildSvg(forExport=false){
   let defsContent = "";
   for (const pd of patternDefs){
     // pattern che riempie una cella intera, ripetuto per cella
-    defsContent += `<pattern id="${pd.id}" patternUnits="userSpaceOnUse" x="${PAD}" y="${PAD}" width="${CS}" height="${CS}">`;
+    defsContent += `<pattern id="svg_${pd.id}" patternUnits="userSpaceOnUse" x="${PAD}" y="${PAD}" width="${CS}" height="${CS}">`;
     defsContent += `<image href="${pd.dataUri}" x="0" y="0" width="${CS}" height="${CS}" preserveAspectRatio="xMidYMid slice"/>`;
     defsContent += `</pattern>`;
   }
@@ -7311,27 +7289,23 @@ function buildSvg(forExport=false){
 
   for (const obj of state.objects.list) {
     if (!obj.cells || obj.cells.length === 0) continue;
-    
-    let activeSet = obj.iconSet || globalSet;
-    if (activeSet === "Nessuno / Eredita Globale" || activeSet === "Nessuno (Testo)" || activeSet === "nessuno") activeSet = "";
-    
     for (const [r, c] of obj.cells) {
       const cx = PAD + c * CS;
       const cy = PAD + r * CS;
-      if (activeSet) {
+      if (globalSet) {
         // Usa il PNG del set selezionato da GitHub
         const sizePct = obj.size || DEFAULT_ICON_PCT;
         const sizePx = (sizePct / 100) * CS;
         const x = cx + CS/2 - sizePx/2;
         const y = cy + CS/2 - sizePx/2;
-        const filterAttr = iconShade !== 50 ? ` filter="url(#svg_iconShadeFilter)"` : "";
-        s += `<image${filterAttr} href="${baseIconsUrl}/${encodeURIComponent(activeSet)}/${encodeURIComponent(obj.slug)}.png" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet" pointer-events="none"/>`;
+        const filterAttr = iconShade !== 50 ? ` filter="url(#iconShadeFilter)"` : "";
+        s += `<image${filterAttr} href="${baseIconsUrl}/${globalSet}/${obj.slug}.png" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet" pointer-events="none"/>`;
       } else {
-        // Disegna box con prime 2 lettere dell'ID
+        // Disegna box con prime 3 lettere
         const boxSize = CS * 0.8;
         const x = cx + CS/2 - boxSize/2;
         const y = cy + CS/2 - boxSize/2;
-        const text = obj.slug.substring(0, 2).toUpperCase();
+        const text = (obj.name || obj.slug).substring(0, 3).toUpperCase();
         s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#f4efe4" stroke="#263238" stroke-width="2" rx="4" pointer-events="none"/>`;
         s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#263238" text-anchor="middle" pointer-events="none">${text}</text>`;
       }
@@ -7349,8 +7323,8 @@ function buildSvg(forExport=false){
     if (!forExport && state.icons.selectedId === ic.id){
       s += `<rect x="${x-3}" y="${y-3}" width="${sizePx+6}" height="${sizePx+6}" fill="none" stroke="#8a6bff" stroke-width="1.5" stroke-dasharray="4 3" pointer-events="none"/>`;
     }
-    const attrs = forExport ? "" : ` class="picon" data-pid="${ic.id}" style="cursor:move"`;
-    const filterAttr = iconShade !== 50 ? ` filter="url(#svg_iconShadeFilter)"` : "";
+    const attrs = forExport ? "" : ` class="picon" data-pid="svg_${ic.id}" style="cursor:move"`;
+    const filterAttr = iconShade !== 50 ? ` filter="url(#iconShadeFilter)"` : "";
     s += `<image${attrs}${filterAttr} href="${lib.dataUri}" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet"/>`;
   }
 
@@ -7961,9 +7935,9 @@ function renderBgLibrary(){
     return;
   }
   box.innerHTML = state.bg.library.map(b =>
-    `<div class="icon-thumb bg-thumb" draggable="true" data-bg-id="${b.id}" title="${escapeHtmlAttr(b.name)}\nClick per applicare alla stanza selezionata, o trascina su una riga in «Stanze»">
+    `<div class="icon-thumb bg-thumb" draggable="true" data-bg-id="svg_${b.id}" title="${escapeHtmlAttr(b.name)}\nClick per applicare alla stanza selezionata, o trascina su una riga in «Stanze»">
        <img src="${b.dataUri}" alt="${escapeHtmlAttr(b.name)}">
-       <button type="button" class="thumb-x" data-bg-id="${b.id}" title="Rimuovi dalla libreria">×</button>
+       <button type="button" class="thumb-x" data-bg-id="svg_${b.id}" title="Rimuovi dalla libreria">×</button>
      </div>`
   ).join("");
   box.querySelectorAll(".bg-thumb").forEach(el => {
@@ -8191,9 +8165,9 @@ function renderIconLibrary(){
     return;
   }
   box.innerHTML = state.icons.library.map(l =>
-    `<div class="icon-thumb" draggable="true" data-lib-id="${l.id}" title="${escapeHtmlAttr(l.name)}">
+    `<div class="icon-thumb" draggable="true" data-lib-id="svg_${l.id}" title="${escapeHtmlAttr(l.name)}">
        <img src="${l.dataUri}" alt="${escapeHtmlAttr(l.name)}">
-       <button type="button" class="thumb-x" data-lib-id="${l.id}" title="Rimuovi dalla libreria">×</button>
+       <button type="button" class="thumb-x" data-lib-id="svg_${l.id}" title="Rimuovi dalla libreria">×</button>
      </div>`
   ).join("");
   box.querySelectorAll(".icon-thumb").forEach(el => {
@@ -8419,28 +8393,11 @@ function renderObjectsSection(){
   if (!state.objects.list.length){ box.innerHTML = ""; return; }
   box.innerHTML = state.objects.list.map(o => {
     const lib = o.libId != null ? state.icons.library.find(l => l.id === o.libId) : null;
-    let effectiveSet = o.iconSet || state.icons.globalSet;
-    if (effectiveSet === "Nessuno / Eredita Globale" || effectiveSet === "Nessuno (Testo)" || effectiveSet === "nessuno") effectiveSet = "";
-    
-    const cfg = getGithubConfig();
-    const owner = cfg.owner || "NumaPompilio";
-    const repo = cfg.repo || "murdoku-studio";
-    const baseIconsUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/icons`;
-
-    let previewHtml = "";
-    if (lib) {
-      previewHtml = `<img src="${lib.dataUri}" alt="${escapeHtmlAttr(lib.name)}">`;
-    } else if (effectiveSet) {
-      const iconUrl = `${baseIconsUrl}/${encodeURIComponent(effectiveSet)}/${encodeURIComponent(o.slug)}.png`;
-      previewHtml = `<img src="${iconUrl}" alt="${escapeHtmlAttr(o.slug)}" style="width:100%; height:100%; object-fit:contain; pointer-events:none;">`;
-    } else {
-      previewHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:var(--panel2); color:var(--text); font-family:var(--mono); font-size:14px; font-weight:bold; border-radius:4px;">${escapeHtmlAttr(o.slug.substring(0, 2).toUpperCase())}</div>`;
-    }
+    const previewHtml = lib
+      ? `<img src="${lib.dataUri}" alt="${escapeHtmlAttr(lib.name)}">`
+      : `<span class="assign-drop-hint">+</span>`;
     const cellWord = o.cells.length === 1 ? "cella" : "celle";
     const walkBadge = o.walkable ? "" : `<span class="assign-badge">non calpestabile</span>`;
-    const setOptions = `<option value="">nessuno</option>` + 
-      (state.icons.availableSets || []).map(dir => `<option value="${escapeHtmlAttr(dir)}" ${o.iconSet === dir ? "selected" : ""}>${escapeHtmlAttr(dir)}</option>`).join("");
-      
     return `
       <div class="assign-row">
         <div class="assign-row-top">
@@ -8450,12 +8407,6 @@ function renderObjectsSection(){
             <div class="assign-sub">${walkBadge}</div>
           </div>
           ${lib ? `<button type="button" class="assign-clear" data-obj-slug="${escapeHtmlAttr(o.slug)}" title="Rimuovi icona assegnata">×</button>` : ""}
-        </div>
-        <div class="field" style="margin:8px 0 0">
-          <label>Set Icone: </label>
-          <select class="object-iconset-select" data-obj-slug="${escapeHtmlAttr(o.slug)}" style="width:100%; padding:4px; margin-top:4px; border-radius:4px; background:var(--panel2); color:var(--text); border:1px solid var(--line2);">
-            ${setOptions}
-          </select>
         </div>
         <div class="field" style="margin:8px 0 0">
           <label>Dimensione icone: <span class="val object-size-val">${o.size}</span> %</label>
@@ -8471,17 +8422,6 @@ function renderObjectsSection(){
     btn.addEventListener("click", e => {
       e.stopPropagation();
       clearObjectIconAssignment(btn.dataset.objSlug);
-    });
-  });
-  box.querySelectorAll(".object-iconset-select").forEach(sel => {
-    sel.addEventListener("change", e => {
-      const slug = sel.dataset.objSlug;
-      const v = e.target.value;
-      const obj = state.objects.list.find(x => x.slug === slug);
-      if(obj) {
-          obj.iconSet = v || null;
-          render();
-      }
     });
   });
   box.querySelectorAll(".object-size-range").forEach(el => {
@@ -8836,7 +8776,7 @@ function serializeState(opts){
     objects: {
       list: state.objects.list.map(o => ({
         slug: o.slug, name: o.name, walkable: o.walkable,
-        cells: o.cells, libId: o.libId, size: o.size, iconSet: o.iconSet
+        cells: o.cells, libId: o.libId, size: o.size,
       })),
     },
   };
@@ -9016,7 +8956,6 @@ function loadJsonPayload(obj, silent=false){
         cells: Array.isArray(o.cells) ? o.cells.filter(c => Array.isArray(c) && c.length === 2).map(c => [c[0]|0, c[1]|0]) : [],
         libId: remappedLibId,
         size: Number.isFinite(o.size) ? o.size : DEFAULT_ICON_PCT,
-        iconSet: typeof o.iconSet === "string" ? o.iconSet : null,
       });
     }
   }
@@ -9037,13 +8976,6 @@ function loadJsonPayload(obj, silent=false){
   render();
   if (!silent) toast("Progetto caricato.");
 }
-
-window.graphicApp.loadConfig = loadJsonPayload;
-window.graphicApp.setAvailableSets = (dirs) => {
-  state.icons.availableSets = dirs;
-  renderObjectsSection();
-};
-
 
 /* Le opzioni di scala vivono ora nel modal "Esporta Immagine".
    Rigeneriamo il select se il modal è già in DOM: le sue voci mostrano
@@ -9196,18 +9128,7 @@ async function doCloudSave(){
     } catch(e) {}
   }
   
-  let obj = serializeState();
-  if (typeof window.serialize === "function") {
-      try {
-          const editorObj = window.serialize();
-          if (editorObj) {
-              editorObj.graphicConfig = obj;
-              obj = editorObj;
-          }
-      } catch (err) {
-          console.error("Editor serialize error:", err);
-      }
-  }
+  const obj = serializeState();
   const contentStr = JSON.stringify(obj, null, 2);
   
   const utf8Encode = new TextEncoder().encode(contentStr);
@@ -9325,10 +9246,6 @@ function importFromMurdokuText(txt){
   } catch(e){
     throw new Error("Blocco base64 non decodificabile.");
   }
-  importFromMurdokuObject(json, txt);
-}
-
-function importFromMurdokuObject(json, txt=""){
   const n = json.size|0;
   if (n < 4 || n > 16) throw new Error("Dimensione mappa non supportata (min 4, max 16).");
   state.size = n;
@@ -9407,25 +9324,12 @@ function importFromMurdokuObject(json, txt=""){
   const newObjects = [];
   for (const [slug, cells] of bySlug){
     const info = legend[slug];
-    let name = info ? info.name : null;
-    if (!name && window.MurdokuEngine && window.MurdokuEngine.OBJECT_LIB && window.MurdokuEngine.OBJECT_LIB[slug]) {
-      name = window.MurdokuEngine.OBJECT_LIB[slug].label;
-    }
-    if (!name) name = slug.replace(/_/g, " ").replace(/\b\w/g, ch => ch.toUpperCase());
-    
-    // If legend is missing, infer walkable from whether all cells are not in newNonWalkable
-    let walkable = true;
-    if (info) {
-        walkable = info.walkable;
-    } else {
-        walkable = cells.every(([r,c]) => !newNonWalkable.includes(cellKey(r,c)));
-    }
-    
+    const name = info ? info.name : slug.replace(/_/g, " ").replace(/\b\w/g, ch => ch.toUpperCase());
+    const walkable = info ? info.walkable : true;
     const prev = prevBySlug.get(slug);
     const obj = {
       slug, name, walkable, cells,
       libId: prev ? prev.libId : null,
-      iconSet: prev ? prev.iconSet : null,
       size: prev ? prev.size : DEFAULT_ICON_PCT,
     };
     newObjects.push(obj);
@@ -9572,25 +9476,7 @@ function bindEvents(){
   const iconSetSel = $("#svg_globalIconSetSelect");
   if (iconSetSel) {
     iconSetSel.addEventListener("change", e => {
-      const v = e.target.value;
-      state.icons.globalSet = v;
-      for (const obj of state.objects.list) {
-         obj.iconSet = v;
-      }
-      renderObjectsSection();
-      render();
-    });
-  }
-
-  const globalObjSize = $("#svg_globalObjectSize");
-  if (globalObjSize) {
-    globalObjSize.addEventListener("input", e => {
-      const v = +e.target.value;
-      $("#svg_globalObjectSizeVal").textContent = v;
-      for (const obj of state.objects.list) {
-         obj.size = v;
-      }
-      renderObjectsSection();
+      state.icons.globalSet = e.target.value;
       render();
     });
   }
@@ -9810,20 +9696,6 @@ function bindEvents(){
   // Import Murdoku
   if ($("#svg_btnImportMurdoku")) {
     $("#svg_btnImportMurdoku").addEventListener("click", openImportModal);
-  }
-  
-  if ($("#svg_btnImportEditor")) {
-    $("#svg_btnImportEditor").addEventListener("click", () => {
-      if (typeof window.serialize === "function") {
-        try {
-          pushHistoryNow();
-          const obj = window.serialize();
-          importFromMurdokuObject(obj);
-        } catch(err) {
-          toast("Errore importazione dall'editor: " + err.message);
-        }
-      }
-    });
   }
   $("#svg_importCloudSelect").addEventListener("change", loadImportMapIntoTextarea);
   $("#svg_btnDoImport").addEventListener("click", () => {
