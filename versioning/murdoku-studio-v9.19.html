@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Murdoku Studio v9.20 — generatore ed editor di enigmi</title>
+<title>Murdoku Studio v9.19 — generatore ed editor di enigmi</title>
 <style>
   :root{
     --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
@@ -405,12 +405,12 @@
 </head>
 <body>
 
-<header style="justify-content: space-between; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;">
-  <div style="display: flex; align-items: center; gap: 16px; min-width: 0; flex-shrink: 0;">
+<header style="justify-content: space-between; flex-wrap: wrap;">
+  <div style="flex: 1; display: flex; align-items: center; gap: 16px; min-width: 0; flex-wrap: wrap;">
     <div class="brand">
       <span class="tab" style="font-size:16px;">MURDOKU</span>
       <div>
-        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.20</span></h1>
+        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.19</span></h1>
       </div>
     </div>
     
@@ -421,7 +421,7 @@
     </div>
   </div>
 
-  <div style="flex: 1; display: flex; justify-content: center; align-items: center; min-width: 0;">
+  <div style="display: flex; justify-content: center; align-items: center; min-width: 0;">
     <div class="pulsantiera toprow">
       <button class="btn primary" id="genMap" title="Genera una nuova mappa casuale (stanze e arredi), cancellando la precedente"><span class="k">🎲</span> Genera mappa</button>
       <button class="btn primary" id="genClues" title="Genera un nuovo set di indizi logici univoci basati sulla mappa attuale"><span class="k">🔍</span> Genera indizi</button>
@@ -454,7 +454,7 @@
     </div>
   </div>
 
-  <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0; flex-shrink: 0;">
+  <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0;">
     <div id="editorCloudBtns" style="display:flex; gap:8px;">
       <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">⬇️</span> Carica dal Cloud</button>
       <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">💾</span> Salva sul Cloud</button>

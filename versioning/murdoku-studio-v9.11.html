@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Murdoku Studio v9.20 — generatore ed editor di enigmi</title>
+<title>Murdoku Studio v9.11 — generatore ed editor di enigmi</title>
 <style>
   :root{
     --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
@@ -366,8 +366,7 @@
   .board-wrap.drop-target{outline:2px dashed var(--violet); outline-offset:-4px}
 
   /* Righe di assegnazione (sezioni "Oggetti" e "Stanze") */
-  #svg_objectsList, #svg_roomsList { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px }
-  .assign-row{background:var(--panel2); border:1px solid var(--line2); border-radius:9px; padding:10px}
+  .assign-row{background:var(--panel2); border:1px solid var(--line2); border-radius:9px; padding:10px; margin-bottom:8px}
   .assign-row-top{display:flex; align-items:center; gap:10px}
   .assign-drop{
     position:relative; width:44px; height:44px; flex:none; background:#fff;
@@ -405,12 +404,12 @@
 </head>
 <body>
 
-<header style="justify-content: space-between; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;">
-  <div style="display: flex; align-items: center; gap: 16px; min-width: 0; flex-shrink: 0;">
+<header style="justify-content: space-between; flex-wrap: wrap;">
+  <div style="flex: 1; display: flex; align-items: center; gap: 16px; min-width: 0; flex-wrap: wrap;">
     <div class="brand">
       <span class="tab" style="font-size:16px;">MURDOKU</span>
       <div>
-        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.20</span></h1>
+        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.11</span></h1>
       </div>
     </div>
     
@@ -421,7 +420,7 @@
     </div>
   </div>
 
-  <div style="flex: 1; display: flex; justify-content: center; align-items: center; min-width: 0;">
+  <div style="display: flex; justify-content: center; align-items: center; min-width: 0;">
     <div class="pulsantiera toprow">
       <button class="btn primary" id="genMap" title="Genera una nuova mappa casuale (stanze e arredi), cancellando la precedente"><span class="k">🎲</span> Genera mappa</button>
       <button class="btn primary" id="genClues" title="Genera un nuovo set di indizi logici univoci basati sulla mappa attuale"><span class="k">🔍</span> Genera indizi</button>
@@ -454,7 +453,7 @@
     </div>
   </div>
 
-  <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0; flex-shrink: 0;">
+  <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0;">
     <div id="editorCloudBtns" style="display:flex; gap:8px;">
       <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">⬇️</span> Carica dal Cloud</button>
       <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">💾</span> Salva sul Cloud</button>
@@ -725,7 +724,7 @@
               <button type="button" class="unit-btn" data-unit="px" id="svg_unitPx">px</button>
             </span>
           </label>
-          <input type="range" id="svg_iconSizeRange" min="70" max="200" step="5" value="90">
+          <input type="range" id="svg_iconSizeRange" min="20" max="200" step="5" value="90">
         </div>
         <button class="btn ghost" id="svg_btnDeletePlacedIcon" style="width:100%; color:var(--evidence); border-color:#5c3030">🗑️ Rimuovi icona (Canc)</button>
       </div>
@@ -742,7 +741,7 @@
           </select>
         </label>
         <label style="margin-top:10px; display:block">Dimensione globale oggetti: <span id="svg_globalObjectSizeVal" class="val">80</span> %
-          <input type="range" id="svg_globalObjectSize" min="70" max="200" step="5" value="80" style="width:100%; margin-top:4px;">
+          <input type="range" id="svg_globalObjectSize" min="20" max="200" step="5" value="80" style="width:100%; margin-top:4px;">
         </label>
       </div>
       <div id="svg_objectsList"></div>
@@ -5983,8 +5982,7 @@ $("#otherModal").addEventListener("click", e => { if(e.target.id === "otherModal
   .board-wrap.drop-target{outline:2px dashed var(--violet); outline-offset:-4px}
 
   /* Righe di assegnazione (sezioni "Oggetti" e "Stanze") */
-  #svg_objectsList, #svg_roomsList { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:8px }
-  .assign-row{background:var(--panel2); border:1px solid var(--line2); border-radius:9px; padding:10px}
+  .assign-row{background:var(--panel2); border:1px solid var(--line2); border-radius:9px; padding:10px; margin-bottom:8px}
   .assign-row-top{display:flex; align-items:center; gap:10px}
   .assign-drop{
     position:relative; width:44px; height:44px; flex:none; background:#fff;
@@ -7318,7 +7316,7 @@ function buildSvg(forExport=false){
       const x = PAD + c*CS, y = PAD + r*CS;
       const title = cellTitles[`${r},${c}`];
       if (title) s += `<g><title>${escapeXml(title)}</title>`;
-      s += `<rect class="chit" data-r="${r}" data-c="${c}" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="transparent" pointer-events="all" style="cursor:pointer"/>`;
+      s += `<rect class="chit" data-r="${r}" data-c="${c}" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="transparent" style="cursor:pointer"/>`;
       if (title) s += `</g>`;
     }
     s += `</g>`;
@@ -7342,7 +7340,6 @@ function buildSvg(forExport=false){
 
   for (const obj of state.objects.list) {
     if (!obj.cells || obj.cells.length === 0) continue;
-    if (obj.libId != null) continue; // Salta il rendering del set/blue box, perché verrà disegnato come picon
     
     let activeSet = obj.iconSet || globalSet;
     if (activeSet === "Nessuno / Eredita Globale" || activeSet === "Nessuno (Testo)" || activeSet === "nessuno") activeSet = "";
@@ -7351,31 +7348,21 @@ function buildSvg(forExport=false){
       const cx = PAD + c * CS;
       const cy = PAD + r * CS;
       if (activeSet) {
-        // Usa il PNG del set selezionato da GitHub con fallback a box blu in caso di errore 404
+        // Usa il PNG del set selezionato da GitHub
         const sizePct = obj.size || DEFAULT_ICON_PCT;
         const sizePx = (sizePct / 100) * CS;
         const x = cx + CS/2 - sizePx/2;
         const y = cy + CS/2 - sizePx/2;
         const filterAttr = iconShade !== 50 ? ` filter="url(#svg_iconShadeFilter)"` : "";
-        const boxSize = CS * 0.8;
-        const fx = cx + CS/2 - boxSize/2;
-        const fy = cy + CS/2 - boxSize/2;
-        const text = obj.slug.substring(0, 2).toUpperCase();
-        s += `<g>`;
-        s += `<image${filterAttr} href="${baseIconsUrl}/${encodeURIComponent(activeSet)}/${encodeURIComponent(obj.slug)}.png" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet" pointer-events="none" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"/>`;
-        s += `<g style="display:none">`;
-        s += `<rect x="${fx}" y="${fy}" width="${boxSize}" height="${boxSize}" fill="#2a82da" stroke="#1d5c9c" stroke-width="2" rx="4" pointer-events="none"/>`;
-        s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#ffffff" text-anchor="middle" pointer-events="none">${text}</text>`;
-        s += `</g>`;
-        s += `</g>`;
+        s += `<image${filterAttr} href="${baseIconsUrl}/${encodeURIComponent(activeSet)}/${encodeURIComponent(obj.slug)}.png" x="${x}" y="${y}" width="${sizePx}" height="${sizePx}" preserveAspectRatio="xMidYMid meet" pointer-events="none"/>`;
       } else {
-        // Disegna box blu con prime 2 lettere dell'ID
+        // Disegna box con prime 2 lettere dell'ID
         const boxSize = CS * 0.8;
         const x = cx + CS/2 - boxSize/2;
         const y = cy + CS/2 - boxSize/2;
         const text = obj.slug.substring(0, 2).toUpperCase();
-        s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#2a82da" stroke="#1d5c9c" stroke-width="2" rx="4" pointer-events="none"/>`;
-        s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#ffffff" text-anchor="middle" pointer-events="none">${text}</text>`;
+        s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#f4efe4" stroke="#263238" stroke-width="2" rx="4" pointer-events="none"/>`;
+        s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#263238" text-anchor="middle" pointer-events="none">${text}</text>`;
       }
     }
   }
@@ -7537,30 +7524,11 @@ let cellClickTimer = null;
 
 /* -------------------- ICONE POSIZIONATE ---------------------- */
 
+/* Converte coordinate client in coordinate SVG user (in base al viewBox). */
 function svgUserPoint(svg, clientX, clientY){
-  // Safari workaround: getScreenCTM() è spesso inaccurato o scala male se l'SVG 
-  // è inside un flexbox o margin. Calcoliamo la proiezione del viewBox manualmente:
-  const rect = svg.getBoundingClientRect();
-  const vbStr = svg.getAttribute("viewBox");
-  let vX = 0, vY = 0, vW = 1024, vH = 1024;
-  if (vbStr) {
-    const vb = vbStr.split(/[\s,]+/).map(Number);
-    if (vb.length === 4) { vX=vb[0]; vY=vb[1]; vW=vb[2]; vH=vb[3]; }
-  }
-  // Se non è specificato preserveAspectRatio, il default è xMidYMid meet
-  const scale = Math.min(rect.width / vW, rect.height / vH);
-  const renderedW = vW * scale;
-  const renderedH = vH * scale;
-  const offsetX = (rect.width - renderedW) / 2;
-  const offsetY = (rect.height - renderedH) / 2;
-  
-  const px = clientX - rect.left - offsetX;
-  const py = clientY - rect.top - offsetY;
-  
-  return {
-    x: (px / scale) + vX,
-    y: (py / scale) + vY
-  };
+  const pt = svg.createSVGPoint();
+  pt.x = clientX; pt.y = clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
 }
 
 /* Da coordinate SVG assolute (x,y) restituisce (fCol,fRow) rispetto alla
@@ -7724,7 +7692,6 @@ function renderSwatches(){
   ).join("");
   box.querySelectorAll(".svg-sw").forEach(el => {
     el.addEventListener("dragstart", e => {
-      e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
       e.dataTransfer.effectAllowed = "copy";
       e.dataTransfer.setData("application/x-murdoku-color", el.dataset.color);
       e.dataTransfer.setData("text/plain", "murdoku-color:" + el.dataset.color);
@@ -7924,13 +7891,11 @@ function renderRoomsSection(){
   const box = $("#svg_roomsList");
   if (!box) return;
   const an = computeAreas();
-  let mappedRooms = an.areas.map((a, idx) => {
+  box.innerHTML = an.areas.map((a, idx) => {
     const sig = areaSignature(a.cells);
-    return { a, sig, idx, label: roomLabel(sig, idx), fill: state.areaFills[sig], shade: getAreaShade(sig) };
-  });
-  mappedRooms.sort((m1, m2) => m1.label.localeCompare(m2.label));
-  box.innerHTML = mappedRooms.map(m => {
-    const { a, sig, idx, label, fill, shade } = m;
+    const fill = state.areaFills[sig];
+    const shade = getAreaShade(sig);
+    const label = roomLabel(sig, idx);
     const cellWord = a.cells.length === 1 ? "cella" : "celle";
     const previewHtml = (fill && fill.type === "svg" && fill.value)
       ? `<img src="${fill.value}" alt="">`
@@ -8032,7 +7997,6 @@ function renderBgLibrary(){
   ).join("");
   box.querySelectorAll(".bg-thumb").forEach(el => {
     el.addEventListener("dragstart", e => {
-      e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
       e.dataTransfer.effectAllowed = "copy";
       e.dataTransfer.setData("application/x-murdoku-bg", el.dataset.bgId);
       e.dataTransfer.setData("text/plain", "murdoku-bg:" + el.dataset.bgId);
@@ -8263,7 +8227,6 @@ function renderIconLibrary(){
   ).join("");
   box.querySelectorAll(".icon-thumb").forEach(el => {
     el.addEventListener("dragstart", e => {
-      e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
       e.dataTransfer.effectAllowed = "copy";
       e.dataTransfer.setData("application/x-murdoku-icon", el.dataset.libId);
       // fallback per browser che ignorano tipi custom
@@ -8286,7 +8249,7 @@ function escapeHtmlAttr(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&am
 function bindBoardDropZone(){
   const wrap = document.querySelector(".svg-board-wrap");
   wrap.addEventListener("dragover", e => {
-    if (!isBoardDragAllowed(e)) return;
+    if (!isLibIconDrag(e)) return;
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
     wrap.classList.add("drop-target");
@@ -8296,28 +8259,18 @@ function bindBoardDropZone(){
   });
   wrap.addEventListener("drop", e => {
     wrap.classList.remove("drop-target");
-    e.preventDefault();
-
     let libId = e.dataTransfer.getData("application/x-murdoku-icon");
     if (!libId){
       const t = e.dataTransfer.getData("text/plain");
       if (t.startsWith("murdoku-icon:")) libId = t.slice("murdoku-icon:".length);
     }
     if (!libId) return;
+    e.preventDefault();
     const svg = $("#svg_board");
     const p = svgUserPoint(svg, e.clientX, e.clientY);
     const { fCol, fRow } = svgToCellFrac(p.x, p.y, state.icons.snap);
     placeIcon(+libId, fCol, fRow);
   });
-}
-
-function isBoardDragAllowed(e){
-  if (!e.dataTransfer) return false;
-  const types = e.dataTransfer.types || [];
-  return Array.from(types).some(t => 
-    t === "application/x-murdoku-icon" || 
-    t === "text/plain"
-  );
 }
 
 function isLibIconDrag(e){
@@ -8493,8 +8446,7 @@ function renderObjectsSection(){
   const box = $("#svg_objectsList");
   if (!box) return;
   if (!state.objects.list.length){ box.innerHTML = ""; return; }
-  let sortedObjects = [...state.objects.list].sort((a,b) => a.slug.localeCompare(b.slug));
-  box.innerHTML = sortedObjects.map(o => {
+  box.innerHTML = state.objects.list.map(o => {
     const lib = o.libId != null ? state.icons.library.find(l => l.id === o.libId) : null;
     let effectiveSet = o.iconSet || state.icons.globalSet;
     if (effectiveSet === "Nessuno / Eredita Globale" || effectiveSet === "Nessuno (Testo)" || effectiveSet === "nessuno") effectiveSet = "";
@@ -8509,9 +8461,9 @@ function renderObjectsSection(){
       previewHtml = `<img src="${lib.dataUri}" alt="${escapeHtmlAttr(lib.name)}">`;
     } else if (effectiveSet) {
       const iconUrl = `${baseIconsUrl}/${encodeURIComponent(effectiveSet)}/${encodeURIComponent(o.slug)}.png`;
-      previewHtml = `<img src="${iconUrl}" alt="${escapeHtmlAttr(o.slug)}" style="width:100%; height:100%; object-fit:contain; pointer-events:none;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; background:#2a82da; color:#fff; font-family:var(--mono); font-size:14px; font-weight:bold; border-radius:4px;">${escapeHtmlAttr(o.slug.substring(0, 2).toUpperCase())}</div>`;
+      previewHtml = `<img src="${iconUrl}" alt="${escapeHtmlAttr(o.slug)}" style="width:100%; height:100%; object-fit:contain; pointer-events:none;">`;
     } else {
-      previewHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#2a82da; color:#fff; font-family:var(--mono); font-size:14px; font-weight:bold; border-radius:4px;">${escapeHtmlAttr(o.slug.substring(0, 2).toUpperCase())}</div>`;
+      previewHtml = `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:var(--panel2); color:var(--text); font-family:var(--mono); font-size:14px; font-weight:bold; border-radius:4px;">${escapeHtmlAttr(o.slug.substring(0, 2).toUpperCase())}</div>`;
     }
     const cellWord = o.cells.length === 1 ? "cella" : "celle";
     const walkBadge = o.walkable ? "" : `<span class="assign-badge">non calpestabile</span>`;
@@ -8536,7 +8488,7 @@ function renderObjectsSection(){
         </div>
         <div class="field" style="margin:8px 0 0">
           <label>Dimensione icone: <span class="val object-size-val">${o.size}</span> %</label>
-          <input type="range" class="object-size-range" min="70" max="200" step="5" value="${o.size}" data-obj-slug="${escapeHtmlAttr(o.slug)}">
+          <input type="range" class="object-size-range" min="20" max="200" step="5" value="${o.size}" data-obj-slug="${escapeHtmlAttr(o.slug)}">
         </div>
       </div>`;
   }).join("");

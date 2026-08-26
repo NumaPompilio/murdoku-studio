@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Murdoku Studio v9.20 — generatore ed editor di enigmi</title>
+<title>Murdoku Studio v9.15 — generatore ed editor di enigmi</title>
 <style>
   :root{
     --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
@@ -405,12 +405,12 @@
 </head>
 <body>
 
-<header style="justify-content: space-between; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden;">
-  <div style="display: flex; align-items: center; gap: 16px; min-width: 0; flex-shrink: 0;">
+<header style="justify-content: space-between; flex-wrap: wrap;">
+  <div style="flex: 1; display: flex; align-items: center; gap: 16px; min-width: 0; flex-wrap: wrap;">
     <div class="brand">
       <span class="tab" style="font-size:16px;">MURDOKU</span>
       <div>
-        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.20</span></h1>
+        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.15</span></h1>
       </div>
     </div>
     
@@ -421,7 +421,7 @@
     </div>
   </div>
 
-  <div style="flex: 1; display: flex; justify-content: center; align-items: center; min-width: 0;">
+  <div style="display: flex; justify-content: center; align-items: center; min-width: 0;">
     <div class="pulsantiera toprow">
       <button class="btn primary" id="genMap" title="Genera una nuova mappa casuale (stanze e arredi), cancellando la precedente"><span class="k">🎲</span> Genera mappa</button>
       <button class="btn primary" id="genClues" title="Genera un nuovo set di indizi logici univoci basati sulla mappa attuale"><span class="k">🔍</span> Genera indizi</button>
@@ -454,7 +454,7 @@
     </div>
   </div>
 
-  <div style="display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0; flex-shrink: 0;">
+  <div style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 8px; min-width: 0;">
     <div id="editorCloudBtns" style="display:flex; gap:8px;">
       <button class="btn ghost" id="cloudLoadBtn" title="Carica una mappa dal Cloud (GitHub)"><span class="k">⬇️</span> Carica dal Cloud</button>
       <button class="btn ghost" id="cloudSaveBtn" title="Salva la mappa attuale sul Cloud (GitHub)"><span class="k">💾</span> Salva sul Cloud</button>
@@ -7318,7 +7318,7 @@ function buildSvg(forExport=false){
       const x = PAD + c*CS, y = PAD + r*CS;
       const title = cellTitles[`${r},${c}`];
       if (title) s += `<g><title>${escapeXml(title)}</title>`;
-      s += `<rect class="chit" data-r="${r}" data-c="${c}" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="transparent" pointer-events="all" style="cursor:pointer"/>`;
+      s += `<rect class="chit" data-r="${r}" data-c="${c}" x="${x}" y="${y}" width="${CS}" height="${CS}" fill="transparent" style="cursor:pointer"/>`;
       if (title) s += `</g>`;
     }
     s += `</g>`;
@@ -7342,7 +7342,6 @@ function buildSvg(forExport=false){
 
   for (const obj of state.objects.list) {
     if (!obj.cells || obj.cells.length === 0) continue;
-    if (obj.libId != null) continue; // Salta il rendering del set/blue box, perché verrà disegnato come picon
     
     let activeSet = obj.iconSet || globalSet;
     if (activeSet === "Nessuno / Eredita Globale" || activeSet === "Nessuno (Testo)" || activeSet === "nessuno") activeSet = "";
@@ -7537,30 +7536,11 @@ let cellClickTimer = null;
 
 /* -------------------- ICONE POSIZIONATE ---------------------- */
 
+/* Converte coordinate client in coordinate SVG user (in base al viewBox). */
 function svgUserPoint(svg, clientX, clientY){
-  // Safari workaround: getScreenCTM() è spesso inaccurato o scala male se l'SVG 
-  // è inside un flexbox o margin. Calcoliamo la proiezione del viewBox manualmente:
-  const rect = svg.getBoundingClientRect();
-  const vbStr = svg.getAttribute("viewBox");
-  let vX = 0, vY = 0, vW = 1024, vH = 1024;
-  if (vbStr) {
-    const vb = vbStr.split(/[\s,]+/).map(Number);
-    if (vb.length === 4) { vX=vb[0]; vY=vb[1]; vW=vb[2]; vH=vb[3]; }
-  }
-  // Se non è specificato preserveAspectRatio, il default è xMidYMid meet
-  const scale = Math.min(rect.width / vW, rect.height / vH);
-  const renderedW = vW * scale;
-  const renderedH = vH * scale;
-  const offsetX = (rect.width - renderedW) / 2;
-  const offsetY = (rect.height - renderedH) / 2;
-  
-  const px = clientX - rect.left - offsetX;
-  const py = clientY - rect.top - offsetY;
-  
-  return {
-    x: (px / scale) + vX,
-    y: (py / scale) + vY
-  };
+  const pt = svg.createSVGPoint();
+  pt.x = clientX; pt.y = clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
 }
 
 /* Da coordinate SVG assolute (x,y) restituisce (fCol,fRow) rispetto alla
@@ -8298,6 +8278,45 @@ function bindBoardDropZone(){
     wrap.classList.remove("drop-target");
     e.preventDefault();
 
+    let color = e.dataTransfer.getData("application/x-murdoku-color");
+    if (!color){
+      const t = e.dataTransfer.getData("text/plain");
+      if (t.startsWith("murdoku-color:")) color = t.slice("murdoku-color:".length);
+    }
+    let bgId = e.dataTransfer.getData("application/x-murdoku-bg");
+    if (!bgId){
+      const t = e.dataTransfer.getData("text/plain");
+      if (t.startsWith("murdoku-bg:")) bgId = t.slice("murdoku-bg:".length);
+    }
+
+    if (color || bgId) {
+      let c = -1, r = -1;
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+      const chit = target ? target.closest(".chit, .cell") : null;
+      if (chit && chit.dataset.r != null) {
+        r = +chit.dataset.r;
+        c = +chit.dataset.c;
+      } else {
+        const svg = $("#svg_board");
+        const p = svgUserPoint(svg, e.clientX, e.clientY);
+        const { fCol, fRow } = svgToCellFrac(p.x, p.y, 0);
+        c = Math.floor(fCol);
+        r = Math.floor(fRow);
+      }
+      const N = window.state ? state.size : 8;
+      if (r >= 0 && r < N && c >= 0 && c < N) {
+        const an = computeAreas();
+        const aid = an.area[r * N + c];
+        const sig = areaSignature(an.areas[aid].cells);
+        if (color) applyFillToRoom(sig, { type: "color", value: color });
+        else if (bgId) {
+          const bg = state.bg.library.find(b => b.id === +bgId);
+          if (bg) applyFillToRoom(sig, { type: "svg", value: bg.dataUri });
+        }
+      }
+      return;
+    }
+
     let libId = e.dataTransfer.getData("application/x-murdoku-icon");
     if (!libId){
       const t = e.dataTransfer.getData("text/plain");
@@ -8316,6 +8335,8 @@ function isBoardDragAllowed(e){
   const types = e.dataTransfer.types || [];
   return Array.from(types).some(t => 
     t === "application/x-murdoku-icon" || 
+    t === "application/x-murdoku-color" || 
+    t === "application/x-murdoku-bg" || 
     t === "text/plain"
   );
 }

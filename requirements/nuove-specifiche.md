@@ -608,3 +608,46 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 ### VERSIONE 9.7 (Bugfix e Anteprima Oggetti Graphic)
 - **Anteprima Icona Set Oggetto**: Quando viene assegnato un set da GitHub ad un oggetto (oppure eredita il set globale), il box di anteprima nella lista laterale di Graphic mostra l"icona PNG effettiva corrispondente al set selezionato anziché il pulsante "+", garantendo un immediato feedback visivo corrispondente a quanto renderizzato in mappa.
 - **Bugfix Rendering "nessuno"**: Corretto un difetto in cui le opzioni vuote associate al valore "nessuno" per i set venivano trattate impropriamente come set validi, forzando la visualizzazione corretta del box fallback con le prime 2 lettere in assenza di un set grafico.
+
+### VERSIONE 9.8 (Miglioramenti UX Catalogo)
+- **Pre-selezione Automatica Catalogo**: Quando si accede alla sezione CATALOGO per la prima volta e la lista dei cataloghi viene popolata, il primo catalogo disponibile viene automaticamente pre-selezionato. Questo evita che la pagina appaia vuota all'utente e garantisce che lo stato del catalogo sia sempre coerente con l'interfaccia.
+- **Mantenimento dello Stato del Catalogo**: Grazie all'impostazione e ripristino automatico dello stato tramite `hash` di navigazione e il corretto bind con la vista, il catalogo caricato e visualizzato viene mantenuto attivamente in memoria anche quando si passa momentaneamente alle sezioni EDITOR o GRAPHIC e si ritorna successivamente in CATALOGO.
+
+### VERSIONE 9.9 (Pulsante Pulisci Mappa Graphic)
+- **Pulisci Mappa**: Aggiunto un nuovo pulsante `Pulisci Mappa` nella barra degli strumenti della sezione Graphic, di fianco a `Importa da Editor`. Previsto di finestra di conferma, il pulsante ripristina la mappa svuotandola completamente da muri, colori, texture e oggetti posizionati. La lista laterale degli oggetti riflette immediatamente il reset, offrendo all'utente una tela bianca su cui operare.
+
+### VERSIONE 9.10 (Uniformazione layout EDITOR e GRAPHIC)
+- **Dimensione Spalle Editor**: Uniformata la larghezza delle spalle sinistra e destra del layout dell'EDITOR a quella della modalità GRAPHIC. Il layout principale (`main`) utilizza ora una griglia con `minmax(280px, 1fr) auto minmax(280px, 1fr)` in sostituzione dei precedenti `483px` fissi, rendendo i due ambienti visivamente coerenti e responsivi alla stessa maniera.
+
+### VERSIONE 9.11 (Uniformazione mappa EDITOR)
+- **Dimensione Mappa Editor**: Applicate anche alla griglia centrale (mappa) della vista EDITOR le stesse logiche di dimensionamento previste per GRAPHIC. Il contenitore `.board-wrap` usa ora `width:calc(100vh - 140px); max-width:100%;` e l'SVG `.board` sfrutta `aspect-ratio:1 / 1`, garantendo così un perfetto allineamento tra i due ambienti per quanto riguarda l'ingombro visivo.
+
+### VERSIONE 9.12 (Ottimizzazione UI Graphic: Oggetti e Stanze)
+- **Slider Dimensione Oggetti**: Modificati i range minimi degli slider di scala (sia globali che per singolo oggetto) nella vista Graphic, portando il limite inferiore da 20% a 70% per prevenire riduzioni eccessive che renderebbero gli asset illeggibili.
+- **Elenco a Due Colonne e Riordino**: Le liste assegnazione per 'Oggetti' e 'Stanze' sono state ridisegnate sfruttando CSS Grid (`1fr 1fr`) per disporre le card su due colonne, ottimizzando notevolmente lo spazio. Inoltre, gli elementi all'interno di queste liste vengono ora riordinati automaticamente in ordine alfabetico, facilitandone la ricerca.
+
+### VERSIONE 9.13 (Drag & Drop Avanzato in Graphic)
+- **Colorazione Mappa Diretta**: Aggiunto il supporto per il Drag & Drop diretto di colori (dalla palette) e di sfondi personalizzati (dalla libreria Graphic) sull'intera mappa SVG. Adesso, trascinando e rilasciando un colore su una cella qualsiasi della griglia grafica, l'editor identifica l'area logica di appartenenza (stanza) e ne applica istantaneamente il colore (o lo sfondo), in maniera del tutto equivalente a come avveniva in precedenza solo tramite trascinamento sull'elemento lista.
+
+### VERSIONE 9.14 (Miglioramento visualizzazione placeholder SVG)
+- **Fallback SVG Icone Mancanti**: Aggiunto un fallback elegante in Graphic Mode per gli oggetti. Qualora l'icona PNG per l'oggetto corrente non venisse trovata all'interno del Set selezionato, l'applicativo rileva l'errore 404 e scambia dinamicamente l'immagine rotta con un box blu contenente la sigla dell'oggetto (prime due lettere). Questa miglioria si applica sia direttamente sulla mappa SVG, sia all'anteprima della lista oggetti nella spalla destra, rendendo il rendering molto più pulito anche con cataloghi incompleti.
+
+### VERSIONE 9.15 (Correzione offset Drag & Drop in Graphic Mode)
+- **Centraggio automatico cursore**: Durante il drag di Colori, Sfondi e Icone dalla spalla destra, l'immagine fantasma trascinata viene ora forzata ad essere perfettamente centrata rispetto al cursore del mouse (tramite ). Questo previene gli sfasamenti del target durante il calcolo dell'evento drop sulla mappa, causati in precedenza dall'offset di click iniziale dell'utente all'interno dell'elemento trascinato.
+
+### VERSIONE 9.15 (Correzione offset Drag & Drop in Graphic Mode)
+- **Centraggio automatico cursore**: Durante il drag di Colori, Sfondi e Icone dalla spalla destra, l'immagine fantasma trascinata viene ora forzata ad essere perfettamente centrata rispetto al cursore del mouse (tramite setDragImage). Questo previene gli sfasamenti del target durante il calcolo dell'evento drop sulla mappa, causati in precedenza dall'offset di click iniziale dell'utente all'interno dell'elemento trascinato.
+
+### VERSIONE 9.16 (Pulizia mappa da fallback duplicati)
+- **Rimozione fallback su icone personalizzate**: Se a un oggetto sulla mappa viene assegnata un'icona personalizzata trascinandola dalla sezione ICONE (sovrascrivendo quindi l'icona del SET), il sistema ora rimuove e disattiva automaticamente il box blu (o l'immagine di SET sottostante). In questo modo l'icona personalizzata risulterà perfettamente pulita senza un riquadro blu sporgente sotto di essa.
+
+### VERSIONE 9.17 (Ricerca profonda del target nel Drag & Drop)
+- **Bypass Ostacoli Drag & Drop**: Risolto un bug causato dalle icone posizionate sulla mappa o altri elementi SVG con pointer-events attivi che bloccavano l'intercettazione della cella sottostante durante un drop. Il sistema utilizza ora document.elementsFromPoint per ispezionare tutti i livelli e trovare in profondità l'esatto hit-box della cella bersaglio (.chit), bypassando qualsiasi altro ostacolo visivo ed eliminando l'uso di fallback matematici imprecisi che causavano lo sfasamento.
+
+### VERSIONE 9.18 (Fix Coordinate Drag & Drop Safari/iOS)
+- **Bypass getScreenCTM() per hit testing in ambienti ibridi**: Modificata radicalmente la logica di calcolo del `svgUserPoint`. Browser basati su webkit come Safari possono restituire una matrice CTM del tutto sfasata quando un SVG si auto-adatta (preserveAspectRatio) all'interno di container fluidi. Questo causava una lettura falsata della posizione del mouse qualora `elementsFromPoint` non avesse trovato nulla. Le coordinate ora vengono calcolate matematicamente rispetto al `getBoundingClientRect()`, garantendo hit test infallibili per Drag & Drop e per posizionamento manuale in ogni browser.
+- **Hitbox rinforzati (Safari Workaround)**: Aggiunto esplicitamente `pointer-events="all"` alle hitbox `.chit` sulla mappa. In alcuni engine grafici un `fill="transparent"` può non essere considerato sufficente a intercettare l'evento `elementsFromPoint`, impedendo il fix introdotto nella patch precedente. Questa accortezza rende la ricerca profonda della cella perfettamente affidabile in qualsiasi condizione.
+
+### VERSIONE 9.19 (Rollback funzionalità drag & drop per i colori sulla mappa)
+- **Rimozione colorazione via mappa**: A causa di persistenti difficoltà nell'elaborazione esatta dell'hit test in scenari con multipli strati interattivi su specifici device o configurazioni di browser, la funzionalità per trascinare e rilasciare colori o sfondi personalizzati *direttamente* sopra la mappa è stata temporaneamente rimossa dal codice della modalità Graphic.
+- **Ritorno al workflow standard**: L'assegnazione di colori e background alle stanze resta operativa nel suo formato classico originario, ovvero trascinando i campioni desiderati sopra l'elenco testuale delle "Stanze" nella spalla di destra dell'Editor.
