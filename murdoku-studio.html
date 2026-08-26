@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Murdoku Studio v9.24 — generatore ed editor di enigmi</title>
+<title>Murdoku Studio v9.25 — generatore ed editor di enigmi</title>
 <style>
   :root{
     --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
@@ -410,7 +410,7 @@
     <div class="brand">
       <span class="tab" style="font-size:16px;">MURDOKU</span>
       <div>
-        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.24</span></h1>
+        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.25</span></h1>
       </div>
     </div>
     
@@ -5318,6 +5318,7 @@ async function loadRemoteObjects() {
 window.addEventListener('DOMContentLoaded', async () => {
   await loadRemoteSettings();
   await loadRemoteObjects();
+  await loadRemoteTiles();
 });
 
 // Carica i set di icone direttamente da GitHub
@@ -5361,6 +5362,45 @@ async function loadRemoteIconSets() {
     opt.textContent = dir;
     select.appendChild(opt);
   });
+}
+
+// Carica i set di sfondi personalizzati (tiles) da GitHub
+async function loadRemoteTiles() {
+  try {
+    const res = await ghFetch("tiles");
+    if (res.ok) {
+      const data = await res.json();
+      const cfg = getGithubConfig();
+      const owner = cfg.owner || "NumaPompilio";
+      const repo = cfg.repo || "murdoku-studio";
+      
+      const files = data.filter(d => d.type === "file" && (d.name.endsWith(".png") || d.name.endsWith(".webp") || d.name.endsWith(".jpg") || d.name.endsWith(".jpeg")));
+      
+      window.GITHUB_TILES = files.map(file => {
+        return {
+          name: file.name,
+          dataUri: `https://raw.githubusercontent.com/${owner}/${repo}/main/tiles/${encodeURIComponent(file.name)}`
+        };
+      });
+      
+      if (typeof state !== 'undefined' && state.bg && state.bg.library) {
+        injectGithubTiles(state.bg.library);
+        if (typeof renderBgLibrary === "function") renderBgLibrary();
+      }
+    }
+  } catch(e) {
+    console.warn("Errore caricamento tiles", e);
+  }
+}
+
+function injectGithubTiles(bgLib) {
+  if (window.GITHUB_TILES) {
+    window.GITHUB_TILES.forEach(t => {
+      if (!bgLib.some(b => b.dataUri === t.dataUri)) {
+        bgLib.push({ id: state.bg.nextId++, name: t.name, dataUri: t.dataUri });
+      }
+    });
+  }
 }
 
 
@@ -9097,6 +9137,7 @@ function loadJsonPayload(obj, silent=false){
       if (b && b.dataUri) state.bg.library.push({ id: state.bg.nextId++, name: b.name || "bg", dataUri: b.dataUri });
     }
   }
+  injectGithubTiles(state.bg.library);
   // Catalogo oggetti (sezione "Oggetti")
   state.objects.list = [];
   if (obj.objects && Array.isArray(obj.objects.list)){
@@ -9855,6 +9896,7 @@ function bindEvents(){
     state.icons.selectedId = null;
     state.icons.shade = 50;
     state.bg.library = [];
+    injectGithubTiles(state.bg.library);
     state.objects.list = [];
     $("#svg_iconShadeRange").value = 50;
     $("#svg_iconShadeVal").textContent = 50;
