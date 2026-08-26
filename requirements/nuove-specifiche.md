@@ -660,3 +660,12 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### VERSIONE 9.22 (Pulizia UI Graphic Editor)
 - **Rimozione testi descrittivi**: Rimossi i testi di suggerimento e istruzione per il drag & drop ("Oggetti rilevati nella mappa importata...") dalle card OGGETTI e STANZE nella barra laterale destra del Graphic Editor, per rendere l'interfaccia visiva più minimalista e ordinata.
+
+### VERSIONE 9.23 (Fix Export PNG e Rimozione SVG)
+- **Risoluzione esportazione PNG**: Le immagini importate da GitHub ora vengono scaricate e convertite internamente in Data URI (Base64) prima di generare l'esportazione in PNG della mappa, risolvendo il problema delle icone e degli oggetti mancanti causato dai blocchi di sicurezza CORS sul Canvas.
+- **Rimozione formato SVG**: L'opzione per esportare la mappa come file SVG è stata rimossa dal modale "Esporta immagine" per semplificare l'interfaccia, lasciando unicamente l'export in alta risoluzione PNG.
+
+### VERSIONE 9.24 (Importazione Porte e Finestre in Graphic)
+- **Oggetti Porta e Finestra in Graphic**: Aggiornata la logica di "Importa da Editor" della modalità Graphic in modo che includa anche l'importazione di porte e finestre (precedentemente omesse). Questi elementi vengono ora inseriti nella lista "OGGETTI", permettendone la personalizzazione grafica.
+- **Posizionamento frazionato su parete**: Le porte e le finestre vengono posizionate visivamente calcolando coordinate frazionate, risultando perfettamente ancorate e centrate sul lato della cella (il muro) su cui sono state piazzate nell'editor. L'immagine ad essi associata viene di conseguenza correttamente centrata e ridimensionata.
+- **Icone Vettoriali di Fallback**: In assenza di icone PNG personalizzate dal set, Graphic renderizza porte e finestre usando gli stessi glifi vettoriali stilizzati (senza label) della mappa EDITOR originale, calcolandone l'allineamento orizzontale o verticale a seconda del muro corrispondente.

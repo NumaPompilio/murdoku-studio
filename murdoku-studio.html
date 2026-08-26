@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Murdoku Studio v9.22 — generatore ed editor di enigmi</title>
+<title>Murdoku Studio v9.24 — generatore ed editor di enigmi</title>
 <style>
   :root{
     --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
@@ -410,7 +410,7 @@
     <div class="brand">
       <span class="tab" style="font-size:16px;">MURDOKU</span>
       <div>
-        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.22</span></h1>
+        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.24</span></h1>
       </div>
     </div>
     
@@ -439,7 +439,7 @@
       <button class="btn ghost" id="svg_btnImportEditor" title="Importa la mappa dall'Editor in tempo reale"><span class="k">📥</span> Importa da Editor</button>
       <button class="btn ghost" id="svg_btnClearMap" title="Ripulisci la mappa rimuovendo muri, colori e oggetti"><span class="k">🧹</span> Pulisci Mappa</button>
       <div class="separator"></div>
-      <button class="btn primary" id="svg_btnExportImage" title="Esporta la mappa come immagine (PNG o SVG)"><span class="k">⇩</span> Esporta Immagine</button>
+      <button class="btn primary" id="svg_btnExportImage" title="Esporta la mappa come immagine PNG"><span class="k">⇩</span> Esporta Immagine</button>
       <button class="btn ghost" id="svg_btnExportGrid" title="Esporta solo la griglia (bordi, muri, linee, numeri) in PNG x8"><span class="k">🔲</span> Esporta Griglia</button>
     </div>
 
@@ -939,22 +939,14 @@
   <div class="box">
     <div class="mh"><h3>Esporta immagine</h3></div>
     <div class="mb">
-      <div class="field">
-        <label>Formato</label>
-        <div class="unit-toggle" id="svg_exportFormatToggle" style="align-self:flex-start">
-          <button type="button" class="unit-btn active" data-format="png">PNG</button>
-          <button type="button" class="unit-btn" data-format="svg">SVG</button>
-        </div>
-      </div>
       <div class="field" id="svg_exportScaleField">
         <label>Risoluzione</label>
         <select id="svg_exportScaleSelect" style="background:var(--panel2); color:var(--text); border:1px solid var(--line2); border-radius:7px; padding:7px 9px; font-size:13px; max-width:220px"></select>
-        <div class="hint" id="svg_exportSvgHint" style="display:none">Il formato SVG è vettoriale: la risoluzione non si applica.</div>
       </div>
       <div class="field" style="margin-bottom:0">
         <label for="exportFilename">Nome del file</label>
         <input type="text" id="svg_exportFilename" placeholder="mappa" spellcheck="false" autocomplete="off">
-        <div class="hint">Estensione <code id="svg_exportExtHint">.png</code> aggiunta automaticamente.</div>
+        <div class="hint">Estensione <code>.png</code> aggiunta automaticamente.</div>
       </div>
     </div>
     <div class="mf">
@@ -7369,13 +7361,36 @@ function buildSvg(forExport=false){
         s += `</g>`;
         s += `</g>`;
       } else {
-        // Disegna box blu con prime 2 lettere dell'ID
-        const boxSize = CS * 0.8;
-        const x = cx + CS/2 - boxSize/2;
-        const y = cy + CS/2 - boxSize/2;
-        const text = obj.slug.substring(0, 2).toUpperCase();
-        s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#2a82da" stroke="#1d5c9c" stroke-width="2" rx="4" pointer-events="none"/>`;
-        s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#ffffff" text-anchor="middle" pointer-events="none">${text}</text>`;
+        const isDoor = obj.slug === "porta";
+        const isWindow = obj.slug === "finestra";
+        
+        if (isDoor || isWindow) {
+          const wx = cx + CS/2;
+          const wy = cy + CS/2;
+          const isVert = Math.abs(c % 1) === 0.5;
+          const isHoriz = Math.abs(r % 1) === 0.5;
+          const color = isDoor ? "#d97706" : "#a3d1f0";
+          
+          s += `<g pointer-events="none">`;
+          if (isVert) {
+            s += `<rect x="${wx-5}" y="${wy - CS*0.35}" width="10" height="${CS*0.7}" fill="${color}" stroke="#fff" stroke-width="2" rx="2" />`;
+            s += `<line x1="${wx}" y1="${wy - CS*0.35}" x2="${wx}" y2="${wy + CS*0.35}" stroke="#fff" stroke-width="2" />`;
+          } else if (isHoriz) {
+            s += `<rect x="${wx - CS*0.35}" y="${wy - 5}" width="${CS*0.7}" height="10" fill="${color}" stroke="#fff" stroke-width="2" rx="2" />`;
+            s += `<line x1="${wx - CS*0.35}" y1="${wy}" x2="${wx + CS*0.35}" y2="${wy}" stroke="#fff" stroke-width="2" />`;
+          } else {
+            s += `<circle cx="${wx}" cy="${wy}" r="${CS*0.35}" fill="${color}" stroke="#fff" stroke-width="2" />`;
+          }
+          s += `</g>`;
+        } else {
+          // Disegna box blu con prime 2 lettere dell'ID
+          const boxSize = CS * 0.8;
+          const x = cx + CS/2 - boxSize/2;
+          const y = cy + CS/2 - boxSize/2;
+          const text = obj.slug.substring(0, 2).toUpperCase();
+          s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#2a82da" stroke="#1d5c9c" stroke-width="2" rx="4" pointer-events="none"/>`;
+          s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#ffffff" text-anchor="middle" pointer-events="none">${text}</text>`;
+        }
       }
     }
   }
@@ -8776,41 +8791,65 @@ function normalizeExportFilename(rawName, ext){
   return name + "." + ext;
 }
 
-function exportSvgFile(filename){
-  const { svg } = buildSvg(true);
-  const blob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
-  downloadBlob(blob, normalizeExportFilename(filename, "svg"));
-}
+async function exportPngFile(scaleOverride, filename){
+  toast("Preparazione export in corso...", 2000);
+  let { svg, width, height } = buildSvg(true);
 
-function exportPngFile(scaleOverride, filename){
-  const { svg, width, height } = buildSvg(true);
+  // Trova e sostituisci le URL remote con Data URI per bypassare restrizioni CORS/Canvas
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svg, "image/svg+xml");
+  const images = doc.querySelectorAll('image');
+  
+  for (const img of images) {
+    const href = img.getAttribute("href") || img.getAttribute("xlink:href");
+    if (href && href.startsWith("http")) {
+      try {
+        const resp = await fetch(href);
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        const blob = await resp.blob();
+        const dataUri = await new Promise(r => {
+          const reader = new FileReader();
+          reader.onload = () => r(reader.result);
+          reader.readAsDataURL(blob);
+        });
+        img.setAttribute("href", dataUri);
+      } catch (e) {
+        console.warn("Errore fetch immagine per export PNG (fallback attivo):", href, e);
+        img.setAttribute("style", "display:none");
+        if (img.nextElementSibling) {
+          img.nextElementSibling.setAttribute("style", "display:block");
+        }
+      }
+    }
+  }
+  
+  svg = new XMLSerializer().serializeToString(doc);
+
   const scale = Math.max(1, Math.min(8, scaleOverride|0 || state.style.pngScale));
   const outName = normalizeExportFilename(filename, "png");
-  const img = new Image();
+  const imgElement = new Image();
   const svgBlob = new Blob([svg], { type: "image/svg+xml;charset=utf-8" });
   const url = URL.createObjectURL(svgBlob);
-  img.onload = () => {
+  imgElement.onload = () => {
     const canvas = document.createElement("canvas");
     canvas.width = width * scale;
     canvas.height = height * scale;
     const ctx = canvas.getContext("2d");
     ctx.scale(scale, scale);
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(imgElement, 0, 0);
     canvas.toBlob(b => {
       downloadBlob(b, outName);
       URL.revokeObjectURL(url);
     }, "image/png");
   };
-  img.onerror = () => {
+  imgElement.onerror = () => {
     URL.revokeObjectURL(url);
     toast("Errore nella conversione PNG.");
   };
-  img.src = url;
+  imgElement.src = url;
 }
 
 /* --- Modal "Esporta Immagine" ------------------------------------ */
-let exportFormat = "png";
-
 function populateExportScale(){
   const sel = $("#svg_exportScaleSelect");
   if (!sel) return;
@@ -8827,42 +8866,20 @@ function populateExportScale(){
 
 function openExportModal(){
   populateExportScale();
-  updateExportFormatUI();
   $("#svg_exportFilename").value = `mappa-${state.size}x${state.size}`;
   openModal("svg_exportModal");
   setTimeout(() => { const i = $("#svg_exportFilename"); if (i){ i.focus(); i.select(); } }, 0);
 }
 
-function updateExportFormatUI(){
-  $$("#svg_exportFormatToggle .unit-btn").forEach(b => {
-    b.classList.toggle("active", b.dataset.format === exportFormat);
-  });
-  const isSvg = exportFormat === "svg";
-  $("#svg_exportScaleSelect").disabled = isSvg;
-  $("#svg_exportSvgHint").style.display = isSvg ? "" : "none";
-  const ext = $("#svg_exportExtHint");
-  if (ext) ext.textContent = "." + (isSvg ? "svg" : "png");
-}
-
 function bindExportModal(){
-  $$("#svg_exportFormatToggle .unit-btn").forEach(b => {
-    b.addEventListener("click", () => {
-      exportFormat = b.dataset.format === "svg" ? "svg" : "png";
-      updateExportFormatUI();
-    });
-  });
   $("#svg_exportScaleSelect").addEventListener("change", e => {
     state.style.pngScale = parseInt(e.target.value, 10) || 2;
   });
   $("#svg_btnDoExport").addEventListener("click", () => {
     const name = $("#svg_exportFilename").value;
-    if (exportFormat === "svg"){
-      exportSvgFile(name);
-    } else {
-      const scale = parseInt($("#svg_exportScaleSelect").value, 10) || state.style.pngScale;
-      state.style.pngScale = scale;
-      exportPngFile(scale, name);
-    }
+    const scale = parseInt($("#svg_exportScaleSelect").value, 10) || state.style.pngScale;
+    state.style.pngScale = scale;
+    exportPngFile(scale, name);
     closeModal("svg_exportModal");
   });
   $("#svg_exportFilename").addEventListener("keydown", e => {
@@ -9090,7 +9107,7 @@ function loadJsonPayload(obj, silent=false){
         slug: o.slug,
         name: typeof o.name === "string" ? o.name : o.slug,
         walkable: o.walkable !== false,
-        cells: Array.isArray(o.cells) ? o.cells.filter(c => Array.isArray(c) && c.length === 2).map(c => [c[0]|0, c[1]|0]) : [],
+        cells: Array.isArray(o.cells) ? o.cells.filter(c => Array.isArray(c) && c.length === 2).map(c => [Number(c[0]), Number(c[1])]) : [],
         libId: remappedLibId,
         size: Number.isFinite(o.size) ? o.size : DEFAULT_ICON_PCT,
         iconSet: typeof o.iconSet === "string" ? o.iconSet : null,
@@ -9473,6 +9490,40 @@ function importFromMurdokuObject(json, txt=""){
     if (!slug) continue;
     if (!bySlug.has(slug)) bySlug.set(slug, []);
     bySlug.get(slug).push([r,c]);
+  }
+
+  // Import finestre e porte come oggetti
+  const doors = new Set(json.doors || []);
+  const windows = new Set(json.windows || []);
+  
+  if (doors.size > 0) {
+    const doorCells = [];
+    for (const wk of doors) {
+      const parts = wk.split("|");
+      if (parts.length !== 2) continue;
+      const [r1,c1] = parts[0].split(",").map(Number);
+      const [r2,c2] = parts[1].split(",").map(Number);
+      doorCells.push([(r1+r2)/2, (c1+c2)/2]);
+    }
+    if (doorCells.length) {
+      if (!bySlug.has("porta")) bySlug.set("porta", []);
+      bySlug.get("porta").push(...doorCells);
+    }
+  }
+
+  if (windows.size > 0) {
+    const winCells = [];
+    for (const wk of windows) {
+      const parts = wk.split("|");
+      if (parts.length !== 2) continue;
+      const [r1,c1] = parts[0].split(",").map(Number);
+      const [r2,c2] = parts[1].split(",").map(Number);
+      winCells.push([(r1+r2)/2, (c1+c2)/2]);
+    }
+    if (winCells.length) {
+      if (!bySlug.has("finestra")) bySlug.set("finestra", []);
+      bySlug.get("finestra").push(...winCells);
+    }
   }
   // Ripulisce completamente le icone piazzate e le celle non calpestabili
   // della mappa precedente: dopo l'import deve restare visibile solo ciò

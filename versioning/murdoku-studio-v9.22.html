@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Murdoku Studio v9.24 — generatore ed editor di enigmi</title>
+<title>Murdoku Studio v9.22 — generatore ed editor di enigmi</title>
 <style>
   :root{
     --ink:#141019; --desk:#1b1622; --panel:#221b2e; --panel2:#2b2238;
@@ -410,7 +410,7 @@
     <div class="brand">
       <span class="tab" style="font-size:16px;">MURDOKU</span>
       <div>
-        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.24</span></h1>
+        <h1 style="font-size:14px;">Studio <span id="appVersion" style="font-size:10px; color:var(--text-faint); margin-left:6px; font-weight:normal; font-family:var(--sans); vertical-align:middle; letter-spacing:0">v9.22</span></h1>
       </div>
     </div>
     
@@ -7361,36 +7361,13 @@ function buildSvg(forExport=false){
         s += `</g>`;
         s += `</g>`;
       } else {
-        const isDoor = obj.slug === "porta";
-        const isWindow = obj.slug === "finestra";
-        
-        if (isDoor || isWindow) {
-          const wx = cx + CS/2;
-          const wy = cy + CS/2;
-          const isVert = Math.abs(c % 1) === 0.5;
-          const isHoriz = Math.abs(r % 1) === 0.5;
-          const color = isDoor ? "#d97706" : "#a3d1f0";
-          
-          s += `<g pointer-events="none">`;
-          if (isVert) {
-            s += `<rect x="${wx-5}" y="${wy - CS*0.35}" width="10" height="${CS*0.7}" fill="${color}" stroke="#fff" stroke-width="2" rx="2" />`;
-            s += `<line x1="${wx}" y1="${wy - CS*0.35}" x2="${wx}" y2="${wy + CS*0.35}" stroke="#fff" stroke-width="2" />`;
-          } else if (isHoriz) {
-            s += `<rect x="${wx - CS*0.35}" y="${wy - 5}" width="${CS*0.7}" height="10" fill="${color}" stroke="#fff" stroke-width="2" rx="2" />`;
-            s += `<line x1="${wx - CS*0.35}" y1="${wy}" x2="${wx + CS*0.35}" y2="${wy}" stroke="#fff" stroke-width="2" />`;
-          } else {
-            s += `<circle cx="${wx}" cy="${wy}" r="${CS*0.35}" fill="${color}" stroke="#fff" stroke-width="2" />`;
-          }
-          s += `</g>`;
-        } else {
-          // Disegna box blu con prime 2 lettere dell'ID
-          const boxSize = CS * 0.8;
-          const x = cx + CS/2 - boxSize/2;
-          const y = cy + CS/2 - boxSize/2;
-          const text = obj.slug.substring(0, 2).toUpperCase();
-          s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#2a82da" stroke="#1d5c9c" stroke-width="2" rx="4" pointer-events="none"/>`;
-          s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#ffffff" text-anchor="middle" pointer-events="none">${text}</text>`;
-        }
+        // Disegna box blu con prime 2 lettere dell'ID
+        const boxSize = CS * 0.8;
+        const x = cx + CS/2 - boxSize/2;
+        const y = cy + CS/2 - boxSize/2;
+        const text = obj.slug.substring(0, 2).toUpperCase();
+        s += `<rect x="${x}" y="${y}" width="${boxSize}" height="${boxSize}" fill="#2a82da" stroke="#1d5c9c" stroke-width="2" rx="4" pointer-events="none"/>`;
+        s += `<text x="${cx + CS/2}" y="${cy + CS/2 + FS/2.5}" font-family="var(--sans)" font-size="${Math.round(CS * 0.35)}" font-weight="bold" fill="#ffffff" text-anchor="middle" pointer-events="none">${text}</text>`;
       }
     }
   }
@@ -8805,7 +8782,6 @@ async function exportPngFile(scaleOverride, filename){
     if (href && href.startsWith("http")) {
       try {
         const resp = await fetch(href);
-        if (!resp.ok) throw new Error("HTTP " + resp.status);
         const blob = await resp.blob();
         const dataUri = await new Promise(r => {
           const reader = new FileReader();
@@ -8814,11 +8790,7 @@ async function exportPngFile(scaleOverride, filename){
         });
         img.setAttribute("href", dataUri);
       } catch (e) {
-        console.warn("Errore fetch immagine per export PNG (fallback attivo):", href, e);
-        img.setAttribute("style", "display:none");
-        if (img.nextElementSibling) {
-          img.nextElementSibling.setAttribute("style", "display:block");
-        }
+        console.warn("Errore fetch immagine per export PNG:", href, e);
       }
     }
   }
@@ -9107,7 +9079,7 @@ function loadJsonPayload(obj, silent=false){
         slug: o.slug,
         name: typeof o.name === "string" ? o.name : o.slug,
         walkable: o.walkable !== false,
-        cells: Array.isArray(o.cells) ? o.cells.filter(c => Array.isArray(c) && c.length === 2).map(c => [Number(c[0]), Number(c[1])]) : [],
+        cells: Array.isArray(o.cells) ? o.cells.filter(c => Array.isArray(c) && c.length === 2).map(c => [c[0]|0, c[1]|0]) : [],
         libId: remappedLibId,
         size: Number.isFinite(o.size) ? o.size : DEFAULT_ICON_PCT,
         iconSet: typeof o.iconSet === "string" ? o.iconSet : null,
@@ -9490,40 +9462,6 @@ function importFromMurdokuObject(json, txt=""){
     if (!slug) continue;
     if (!bySlug.has(slug)) bySlug.set(slug, []);
     bySlug.get(slug).push([r,c]);
-  }
-
-  // Import finestre e porte come oggetti
-  const doors = new Set(json.doors || []);
-  const windows = new Set(json.windows || []);
-  
-  if (doors.size > 0) {
-    const doorCells = [];
-    for (const wk of doors) {
-      const parts = wk.split("|");
-      if (parts.length !== 2) continue;
-      const [r1,c1] = parts[0].split(",").map(Number);
-      const [r2,c2] = parts[1].split(",").map(Number);
-      doorCells.push([(r1+r2)/2, (c1+c2)/2]);
-    }
-    if (doorCells.length) {
-      if (!bySlug.has("porta")) bySlug.set("porta", []);
-      bySlug.get("porta").push(...doorCells);
-    }
-  }
-
-  if (windows.size > 0) {
-    const winCells = [];
-    for (const wk of windows) {
-      const parts = wk.split("|");
-      if (parts.length !== 2) continue;
-      const [r1,c1] = parts[0].split(",").map(Number);
-      const [r2,c2] = parts[1].split(",").map(Number);
-      winCells.push([(r1+r2)/2, (c1+c2)/2]);
-    }
-    if (winCells.length) {
-      if (!bySlug.has("finestra")) bySlug.set("finestra", []);
-      bySlug.get("finestra").push(...winCells);
-    }
   }
   // Ripulisce completamente le icone piazzate e le celle non calpestabili
   // della mappa precedente: dopo l'import deve restare visibile solo ciò
