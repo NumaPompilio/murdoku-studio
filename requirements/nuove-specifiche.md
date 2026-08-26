@@ -675,3 +675,6 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### VERSIONE 9.26 (Layout Griglia Sfondi Personalizzati)
 - **Disposizione a 4 colonne per riga**: La griglia della sezione "Sfondi personalizzati" in Graphic Mode è stata aggiornata per disporre le miniature dei tile in righe da 4 elementi (`repeat(4, 1fr)`), ingrandendole e ottimizzando la resa visiva delle texture dei pavimenti con adattamento `object-fit: cover`.
+
+### VERSIONE 9.27 (Layout Griglia Sfondi a 5 Colonne)
+- **Disposizione a 5 colonne per riga**: La griglia della sezione "Sfondi personalizzati" è stata ulteriormente perfezionata per disporre le miniature dei tile in righe da 5 elementi (`repeat(5, 1fr)`), ottimizzando lo spazio a disposizione nell'interfaccia.
