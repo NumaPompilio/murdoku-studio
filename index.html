@@ -5374,32 +5374,24 @@ async function loadRemoteTiles() {
       const owner = cfg.owner || "NumaPompilio";
       const repo = cfg.repo || "murdoku-studio";
       
-      const files = data.filter(d => d.type === "file" && (d.name.endsWith(".png") || d.name.endsWith(".webp") || d.name.endsWith(".jpg") || d.name.endsWith(".jpeg")));
+      const files = (Array.isArray(data) ? data : []).filter(d => d && d.type === "file" && /\.(png|webp|jpg|jpeg|svg)$/i.test(d.name));
       
-      window.GITHUB_TILES = files.map(file => {
+      const tiles = files.map(file => {
         return {
           name: file.name,
           dataUri: `https://raw.githubusercontent.com/${owner}/${repo}/main/tiles/${encodeURIComponent(file.name)}`
         };
       });
       
-      if (typeof state !== 'undefined' && state.bg && state.bg.library) {
-        injectGithubTiles(state.bg.library);
-        if (typeof renderBgLibrary === "function") renderBgLibrary();
+      window.GITHUB_TILES = tiles;
+      if (window.graphicApp && typeof window.graphicApp.setTiles === "function") {
+        window.graphicApp.setTiles(tiles);
       }
+    } else {
+      console.warn("API GitHub non ok per /tiles:", res.status);
     }
   } catch(e) {
     console.warn("Errore caricamento tiles", e);
-  }
-}
-
-function injectGithubTiles(bgLib) {
-  if (window.GITHUB_TILES) {
-    window.GITHUB_TILES.forEach(t => {
-      if (!bgLib.some(b => b.dataUri === t.dataUri)) {
-        bgLib.push({ id: state.bg.nextId++, name: t.name, dataUri: t.dataUri });
-      }
-    });
   }
 }
 
@@ -8071,6 +8063,16 @@ async function removeBgFromLibrary(bgId){
   render();
 }
 
+function injectGithubTiles(bgLib = state.bg.library) {
+  if (window.GITHUB_TILES && Array.isArray(window.GITHUB_TILES)) {
+    window.GITHUB_TILES.forEach(t => {
+      if (!bgLib.some(b => b.dataUri === t.dataUri || b.name === t.name)) {
+        bgLib.push({ id: state.bg.nextId++, name: t.name, dataUri: t.dataUri });
+      }
+    });
+  }
+}
+
 function renderBgLibrary(){
   scheduleAutoSave();
   const box = $("#svg_bgLibrary");
@@ -9178,6 +9180,10 @@ window.graphicApp.setAvailableSets = (dirs) => {
   state.icons.availableSets = dirs;
   renderObjectsSection();
 };
+window.graphicApp.setTiles = (tiles) => {
+  injectGithubTiles(state.bg.library);
+  renderBgLibrary();
+};
 
 
 /* Le opzioni di scala vivono ora nel modal "Esporta Immagine".
@@ -10059,6 +10065,7 @@ async function init(){
   // Ripristina lo stato salvato (async — IDB). Se presente, loadJsonPayload
   // richiama syncStyleControls/renderIconLibrary/renderBgLibrary/render.
   const loaded = await loadFromStorage();
+  injectGithubTiles(state.bg.library);
   if (!loaded){
     syncStyleControls();
     renderIconLibrary();
@@ -10067,6 +10074,8 @@ async function init(){
     renderRoomsSection();
     updateIconSelectionUI();
     render();
+  } else {
+    renderBgLibrary();
   }
 }
 
