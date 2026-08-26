@@ -651,3 +651,12 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 ### VERSIONE 9.19 (Rollback funzionalità drag & drop per i colori sulla mappa)
 - **Rimozione colorazione via mappa**: A causa di persistenti difficoltà nell'elaborazione esatta dell'hit test in scenari con multipli strati interattivi su specifici device o configurazioni di browser, la funzionalità per trascinare e rilasciare colori o sfondi personalizzati *direttamente* sopra la mappa è stata temporaneamente rimossa dal codice della modalità Graphic.
 - **Ritorno al workflow standard**: L'assegnazione di colori e background alle stanze resta operativa nel suo formato classico originario, ovvero trascinando i campioni desiderati sopra l'elenco testuale delle "Stanze" nella spalla di destra dell'Editor.
+
+### VERSIONE 9.20 (Fix allineamento header in Editor)
+- **Allineamento pulsantiera**: Risolto il problema del wrapping dell'header in modalità Editor. La barra dei pulsanti non va più a capo su viewport inferiori ma rimane su un'unica riga orizzontale coerente, implementando uno scrolling orizzontale se necessario e bloccando le dimensioni delle sezioni esterne.
+
+### VERSIONE 9.21 (Dimezzamento dimensioni palette colore in Graphic)
+- **Dimensione box colore**: Ridotte della metà le dimensioni dei box di colore nelle palette del modulo Graphic (sfondo, griglia e font). Modificato il layout grid a 18 colonne (precedentemente 9) per dimezzarne la larghezza mantenendo una struttura ordinata e compatta.
+
+### VERSIONE 9.22 (Pulizia UI Graphic Editor)
+- **Rimozione testi descrittivi**: Rimossi i testi di suggerimento e istruzione per il drag & drop ("Oggetti rilevati nella mappa importata...") dalle card OGGETTI e STANZE nella barra laterale destra del Graphic Editor, per rendere l'interfaccia visiva più minimalista e ordinata.

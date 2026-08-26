@@ -91,7 +91,7 @@
   .tool.active{border-color:var(--violet); background:#342a49; color:#fff; box-shadow:0 0 0 1px var(--violet) inset}
   .tool:hover{border-color:var(--violet-dim)}
 
-  .swatches{display:grid; grid-template-columns:repeat(9,1fr); gap:4px}
+  .swatches{display:grid; grid-template-columns:repeat(18,1fr); gap:4px}
   .sw{width:100%; aspect-ratio:1/1; border-radius:5px; cursor:pointer; border:1px solid var(--line2); transition:.12s; position:relative}
   .sw:hover{transform:scale(1.15); border-color:var(--violet); z-index:1}
   .sw.active{border-color:var(--violet); box-shadow:0 0 0 2px var(--violet); z-index:1}
@@ -272,7 +272,7 @@
 
     <div class="card" id="objectsCard" style="display:none">
       <h2>Oggetti</h2>
-      <div class="hint" style="margin:0 0 10px">Oggetti rilevati nella mappa importata. Trascina un'icona dalla libreria qui sopra nella casella di un oggetto per assegnarla automaticamente a tutte le celle in cui l'oggetto è presente.</div>
+
       <div id="objectsList"></div>
     </div>
 
@@ -341,7 +341,7 @@
 
     <div class="card" id="roomsCard">
       <h2>Stanze</h2>
-      <div class="hint" style="margin:0 0 10px">Stanze presenti nella mappa. Trascina un colore dalla palette o un'immagine dai «Sfondi personalizzati» qui sopra sulla casella di una stanza per assegnarlo.</div>
+
       <div id="roomsList"></div>
     </div>
 
