@@ -672,3 +672,6 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### VERSIONE 9.25 (Sfondi Personalizzati Cloud)
 - **Pre-caricamento automatico delle Texture (Tiles)**: L'editor ora interroga all'avvio la cartella `tiles` sul repository GitHub. Tutte le immagini presenti (PNG, WebP, JPG, JPEG) vengono scaricate dinamicamente e inserite automaticamente come opzioni predefinite nella sezione "Sfondi personalizzati" di Graphic, senza richiedere il caricamento manuale da parte dell'utente. Questa logica garantisce che le texture per i pavimenti (ad es. legno, erba, ecc.) siano sempre aggiornate e allineate con le risorse cloud ufficiali.
+
+### VERSIONE 9.26 (Layout Griglia Sfondi Personalizzati)
+- **Disposizione a 4 colonne per riga**: La griglia della sezione "Sfondi personalizzati" in Graphic Mode è stata aggiornata per disporre le miniature dei tile in righe da 4 elementi (`repeat(4, 1fr)`), ingrandendole e ottimizzando la resa visiva delle texture dei pavimenti con adattamento `object-fit: cover`.
