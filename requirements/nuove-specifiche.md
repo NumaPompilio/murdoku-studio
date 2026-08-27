@@ -678,3 +678,7 @@ Tutti gli indizi sono stati integrati nei rispettivi insiemi di difficoltà, con
 
 ### VERSIONE 9.27 (Layout Griglia Sfondi a 5 Colonne)
 - **Disposizione a 5 colonne per riga**: La griglia della sezione "Sfondi personalizzati" è stata ulteriormente perfezionata per disporre le miniature dei tile in righe da 5 elementi (`repeat(5, 1fr)`), ottimizzando lo spazio a disposizione nell'interfaccia.
+
+### VERSIONE 9.28 (Ottimizzazione Lazy Loading Oggetti)
+- **Caricamento dinamico (Lazy Load)**: Confermata l'architettura dinamica per le icone dei Set. A differenza degli sfondi personalizzati (Tiles) che vengono pre-caricati globalmente, i Set degli Oggetti (es. `icons/set 3`) in Graphic non vengono mai scaricati per intero. L'editor si limita a costruire dinamicamente l'URL dell'icona (`.../icons/set X/slug.png`) per i soli oggetti **effettivamente utilizzati** all'interno della mappa corrente.
+- **Ottimizzazione performance**: Aggiunto esplicitamente l'attributo `loading="lazy"` a tutte le miniature degli oggetti renderizzate nella lista laterale di Graphic. Questo assicura che il browser scarichi l'immagine unicamente quando l'oggetto scorre nel campo visivo, ottimizzando ulteriormente il consumo di banda e le performance per le mappe complesse.
